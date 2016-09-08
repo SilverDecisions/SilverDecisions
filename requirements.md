@@ -1,4 +1,4 @@
-#Those are requirements for GUI of Silverdecisions
+#Requirements for GUI of SilverDecisions
 
 - Application has to be developed in web technologies with guaranteed long time maintenance and good availability of developers
 - Application must run in major web browsers (Chrome, Firefox, Internet Explorer)
