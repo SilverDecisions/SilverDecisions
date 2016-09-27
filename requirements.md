@@ -13,7 +13,7 @@
     * ability to select a subtree and copy them to another part of the tree
     * ability to move a subtree to another part of the tree
     * save/load tree from file (local or in the cloud)
-    * add new node (decision, chance or final) as a sibling of an existing chance or decision node; corner case is an empty tree (in general it is OK that only one tree is allow in canvas, current Silverlight GUI allows many, but it is not required)
+    * add new node (decision, chance or final) as a child of an existing chance or decision node; corner case is an empty tree (in general it is OK that only one tree is allow in canvas, current Silverlight GUI allows many, but it is not required)
     * change parameters of a node
     * change parameters of edge
 - recomputation of the tree should be automatic (on-line, this means in particular that error must be signaled in some way when the tree is not feasible)
