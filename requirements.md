@@ -4,7 +4,7 @@
 - Application must run in major web browsers (Chrome, Firefox, Internet Explorer)
 - Data model (preferably JSON or exportable to JSON) separated from visualization engine
 - Actions available in GUI
-    * change metadata (graphical and computational, eg. which objective function should be used for selection of the best path in a tree - payoffs for all algorithms should be internally computed but only one should be shown corresponding to the metadata)
+    * change metadata (graphical and computational, eg. which objective function should be used for selection of the best path in a tree - payoffs for all algorithms should be internally computed but only one should be shown corresponding to the metadata; how numbers should be presented - precision, currency etc.)
     * undo/redo
     * autolayout
     * manual layout (moving a node moves also subtree)
@@ -13,10 +13,11 @@
     * ability to select a subtree and copy them to another part of the tree
     * ability to move a subtree to another part of the tree
     * save/load tree from file (local or in the cloud)
-    * add new node (decision, chance or final) as a sibling of an existing chance or decision node; corner case is an empty tree (in general it is OK that only one tree is allow in canvas, current Silverlight GUI allows many, but it is not required)
+    * add new node (decision, chance or final) as a child of an existing chance or decision node; corner case is an empty tree (in general it is OK that only one tree is allow in canvas, current Silverlight GUI allows many, but it is not required)
     * change parameters of a node
     * change parameters of edge
 - recomputation of the tree should be automatic (on-line, this means in particular that error must be signaled in some way when the tree is not feasible)
+- initially only maximization of expected value rule must be supported as a rule
 - GUI does not have to have the same way of building trees as existing Silverlight GUI
 - Every action in GUI changes the data model; the old data model is saved for undo/redo (it is OK and enough to save full model at each edit step, undo history of 4 last modifications is sufficient if it makes a difference in implementation)
 - Some way to safeguard against losing work when accidentally browsing is performed (a confirmation message when trying to leave the page)
@@ -52,3 +53,14 @@
             * graphical: none
             * computation: none
 
+# Possible requirements for future versions
+- maxi-min, maxi-max, most probable outcome rules for sure; other rules will be specified in the future
+- in the future nodes/edges/whole tree will get additional attributes and GUI must support extensibility for setting them
+- nice to have is to allow dynamical changing of visual apperance of the tree (skins)
+- in the future is is possible that numerical values will be stored as variables set in metadata (eg. in some edge we set a payoff "p", which is a symbol defined in a symbol list in tree metadata); this might be used as an option in GUI to e.g. find "p" that has some property
+- in the future apart from the tree payoffs additional visualizations might be done (eg. some plots of sensitivity analysis) or even some automatic transformations of the tree (e.g. inversion of the tree using Bayes rule)
+
+# Other requirements
+- code should be reasonably documented
+- ideally some rudimenta developer guide should be provided
+- in parallel user documentation should be maintained
