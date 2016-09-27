@@ -1,0 +1,66 @@
+/*based on:
+* github.com/patorjk/d3-context-menu */
+
+.d3-context-menu {
+  position: absolute;
+  display: none;
+  background-color: #f2f2f2;
+  border-radius: 4px;
+
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  min-width: 150px;
+  border: 1px solid #d4d4d4;
+
+  z-index:1200;
+
+  ul {
+    list-style-type: none;
+    margin: 4px 0px;
+    padding: 0px;
+    cursor: default;
+    li {
+      padding: 4px 16px;
+
+      -webkit-touch-callout: none; /* iOS Safari */
+      -webkit-user-select: none;   /* Chrome/Safari/Opera */
+      -khtml-user-select: none;    /* Konqueror */
+      -moz-user-select: none;      /* Firefox */
+      -ms-user-select: none;       /* Internet Explorer/Edge */
+      user-select: none;
+
+      &:hover {
+        background-color: #4677f8;
+        color: #fefefe;
+      }
+
+      &.is-header,&.is-header:hover{
+        background-color: #f2f2f2;
+        color: #444;
+        font-weight: bold;
+        font-style: italic;
+      }
+
+      &.is-disabled, &.is-disabled:hover {
+        background-color: #f2f2f2;
+        color: #888;
+        cursor: not-allowed;
+      }
+
+      &.is-divider{
+        padding: 0px 0px;
+
+        &:hover{
+          background-color: #f2f2f2;
+        }
+      }
+    }
+
+    hr{
+      border: 0;
+      height: 0;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    }
+  }
+}

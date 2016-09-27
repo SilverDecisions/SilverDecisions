@@ -1,0 +1,47 @@
+.node{
+  cursor: move;
+}
+
+.decision-node{
+  $fill-color: red;
+
+  path{
+    fill: $fill-color;
+    stroke-width: 1px;
+    stroke: darken( $fill-color, 30% );
+  }
+  &.dragging, &.selected{
+    path{
+      fill: darken( $fill-color, 10% )
+    }
+  }
+}
+.chance-node{
+  $fill-color: yellow;
+
+  path{
+    fill: $fill-color;
+    stroke-width: 1px;
+    stroke: darken( $fill-color, 30% );
+  }
+  &.dragging, &.selected{
+    path{
+      fill: darken( $fill-color, 10% )
+    }
+  }
+}
+
+.terminal-node{
+  $fill-color: green;
+
+  path{
+    fill: $fill-color;
+    stroke-width: 1px;
+    stroke: darken( $fill-color, 30% );
+  }
+  &.dragging, &.selected{
+    path{
+      fill: darken( $fill-color, 10% )
+    }
+  }
+}
