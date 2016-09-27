@@ -54,25 +54,28 @@
   cursor: move; }
 
 .decision-node path {
-  fill: red;
+  fill: #ff7777;
   stroke-width: 1px;
   stroke: #660000; }
 
 .decision-node.dragging path, .decision-node.selected path {
-  fill: #cc0000; }
+  fill: #aa3333;
+  stroke-dasharray: 3; }
 
 .chance-node path {
-  fill: yellow;
+  fill: #ffff44;
   stroke-width: 1px;
   stroke: #666600; }
 
 .chance-node.dragging path, .chance-node.selected path {
-  fill: #cccc00; }
+  fill: #aaaa00;
+  stroke-dasharray: 3; }
 
 .terminal-node path {
-  fill: green;
+  fill: #44ff44;
   stroke-width: 1px;
   stroke: black; }
 
 .terminal-node.dragging path, .terminal-node.selected path {
-  fill: #004d00; }
+  fill: #00aa00;
+  stroke-dasharray: 3; }
