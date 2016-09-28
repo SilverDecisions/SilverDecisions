@@ -4,10 +4,7 @@ import {Utils} from './utils'
 import * as model from './model/index'
 import {ContextMenu} from './context-menu'
 
-
-
 export class TreeDesignerConfig {
-    cssClassPrefix = "sd-";
     width = undefined;
     height = undefined;
     margin = {
@@ -174,11 +171,13 @@ export class TreeDesigner {
 
 
     redrawEdges() {
-
+        var self = this;
         var edgesContainer = this.mainGroup.selectOrAppend('g.edges');
         var edges = edgesContainer.selectAll('.edge').data(this.data.edges, (d,i)=> d.$id);
         edges.exit().remove();
-        var edgesEnter = edges.enter().append('g').attr('class', 'edge');
+        var edgesEnter = edges.enter().append('g')
+            .attr('id', d=>'edge-'+d.$id)
+            .attr('class', 'edge');
 
         edgesEnter.append('path');
         var edgesMerge = edgesEnter.merge(edges);
@@ -186,11 +185,18 @@ export class TreeDesigner {
         edgesMerge.select('path')
             .attr('d', d=> this.edgeLineD(d))
             .attr("stroke", "black")
-            .attr("stroke-width", 2)
+            // .attr("stroke-width", 2)
             .attr("fill", "none")
             .attr("marker-end", "url(#arrow)")
             .attr("shape-rendering", "optimizeQuality")
+
+        edgesMerge.on('click', d=>{
+            self.selectEdge(d, true)
+        })
+
     }
+
+
 
     initEdgeMarker() {
         console.log(this.svg);
@@ -401,6 +407,8 @@ export class TreeDesigner {
     copySelectedNodes() {
         var self;
         var selectedNodes = this.getSelectedNodes();
+
+        //this.data.findSubtreeRoots(selectedNodes);
         //TODO
 
     }
@@ -441,6 +449,13 @@ export class TreeDesigner {
 
     clearSelection(){
         this.mainGroup.selectAll(".selected").classed('selected', false);
+    }
+
+    selectEdge(edge, clearSelectionBeforeSelect){
+        if(clearSelectionBeforeSelect){
+            this.clearSelection();
+        }
+        this.mainGroup.select('#edge-'+edge.$id).classed('selected', true);
     }
 
     selectNode(node, clearSelectionBeforeSelect){

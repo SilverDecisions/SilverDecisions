@@ -1,57 +1,113 @@
-.node{
-  cursor: move;
+#silver-decisions{
 
-  &.dragging path, &.selected path{
-    stroke-dasharray: 3;
-  }
-}
+  svg.tree-designer{
 
-.decision-node{
-  $fill-color: #ff7777;
-  $fill-highlighted-color: #aa3333;
-  $stroke-color: #660000;
+    .node{
+      cursor: move;
 
-  path{
-    fill: $fill-color;
-    stroke-width: 1px;
-    stroke: $stroke-color;
-  }
-  &.dragging, &.selected{
-    path{
-      fill: $fill-highlighted-color
+      path{
+        -webkit-transition: fill 0.25s; /* Safari */
+        transition: fill 0.25s;
+      }
+
+
+      &.selected{
+
+      }
+
+      &.dragging path, &.selected path{
+        stroke-dasharray: 3;
+      }
+    }
+
+    .decision-node{
+      $fill-color: #ff7777;
+      $fill-highlighted-color: #aa3333;
+      $stroke-color: #660000;
+
+      path{
+        fill: $fill-color;
+        stroke-width: 1px;
+        stroke: $stroke-color;
+      }
+      &.dragging, &.selected{
+        path{
+          fill: $fill-highlighted-color
+        }
+      }
+    }
+    .chance-node{
+      $fill-color: #ffff44;
+      $fill-highlighted-color: #aaaa00;
+      $stroke-color: #666600;
+
+      path{
+        fill: $fill-color;
+        stroke-width: 1px;
+        stroke: $stroke-color;
+      }
+      &.dragging, &.selected{
+        path{
+          fill: $fill-highlighted-color;
+        }
+      }
+    }
+
+    .terminal-node{
+      $fill-color: #44ff44;
+      $fill-highlighted-color: #00aa00;
+      $stroke-color: black;
+
+      path{
+        fill: $fill-color;
+        stroke-width: 1px;
+        stroke: $stroke-color;
+      }
+      &.dragging, &.selected{
+        path{
+          fill: $fill-highlighted-color;
+        }
+      }
+    }
+
+    .edge{
+      $stroke-width: 2;
+      $stroke-width-selected: $stroke-width + 2;
+      cursor: pointer;
+      stroke-width: $stroke-width;
+
+      -webkit-transition: stroke-width 0.3s; /* Safari */
+      transition: stroke-width 0.3s;
+
+      &:hover{
+        stroke-width: $stroke-width-selected - 1;
+
+      }
+
+      &.selected{
+
+        stroke-width: $stroke-width-selected;
+
+        //transition:none;
+        //-webkit-transition: none;
+        //animation: pulse 1.3s ease-in;
+        //-webkit-animation: pulse 1.3s ease-in;
+        //-webkit-animation-iteration-count: infinite;
+      }
+
+      @-webkit-keyframes pulse {
+        0% { stroke-width: $stroke-width-selected; opacity: 1.0; }
+        50% { stroke-width: $stroke-width;; opacity: 1; }
+        100% { stroke-width: $stroke-width-selected; opacity: 1.0; }
+      }
+      @keyframes pulse {
+        0% { stroke-width: $stroke-width-selected; opacity: 1.0; }
+        50% { stroke-width: $stroke-width; opacity: 1; }
+        100% { stroke-width: $stroke-width-selected; opacity: 1.0; }
+      }
     }
   }
-}
-.chance-node{
-  $fill-color: #ffff44;
-  $fill-highlighted-color: #aaaa00;
-  $stroke-color: #666600;
 
-  path{
-    fill: $fill-color;
-    stroke-width: 1px;
-    stroke: $stroke-color;
-  }
-  &.dragging, &.selected{
-    path{
-      fill: $fill-highlighted-color;
-    }
-  }
+
 }
 
-.terminal-node{
-  $fill-color: #44ff44;
-  $fill-highlighted-color: #00aa00;
-  $stroke-color: black;
-
-  path{
-    fill: $fill-color;
-    stroke-width: 1px;
-    stroke: $stroke-color;
-  }
-  &.dragging, &.selected{
-    path{
-      fill: $fill-highlighted-color;
-    }
-  }
-}
