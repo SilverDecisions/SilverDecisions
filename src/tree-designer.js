@@ -315,7 +315,6 @@ export class TreeDesigner {
             return menu;
         };
 
-
         this.nodeContextMenu = new ContextMenu(menu);
     }
 
@@ -327,15 +326,14 @@ export class TreeDesigner {
             menu.push({
                 title: 'Add Decision Node',
                 action: function(elm, d, i) {
-                    var newNode = new model.DecisionNode(new model.Point(d3.event.x, d3.event.y));
+                    var newNode = new model.DecisionNode(new model.Point(d3.mouse(self.mainGroup.node())));
                     self.addNode(newNode)
                 }
             });
             menu.push({
                 title: 'Add Chance Node',
                 action: function(elm, d, i) {
-
-                    var newNode = new model.ChanceNode(new model.Point(d3.event.x, d3.event.y));
+                    var newNode = new model.ChanceNode(new model.Point(d3.mouse(self.mainGroup.node())));
                     self.addNode(newNode)
                 }
             });

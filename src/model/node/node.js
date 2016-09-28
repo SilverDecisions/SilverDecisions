@@ -12,7 +12,7 @@ export class Node {
     };
     location; //Point
 
-    $id = Utils.guid();
+    $id = Utils.guid(); //internal id
     $symbol;
     
     constructor(type, symbol, location){
@@ -24,23 +24,22 @@ export class Node {
         this.$symbol=symbol;
     }
 
-    moveTo(x,y, withChildren){ //move to location
+    moveTo(x,y, withChildren){ //move to new location
         if(withChildren){
             var dx = x-this.location.x;
             var dy = y-this.location.y;
             this.childEdges.forEach(e=>e.childNode.move(dx, dy, true))
         }
 
-        this.location.x=x;
-        this.location.y=y;
+        this.location.moveTo(x,y);
+        return this;
     }
 
     move(dx, dy, withChildren){ //move by vector
         if(withChildren){
             this.childEdges.forEach(e=>e.childNode.move(dx, dy, true))
         }
-
-        this.location.x+=dx;
-        this.location.y+=dy;
+        this.location.move(dx, dy);
+        return this;
     }
 }
