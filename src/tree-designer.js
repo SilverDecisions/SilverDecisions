@@ -75,7 +75,9 @@ export class TreeDesigner {
         var nodesContainer = this.mainGroup.selectOrAppend('g.nodes');
         var nodes = nodesContainer.selectAll('.node').data(this.data.nodes, (d,i)=> d.$id);
         nodes.exit().remove();
-        var nodesEnter = nodes.enter().append('g').attr('class', d=>d.type+'-node node');
+        var nodesEnter = nodes.enter().append('g')
+            .attr('id', d=>'node-'+d.$id)
+            .attr('class', d=>d.type+'-node node');
         nodesEnter.append('path');
         nodesEnter.append('text');
 
@@ -97,6 +99,14 @@ export class TreeDesigner {
         var self = this;
 
         var drag = d3.drag()
+            .subject(function(d) {
+                if(d==null){
+                    return  {x: event.x, y: event.y};
+                }
+                var t = d3.select(this);
+                return {x: t.attr("x") + Utils.getTranslation(t.attr("transform"))[0],
+                    y: t.attr("y") + Utils.getTranslation(t.attr("transform"))[1]};
+            })
             .on("start", function(d){
                 self.dragStarted.call(this,d, self)
             })
@@ -107,6 +117,7 @@ export class TreeDesigner {
 
         nodesMerge.call(drag);
         nodesMerge.on('contextmenu', this.nodeContextMenu);
+        nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
     }
 
     dragStarted(d,self) {
@@ -237,33 +248,36 @@ export class TreeDesigner {
             // if (!d3.event.selection) self.mainGroup.selectAll(".selected").classed('selected', false);
         }
     }
-    brushed(){
-        
-    }
-
-    clearSelection(){
-        this.mainGroup.selectAll(".selected").classed('selected', false);
-    }
-
-    selectNode(nodeSelection){
-        this.clearSelection();
-
-    }
 
     initNodeContextMenu() {
         var self = this;
         var menu = function(d){
-            var deleteMenuItem = {
-                title: 'Delete node',
-                action: function(elm, d, i) {
 
-                    self.removeNode(d);
+            var copyMenuItem = {
+                title: 'Copy',
+                action: function(elm, d, i) {
+                    self.copyNode(d);
+                }
+            };
+            var pasteMenuItem = {
+                title: 'Paste',
+                action: function(elm, d, i) {
+                    self.pasteToNode(d);
+                },
+                disabled: !self.copiedNode
+
+            };
+            var deleteMenuItem = {
+                title: 'Delete',
+                action: function(elm, d, i) {
+                    self.selectNode(d);
+                    self.removeSelectedNodes();
 
                 }
             };
             var menu = [];
             if(d.type=='terminal'){
-                return [deleteMenuItem];
+                return [copyMenuItem,deleteMenuItem];
             }
             menu.push({
                 title: 'Add Decision Node',
@@ -286,7 +300,18 @@ export class TreeDesigner {
                     self.addNode(newNode,d)
                 }
             });
+            menu.push({divider:true});
+            menu.push(copyMenuItem);
+            menu.push(pasteMenuItem);
             menu.push(deleteMenuItem);
+            menu.push({divider:true});
+            menu.push({
+                title: 'Select subtree',
+                action: function(elm, d, i) {
+                    self.selectSubTree(d, true);
+                }
+            });
+
             return menu;
         };
 
@@ -314,9 +339,17 @@ export class TreeDesigner {
                     self.addNode(newNode)
                 }
             });
+
+            menu.push({divider:true});
+
+            menu.push({
+                title: 'Select all nodes',
+                action: function(elm, d, i) {
+                    self.selectAllNodes();
+                }
+            });
             return menu;
         };
-
 
         this.mainContextMenu = new ContextMenu(menu);
         self.mainGroup.on('contextmenu',this.mainContextMenu);
@@ -333,5 +366,68 @@ export class TreeDesigner {
         this.data.removeNode(node);
         this.redrawEdges();
         this.redrawNodes();
+    }
+
+    removeSelectedNodes() {
+        var selectedNodes = this.getSelectedNodes();
+        this.data.removeNodes(selectedNodes);
+        this.clearSelection();
+        this.redrawEdges();
+        this.redrawNodes();
+    }
+
+    copyNode(d) {
+        this.copiedNode = this.data.cloneSubtree(d);
+    }
+
+    copySelectedNodes() {
+        var self;
+        var selectedNodes = this.getSelectedNodes();
+        //TODO
+
+    }
+
+    pasteToNode(node) {
+        var self = this;
+        var toAttach = this.copiedNode;
+        self.copyNode(toAttach);
+        var attached = this.data.attachSubtree(this.copiedNode, node);
+
+        attached.moveTo(node.location.x+120, node.location.y, true);
+        this.redrawEdges();
+        this.redrawNodes();
+
+        self.selectSubTree(attached, true);
+    }
+
+    moveNodeTo(x,y){
+
+    }
+
+    getSelectedNodes() {
+        return this.mainGroup.selectAll(".node.selected").data();
+    }
+
+    clearSelection(){
+        this.mainGroup.selectAll(".selected").classed('selected', false);
+    }
+
+    selectNode(node, clearSelectionBeforeSelect){
+        if(clearSelectionBeforeSelect){
+            this.clearSelection();
+        }
+        this.mainGroup.select('#node-'+node.$id).classed('selected', true);
+    }
+
+    selectSubTree(node, clearSelectionBeforeSelect) {
+        if(clearSelectionBeforeSelect){
+            this.clearSelection();
+        }
+        this.selectNode(node);
+        node.childEdges.forEach(e=>this.selectSubTree(e.childNode));
+    }
+
+    selectAllNodes() {
+        this.mainGroup.selectAll(".node").classed('selected', true);
     }
 }

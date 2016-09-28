@@ -24,5 +24,23 @@ export class Node {
         this.$symbol=symbol;
     }
 
+    moveTo(x,y, withChildren){ //move to location
+        if(withChildren){
+            var dx = x-this.location.x;
+            var dy = y-this.location.y;
+            this.childEdges.forEach(e=>e.childNode.move(dx, dy, true))
+        }
 
+        this.location.x=x;
+        this.location.y=y;
+    }
+
+    move(dx, dy, withChildren){ //move by vector
+        if(withChildren){
+            this.childEdges.forEach(e=>e.childNode.move(dx, dy, true))
+        }
+
+        this.location.x+=dx;
+        this.location.y+=dy;
+    }
 }
