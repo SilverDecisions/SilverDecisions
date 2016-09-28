@@ -118,6 +118,7 @@ export class TreeDesigner {
     }
 
     dragStarted(d,self) {
+        ContextMenu.hide();
         var node = d3.select(this);
         if(!node.classed("selected")){
             self.clearSelection();
