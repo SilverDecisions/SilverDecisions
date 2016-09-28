@@ -1,47 +1,57 @@
 .node{
   cursor: move;
+
+  &.dragging path, &.selected path{
+    stroke-dasharray: 3;
+  }
 }
 
 .decision-node{
-  $fill-color: red;
+  $fill-color: #ff7777;
+  $fill-highlighted-color: #aa3333;
+  $stroke-color: #660000;
 
   path{
     fill: $fill-color;
     stroke-width: 1px;
-    stroke: darken( $fill-color, 30% );
+    stroke: $stroke-color;
   }
   &.dragging, &.selected{
     path{
-      fill: darken( $fill-color, 10% )
+      fill: $fill-highlighted-color
     }
   }
 }
 .chance-node{
-  $fill-color: yellow;
+  $fill-color: #ffff44;
+  $fill-highlighted-color: #aaaa00;
+  $stroke-color: #666600;
 
   path{
     fill: $fill-color;
     stroke-width: 1px;
-    stroke: darken( $fill-color, 30% );
+    stroke: $stroke-color;
   }
   &.dragging, &.selected{
     path{
-      fill: darken( $fill-color, 10% )
+      fill: $fill-highlighted-color;
     }
   }
 }
 
 .terminal-node{
-  $fill-color: green;
+  $fill-color: #44ff44;
+  $fill-highlighted-color: #00aa00;
+  $stroke-color: black;
 
   path{
     fill: $fill-color;
     stroke-width: 1px;
-    stroke: darken( $fill-color, 30% );
+    stroke: $stroke-color;
   }
   &.dragging, &.selected{
     path{
-      fill: darken( $fill-color, 10% )
+      fill: $fill-highlighted-color;
     }
   }
 }

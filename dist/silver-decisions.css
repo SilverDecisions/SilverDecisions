@@ -52,6 +52,8 @@
 
 .node {
   cursor: move; }
+  .node.dragging path, .node.selected path {
+    stroke-dasharray: 3; }
 
 .decision-node path {
   fill: #ff7777;
@@ -59,8 +61,7 @@
   stroke: #660000; }
 
 .decision-node.dragging path, .decision-node.selected path {
-  fill: #aa3333;
-  stroke-dasharray: 3; }
+  fill: #aa3333; }
 
 .chance-node path {
   fill: #ffff44;
@@ -68,8 +69,7 @@
   stroke: #666600; }
 
 .chance-node.dragging path, .chance-node.selected path {
-  fill: #aaaa00;
-  stroke-dasharray: 3; }
+  fill: #aaaa00; }
 
 .terminal-node path {
   fill: #44ff44;
@@ -77,5 +77,4 @@
   stroke: black; }
 
 .terminal-node.dragging path, .terminal-node.selected path {
-  fill: #00aa00;
-  stroke-dasharray: 3; }
+  fill: #00aa00; }
