@@ -50,7 +50,7 @@ gulp.task('build-js', function () {
         .pipe(plugins.stripDebug())
         .pipe(plugins.uglify())
         .pipe(plugins.rename({ extname: '.min.js' }))
-        
+
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest("dist"));
 });
@@ -70,6 +70,16 @@ gulp.task('watch', function() {
 
 gulp.task('default', ['build-clean'],  function() {
 
+});
+
+gulp.task('build-templates', function () {
+    gulp.src('src/templates/*.html')
+        .pipe(plugins.html2js('templates.js', {
+            adapter: 'javascript',
+            base: 'templates',
+            name: 'templates'
+        }))
+        .pipe(gulp.dest('dist'));
 });
 
 gulp.task('default-watch', ['default'], ()=>{ browserSync.reload() });

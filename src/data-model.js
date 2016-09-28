@@ -1,5 +1,6 @@
 import {Utils} from './utils'
 import * as model from './model/index'
+import *  as _ from 'lodash'
 
 /*
 * Data model manager
@@ -21,19 +22,23 @@ export class DataModel {
         var self = this;
         self.nodes.push(node);
         if(parent){
-            var edge = new model.Edge(parent, node);
-            self.edges.push(edge);
-            parent.childEdges.push(edge);
-            node.parent = parent;
+            self._addChild(parent, node);
         }
         return node;
     }
 
+    _addChild(parent, child) {
+        var self = this;
+        var edge = new model.Edge(parent, child);
+        self.edges.push(edge);
+        parent.childEdges.push(edge);
+        child.parent = parent;
+    }
+
+    /*removes given node and its subtree*/
     removeNode(node) {
         var self = this;
-
         self._removeNode(node);
-
         var parent = node.parent;
         if(parent){
             var parentEdge = parent.childEdges.find((e,i)=> e.childNode===node);
@@ -42,6 +47,60 @@ export class DataModel {
 
         node.parent=null;
         node.childEdges.forEach(e=>self.removeNode(e.childNode));
+    }
+
+    /*removes given nodes and their subtrees*/
+    removeNodes(nodes){
+        var roots = this.findSubtreeRoots(nodes);
+        roots.forEach(this.removeNode, this);
+    }
+
+    findSubtreeRoots(nodes) {
+        return nodes.filter(n=>!n.parent || nodes.indexOf(n.parent)===-1);
+    }
+
+    /*creates detached clone of given node*/
+    cloneSubtree(nodeToCopy){
+        var self = this;
+        var clone = this.cloneNode(nodeToCopy);
+
+        nodeToCopy.childEdges.forEach(e=>{
+            var childClone = self.cloneSubtree(e.childNode);
+            childClone.parent = clone;
+            var edge = new model.Edge(clone, childClone);
+            clone.childEdges.push(edge);
+        });
+        return clone;
+    }
+
+    /*attaches detached subtree to given parent*/
+    attachSubtree(nodeToAttach, parent){
+        var self = this;
+        self.addNode(nodeToAttach, parent);
+
+        var childEdges = self.getAllChildEdges(nodeToAttach);
+        childEdges.forEach(e=>{
+            self.edges.push(e);
+            self.nodes.push(e.childNode);
+        });
+
+        return nodeToAttach;
+    }
+
+    cloneNodes(nodes){
+        var roots = []
+        //TODO
+    }
+
+    /*shallow clone without parent and children*/
+    cloneNode(node){
+        var clone = _.clone(node)
+        clone.$id = Utils.guid();
+        clone.location = _.clone(node.location);
+        clone.computed = _.clone(node.computed);
+        clone.parent=null;
+        clone.childEdges = [];
+        return clone;
     }
 
     _removeNode(node){// simply removes node from node list
@@ -63,5 +122,19 @@ export class DataModel {
     }
     _removeEdges(edgesToRemove) {
         this.edges = this.edges.filter(e=>edgesToRemove.indexOf(e)===-1);
+    }
+
+    getAllChildEdges(node) {
+        var self = this;
+        var result = [];
+
+        node.childEdges.forEach(e=>{
+            result.push(e);
+            if(e.childNode){
+                result.push(...self.getAllChildEdges(e.childNode));
+            }
+        });
+
+        return result;
     }
 }

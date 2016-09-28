@@ -5,7 +5,7 @@ import * as model from './model/index'
 import {Exporter} from './exporter'
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer'
 import {DataModel} from './data-model'
-
+import {Templates} from './templates'
 
 export class AppConfig {
     width = undefined;
@@ -43,6 +43,7 @@ export class App {
 
     initContainer(containerId) {
         this.container = d3.select('#'+containerId);
+        this.container.html(Templates.main);
     }
 
     initDataModel() {
@@ -50,7 +51,7 @@ export class App {
     }
 
     initTreeDesigner(){
-        this.treeDesigner = new TreeDesigner(this.container, this.dataModel);
+        this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel);
     }
     
 
