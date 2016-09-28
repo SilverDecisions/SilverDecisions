@@ -259,6 +259,12 @@ export class TreeDesigner {
                     self.copyNode(d);
                 }
             };
+            var cutMenuItem = {
+                title: 'Cut',
+                action: function(elm, d, i) {
+                    self.cutNode(d);
+                }
+            };
             var pasteMenuItem = {
                 title: 'Paste',
                 action: function(elm, d, i) {
@@ -277,7 +283,7 @@ export class TreeDesigner {
             };
             var menu = [];
             if(d.type=='terminal'){
-                return [copyMenuItem,deleteMenuItem];
+                return [copyMenuItem,cutMenuItem,deleteMenuItem];
             }
             menu.push({
                 title: 'Add Decision Node',
@@ -302,6 +308,7 @@ export class TreeDesigner {
             });
             menu.push({divider:true});
             menu.push(copyMenuItem);
+            menu.push(cutMenuItem);
             menu.push(pasteMenuItem);
             menu.push(deleteMenuItem);
             menu.push({divider:true});
@@ -337,7 +344,15 @@ export class TreeDesigner {
                     self.addNode(newNode)
                 }
             });
+            menu.push({divider:true});
+            menu.push({
+                title: 'Paste',
+                action: function(elm, d, i) {
+                    self.pasteToNewLocation(new model.Point(d3.mouse(self.mainGroup.node())));
+                },
+                disabled: !self.copiedNode
 
+            });
             menu.push({divider:true});
 
             menu.push({
@@ -378,6 +393,11 @@ export class TreeDesigner {
         this.copiedNode = this.data.cloneSubtree(d);
     }
 
+    cutNode(d) {
+        this.copyNode(d);
+        this.removeNode(d);
+    }
+
     copySelectedNodes() {
         var self;
         var selectedNodes = this.getSelectedNodes();
@@ -389,9 +409,22 @@ export class TreeDesigner {
         var self = this;
         var toAttach = this.copiedNode;
         self.copyNode(toAttach);
-        var attached = this.data.attachSubtree(this.copiedNode, node);
+        var attached = this.data.attachSubtree(toAttach, node);
 
         attached.moveTo(node.location.x+120, node.location.y, true);
+        this.redrawEdges();
+        this.redrawNodes();
+
+        self.selectSubTree(attached, true);
+    }
+
+    pasteToNewLocation(point) {
+        var self = this;
+        var toAttach = this.copiedNode;
+        self.copyNode(toAttach);
+        var attached = this.data.attachSubtree(toAttach);
+
+        attached.moveTo(point.x, point.y, true);
         this.redrawEdges();
         this.redrawNodes();
 
