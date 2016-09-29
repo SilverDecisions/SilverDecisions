@@ -13,6 +13,10 @@ export class TreeDesignerConfig {
         top: 25,
         bottom: 25
     };
+    layout={
+        limitNodePositioning:true
+    };
+
     symbolSize= 40;
     constructor(custom) {
         if (custom) {
@@ -194,10 +198,14 @@ export class TreeDesigner {
 
     drag(draggedNode, self){
         var dx = d3.event.x - self.prevDragEvent.x;
-        if(dx<0){
-            self.selectedNodes.sort((a,b)=>a.location.x-b.location.x);
-        }else{
-            self.selectedNodes.sort((a,b)=>b.location.x-a.location.x);
+        var limit = self.config.layout.limitNodePositioning;
+        if(limit){
+            if(dx<0){
+                self.selectedNodes.sort((a,b)=>a.location.x-b.location.x);
+            }else{
+                self.selectedNodes.sort((a,b)=>b.location.x-a.location.x);
+            }
+            self.selectedNodes.forEach(TreeDesigner.backupNodeLocation);
         }
 
         var dy = d3.event.y-self.prevDragEvent.y;
@@ -206,18 +214,21 @@ export class TreeDesigner {
             dy = self.getNodeMinY() - minY;
         }
 
-        self.selectedNodes.forEach(TreeDesigner.backupNodeLocation);
-
         self.selectedNodes.forEach(d=>{
+            if(limit){
+                var minX = self.getNodeMinX(d);
+                var maxX = self.getNodeMaxX(d);
 
-            var minX = self.getNodeMinX(d);
-            var maxX = self.getNodeMaxX(d);
+                d.location.x = Math.min(Math.max(d.location.x+dx, minX), maxX);
+                d.location.y += dy;
+            }else{
+                d.location.x +=dx;
+                d.location.y += dy;
+            }
 
-            d.location.x = Math.min(Math.max(d.location.x+dx, minX), maxX);
-            d.location.y += dy;
         });
 
-        var revertX = draggedNode.location.x == draggedNode.$location.x;
+        var revertX = limit && (draggedNode.location.x == draggedNode.$location.x);
 
         self.selectedNodes.forEach(d=>{
             if(revertX){
