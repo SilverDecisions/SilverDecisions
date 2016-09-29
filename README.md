@@ -15,9 +15,14 @@ Software for creating and analyzing decision trees.
 
 ### Project structure
 
-* demo 
-* dist - distribution folder generated with gulp 
-* src - source files directory
-  * styles - scss styles source directory (sass-lang.com) 
-* test 
+* `demo` - demo usage of SilverDecisions
+* `dist` - distribution folder generated with gulp 
+* `src` - source files directory
+  * `styles` - scss styles source directory (sass-lang.com) 
+* `test` 
 
+## User testing guide
+
+* Versions ready for user testing will be clearly tagged in git repository (please do not submit bugs for development versions)
+* You can use `index.html` in `demo` directory to perform tests (in versions tagged for testing everything will be properly biult)
+* Submit atomic comments using GitHub issues
