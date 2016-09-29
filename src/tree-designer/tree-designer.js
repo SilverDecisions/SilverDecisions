@@ -1,8 +1,10 @@
-import * as d3 from './d3'
+import * as d3 from '../d3'
 
-import {Utils} from './utils'
-import * as model from './model/index'
-import {ContextMenu} from './context-menu'
+import {Utils} from '../utils'
+import * as model from '../model/index'
+import {ContextMenu} from '../context-menu'
+import {MainContextMenu} from './main-context-menu'
+import {NodeContextMenu} from './node-context-menu'
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -205,6 +207,7 @@ export class TreeDesigner {
             }else{
                 self.selectedNodes.sort((a,b)=>b.location.x-a.location.x);
             }
+
             self.selectedNodes.forEach(TreeDesigner.backupNodeLocation);
         }
 
@@ -380,124 +383,12 @@ export class TreeDesigner {
     }
 
     initNodeContextMenu() {
-        var self = this;
-        var menu = function(d){
-
-            var copyMenuItem = {
-                title: 'Copy',
-                action: function(elm, d, i) {
-                    self.copyNode(d);
-                }
-            };
-            var cutMenuItem = {
-                title: 'Cut',
-                action: function(elm, d, i) {
-                    self.cutNode(d);
-                }
-            };
-            var pasteMenuItem = {
-                title: 'Paste',
-                action: function(elm, d, i) {
-                    self.pasteToNode(d);
-                },
-                disabled: !self.copiedNode
-
-            };
-            var deleteMenuItem = {
-                title: 'Delete',
-                action: function(elm, d, i) {
-                    self.selectNode(d);
-                    self.removeSelectedNodes();
-
-                }
-            };
-            var menu = [];
-            if(d.type=='terminal'){
-                return [copyMenuItem,cutMenuItem,deleteMenuItem];
-            }
-            menu.push({
-                title: 'Add Decision Node',
-                action: function(elm, d, i) {
-                    var newNode = new model.DecisionNode(new model.Point(d.location.x+120, d.location.y));
-                    self.addNode(newNode,d)
-                }
-            });
-            menu.push({
-                title: 'Add Chance Node',
-                action: function(elm, d, i) {
-                    var newNode = new model.ChanceNode(new model.Point(d.location.x+120, d.location.y));
-                    self.addNode(newNode,d)
-                }
-            });
-            menu.push({
-                title: 'Add Terminal Node',
-                action: function(elm, d, i) {
-                    var newNode = new model.TerminalNode(new model.Point(d.location.x+120, d.location.y));
-                    self.addNode(newNode,d)
-                }
-            });
-            menu.push({divider:true});
-            menu.push(copyMenuItem);
-            menu.push(cutMenuItem);
-            menu.push(pasteMenuItem);
-            menu.push(deleteMenuItem);
-            menu.push({divider:true});
-            menu.push({
-                title: 'Select subtree',
-                action: function(elm, d, i) {
-                    self.selectSubTree(d, true);
-                }
-            });
-
-            return menu;
-        };
-
-        this.nodeContextMenu = new ContextMenu(menu);
+        this.nodeContextMenu = new NodeContextMenu(this);
     }
 
     initMainContextMenu() {
-        var self = this;
-        var menu = function(d){
-
-            var menu = [];
-            menu.push({
-                title: 'Add Decision Node',
-                action: function(elm, d, i) {
-                    var newNode = new model.DecisionNode(new model.Point(d3.mouse(self.svg.node())).move(self.getMainGroupTranslation(true)));
-                    self.addNode(newNode)
-                }
-            });
-            menu.push({
-                title: 'Add Chance Node',
-                action: function(elm, d, i) {
-                    var newNode = new model.ChanceNode(new model.Point(d3.mouse(self.svg.node())).move(self.getMainGroupTranslation(true)));
-                    self.addNode(newNode)
-                }
-            });
-            menu.push({divider:true});
-            menu.push({
-                title: 'Paste',
-                action: function(elm, d, i) {
-                    self.pasteToNewLocation(new model.Point(d3.mouse(self.svg.node())).move(self.getMainGroupTranslation(true)));
-                },
-                disabled: !self.copiedNode
-
-            });
-            menu.push({divider:true});
-
-            menu.push({
-                title: 'Select all nodes',
-                action: function(elm, d, i) {
-                    self.selectAllNodes();
-                }
-            });
-            return menu;
-        };
-
-        this.mainContextMenu = new ContextMenu(menu,{
-            onOpen: () => self.clearSelection()
-        });
-        self.svg.on('contextmenu',this.mainContextMenu);
+        this.mainContextMenu = new MainContextMenu(this);
+        this.svg.on('contextmenu',this.mainContextMenu);
     }
 
     addNode(node, parent){

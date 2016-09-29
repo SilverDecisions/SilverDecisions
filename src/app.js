@@ -3,7 +3,7 @@ import * as d3 from './d3'
 import {Utils} from './utils'
 import * as model from './model/index'
 import {Exporter} from './exporter'
-import {TreeDesigner, TreeDesignerConfig} from './tree-designer'
+import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
 import {DataModel} from './data-model'
 import {Templates} from './templates'
 
