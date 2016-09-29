@@ -1,6 +1,18 @@
 #silver-decisions{
+  display: flex;
+  align-items: stretch;
+  flex-direction: column;
+  height: 100%;
+
+  #tree-designer-container{
+    flex: 1;
+  }
 
   svg.tree-designer{
+    position: absolute;
+    //top: 0;
+    //left: 0;
+    border: 1px dashed black;
 
     .node{
       cursor: move;

@@ -45,23 +45,67 @@ export class TreeDesigner {
     }
 
     init(){
+        this.minMarginBetweenNodes = this.config.symbolSize + 30;
         this.initSvg();
         this.initMainContextMenu();
         this.initBrush();
         this.initEdgeMarker();
-        this.redrawEdges();
         this.initNodeContextMenu();
-        this.redrawNodes();
+        this.redraw();
     }
+
+    redraw(){
+        this.redrawEdges();
+        this.redrawNodes();
+        this.updatePlottingRegionSize();
+    }
+
+    computeAvailableSpace(){
+        this.availableHeight = Utils.sanitizeHeight(this.config.height, this.container, this.config.margin);
+        this.availableWidth = Utils.sanitizeWidth(this.config.width, this.container, this.config.margin);
+    }
+
+    initSvg() {
+        var self = this;
+        this.computeAvailableSpace();
+        this.svg = this.container.selectOrAppend('svg.tree-designer');
+        this.svg.attr('width', this.availableWidth).attr('height', this.availableHeight);
+
+        var margin = this.config.margin;
+        this.mainGroup = this.svg.selectOrAppend('g.main-group');
+        this.mainGroup.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        if (!this.config.width) {
+            d3.select(window)
+                .on("resize.tree-designer", function () {
+                    self.updatePlottingRegionSize();
+                });
+        }
+    }
+
     initContainer(container) {
         this.container = container;
     }
 
-    initSvg() {
-        this.svg = this.container.selectOrAppend('svg.tree-designer');
-        this.svg.attr('width', 800).attr('height', 800);
+    updatePlottingRegionSize() {
+        console.log('updatePlottingRegionSize');
+        this.computeAvailableSpace();
+        var margin = this.config.margin;
+        var svgWidth = this.svg.attr('width');
+        var svgHeight = this.svg.attr('height');
+        var mainGroupBox = this.mainGroup.node().getBBox();
+        var newSvgWidth = mainGroupBox.width+mainGroupBox.x+margin.left+margin.right;
+        newSvgWidth = Math.max(newSvgWidth, this.availableWidth);
+        if(svgWidth!=newSvgWidth){
+            this.svg.attr('width', newSvgWidth);
+        }
+        var newSvgHeight = mainGroupBox.height+mainGroupBox.y+margin.top+margin.bottom;
+        newSvgHeight = Math.max(newSvgHeight, this.availableHeight);
+        if(svgHeight!=newSvgHeight){
+            this.svg.attr('height', newSvgHeight);
+        }
 
-        this.mainGroup = this.svg.selectOrAppend('g.main-group');
+        this.updateBrushExtent()
     }
 
     redrawNodes() {
@@ -117,6 +161,26 @@ export class TreeDesigner {
         nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
     }
 
+    getNodeMinX(d){
+        var self = this;
+        if(d.parent){// && !self.isNodeSelected(d.parent)
+            return d.parent.location.x + self.minMarginBetweenNodes;
+        }
+        return self.config.symbolSize/2;
+    }
+
+    getNodeMinY(d){
+        return this.config.symbolSize/2;
+    }
+
+    getNodeMaxX(d){
+        var self = this;
+        if(d.childEdges.length){
+            return d3.min(d.childEdges, e=>e.childNode.location.x)-self.minMarginBetweenNodes;
+        }
+        return 9999999;
+    }
+
     dragStarted(d,self) {
         ContextMenu.hide();
         var node = d3.select(this);
@@ -125,21 +189,55 @@ export class TreeDesigner {
         }
 
         node.classed("selected dragging", true);
+        self.selectedNodes = self.getSelectedNodes();
+        self.prevDragEvent = d3.event;
     }
 
-    drag(d, self){
-        var dx=  d3.event.x-d.location.x;
-        var dy = d3.event.y-d.location.y;
+    drag(draggedNode, self){
+        var dx = d3.event.x - self.prevDragEvent.x;
+        if(dx<0){
+            self.selectedNodes.sort((a,b)=>a.location.x-b.location.x);
+        }else{
+            self.selectedNodes.sort((a,b)=>b.location.x-a.location.x);
+        }
 
-        self.mainGroup.selectAll('.node.selected, .node.dragging').each(function(d){
-            d.location.x += dx;
+        var dy = d3.event.y-self.prevDragEvent.y;
+        var minY = d3.min(self.selectedNodes, d=>d.location.y);
+        if(minY + dy < self.getNodeMinY()){
+            dy = self.getNodeMinY() - minY;
+        }
+
+        self.selectedNodes.forEach(TreeDesigner.backupNodeLocation);
+
+        self.selectedNodes.forEach(d=>{
+
+            var minX = self.getNodeMinX(d);
+            var maxX = self.getNodeMaxX(d);
+
+            d.location.x = Math.min(Math.max(d.location.x+dx, minX), maxX);
             d.location.y += dy;
-            d3.select(this).raise().attr('transform', 'translate('+d.location.x+' '+d.location.y+')  rotate(-90)');
         });
+
+        var revertX = draggedNode.location.x == draggedNode.$location.x;
+
+        self.selectedNodes.forEach(d=>{
+            if(revertX){
+                d.location.x = d.$location.x;
+            }
+            self.getNodeD3Selection(d).raise().attr('transform', 'translate('+d.location.x+' '+d.location.y+')  rotate(-90)');
+        });
+
+        self.prevDragEvent = d3.event;
         self.redrawEdges();
+        self.updatePlottingRegionSize();
     }
+
     dragEnded(){
         var node = d3.select(this).classed("dragging", false);
+    }
+
+    static backupNodeLocation(node) {
+        node.$location = new model.Point(node.location);
     }
 
     edgeLineD(edge){
@@ -163,7 +261,7 @@ export class TreeDesigner {
 
         var point2 = [parentNode.location.x+slantStartXOffset, parentNode.location.y];
         var point3 = [parentNode.location.x+slantStartXOffset+slantWidth, childNode.location.y];
-        var point4 = [childNode.location.x - (sign*(Math.max(0, Math.min(this.config.symbolSize/2+8, dX/2 - slantStartXOffset)))), childNode.location.y];
+        var point4 = [childNode.location.x - (sign*(Math.max(0, Math.min(this.config.symbolSize/2+8, dX/2)))), childNode.location.y];
         // var point2 = [parentNode.location.x+dX/2-slantWidth/2, parentNode.location.y];
         // var point3 = [childNode.location.x-(dX/2-slantWidth/2), childNode.location.y];
 
@@ -197,8 +295,6 @@ export class TreeDesigner {
 
     }
 
-
-
     initEdgeMarker() {
         console.log(this.svg);
         var defs = this.svg.append("svg:defs");
@@ -214,21 +310,27 @@ export class TreeDesigner {
             .append("path")
             .attr("d", "M0,-5L10,0L0,5")
             .attr("class","arrowHead");
-
     }
 
+    updateBrushExtent() {
+        var self =this;
+        this.brush.extent([[0, 0], [self.svg.attr('width'), self.svg.attr('height')]]);
+        this.brushContainer.call(this.brush);
+    }
     initBrush() {
         var self = this;
-        var brushContainer = this.mainGroup.append("g")
+        var brushContainer = this.brushContainer= this.svg.selectOrInsert("g.brush", ":first-child")
             .attr("class", "brush");
 
-        var brush = d3.brush()
+        var brush = this.brush = d3.brush()
             .on("start", brushstart)
             .on("brush", brushmove)
             .on("end", brushend);
 
-        // brush.extent([[0, 0], [self.plot.size, self.plot.size]]);
-        brushContainer.call(brush);
+
+        var mainGroupTranslation = Utils.getTranslation(self.mainGroup.attr("transform"));
+        this.updateBrushExtent();
+
         
         function brushstart() {
             if (!d3.event.selection) return;
@@ -243,8 +345,10 @@ export class TreeDesigner {
 
             self.mainGroup.selectAll(".node").classed('selected', function (d) {
 
-                return s[0][0] <= d.location.x && d.location.x <= s[1][0]
-                    && s[0][1] <= d.location.y && d.location.y <= s[1][1];
+                var x = d.location.x+mainGroupTranslation[0];
+                var y = d.location.y+mainGroupTranslation[1];
+                return s[0][0] <= x && x <= s[1][0]
+                    && s[0][1] <= y && y <= s[1][1];
             });
         }
         // If the brush is empty, select all circles.
@@ -377,23 +481,20 @@ export class TreeDesigner {
 
     addNode(node, parent){
         this.data.addNode(node, parent);
-        this.redrawEdges();
-        this.redrawNodes();
+        this.redraw();
         return node;
     }
     
     removeNode(node) {
         this.data.removeNode(node);
-        this.redrawEdges();
-        this.redrawNodes();
+        this.redraw();
     }
 
     removeSelectedNodes() {
         var selectedNodes = this.getSelectedNodes();
         this.data.removeNodes(selectedNodes);
         this.clearSelection();
-        this.redrawEdges();
-        this.redrawNodes();
+        this.redraw();
     }
 
     copyNode(d) {
@@ -421,8 +522,7 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach, node);
 
         attached.moveTo(node.location.x+120, node.location.y, true);
-        this.redrawEdges();
-        this.redrawNodes();
+        this.redraw();
 
         self.selectSubTree(attached, true);
     }
@@ -434,14 +534,17 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach);
 
         attached.moveTo(point.x, point.y, true);
-        this.redrawEdges();
-        this.redrawNodes();
+        this.redraw();
 
         self.selectSubTree(attached, true);
     }
 
     moveNodeTo(x,y){
 
+    }
+
+    getNodeD3Selection(node){
+        return this.mainGroup.select('#node-'+node.$id);
     }
 
     getSelectedNodes() {
@@ -457,6 +560,10 @@ export class TreeDesigner {
             this.clearSelection();
         }
         this.mainGroup.select('#edge-'+edge.$id).classed('selected', true);
+    }
+
+    isNodeSelected(node){
+        return this.getNodeD3Selection(node).classed('selected');
     }
 
     selectNode(node, clearSelectionBeforeSelect){

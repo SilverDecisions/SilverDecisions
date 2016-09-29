@@ -2,7 +2,10 @@ export class Point {
     x;
     y;
     constructor(x,y){
-        if(Array.isArray(x)){
+        if(x instanceof Point){
+            y=x.y;
+            x=x.x
+        }else if(Array.isArray(x)){
             y=x[1];
             x=x[0];
         }
