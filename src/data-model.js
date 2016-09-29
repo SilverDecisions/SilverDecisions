@@ -78,7 +78,7 @@ export class DataModel {
         var self = this;
         self.addNode(nodeToAttach, parent);
 
-        var childEdges = self.getAllChildEdges(nodeToAttach);
+        var childEdges = self.getAllDescendantEdges(nodeToAttach);
         childEdges.forEach(e=>{
             self.edges.push(e);
             self.nodes.push(e.childNode);
@@ -124,14 +124,28 @@ export class DataModel {
         this.edges = this.edges.filter(e=>edgesToRemove.indexOf(e)===-1);
     }
 
-    getAllChildEdges(node) {
+    getAllDescendantEdges(node) {
         var self = this;
         var result = [];
 
         node.childEdges.forEach(e=>{
             result.push(e);
             if(e.childNode){
-                result.push(...self.getAllChildEdges(e.childNode));
+                result.push(...self.getAllDescendantEdges(e.childNode));
+            }
+        });
+
+        return result;
+    }
+
+    getAllDescendantNodes(node) {
+        var self = this;
+        var result = [];
+
+        node.childEdges.forEach(e=>{
+            if(e.childNode){
+                result.push(e.childNode);
+                result.push(...self.getAllDescendantNodes(e.childNode));
             }
         });
 

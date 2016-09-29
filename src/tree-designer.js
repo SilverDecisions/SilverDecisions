@@ -88,7 +88,6 @@ export class TreeDesigner {
     }
 
     updatePlottingRegionSize() {
-        console.log('updatePlottingRegionSize');
         this.computeAvailableSpace();
         var margin = this.config.margin;
         var svgWidth = this.svg.attr('width');
@@ -328,7 +327,7 @@ export class TreeDesigner {
             .on("end", brushend);
 
 
-        var mainGroupTranslation = Utils.getTranslation(self.mainGroup.attr("transform"));
+        var mainGroupTranslation = this.getMainGroupTranslation();
         this.updateBrushExtent();
 
         
@@ -358,6 +357,15 @@ export class TreeDesigner {
 
             // if (!d3.event.selection) self.mainGroup.selectAll(".selected").classed('selected', false);
         }
+    }
+
+    getMainGroupTranslation(invert) {
+        var translation = Utils.getTranslation(this.mainGroup.attr("transform"));
+        if(invert){
+            translation[0] = -translation[0];
+            translation[1] = -translation[1]
+        }
+        return translation;
     }
 
     initNodeContextMenu() {
@@ -444,14 +452,14 @@ export class TreeDesigner {
             menu.push({
                 title: 'Add Decision Node',
                 action: function(elm, d, i) {
-                    var newNode = new model.DecisionNode(new model.Point(d3.mouse(self.mainGroup.node())));
+                    var newNode = new model.DecisionNode(new model.Point(d3.mouse(self.svg.node())).move(self.getMainGroupTranslation(true)));
                     self.addNode(newNode)
                 }
             });
             menu.push({
                 title: 'Add Chance Node',
                 action: function(elm, d, i) {
-                    var newNode = new model.ChanceNode(new model.Point(d3.mouse(self.mainGroup.node())));
+                    var newNode = new model.ChanceNode(new model.Point(d3.mouse(self.svg.node())).move(self.getMainGroupTranslation(true)));
                     self.addNode(newNode)
                 }
             });
@@ -459,7 +467,7 @@ export class TreeDesigner {
             menu.push({
                 title: 'Paste',
                 action: function(elm, d, i) {
-                    self.pasteToNewLocation(new model.Point(d3.mouse(self.mainGroup.node())));
+                    self.pasteToNewLocation(new model.Point(d3.mouse(self.svg.node())).move(self.getMainGroupTranslation(true)));
                 },
                 disabled: !self.copiedNode
 
@@ -475,8 +483,10 @@ export class TreeDesigner {
             return menu;
         };
 
-        this.mainContextMenu = new ContextMenu(menu);
-        self.mainGroup.on('contextmenu',this.mainContextMenu);
+        this.mainContextMenu = new ContextMenu(menu,{
+            onOpen: () => self.clearSelection()
+        });
+        self.svg.on('contextmenu',this.mainContextMenu);
     }
 
     addNode(node, parent){
@@ -515,6 +525,16 @@ export class TreeDesigner {
 
     }
 
+    fitNodesInPlottingRegion(nodes){
+        var self = this;
+        var topY = d3.min(nodes, n=>n.location.y);
+        var minY = self.getNodeMinY();
+        var dy = topY - minY;
+        if(dy<0){
+            nodes.forEach(n=>n.move(0, -dy));
+        }
+    }
+
     pasteToNode(node) {
         var self = this;
         var toAttach = this.copiedNode;
@@ -522,6 +542,8 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach, node);
 
         attached.moveTo(node.location.x+120, node.location.y, true);
+        self.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
+
         this.redraw();
 
         self.selectSubTree(attached, true);
@@ -534,6 +556,8 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach);
 
         attached.moveTo(point.x, point.y, true);
+        self.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
+
         this.redraw();
 
         self.selectSubTree(attached, true);

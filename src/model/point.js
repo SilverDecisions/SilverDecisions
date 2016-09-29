@@ -32,4 +32,5 @@ export class Point {
         this.y+=dy;
         return this;
     }
+
 }
