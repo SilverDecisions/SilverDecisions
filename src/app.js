@@ -30,6 +30,7 @@ export class App {
         this.initTreeDesigner();
         this.initExportToPngButton();
         this.initExportSvgButton();
+        this.initAutoLayoutButtons();
     }
 
     setConfig(config) {
@@ -57,7 +58,7 @@ export class App {
 
     initExportToPngButton() {
         var svg = this.treeDesigner.svg;
-        d3.select('#saveButton').on('click', function(){
+        this.container.select('#saveButton').on('click', function(){
             var svgString = Exporter.getSVGString(svg.node());
             Exporter.svgString2Image(svgString, 2*800, 2*800, 'png', save ); // passes Blob and filesize String to the callback
 
@@ -69,10 +70,20 @@ export class App {
 
     initExportSvgButton() {
         var svg = this.treeDesigner.svg;
-        d3.select('#saveButtonSvg').on('click', function(){
+        this.container.select('#saveButtonSvg').on('click', function(){
             var svgString = Exporter.getSVGString(svg.node());
             var blob = new Blob([svgString], {type: "image/svg+xml"});
             Exporter.saveAs(blob,'export.svg');
+        });
+    }
+
+    initAutoLayoutButtons() {
+        var self = this;
+        this.container.select('#treeAutoLayoutButton').on('click', function(){
+            self.treeDesigner.autoLayout('tree');
+        });
+        this.container.select('#clusterAutoLayoutButton').on('click', function(){
+            self.treeDesigner.autoLayout('cluster');
         });
     }
 }

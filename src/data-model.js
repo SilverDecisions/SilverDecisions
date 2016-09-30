@@ -57,6 +57,10 @@ export class DataModel {
         roots.forEach(this.removeNode, this);
     }
 
+    getRoots(){
+        return this.nodes.filter(n=>!n.parent);
+    }
+
     findSubtreeRoots(nodes) {
         return nodes.filter(n=>!n.parent || nodes.indexOf(n.parent)===-1);
     }

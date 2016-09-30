@@ -40,7 +40,9 @@ export class Exporter {
 
             function getSelectors(element, parentSelectors, selectorTextArr){
                 // Add Parent element Id and Classes to the list
-
+                if(!element.tagName){
+                      return  selectorTextArr;
+                }
 
                 if (!contains(element.tagName, selectorTextArr))
                     selectorTextArr.push(element.tagName);
@@ -66,7 +68,6 @@ export class Exporter {
                     if (!contains(element.tagName+allClasses, selectorTextArr))
                         selectorTextArr.push(element.tagName+allClasses);
                 }
-
 
                 // Add Children element Ids and Classes to the list
                 var nodes = element.childNodes;

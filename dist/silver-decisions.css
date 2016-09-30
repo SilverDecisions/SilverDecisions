@@ -106,8 +106,6 @@
         fill: #0000d7; }
       #silver-decisions svg.tree-designer .edge:hover {
         stroke-width: 2.5; }
-        #silver-decisions svg.tree-designer .edge:hover .label {
-          font-weight: bold; }
       #silver-decisions svg.tree-designer .edge.selected {
         stroke-width: 3.5; }
         #silver-decisions svg.tree-designer .edge.selected .label {

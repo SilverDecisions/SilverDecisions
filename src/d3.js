@@ -5,3 +5,4 @@ export * from 'd3-shape'
 export * from 'd3-drag';
 export * from 'd3-brush'
 export * from 'd3-array'
+export * from 'd3-hierarchy'

@@ -6,6 +6,8 @@ export class Templates{
         '<div id="toolbar">' +
             '<button id="saveButton">Export to PNG</button>'+
             '<button id="saveButtonSvg">Export to SVG</button>'+
+            '<button id="treeAutoLayoutButton">Tree auto layout</button>'+
+            '<button id="clusterAutoLayoutButton">Cluster auto layout</button>'+
         '</div>';
 
     static main =
