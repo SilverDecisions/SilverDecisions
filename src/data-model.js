@@ -11,18 +11,19 @@ export class DataModel {
     edges = [];
 
     constructor() {
-        var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150)));
-        var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1);
-        var n3 = this.addNode(new model.TerminalNode(new model.Point(250,200)), n1);
-        var n4 = this.addNode(new model.DecisionNode(new model.Point(400,50)), n2);
-        var n5 = this.addNode(new model.TerminalNode(new model.Point(400,150)), n2);
+        var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
+        var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
+        var n3 = this.addNode(new model.TerminalNode(new model.Point(250,200)), n1).setName('leave game').setPayoff(0).childNode;
+        var n4 = this.addNode(new model.DecisionNode(new model.Point(400,50)), n2).setName('win').setPayoff(20).setProbability(0.1).childNode;
+        var n5 = this.addNode(new model.TerminalNode(new model.Point(400,150)), n2).setName('lose').setPayoff(0).setProbability(0.9).childNode;
     }
 
+    /*returns node or edge from parent to this node*/
     addNode(node, parent){
         var self = this;
         self.nodes.push(node);
         if(parent){
-            self._addChild(parent, node);
+            return self._addChild(parent, node);
         }
         return node;
     }
@@ -33,6 +34,7 @@ export class DataModel {
         self.edges.push(edge);
         parent.childEdges.push(edge);
         child.parent = parent;
+        return edge;
     }
 
     /*removes given node and its subtree*/
@@ -67,7 +69,7 @@ export class DataModel {
         nodeToCopy.childEdges.forEach(e=>{
             var childClone = self.cloneSubtree(e.childNode);
             childClone.parent = clone;
-            var edge = new model.Edge(clone, childClone);
+            var edge = new model.Edge(clone, childClone, e.name, e.payoff, e.probability);
             clone.childEdges.push(edge);
         });
         return clone;

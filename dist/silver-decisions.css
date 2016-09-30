@@ -59,10 +59,13 @@
     position: relative;
     flex: 1; }
   #silver-decisions svg.tree-designer {
+    font-size: 12px;
     position: absolute;
     border: 1px dashed black; }
     #silver-decisions svg.tree-designer .node {
       cursor: move; }
+      #silver-decisions svg.tree-designer .node .payoff {
+        fill: #0000d7; }
       #silver-decisions svg.tree-designer .node path {
         -webkit-transition: fill 0.25s;
         /* Safari */
@@ -89,33 +92,45 @@
       fill: #00aa00; }
     #silver-decisions svg.tree-designer .edge {
       cursor: pointer;
-      stroke-width: 2;
+      stroke-width: 1.5;
       -webkit-transition: stroke-width 0.3s;
       /* Safari */
       transition: stroke-width 0.3s; }
+      #silver-decisions svg.tree-designer .edge .label {
+        font-size: 1em; }
+      #silver-decisions svg.tree-designer .edge .payoff {
+        fill: #006f00; }
+        #silver-decisions svg.tree-designer .edge .payoff.negative {
+          fill: #b60000; }
+      #silver-decisions svg.tree-designer .edge .probability {
+        fill: #0000d7; }
       #silver-decisions svg.tree-designer .edge:hover {
-        stroke-width: 3; }
+        stroke-width: 2.5; }
+        #silver-decisions svg.tree-designer .edge:hover .label {
+          font-weight: bold; }
       #silver-decisions svg.tree-designer .edge.selected {
-        stroke-width: 4; }
+        stroke-width: 3.5; }
+        #silver-decisions svg.tree-designer .edge.selected .label {
+          font-weight: bold; }
 
 @-webkit-keyframes pulse {
   0% {
-    stroke-width: 4;
+    stroke-width: 3.5;
     opacity: 1.0; }
   50% {
-    stroke-width: 2;
+    stroke-width: 1.5;
     opacity: 1; }
   100% {
-    stroke-width: 4;
+    stroke-width: 3.5;
     opacity: 1.0; } }
 
 @keyframes pulse {
   0% {
-    stroke-width: 4;
+    stroke-width: 3.5;
     opacity: 1.0; }
   50% {
-    stroke-width: 2;
+    stroke-width: 1.5;
     opacity: 1; }
   100% {
-    stroke-width: 4;
+    stroke-width: 3.5;
     opacity: 1.0; } }

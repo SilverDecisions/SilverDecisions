@@ -24,6 +24,11 @@ export class Node {
         this.$symbol=symbol;
     }
 
+    setName(name){
+        this.name = name;
+        return this;
+    }
+
     moveTo(x,y, withChildren){ //move to new location
         if(withChildren){
             var dx = x-this.location.x;

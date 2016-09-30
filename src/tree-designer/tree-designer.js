@@ -61,8 +61,9 @@ export class TreeDesigner {
     }
 
     redraw(){
-        this.redrawEdges();
         this.redrawNodes();
+        this.redrawEdges();
+
         this.updatePlottingRegionSize();
     }
 
@@ -125,13 +126,15 @@ export class TreeDesigner {
             .attr('id', d=>'node-'+d.$id)
             .attr('class', d=>d.type+'-node node');
         nodesEnter.append('path');
-        nodesEnter.append('text');
+
+        nodesEnter.append('text').attr('class', 'label');
+        nodesEnter.append('text').attr('class', 'payoff computed');
 
         var nodesMerge = nodesEnter.merge(nodes);
 
-
-        nodesMerge.attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ') rotate(-90)');
+        nodesMerge.attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')');
         nodesMerge.select('path')
+            .attr('transform', 'rotate(-90)')
             .attr('d', symbol)
             .each(function (d) {
                 var path = d3.select(this);
@@ -140,6 +143,22 @@ export class TreeDesigner {
                 path.attr("d", symbol.size(error * error * 64));
             });
 
+
+        nodesMerge.select('text.label')
+            .attr('x', 0)
+            .attr('y', -symbolSize/2 - 7)
+            .attr('text-anchor', 'middle')
+            .text(d=>d.name);
+
+
+
+        nodesMerge.select('text.payoff')
+            .attr('x', 0)
+            .attr('y', symbolSize/2 + 7)
+            .attr('text-anchor', 'middle')
+            .attr('dominant-baseline', 'hanging')
+            .classed('negative', d=>d.computed.payoff<0)
+            .text(d=> d.computed.payoff!==null ? '$ '+d.computed.payoff : '');
 
 
         var self = this;
@@ -237,7 +256,7 @@ export class TreeDesigner {
             if(revertX){
                 d.location.x = d.$location.x;
             }
-            self.getNodeD3Selection(d).raise().attr('transform', 'translate('+d.location.x+' '+d.location.y+')  rotate(-90)');
+            self.getNodeD3Selection(d).raise().attr('transform', 'translate('+d.location.x+' '+d.location.y+')');
         });
 
         self.prevDragEvent = d3.event;
@@ -271,14 +290,15 @@ export class TreeDesigner {
         var slantStartXOffset = Math.min(dX/2, 30);
         var slantWidth = Math.min(20, Math.max(dX/2 - slantStartXOffset, 0));
 
-
+        var point1 = [parentNode.location.x +this.config.symbolSize/2 + 1, parentNode.location.y];
         var point2 = [parentNode.location.x+slantStartXOffset, parentNode.location.y];
         var point3 = [parentNode.location.x+slantStartXOffset+slantWidth, childNode.location.y];
         var point4 = [childNode.location.x - (sign*(Math.max(0, Math.min(this.config.symbolSize/2+8, dX/2)))), childNode.location.y];
         // var point2 = [parentNode.location.x+dX/2-slantWidth/2, parentNode.location.y];
         // var point3 = [childNode.location.x-(dX/2-slantWidth/2), childNode.location.y];
 
-        return line([[parentNode.location.x, parentNode.location.y], point2, point3, point4]);
+        edge.$linePoints = [point1, point2, point3, point4];
+        return line(edge.$linePoints);
     }
 
 
@@ -291,7 +311,12 @@ export class TreeDesigner {
             .attr('id', d=>'edge-'+d.$id)
             .attr('class', 'edge');
 
+
         edgesEnter.append('path');
+        edgesEnter.append('text').attr('class', 'label');
+        edgesEnter.append('text').attr('class', 'payoff');
+        edgesEnter.append('text').attr('class', 'probability');
+
         var edgesMerge = edgesEnter.merge(edges);
 
         edgesMerge.select('path')
@@ -304,8 +329,31 @@ export class TreeDesigner {
 
         edgesMerge.on('click', d=>{
             self.selectEdge(d, true)
-        })
+        });
 
+
+        edgesMerge.select('text.label')
+            .attr('x', d=>d.$linePoints[2][0]+2)
+            .attr('y', d=>d.$linePoints[2][1]-7)
+            .text(d=>d.name);
+
+        var payoffText = edgesMerge.select('text.payoff')
+            .attr('dominant-baseline', 'hanging')
+            .attr('x', d=>d.$linePoints[2][0]+2)
+            .attr('y', d=>d.$linePoints[2][1]+7)
+            .classed('negative', d=>d.payoff<0)
+            .text(d=>'$ '+d.payoff);
+
+        edgesMerge.select('text.probability')
+            .attr('dominant-baseline', 'hanging') //TODO not working in IE
+            .attr('text-anchor', 'end')
+            .attr('x', function(d){
+                var len = d3.select(this).node().getComputedTextLength();
+                var min = d.$linePoints[2][0]+2+d3.select(this.previousSibling).node().getBBox().width+7+len;
+                return Math.max(min,d.$linePoints[3][0]-8);
+            })
+            .attr('y', d=>d.$linePoints[2][1]+7)
+            .text(d=>d.probability ? d.probability: '')
     }
 
     initEdgeMarker() {
