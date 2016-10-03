@@ -1,9 +1,9 @@
 import * as d3 from './d3'
 
 /*based on:
-* github.com/patorjk/d3-context-menu */
+ * github.com/patorjk/d3-context-menu */
 
-export class ContextMenu{
+export class ContextMenu {
     openCallback;
     closeCallback;
 
@@ -25,7 +25,7 @@ export class ContextMenu{
             .attr('class', 'd3-context-menu');
 
         // close menu
-        d3.select('body').on('click.d3-context-menu', function() {
+        d3.select('body').on('click.d3-context-menu', function () {
             d3.select('.d3-context-menu').style('display', 'none');
             if (self.closeCallback) {
                 self.closeCallback();
@@ -33,12 +33,12 @@ export class ContextMenu{
         });
 
         // this gets executed when a contextmenu event occurs
-        return function(data, index) {
+        return function (data, index) {
             var elm = this;
 
             d3.selectAll('.d3-context-menu').html('');
             var list = d3.selectAll('.d3-context-menu')
-                .on('contextmenu', function(d) {
+                .on('contextmenu', function (d) {
                     d3.select('.d3-context-menu').style('display', 'none');
                     d3.event.preventDefault();
                     d3.event.stopPropagation();
@@ -46,7 +46,7 @@ export class ContextMenu{
                 .append('ul');
             list.selectAll('li').data(typeof menu === 'function' ? menu(data) : menu).enter()
                 .append('li')
-                .attr('class', function(d) {
+                .attr('class', function (d) {
                     var ret = '';
                     if (d.divider) {
                         ret += ' is-divider';
@@ -59,7 +59,7 @@ export class ContextMenu{
                     }
                     return ret;
                 })
-                .html(function(d) {
+                .html(function (d) {
                     if (d.divider) {
                         return '<hr>';
                     }
@@ -68,7 +68,7 @@ export class ContextMenu{
                     }
                     return (typeof d.title === 'string') ? d.title : d.title(data);
                 })
-                .on('click', function(d, i) {
+                .on('click', function (d, i) {
                     if (d.disabled) return; // do nothing if disabled
                     if (!d.action) return; // headers have no "action"
                     d.action(elm, data, index);
@@ -98,8 +98,8 @@ export class ContextMenu{
         };
     };
 
-    static hide(){
+    static hide() {
         d3.select('.d3-context-menu').style('display', 'none');
     }
-    
+
 }

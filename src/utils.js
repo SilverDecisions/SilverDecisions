@@ -79,11 +79,11 @@ export class Utils {
         return typeof a === 'function';
     };
 
-    static isDate(a){
+    static isDate(a) {
         return Object.prototype.toString.call(a) === '[object Date]'
     }
 
-    static isString(a){
+    static isString(a) {
         return typeof a === 'string' || a instanceof String
     }
 
@@ -91,7 +91,7 @@ export class Utils {
 
         var selectorParts = selector.split(/([\.\#])/);
         var element = parent[operation](selectorParts.shift(), before);//":first-child"
-        
+
         while (selectorParts.length > 1) {
             var selectorModifier = selectorParts.shift();
             var selectorItem = selectorParts.shift();
@@ -131,7 +131,7 @@ export class Utils {
         }
         return selection;
     };
-    
+
     static sanitizeHeight = function (height, container) {
         return (height || parseInt(container.style('height'), 10) || 400);
     };
@@ -160,29 +160,29 @@ export class Utils {
     }
 
     //places textString in textObj, adds an ellipsis if text can't fit in width
-    static placeTextWithEllipsis(textD3Obj, textString, width){
+    static placeTextWithEllipsis(textD3Obj, textString, width) {
         var textObj = textD3Obj.node();
-        textObj.textContent=textString;
+        textObj.textContent = textString;
 
         var margin = 0;
         var ellipsisLength = 9;
         //ellipsis is needed
-        if (textObj.getComputedTextLength()>width+margin){
-            for (var x=textString.length-3;x>0;x-=1){
-                if (textObj.getSubStringLength(0,x)+ellipsisLength<=width+margin){
-                    textObj.textContent=textString.substring(0,x)+"...";
+        if (textObj.getComputedTextLength() > width + margin) {
+            for (var x = textString.length - 3; x > 0; x -= 1) {
+                if (textObj.getSubStringLength(0, x) + ellipsisLength <= width + margin) {
+                    textObj.textContent = textString.substring(0, x) + "...";
                     return true;
                 }
             }
-            textObj.textContent="..."; //can't place at all
+            textObj.textContent = "..."; //can't place at all
             return true;
         }
         return false;
     }
 
-    static placeTextWithEllipsisAndTooltip(textD3Obj, textString, width, tooltip){
+    static placeTextWithEllipsisAndTooltip(textD3Obj, textString, width, tooltip) {
         var ellipsisPlaced = Utils.placeTextWithEllipsis(textD3Obj, textString, width);
-        if(ellipsisPlaced && tooltip){
+        if (ellipsisPlaced && tooltip) {
             textD3Obj.on("mouseover", function (d) {
                 tooltip.transition()
                     .duration(200)
@@ -201,7 +201,7 @@ export class Utils {
 
     }
 
-    static getFontSize(element){
+    static getFontSize(element) {
         return window.getComputedStyle(element, null).getPropertyValue("font-size");
     }
 
@@ -210,20 +210,20 @@ export class Utils {
     }
 
     static getTranslation(transform) {
-    // Create a dummy g for calculation purposes only. This will never
-    // be appended to the DOM and will be discarded once this function 
-    // returns.
-    var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        // Create a dummy g for calculation purposes only. This will never
+        // be appended to the DOM and will be discarded once this function
+        // returns.
+        var g = document.createElementNS("http://www.w3.org/2000/svg", "g");
 
-    // Set the transform attribute to the provided string value.
-    g.setAttributeNS(null, "transform", transform);
+        // Set the transform attribute to the provided string value.
+        g.setAttributeNS(null, "transform", transform);
 
-    // consolidate the SVGTransformList containing all transformations
-    // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
-    // its SVGMatrix. 
-    var matrix = g.transform.baseVal.consolidate().matrix;
+        // consolidate the SVGTransformList containing all transformations
+        // to a single SVGTransform of type SVG_TRANSFORM_MATRIX and get
+        // its SVGMatrix.
+        var matrix = g.transform.baseVal.consolidate().matrix;
 
-    // As per definition values e and f are the ones for the translation.
-    return [matrix.e, matrix.f];
-}
+        // As per definition values e and f are the ones for the translation.
+        return [matrix.e, matrix.f];
+    }
 }

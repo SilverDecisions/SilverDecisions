@@ -38,10 +38,10 @@ export class Exporter {
                 return arr.indexOf(str) !== -1;
             }
 
-            function getSelectors(element, parentSelectors, selectorTextArr){
+            function getSelectors(element, parentSelectors, selectorTextArr) {
                 // Add Parent element Id and Classes to the list
-                if(!element.tagName){
-                      return  selectorTextArr;
+                if (!element.tagName) {
+                    return selectorTextArr;
                 }
 
                 if (!contains(element.tagName, selectorTextArr))
@@ -49,24 +49,24 @@ export class Exporter {
 
                 if (element.id && !contains('#' + element.id, selectorTextArr))
                     selectorTextArr.push('#' + element.id);
-                if (element.id && !contains(element.tagName+'#' + element.id, selectorTextArr))
-                    selectorTextArr.push(element.tagName+'#' + element.id);
+                if (element.id && !contains(element.tagName + '#' + element.id, selectorTextArr))
+                    selectorTextArr.push(element.tagName + '#' + element.id);
 
 
-                var allClasses ='';
-                for (var c = 0; c < element.classList.length; c++){
+                var allClasses = '';
+                for (var c = 0; c < element.classList.length; c++) {
                     var className = element.classList[c];
-                    allClasses+='.'+className;
+                    allClasses += '.' + className;
                     if (!contains('.' + className, selectorTextArr))
                         selectorTextArr.push('.' + className);
-                    if (!contains(element.tagName+'.' + className, selectorTextArr))
-                        selectorTextArr.push(element.tagName+'.' + className);
+                    if (!contains(element.tagName + '.' + className, selectorTextArr))
+                        selectorTextArr.push(element.tagName + '.' + className);
                 }
-                if(allClasses){
+                if (allClasses) {
                     if (!contains(allClasses, selectorTextArr))
                         selectorTextArr.push(allClasses);
-                    if (!contains(element.tagName+allClasses, selectorTextArr))
-                        selectorTextArr.push(element.tagName+allClasses);
+                    if (!contains(element.tagName + allClasses, selectorTextArr))
+                        selectorTextArr.push(element.tagName + allClasses);
                 }
 
                 // Add Children element Ids and Classes to the list

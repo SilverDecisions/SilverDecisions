@@ -38,23 +38,26 @@ export class DataModel {
     }
 
     /*removes given node and its subtree*/
-    removeNode(node) {
+    removeNode(node, $l = 0) {
         var self = this;
+        node.childEdges.forEach(e=>self.removeNode(e.childNode, $l + 1));
+
         self._removeNode(node);
         var parent = node.parent;
-        if(parent){
-            var parentEdge = parent.childEdges.find((e,i)=> e.childNode===node);
-            self._removeEdge(parentEdge);
+        if (parent) {
+            var parentEdge = parent.childEdges.find((e, i)=> e.childNode === node);
+            if ($l == 0) {
+                self.removeEdge(parentEdge);
+            } else {
+                self._removeEdge(parentEdge);
+            }
         }
-
-        node.parent=null;
-        node.childEdges.forEach(e=>self.removeNode(e.childNode));
     }
 
     /*removes given nodes and their subtrees*/
     removeNodes(nodes){
         var roots = this.findSubtreeRoots(nodes);
-        roots.forEach(this.removeNode, this);
+        roots.forEach(n=>this.removeNode(n,0), this);
     }
 
     getRoots(){
@@ -114,6 +117,14 @@ export class DataModel {
         if (index > -1) {
             this.nodes.splice(index, 1);
         }
+    }
+
+    removeEdge(edge){
+        var index  = edge.parentNode.childEdges.indexOf(edge);
+        if (index > -1) {
+            edge.parentNode.childEdges.splice(index, 1);
+        }
+        this._removeEdge(edge);
     }
 
     _removeEdge(edge){ //removes edge from edge list without removing connected nodes

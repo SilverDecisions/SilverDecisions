@@ -509,7 +509,8 @@ export class TreeDesigner {
         var self;
         var selectedNodes = this.getSelectedNodes();
 
-        //this.data.findSubtreeRoots(selectedNodes);
+        var selectedRoots = this.data.findSubtreeRoots(selectedNodes);
+        this.copiedNodes = selectedRoots.map(d=>this.data.cloneSubtree(d));
         //TODO
 
     }
