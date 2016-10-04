@@ -60,14 +60,20 @@ export class TreeDesigner {
         this.redraw();
     }
 
-    redraw(){
+    redraw(withTransitions){
         var self = this;
+        if(withTransitions){
+            self.transitionPrev = self.transition;
+            self.transition = true;
+        }
         this.redrawNodes();
         this.redrawEdges();
+        if(withTransitions){
+            self.transition =  self.transitionPrev;
+        }
         setTimeout(function(){
             self.updatePlottingRegionSize();
         },10)
-
     }
 
     computeAvailableSpace(){
@@ -128,11 +134,12 @@ export class TreeDesigner {
         nodes.exit().remove();
         var nodesEnter = nodes.enter().append('g')
             .attr('id', d=>'node-'+d.$id)
-            .attr('class', d=>d.type+'-node node');
+            .attr('class', d=>d.type+'-node node')
+            .attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')');
         nodesEnter.append('path');
 
-        nodesEnter.append('text').attr('class', 'label');
-        nodesEnter.append('text').attr('class', 'payoff computed');
+        var labelEnter = nodesEnter.append('text').attr('class', 'label');
+        var payoffEnter = nodesEnter.append('text').attr('class', 'payoff computed');
 
         var nodesMerge = nodesEnter.merge(nodes);
 
@@ -153,10 +160,9 @@ export class TreeDesigner {
             });
 
 
+        labelPosition(labelEnter);
+        labelPosition(nodesMergeT.select('text.label'))
 
-        nodesMergeT.select('text.label')
-            .attr('x', 0)
-            .attr('y', -symbolSize/2 - 7)
             .attr('text-anchor', 'middle')
             .text(d=>d.name);
 
@@ -170,11 +176,23 @@ export class TreeDesigner {
         if(this.transition){
             payoffT = payoff.transition();
         }
-        payoffT
-            .attr('x', 0)
-            .attr('y', symbolSize/2 + 7)
-            .attr('text-anchor', 'middle')
 
+        payoffPosition(payoffEnter);
+        payoffPosition(payoffT);
+
+
+
+        function labelPosition(selection){
+            return selection
+                .attr('x', 0)
+                .attr('y', -symbolSize/2 - 7)
+        }
+        function payoffPosition(selection){
+            return selection
+                .attr('x', 0)
+                .attr('y', symbolSize/2 + 7)
+                .attr('text-anchor', 'middle')
+        }
 
 
         var self = this;
@@ -228,13 +246,19 @@ export class TreeDesigner {
         if(!node.classed("selected")){
             self.clearSelection();
         }
-
+        console.log('drag started');
         node.classed("selected dragging", true);
         self.selectedNodes = self.getSelectedNodes();
         self.prevDragEvent = d3.event;
+        self.firstDragEvent = true;
     }
 
     drag(draggedNode, self){
+
+        if(self.firstDragEvent){
+            self.data.saveState();
+        }
+        self.firstDragEvent = false;
         var dx = d3.event.x - self.prevDragEvent.x;
         var limit = self.config.layout.limitNodePositioning;
         if(limit){
@@ -330,9 +354,9 @@ export class TreeDesigner {
 
 
         edgesEnter.append('path');
-        edgesEnter.append('text').attr('class', 'label');
-        edgesEnter.append('text').attr('class', 'payoff');
-        edgesEnter.append('text').attr('class', 'probability');
+        var labelEnter = edgesEnter.append('text').attr('class', 'label');
+        var payoffEnter = edgesEnter.append('text').attr('class', 'payoff');
+        var probabilityEnter = edgesEnter.append('text').attr('class', 'probability');
 
         var edgesMerge = edgesEnter.merge(edges);
 
@@ -352,10 +376,8 @@ export class TreeDesigner {
             self.selectEdge(d, true)
         });
 
-
-        edgesMergeT.select('text.label')
-            .attr('x', d=>d.$linePoints[2][0]+2)
-            .attr('y', d=>d.$linePoints[2][1]-7)
+        labelPosition(labelEnter);
+        labelPosition(edgesMergeT.select('text.label'))
             .text(d=>d.name);
 
         var payoffText = edgesMerge.select('text.payoff')
@@ -367,21 +389,36 @@ export class TreeDesigner {
         if(this.transition){
             payoffTextT = payoffText.transition();
         }
-        payoffTextT
-            .attr('x', d=>d.$linePoints[2][0]+2)
-            .attr('y', d=>d.$linePoints[2][1]+7)
+        payoffPosition(payoffEnter);
+        payoffPosition(payoffTextT);
 
-
-        edgesMergeT.select('text.probability')
+        probabilityPosition(probabilityEnter);
+        probabilityPosition(edgesMergeT.select('text.probability'))
             .attr('dominant-baseline', 'hanging') //TODO not working in IE
             .attr('text-anchor', 'end')
-            .attr('x', function(d){
-                var len = d3.select(this).node().getComputedTextLength();
-                var min = d.$linePoints[2][0]+2+d3.select(this.previousSibling).node().getBBox().width+7+len;
-                return Math.max(min,d.$linePoints[3][0]-8);
-            })
-            .attr('y', d=>d.$linePoints[2][1]+7)
             .text(d=>d.probability ? d.probability: '')
+
+        function payoffPosition(selection){
+            return selection
+                .attr('x', d=>d.$linePoints[2][0]+2)
+                .attr('y', d=>d.$linePoints[2][1]+7)
+        }
+        function labelPosition(selection){
+            return selection
+                .attr('x', d=>d.$linePoints[2][0]+2)
+                .attr('y', d=>d.$linePoints[2][1]-7)
+
+        }
+        function probabilityPosition(selection){
+            return selection
+                .attr('x', function(d){
+                    var len = d3.select(this).node().getComputedTextLength();
+                    var min = d.$linePoints[2][0]+2+d3.select(this.previousSibling).node().getBBox().width+7+len;
+                    return Math.max(min,d.$linePoints[3][0]-8);
+                })
+                .attr('y', d=>d.$linePoints[2][1]+7)
+
+        }
     }
 
     initEdgeMarker() {
@@ -420,7 +457,7 @@ export class TreeDesigner {
         var mainGroupTranslation = this.getMainGroupTranslation();
         this.updateBrushExtent();
 
-        
+
         function brushstart() {
             if (!d3.event.selection) return;
             self.clearSelection();
@@ -468,31 +505,34 @@ export class TreeDesigner {
     }
 
     addNode(node, parent){
+        this.data.saveState();
         this.data.addNode(node, parent);
         this.redraw();
         if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout);
+            this.autoLayout(this.currentAutoLayout,true);
         }
         return node;
     }
-    
+
     removeNode(node) {
+        this.data.saveState();
         this.data.removeNode(node);
 
         if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout);
+            this.autoLayout(this.currentAutoLayout, true);
         }else{
             this.redraw();
         }
     }
 
     removeSelectedNodes() {
+        this.data.saveState();
         var selectedNodes = this.getSelectedNodes();
         this.data.removeNodes(selectedNodes);
         this.clearSelection();
         this.redraw();
         if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout);
+            this.autoLayout(this.currentAutoLayout, true);
         }
     }
 
@@ -526,6 +566,7 @@ export class TreeDesigner {
     }
 
     pasteToNode(node) {
+        this.data.saveState();
         var self = this;
         var toAttach = this.copiedNode;
         self.copyNode(toAttach);
@@ -536,13 +577,14 @@ export class TreeDesigner {
 
         this.redraw();
         if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout);
+            this.autoLayout(this.currentAutoLayout, true);
         }
 
         self.selectSubTree(attached, true);
     }
 
     pasteToNewLocation(point) {
+        this.data.saveState();
         var self = this;
         var toAttach = this.copiedNode;
         self.copyNode(toAttach);
@@ -553,7 +595,7 @@ export class TreeDesigner {
 
         this.redraw();
         if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout);
+            this.autoLayout(this.currentAutoLayout, true);
         }
 
         self.selectSubTree(attached, true);
@@ -605,10 +647,20 @@ export class TreeDesigner {
         this.mainGroup.selectAll(".node").classed('selected', true);
     }
 
-    autoLayout(type){
+    autoLayout(type, withoutStateSaving){
+
+
         var self=this;
         if(!this.data.nodes.length){
             return;
+        }
+        if(!withoutStateSaving){
+            this.data.saveState({
+                data:{
+                    currentAutoLayout: self.currentAutoLayout
+                },
+                onRevert: (data)=> self.currentAutoLayout = data.currentAutoLayout
+            });
         }
 
         var nodeTypeOrder = {
@@ -660,9 +712,9 @@ export class TreeDesigner {
         });
 
 
-        this.transition = true;
-        this.redraw();
-        this.transition = false;
+        // this.transition = true;
+        this.redraw(true);
+        // this.transition = false;
 
         this.currentAutoLayout = type;
         return this;

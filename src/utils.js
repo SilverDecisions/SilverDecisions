@@ -226,4 +226,19 @@ export class Utils {
         // As per definition values e and f are the ones for the translation.
         return [matrix.e, matrix.f];
     }
+
+    static getObjectByIdMap(objectList, mappingFn) {
+        var objectById = {};
+        if (!objectList) {
+            return objectById;
+        }
+        objectList.forEach(function (obj) {
+            var val = obj;
+            if (mappingFn) {
+                val = mappingFn(obj);
+            }
+            objectById[obj.$id] = val;
+        });
+        return objectById;
+    };
 }

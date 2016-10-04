@@ -10,6 +10,13 @@ export class DataModel {
     nodes = [];
     edges = [];
 
+    // undo / redo
+    maxStackSize = 15;
+    undoStack = [];
+    redoStack =[];
+    undoRedoStateChangedCallback = null;
+
+
     constructor() {
         var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
         var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
@@ -39,6 +46,7 @@ export class DataModel {
 
     /*removes given node and its subtree*/
     removeNode(node, $l = 0) {
+
         var self = this;
         node.childEdges.forEach(e=>self.removeNode(e.childNode, $l + 1));
 
@@ -56,6 +64,7 @@ export class DataModel {
 
     /*removes given nodes and their subtrees*/
     removeNodes(nodes){
+
         var roots = this.findSubtreeRoots(nodes);
         roots.forEach(n=>this.removeNode(n,0), this);
     }
@@ -167,5 +176,100 @@ export class DataModel {
         });
 
         return result;
+    }
+
+    isUndoAvailable(){
+        return !!this.undoStack.length
+    }
+
+    isRedoAvailable(){
+        return !!this.redoStack.length
+    }
+
+
+    saveState(revertConf){
+        this.redoStack.length = 0;
+
+        this._pushToStack(this.undoStack,{
+            revertConf: revertConf,
+            nodes: _.cloneDeep(this.nodes),
+            edges: _.cloneDeep(this.edges)
+        });
+
+        this._fireUndoRedoCallback();
+
+        return this;
+    }
+
+    undo(){
+        var self = this;
+        var newState = this.undoStack.pop();
+        if(!newState){
+            return;
+        }
+
+        this._pushToStack(this.redoStack, {
+            nodes: self.nodes,
+            edges: self.edges
+        });
+
+        this._setNewState(newState);
+
+        this._fireUndoRedoCallback();
+
+        return this;
+    }
+
+    redo(){
+        var self = this;
+        var newState = this.redoStack.pop();
+        if(!newState){
+            return;
+        }
+
+        this._pushToStack(this.undoStack, {
+            nodes: self.nodes,
+            edges: self.edges
+        });
+
+        this._setNewState(newState);
+
+        this._fireUndoRedoCallback();
+
+        return this;
+    }
+
+
+    _setNewState(newState) {
+        var nodeById = Utils.getObjectByIdMap(newState.nodes);
+        var edgeById = Utils.getObjectByIdMap(newState.edges);
+        this.nodes = newState.nodes;
+        this.edges = newState.edges;
+        this.nodes.forEach(n=> {
+            for(var i=0; i<n.childEdges.length; i++){
+                var edge = edgeById[n.childEdges[i].$id];
+                n.childEdges[i] = edge;
+                edge.parentNode = n;
+                edge.childNode = nodeById[edge.childNode.$id];
+            }
+
+        });
+
+        if(newState.revertConf && newState.revertConf.onRevert){
+            newState.revertConf.onRevert(newState.revertConf.data);
+        }
+    }
+
+    _pushToStack(stack, obj){
+        if(stack.length>=this.maxStackSize){
+            stack.shift();
+        }
+        stack.push(obj);
+    }
+
+    _fireUndoRedoCallback() {
+        if (this.undoRedoStateChangedCallback) {
+            this.undoRedoStateChangedCallback();
+        }
     }
 }

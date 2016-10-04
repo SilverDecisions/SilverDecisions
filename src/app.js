@@ -32,6 +32,7 @@ export class App {
         this.initExportToPngButton();
         this.initExportSvgButton();
         this.initAutoLayoutButtons();
+        this.initUndoRedoButtons();
     }
 
     setConfig(config) {
@@ -86,5 +87,24 @@ export class App {
         this.container.select('#clusterAutoLayoutButton').on('click', function () {
             self.treeDesigner.autoLayout('cluster');
         });
+    }
+
+    initUndoRedoButtons() {
+        var self = this;
+        self.dataModel.undoRedoStateChangedCallback = ()=>this.onUndoRedoChanged();
+        this.undoButton = this.container.select('#undoButton').on('click', function () {
+            self.dataModel.undo();
+            self.treeDesigner.redraw(true);
+        });
+        this.redoButton = this.container.select('#redoButton').on('click', function () {
+            self.dataModel.redo();
+            self.treeDesigner.redraw(true);
+        });
+    }
+
+    onUndoRedoChanged() {
+        console.log('onUndoRedoChanged');
+        this.undoButton.attr("disabled", this.dataModel.isUndoAvailable() ? null : 'disabled');
+        this.redoButton.attr("disabled", this.dataModel.isRedoAvailable() ? null : 'disabled');
     }
 }
