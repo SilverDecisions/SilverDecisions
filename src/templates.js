@@ -12,12 +12,28 @@ export class Templates{
             '<button id="redoButton" disabled="disabled">Redo</button>'+
         '</div>';
 
-    static main =
-        '<div id="silver-decisions">'+
-            Templates.toolbar+
-            '<div id="tree-designer-container"></div>'+
+
+
+    static nodeProperties =
+        '<div id="object-properties">' +
+            '<div class="header"></div> '+
+            '<div class="content"></div> '+
+        '</div>';
+    static sidebar =
+        '<div id="sidebar">' +
+        Templates.nodeProperties+
         '</div>';
 
+    static main =
+        '<div id="silver-decisions">'+
+
+        Templates.toolbar+
+        '<div id="main-region">' +
+        Templates.sidebar+
+        '<div id="tree-designer-container"></div>'+
+        '</div>'+
+
+        '</div>';
 }
 
 

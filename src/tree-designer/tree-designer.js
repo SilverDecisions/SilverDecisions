@@ -16,8 +16,12 @@ export class TreeDesignerConfig {
         bottom: 25
     };
     layout={
-        limitNodePositioning:true
+        limitNodePositioning: true
     };
+
+    onNodeSelected = (node) => {};
+    onEdgeSelected = (edge) => {};
+    onSelectionCleared = () => {};
 
     symbolSize= 40;
     constructor(custom) {
@@ -42,11 +46,7 @@ export class TreeDesigner {
     }
 
     setConfig(config) {
-        if (!config) {
-            this.config = new TreeDesignerConfig();
-        } else {
-            this.config = config;
-        }
+        this.config = new TreeDesignerConfig(config);
         return this;
     }
 
@@ -104,23 +104,31 @@ export class TreeDesigner {
     }
 
     updatePlottingRegionSize() {
+        var changed = false;
         this.computeAvailableSpace();
         var margin = this.config.margin;
         var svgWidth = this.svg.attr('width');
         var svgHeight = this.svg.attr('height');
         var mainGroupBox = this.mainGroup.node().getBBox();
         var newSvgWidth = mainGroupBox.width+mainGroupBox.x+margin.left+margin.right;
+        this.container.classed('with-overflow-x', newSvgWidth>=this.availableWidth);
         newSvgWidth = Math.max(newSvgWidth, this.availableWidth);
         if(svgWidth!=newSvgWidth){
+            changed = true;
             this.svg.attr('width', newSvgWidth);
         }
         var newSvgHeight = mainGroupBox.height+mainGroupBox.y+margin.top+margin.bottom;
+
+        this.container.classed('with-overflow-y', newSvgHeight>=this.availableHeight);
         newSvgHeight = Math.max(newSvgHeight, this.availableHeight);
         if(svgHeight!=newSvgHeight){
+            changed=true;
             this.svg.attr('height', newSvgHeight);
         }
+        if(changed){
+            this.updateBrushExtent()
+        }
 
-        this.updateBrushExtent()
     }
 
     redrawNodes() {
@@ -246,19 +254,21 @@ export class TreeDesigner {
         if(!node.classed("selected")){
             self.clearSelection();
         }
-        console.log('drag started');
+        // console.log('drag started');
+        self.selectNode(d);
         node.classed("selected dragging", true);
         self.selectedNodes = self.getSelectedNodes();
         self.prevDragEvent = d3.event;
-        self.firstDragEvent = true;
+        self.dragEventCount = 0;
     }
 
     drag(draggedNode, self){
-
-        if(self.firstDragEvent){
+        // console.log('drag');
+        if(self.dragEventCount==2){
             self.data.saveState();
         }
-        self.firstDragEvent = false;
+        self.dragEventCount++;
+
         var dx = d3.event.x - self.prevDragEvent.x;
         var limit = self.config.layout.limitNodePositioning;
         if(limit){
@@ -306,6 +316,7 @@ export class TreeDesigner {
     }
 
     dragEnded(){
+        var self = this;
         var node = d3.select(this).classed("dragging", false);
     }
 
@@ -615,12 +626,14 @@ export class TreeDesigner {
 
     clearSelection(){
         this.mainGroup.selectAll(".selected").classed('selected', false);
+        this.config.onSelectionCleared();
     }
 
     selectEdge(edge, clearSelectionBeforeSelect){
         if(clearSelectionBeforeSelect){
             this.clearSelection();
         }
+        this.config.onEdgeSelected(edge);
         this.mainGroup.select('#edge-'+edge.$id).classed('selected', true);
     }
 
@@ -628,19 +641,24 @@ export class TreeDesigner {
         return this.getNodeD3Selection(node).classed('selected');
     }
 
-    selectNode(node, clearSelectionBeforeSelect){
+    selectNode(node, clearSelectionBeforeSelect, skipCallback){
         if(clearSelectionBeforeSelect){
             this.clearSelection();
         }
+
+        if(!skipCallback){
+            this.config.onNodeSelected(node);
+        }
+
         this.mainGroup.select('#node-'+node.$id).classed('selected', true);
     }
 
-    selectSubTree(node, clearSelectionBeforeSelect) {
+    selectSubTree(node, clearSelectionBeforeSelect,skipCallback) {
         if(clearSelectionBeforeSelect){
             this.clearSelection();
         }
-        this.selectNode(node);
-        node.childEdges.forEach(e=>this.selectSubTree(e.childNode));
+        this.selectNode(node, false, skipCallback);
+        node.childEdges.forEach(e=>this.selectSubTree(e.childNode, false, true));
     }
 
     selectAllNodes() {

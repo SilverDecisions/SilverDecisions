@@ -32,7 +32,8 @@ export class NodeContextMenu extends ContextMenu {
             var deleteMenuItem = {
                 title: 'Delete',
                 action: function (elm, d, i) {
-                    treeDesigner.selectNode(d);
+
+                    treeDesigner.selectNode(d, !treeDesigner.isNodeSelected(d));
                     treeDesigner.removeSelectedNodes();
 
                 }

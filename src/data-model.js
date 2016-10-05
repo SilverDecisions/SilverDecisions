@@ -121,6 +121,22 @@ export class DataModel {
         return clone;
     }
 
+    findNodeById(id){
+        return this.nodes.find(n=>n.$id == id);
+    }
+
+    findEdgeById(id){
+        return this.edges.find(e=>e.$id == id);
+    }
+
+    findById(id){
+        var node = this.findNodeById(id);
+        if(node) {
+            return node;
+        }
+        return this.findEdgeById(id);
+    }
+
     _removeNode(node){// simply removes node from node list
         var index  = this.nodes.indexOf(node);
         if (index > -1) {
