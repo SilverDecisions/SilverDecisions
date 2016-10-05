@@ -118,23 +118,27 @@ export class App {
             }]
         }
         if(object instanceof model.Edge){
-            return [
+            var list = [
                 {
                     name: 'name',
                     label: 'Label',
                     type: 'text'
                 },
                 {
-                    name: 'probability',
-                    label: 'Probability',
-                    type: 'number'
-                },
-                {
                     name: 'payoff',
                     label: 'Payoff',
                     type: 'number'
                 }
-            ]
+            ];
+            if(object.parentNode instanceof model.ChanceNode){
+                list.push( {
+                    name: 'probability',
+                    label: 'Probability',
+                    type: 'number'
+                })
+            }
+            return list;
+
         }
 
         return [];
