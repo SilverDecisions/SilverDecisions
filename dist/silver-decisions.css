@@ -94,7 +94,7 @@
         #silver-decisions #main-region #sidebar #object-properties .content .object-field {
           padding: 7px; }
           #silver-decisions #main-region #sidebar #object-properties .content .object-field label {
-            display: inline-block;
+            display: block;
             font-size: 12px; }
           #silver-decisions #main-region #sidebar #object-properties .content .object-field input {
             padding: 4px;
