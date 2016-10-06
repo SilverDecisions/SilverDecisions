@@ -202,7 +202,6 @@ export class TreeDesigner {
                 .attr('text-anchor', 'middle')
         }
 
-
         var self = this;
 
         var drag = d3.drag()
@@ -268,6 +267,9 @@ export class TreeDesigner {
             self.data.saveState();
         }
         self.dragEventCount++;
+        if(self.selectedNodes.length>5 && self.dragEventCount%2!=1){
+            return;
+        }
 
         var dx = d3.event.x - self.prevDragEvent.x;
         var limit = self.config.layout.limitNodePositioning;
@@ -711,12 +713,17 @@ export class TreeDesigner {
             layout.nodeSize([height, width]);
 
             layout(root);
-            var topNode = root;
-            while(topNode.children && topNode.children.length){
-                topNode = topNode.children[0];
-            }
+            // var topNode = root;
+            // while(topNode.children && topNode.children.length){
+            //     topNode = topNode.children[0];
+            // }
 
-            var dy = root.x - topNode.x + prevTreeMaxY;
+            var minY = 999999999;
+            root.each(d=>{
+                minY = Math.min(minY, d.x);
+            });
+
+            var dy = root.x - minY + prevTreeMaxY;
             var dx = self.getNodeMinX();
             var maxY=0;
             root.each(d=>{
