@@ -8,8 +8,8 @@ export class Templates{
             '<button id="saveButtonSvg">Export to SVG</button>'+
             '<button id="treeAutoLayoutButton">Tree auto layout</button>'+
             '<button id="clusterAutoLayoutButton">Cluster auto layout</button>'+
-            '<button id="undoButton" disabled="disabled">Undo</button>'+
-            '<button id="redoButton" disabled="disabled">Redo</button>'+
+            '<button id="undoButton" disabled="disabled" title="undo"><i class="material-icons">undo</i></button>'+
+            '<button id="redoButton" disabled="disabled" title="redo"><i class="material-icons">redo</i></button>'+
         '</div>';
 
 
