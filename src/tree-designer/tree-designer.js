@@ -5,6 +5,8 @@ import * as model from '../model/index'
 import {ContextMenu} from '../context-menu'
 import {MainContextMenu} from './main-context-menu'
 import {NodeContextMenu} from './node-context-menu'
+import {Layout} from './layout'
+import {NodeDragHandler} from './node-drag-handler'
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -15,7 +17,8 @@ export class TreeDesignerConfig {
         top: 25,
         bottom: 25
     };
-    layout={
+    layout= {
+        nodeSize: 40,
         limitNodePositioning: true
     };
 
@@ -23,7 +26,6 @@ export class TreeDesignerConfig {
     onEdgeSelected = (edge) => {};
     onSelectionCleared = () => {};
 
-    symbolSize= 40;
     constructor(custom) {
         if (custom) {
             Utils.deepExtend(this, custom);
@@ -51,13 +53,23 @@ export class TreeDesigner {
     }
 
     init(){
-        this.minMarginBetweenNodes = this.config.symbolSize + 30;
+
         this.initSvg();
+        this.initLayout();
         this.initMainContextMenu();
         this.initBrush();
         this.initEdgeMarker();
         this.initNodeContextMenu();
+        this.initNodeDragHandler();
         this.redraw();
+    }
+
+    initLayout(){
+        this.layout = new Layout(this, this.data, this.config.layout);
+    }
+
+    initNodeDragHandler(){
+        this.nodeDragHandler = new NodeDragHandler(this, this.data);
     }
 
     redraw(withTransitions){
@@ -133,9 +145,7 @@ export class TreeDesigner {
 
     redrawNodes() {
         var self = this;
-        var symbolSize = this.config.symbolSize;
-        var symbol = d3.symbol().type(d=> d.$symbol)
-            .size(d=>64);
+
 
         var nodesContainer = this.mainGroup.selectOrAppend('g.nodes');
         var nodes = nodesContainer.selectAll('.node').data(this.data.nodes, (d,i)=> d.$id);
@@ -157,19 +167,12 @@ export class TreeDesigner {
             nodesMergeT.on('end', ()=> self.updatePlottingRegionSize())
         }
         nodesMergeT.attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')');
-        nodesMerge.select('path')
-            .attr('transform', 'rotate(-90)')
-            .attr('d', symbol)
-            .each(function (d) {
-                var path = d3.select(this);
-                var box = path.node().getBBox();
-                var error = Math.min(symbolSize / box.width, symbolSize / box.height);
-                path.attr("d", symbol.size(error * error * 64));
-            });
+
+        this.layout.drawNodeSymbol(nodesMerge.select('path'));
 
 
-        labelPosition(labelEnter);
-        labelPosition(nodesMergeT.select('text.label'))
+        this.layout.nodeLabelPosition(labelEnter);
+        this.layout.nodeLabelPosition(nodesMergeT.select('text.label'))
 
             .attr('text-anchor', 'middle')
             .text(d=>d.name);
@@ -185,174 +188,15 @@ export class TreeDesigner {
             payoffT = payoff.transition();
         }
 
-        payoffPosition(payoffEnter);
-        payoffPosition(payoffT);
+        this.layout.nodePayoffPosition(payoffEnter);
+        this.layout.nodePayoffPosition(payoffT);
 
 
 
-        function labelPosition(selection){
-            return selection
-                .attr('x', 0)
-                .attr('y', -symbolSize/2 - 7)
-        }
-        function payoffPosition(selection){
-            return selection
-                .attr('x', 0)
-                .attr('y', symbolSize/2 + 7)
-                .attr('text-anchor', 'middle')
-        }
 
-        var self = this;
-
-        var drag = d3.drag()
-            .subject(function(d) {
-                if(d==null){
-                    return  {x: event.x, y: event.y};
-                }
-                var t = d3.select(this);
-                return {x: t.attr("x") + Utils.getTranslation(t.attr("transform"))[0],
-                    y: t.attr("y") + Utils.getTranslation(t.attr("transform"))[1]};
-            })
-            .on("start", function(d){
-                self.dragStarted.call(this,d, self)
-            })
-            .on("drag", function (d) {
-                self.drag.call(this, d, self);
-            })
-            .on("end", this.dragEnded);
-
-        nodesMerge.call(drag);
+        nodesMerge.call(this.nodeDragHandler.drag);
         nodesMerge.on('contextmenu', this.nodeContextMenu);
         nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
-    }
-
-    getNodeMinX(d){
-        var self = this;
-        if(d && d.parent){// && !self.isNodeSelected(d.parent)
-            return d.parent.location.x + self.minMarginBetweenNodes;
-        }
-        return self.config.symbolSize/2;
-    }
-
-    getNodeMinY(d){
-        return this.config.symbolSize/2;
-    }
-
-    getNodeMaxX(d){
-        var self = this;
-        if(d && d.childEdges.length){
-            return d3.min(d.childEdges, e=>e.childNode.location.x)-self.minMarginBetweenNodes;
-        }
-        return 9999999;
-    }
-
-    dragStarted(d,self) {
-        self.currentAutoLayout = null;
-        ContextMenu.hide();
-        var node = d3.select(this);
-        if(!node.classed("selected")){
-            self.clearSelection();
-        }
-        // console.log('drag started');
-        self.selectNode(d);
-        node.classed("selected dragging", true);
-        self.selectedNodes = self.getSelectedNodes();
-        self.prevDragEvent = d3.event;
-        self.dragEventCount = 0;
-    }
-
-    drag(draggedNode, self){
-        // console.log('drag');
-        if(self.dragEventCount==2){
-            self.data.saveState();
-        }
-        self.dragEventCount++;
-        if(self.selectedNodes.length>5 && self.dragEventCount%2!=1){
-            return;
-        }
-
-        var dx = d3.event.x - self.prevDragEvent.x;
-        var limit = self.config.layout.limitNodePositioning;
-        if(limit){
-            if(dx<0){
-                self.selectedNodes.sort((a,b)=>a.location.x-b.location.x);
-            }else{
-                self.selectedNodes.sort((a,b)=>b.location.x-a.location.x);
-            }
-
-            self.selectedNodes.forEach(TreeDesigner.backupNodeLocation);
-        }
-
-        var dy = d3.event.y-self.prevDragEvent.y;
-        var minY = d3.min(self.selectedNodes, d=>d.location.y);
-        if(minY + dy < self.getNodeMinY()){
-            dy = self.getNodeMinY() - minY;
-        }
-
-        self.selectedNodes.forEach(d=>{
-            if(limit){
-                var minX = self.getNodeMinX(d);
-                var maxX = self.getNodeMaxX(d);
-
-                d.location.x = Math.min(Math.max(d.location.x+dx, minX), maxX);
-                d.location.y += dy;
-            }else{
-                d.location.x +=dx;
-                d.location.y += dy;
-            }
-
-        });
-
-        var revertX = limit && (draggedNode.location.x == draggedNode.$location.x);
-
-        self.selectedNodes.forEach(d=>{
-            if(revertX){
-                d.location.x = d.$location.x;
-            }
-            self.getNodeD3Selection(d).raise().attr('transform', 'translate('+d.location.x+' '+d.location.y+')');
-        });
-
-        self.prevDragEvent = d3.event;
-        self.redrawEdges();
-        self.updatePlottingRegionSize();
-    }
-
-    dragEnded(){
-        var self = this;
-        var node = d3.select(this).classed("dragging", false);
-    }
-
-    static backupNodeLocation(node) {
-        node.$location = new model.Point(node.location);
-    }
-
-    edgeLineD(edge){
-        var line = d3.line()
-            .x(d=> d[0])
-            .y(d=> d[1])
-            // .curve(d3.curveCatmullRom.alpha(0.5));
-
-
-        var parentNode = edge.parentNode;
-        var childNode = edge.childNode;
-
-        var dX = childNode.location.x - parentNode.location.x;
-        var dY = childNode.location.y - parentNode.location.y;
-
-        var sign = dX>=0 ? 1 : -1;
-
-        var slantStartXOffset = Math.min(dX/2, 30);
-        var slantWidth = Math.min(20, Math.max(dX/2 - slantStartXOffset, 0));
-
-        var point1 = [parentNode.location.x +this.config.symbolSize/2 + 1, parentNode.location.y];
-        var point2 = [parentNode.location.x+slantStartXOffset, parentNode.location.y];
-        var point3 = [parentNode.location.x+slantStartXOffset+slantWidth, childNode.location.y];
-        var point4 = [childNode.location.x - (sign*(Math.max(0, Math.min(this.config.symbolSize/2+8, dX/2)))), childNode.location.y];
-        // var point2 = [parentNode.location.x+dX/2-slantWidth/2, parentNode.location.y];
-        // var point3 = [childNode.location.x-(dX/2-slantWidth/2), childNode.location.y];
-
-        edge.$linePoints = [point1, point2, point3, point4];
-        return line(edge.$linePoints);
     }
 
 
@@ -378,7 +222,7 @@ export class TreeDesigner {
             edgesMergeT = edgesMerge.transition();
         }
         edgesMergeT.select('path')
-            .attr('d', d=> this.edgeLineD(d))
+            .attr('d', d=> this.layout.edgeLineD(d))
             .attr("stroke", "black")
             // .attr("stroke-width", 2)
             .attr("fill", "none")
@@ -389,8 +233,8 @@ export class TreeDesigner {
             self.selectEdge(d, true)
         });
 
-        labelPosition(labelEnter);
-        labelPosition(edgesMergeT.select('text.label'))
+        this.layout.edgeLabelPosition(labelEnter);
+        this.layout.edgeLabelPosition(edgesMergeT.select('text.label'))
             .text(d=>d.name);
 
         var payoffText = edgesMerge.select('text.payoff')
@@ -402,36 +246,16 @@ export class TreeDesigner {
         if(this.transition){
             payoffTextT = payoffText.transition();
         }
-        payoffPosition(payoffEnter);
-        payoffPosition(payoffTextT);
+        this.layout.edgePayoffPosition(payoffEnter);
+        this.layout.edgePayoffPosition(payoffTextT);
 
-        probabilityPosition(probabilityEnter);
-        probabilityPosition(edgesMergeT.select('text.probability'))
+        this.layout.edgeProbabilityPosition(probabilityEnter);
+        this.layout.edgeProbabilityPosition(edgesMergeT.select('text.probability'))
             .attr('dominant-baseline', 'hanging') //TODO not working in IE
             .attr('text-anchor', 'end')
             .text(d=>d.probability ? d.probability: '')
 
-        function payoffPosition(selection){
-            return selection
-                .attr('x', d=>d.$linePoints[2][0]+2)
-                .attr('y', d=>d.$linePoints[2][1]+7)
-        }
-        function labelPosition(selection){
-            return selection
-                .attr('x', d=>d.$linePoints[2][0]+2)
-                .attr('y', d=>d.$linePoints[2][1]-7)
 
-        }
-        function probabilityPosition(selection){
-            return selection
-                .attr('x', function(d){
-                    var len = d3.select(this).node().getComputedTextLength();
-                    var min = d.$linePoints[2][0]+2+d3.select(this.previousSibling).node().getBBox().width+7+len;
-                    return Math.max(min,d.$linePoints[3][0]-8);
-                })
-                .attr('y', d=>d.$linePoints[2][1]+7)
-
-        }
     }
 
     initEdgeMarker() {
@@ -521,9 +345,7 @@ export class TreeDesigner {
         this.data.saveState();
         this.data.addNode(node, parent);
         this.redraw();
-        if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout,true);
-        }
+        this.layout.update();
         return node;
     }
 
@@ -531,8 +353,9 @@ export class TreeDesigner {
         this.data.saveState();
         this.data.removeNode(node);
 
-        if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout, true);
+
+        if(this.layout.currentAutoLayout){
+            this.layout.update();
         }else{
             this.redraw();
         }
@@ -544,9 +367,7 @@ export class TreeDesigner {
         this.data.removeNodes(selectedNodes);
         this.clearSelection();
         this.redraw();
-        if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout, true);
-        }
+        this.layout.update();
     }
 
     copyNode(d) {
@@ -568,15 +389,7 @@ export class TreeDesigner {
 
     }
 
-    fitNodesInPlottingRegion(nodes){
-        var self = this;
-        var topY = d3.min(nodes, n=>n.location.y);
-        var minY = self.getNodeMinY();
-        var dy = topY - minY;
-        if(dy<0){
-            nodes.forEach(n=>n.move(0, -dy));
-        }
-    }
+
 
     pasteToNode(node) {
         this.data.saveState();
@@ -586,12 +399,10 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach, node);
 
         attached.moveTo(node.location.x+120, node.location.y, true);
-        self.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
+        self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 
         this.redraw();
-        if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout, true);
-        }
+        self.layout.update();
 
         self.selectSubTree(attached, true);
     }
@@ -607,15 +418,17 @@ export class TreeDesigner {
         self.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 
         this.redraw();
-        if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout, true);
-        }
+        self.layout.update();
 
         self.selectSubTree(attached, true);
     }
 
     moveNodeTo(x,y){
 
+    }
+
+    updateNodePosition(node) {
+        this.getNodeD3Selection(node).raise().attr('transform', 'translate('+node.location.x+' '+node.location.y+')');
     }
 
     getNodeD3Selection(node){
@@ -668,80 +481,6 @@ export class TreeDesigner {
     }
 
     autoLayout(type, withoutStateSaving){
-
-
-        var self=this;
-        if(!this.data.nodes.length){
-            return;
-        }
-        if(!withoutStateSaving){
-            this.data.saveState({
-                data:{
-                    currentAutoLayout: self.currentAutoLayout
-                },
-                onRevert: (data)=> self.currentAutoLayout = data.currentAutoLayout
-            });
-        }
-
-        var nodeTypeOrder = {
-            'decision' : 0,
-            'chance': 0,
-            'terminal': 1
-        };
-
-        var treeMargin = 50;
-
-        var prevTreeMaxY = self.getNodeMinY();
-        this.data.getRoots().forEach(r=>{
-            var root = d3.hierarchy(r, d=>{
-                return d.childEdges.map(e=>e.childNode);
-            });
-
-
-
-            root.sort((a,b)=>nodeTypeOrder[a.data.type]-nodeTypeOrder[b.data.type]);
-
-            var height = 65, width=150;
-
-            var layout;
-            if(type=='cluster'){
-                height  =65;
-                layout = d3.cluster();
-            }else{
-                layout = d3.tree();
-            }
-            layout.nodeSize([height, width]);
-
-            layout(root);
-            // var topNode = root;
-            // while(topNode.children && topNode.children.length){
-            //     topNode = topNode.children[0];
-            // }
-
-            var minY = 999999999;
-            root.each(d=>{
-                minY = Math.min(minY, d.x);
-            });
-
-            var dy = root.x - minY + prevTreeMaxY;
-            var dx = self.getNodeMinX();
-            var maxY=0;
-            root.each(d=>{
-                d.data.location.x = d.y + dx;
-                d.data.location.y = d.x + dy;
-
-                maxY = Math.max(maxY, d.data.location.y);
-            });
-
-            prevTreeMaxY = maxY + self.config.symbolSize+treeMargin;
-        });
-
-
-        // this.transition = true;
-        this.redraw(true);
-        // this.transition = false;
-
-        this.currentAutoLayout = type;
-        return this;
+        this.layout.autoLayout(type, withoutStateSaving);
     }
 }
