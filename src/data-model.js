@@ -15,13 +15,14 @@ export class DataModel {
     undoStack = [];
     redoStack =[];
     undoRedoStateChangedCallback = null;
-
+    nodeAddedCallback = null;
+    nodeRemovedCallback = null;
 
     constructor() {
         var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
         var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
         var n3 = this.addNode(new model.TerminalNode(new model.Point(250,200)), n1).setName('leave game').setPayoff(0).childNode;
-        var n4 = this.addNode(new model.DecisionNode(new model.Point(400,50)), n2).setName('win').setPayoff(20).setProbability(0.1).childNode;
+        var n4 = this.addNode(new model.TerminalNode(new model.Point(400,50)), n2).setName('win').setPayoff(20).setProbability(0.1).childNode;
         var n5 = this.addNode(new model.TerminalNode(new model.Point(400,150)), n2).setName('lose').setPayoff(0).setProbability(0.9).childNode;
     }
 
@@ -30,8 +31,12 @@ export class DataModel {
         var self = this;
         self.nodes.push(node);
         if(parent){
-            return self._addChild(parent, node);
+            var edge = self._addChild(parent, node);
+            this._fireNodeAddedCallback(node);
+            return edge;
         }
+
+        this._fireNodeAddedCallback(node);
         return node;
     }
 
@@ -40,7 +45,7 @@ export class DataModel {
         var edge = new model.Edge(parent, child);
         self.edges.push(edge);
         parent.childEdges.push(edge);
-        child.parent = parent;
+        child.$parent = parent;
         return edge;
     }
 
@@ -51,7 +56,7 @@ export class DataModel {
         node.childEdges.forEach(e=>self.removeNode(e.childNode, $l + 1));
 
         self._removeNode(node);
-        var parent = node.parent;
+        var parent = node.$parent;
         if (parent) {
             var parentEdge = parent.childEdges.find((e, i)=> e.childNode === node);
             if ($l == 0) {
@@ -60,6 +65,7 @@ export class DataModel {
                 self._removeEdge(parentEdge);
             }
         }
+        this._fireNodeRemovedCallback(node);
     }
 
     /*removes given nodes and their subtrees*/
@@ -70,11 +76,11 @@ export class DataModel {
     }
 
     getRoots(){
-        return this.nodes.filter(n=>!n.parent);
+        return this.nodes.filter(n=>!n.$parent);
     }
 
     findSubtreeRoots(nodes) {
-        return nodes.filter(n=>!n.parent || nodes.indexOf(n.parent)===-1);
+        return nodes.filter(n=>!n.$parent || nodes.indexOf(n.$parent)===-1);
     }
 
     /*creates detached clone of given node*/
@@ -84,7 +90,7 @@ export class DataModel {
 
         nodeToCopy.childEdges.forEach(e=>{
             var childClone = self.cloneSubtree(e.childNode);
-            childClone.parent = clone;
+            childClone.$parent = clone;
             var edge = new model.Edge(clone, childClone, e.name, e.payoff, e.probability);
             clone.childEdges.push(edge);
         });
@@ -116,7 +122,7 @@ export class DataModel {
         clone.$id = Utils.guid();
         clone.location = _.clone(node.location);
         clone.computed = _.clone(node.computed);
-        clone.parent=null;
+        clone.$parent=null;
         clone.childEdges = [];
         return clone;
     }
@@ -286,6 +292,17 @@ export class DataModel {
     _fireUndoRedoCallback() {
         if (this.undoRedoStateChangedCallback) {
             this.undoRedoStateChangedCallback();
+        }
+    }
+
+    _fireNodeAddedCallback(node) {
+        if (this.nodeAddedCallback) {
+            this.nodeAddedCallback(node);
+        }
+    }
+    _fireNodeRemovedCallback(node) {
+        if (this.nodeRemovedCallback) {
+            this.nodeRemovedCallback(node);
         }
     }
 }

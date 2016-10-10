@@ -8,6 +8,8 @@ export class Edge {
     probability=0;
     payoff=0;
 
+    computed={};
+
     $id = Utils.guid();
 
     constructor(parentNode, childNode, name,payoff, probability, ){

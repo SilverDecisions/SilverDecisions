@@ -17,6 +17,7 @@ export class Layout{
         'terminal': 1
     };
 
+
     constructor(treeDesigner, data, config){
         this.treeDesigner = treeDesigner;
         this.data = data;
@@ -120,8 +121,8 @@ export class Layout{
 
     getNodeMinX(d){
         var self = this;
-        if(d && d.parent){// && !self.isNodeSelected(d.parent)
-            return d.parent.location.x + self.minMarginBetweenNodes;
+        if(d && d.$parent){// && !self.isNodeSelected(d.$parent)
+            return d.$parent.location.x + self.minMarginBetweenNodes;
         }
         return self.config.nodeSize/2;
     }
@@ -162,11 +163,10 @@ export class Layout{
 
             root.sort((a,b)=>self.nodeTypeOrder[a.data.type]-self.nodeTypeOrder[b.data.type]);
 
-            var height = 65, width=150;
+            var height = 75, width=150;
 
             var layout;
             if(type=='cluster'){
-                height  =65;
                 layout = d3.cluster();
             }else{
                 layout = d3.tree();

@@ -66,6 +66,13 @@
               padding: 4px;
               border-radius: 2px;
               border: 1px solid #ccc;
+
+              &.invalid{
+
+                border-color: red;
+                outline-color: red;
+
+              }
             }
           }
         }
@@ -190,10 +197,13 @@
       $stroke-width: 1.5;
       $stroke-width-selected: $stroke-width + 2;
       cursor: pointer;
-      stroke-width: $stroke-width;
 
-      -webkit-transition: stroke-width 0.3s; /* Safari */
-      transition: stroke-width 0.3s;
+      path{
+        stroke: #424242;
+        stroke-width: $stroke-width;
+        -webkit-transition: stroke-width 0.3s; /* Safari */
+        transition: stroke-width 0.3s;
+      }
 
       .label{
         font-size:1em;
@@ -210,8 +220,19 @@
         fill: #0000d7;
       }
 
+      &.optimal{
+        path{
+          stroke-width: $stroke-width-selected - 1.1;
+          stroke: #006f00;
+        }
+
+      }
+
       &:hover{
-        stroke-width: $stroke-width-selected - 1;
+        path{
+          stroke-width: $stroke-width-selected - 1;
+        }
+
         .label{
           //font-weight: bold;
         }
@@ -219,8 +240,11 @@
       }
 
       &.selected{
+        path{
+          stroke-width: $stroke-width-selected;
+          stroke: #045ad1;
+        }
 
-        stroke-width: $stroke-width-selected;
 
         .label{
           font-weight: bold;

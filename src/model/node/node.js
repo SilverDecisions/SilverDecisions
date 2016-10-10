@@ -2,19 +2,17 @@ import {Utils} from '../../utils'
 import {Point} from '../point'
 
 export class Node {
-    
+
     type;
     childEdges=[];
     name='';
 
-    computed={
-        payoff: null
-    };
+    computed={}; //computed values
     location; //Point
 
     $id = Utils.guid(); //internal id
     $symbol;
-    
+
     constructor(type, symbol, location){
         this.location=location;
         if(!location){

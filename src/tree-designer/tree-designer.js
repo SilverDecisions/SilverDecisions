@@ -177,11 +177,11 @@ export class TreeDesigner {
             .attr('text-anchor', 'middle')
             .text(d=>d.name);
 
-
+        var ruleName = this.config.rule;
         var payoff = nodesMerge.select('text.payoff')
             .attr('dominant-baseline', 'hanging')
-            .classed('negative', d=>d.computed.payoff<0)
-            .text(d=> d.computed.payoff!==null ? '$ '+d.computed.payoff : '');
+            .classed('negative', d=> d.computed[ruleName] && d.computed[ruleName].childrenPayoff<0)
+            .text(d=> d.computed[ruleName] && d.computed[ruleName].childrenPayoff ? '$ '+d.computed[ruleName].childrenPayoff : '');
 
         var payoffT = payoff;
         if(this.transition){
@@ -217,17 +217,21 @@ export class TreeDesigner {
 
         var edgesMerge = edgesEnter.merge(edges);
 
+        var ruleName = this.config.rule;
+        edgesMerge.classed('optimal', d=>d.computed[ruleName] && d.computed[ruleName].optimal);
+
         var edgesMergeT = edgesMerge;
         if(this.transition){
             edgesMergeT = edgesMerge.transition();
         }
         edgesMergeT.select('path')
             .attr('d', d=> this.layout.edgeLineD(d))
-            .attr("stroke", "black")
+            // .attr("stroke", "black")
             // .attr("stroke-width", 2)
             .attr("fill", "none")
             .attr("marker-end", "url(#arrow)")
             .attr("shape-rendering", "optimizeQuality")
+
 
         edgesMerge.on('click', d=>{
             self.selectEdge(d, true)
@@ -415,7 +419,7 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach);
 
         attached.moveTo(point.x, point.y, true);
-        self.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
+        self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 
         this.redraw();
         self.layout.update();

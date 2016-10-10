@@ -3,6 +3,8 @@ import * as d3 from './d3'
 import {Utils} from './utils'
 import * as model from './model/index'
 
+import {ObjectiveRulesManager} from './objective/objective-rules-manager'
+
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
 import {DataModel} from './data-model'
 import {Templates} from './templates'
@@ -12,6 +14,7 @@ import {Toolbar} from './toolbar'
 export class AppConfig {
     width = undefined;
     height = undefined;
+    rule = 'max';
 
     constructor(custom) {
         if (custom) {
@@ -24,6 +27,7 @@ export class App {
     config;
     container;
     dataModel; //Data model manager
+    objectiveRulesManager;
     treeDesigner;
     toolbar;
     sidebar;
@@ -32,9 +36,11 @@ export class App {
         this.setConfig(config);
         this.initContainer(containerId);
         this.initDataModel();
+        this.initObjectiveRulesManager();
         this.initSidebar();
         this.initTreeDesigner();
         this.initToolbar();
+
     }
 
     setConfig(config) {
@@ -52,7 +58,16 @@ export class App {
     }
 
     initDataModel() {
+        var self = this;
         this.dataModel = new DataModel();
+        // this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = ()=>self.onNodeAddedOrRemoved();
+        this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = (node)=> Utils.waitForFinalEvent(()=>this.onNodeAddedOrRemoved(), 'onNodeAddedOrRemoved');
+    }
+
+    initObjectiveRulesManager(){
+        this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel);
+        this.objectiveRulesManager.recompute();
+
     }
 
     initSidebar(){
@@ -68,6 +83,7 @@ export class App {
     initTreeDesigner() {
         var self=this;
         var config = {
+            rule: self.config.rule,
             onNodeSelected: function(node){
                 self.onObjectSelected(node);
             },
@@ -99,6 +115,7 @@ export class App {
     }
 
     updateView(){
+
         this.treeDesigner.redraw(true);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
     }
@@ -109,7 +126,7 @@ export class App {
         if(self.selectedObject){
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-
+        this.objectiveRulesManager.recompute();
         self.updateView();
     }
 
@@ -119,7 +136,18 @@ export class App {
         if(self.selectedObject){
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
+        this.objectiveRulesManager.recompute();
         self.updateView();
     }
 
+    onNodeAddedOrRemoved() {
+        console.log('onNodeAddedOrRemoved');
+        this.objectiveRulesManager.recompute();
+        this.updateView();
+    }
+
+    onObjectUpdated(object){
+        this.objectiveRulesManager.recompute();
+        this.treeDesigner.redraw(true);
+    }
 }

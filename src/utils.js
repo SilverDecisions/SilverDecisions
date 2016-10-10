@@ -75,6 +75,10 @@ export class Utils {
         return !isNaN(a) && typeof a === 'number';
     };
 
+    static  isNumeric(n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+    }
+
     static isFunction(a) {
         return typeof a === 'function';
     };
@@ -240,5 +244,17 @@ export class Utils {
             objectById[obj.$id] = val;
         });
         return objectById;
+    };
+
+
+    static timers = {};
+    static waitForFinalEvent(callback, uniqueId, ms=10) {
+        if (!uniqueId) {
+            uniqueId = "Don't call this twice without a uniqueId";
+        }
+        if (Utils.timers[uniqueId]) {
+            clearTimeout (Utils.timers[uniqueId]);
+        }
+        Utils.timers[uniqueId] = setTimeout(callback, ms);
     };
 }

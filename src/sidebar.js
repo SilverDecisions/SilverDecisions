@@ -62,14 +62,16 @@ export class Sidebar{
                 {
                     name: 'payoff',
                     label: 'Payoff',
-                    type: 'number'
+                    type: 'text',
+                    validator: v=> Utils.isNumeric(v)
                 }
             ];
             if(object.parentNode instanceof model.ChanceNode){
                 list.push( {
                     name: 'probability',
                     label: 'Probability',
-                    type: 'number'
+                    type: 'text',
+                    validator: v=> Utils.isNumeric(v) && v>=0.0 && v <=1.0
                 })
             }
             return list;
@@ -99,18 +101,26 @@ export class Sidebar{
             .attr('name', d=>d.name)
             .attr('id', d=>'object-field-'+d.name)
             .on('change keyup', function(d, i){
+                if(d.validator && !d.validator(this.value)){
+                    d3.select(this).classed('invalid', true);
+                    return;
+                }
+                d3.select(this).classed('invalid', false);
                 if(d3.event.type=='change' && temp[i].pristineVal!=this.value){
                     object[d.name] = temp[i].pristineVal;
                     self.app.dataModel.saveState();
                 }
                 object[d.name] = this.value;
-                self.app.treeDesigner.redraw();
+                self.app.onObjectUpdated(object)
 
             })
             .each(function(d, i){
                 this.value = object[d.name];
                 temp[i]={};
                 temp[i].pristineVal = this.value;
+                if(d.validator && !d.validator(this.value)){
+                    d3.select(this).classed('invalid', true);
+                }
             });
 
         fields.exit().remove();

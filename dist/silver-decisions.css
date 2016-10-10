@@ -100,6 +100,9 @@
             padding: 4px;
             border-radius: 2px;
             border: 1px solid #ccc; }
+            #silver-decisions #main-region #sidebar #object-properties .content .object-field input.invalid {
+              border-color: red;
+              outline-color: red; }
   #silver-decisions #tree-designer-container {
     border: 1px solid #bfbfbf;
     border-radius: 2px;
@@ -153,11 +156,13 @@
     #silver-decisions svg.tree-designer .terminal-node.dragging path, #silver-decisions svg.tree-designer .terminal-node.selected path {
       fill: #00aa00; }
     #silver-decisions svg.tree-designer .edge {
-      cursor: pointer;
-      stroke-width: 1.5;
-      -webkit-transition: stroke-width 0.3s;
-      /* Safari */
-      transition: stroke-width 0.3s; }
+      cursor: pointer; }
+      #silver-decisions svg.tree-designer .edge path {
+        stroke: #424242;
+        stroke-width: 1.5;
+        -webkit-transition: stroke-width 0.3s;
+        /* Safari */
+        transition: stroke-width 0.3s; }
       #silver-decisions svg.tree-designer .edge .label {
         font-size: 1em; }
       #silver-decisions svg.tree-designer .edge .payoff {
@@ -166,12 +171,16 @@
           fill: #b60000; }
       #silver-decisions svg.tree-designer .edge .probability {
         fill: #0000d7; }
-      #silver-decisions svg.tree-designer .edge:hover {
+      #silver-decisions svg.tree-designer .edge.optimal path {
+        stroke-width: 2.4;
+        stroke: #006f00; }
+      #silver-decisions svg.tree-designer .edge:hover path {
         stroke-width: 2.5; }
-      #silver-decisions svg.tree-designer .edge.selected {
-        stroke-width: 3.5; }
-        #silver-decisions svg.tree-designer .edge.selected .label {
-          font-weight: bold; }
+      #silver-decisions svg.tree-designer .edge.selected path {
+        stroke-width: 3.5;
+        stroke: #045ad1; }
+      #silver-decisions svg.tree-designer .edge.selected .label {
+        font-weight: bold; }
 
 @-webkit-keyframes pulse {
   0% {
