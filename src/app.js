@@ -10,6 +10,7 @@ import {DataModel} from './data-model'
 import {Templates} from './templates'
 import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
+import {ExpressionEngine} from './expression-engine'
 
 export class AppConfig {
     width = undefined;
@@ -27,6 +28,7 @@ export class App {
     config;
     container;
     dataModel; //Data model manager
+    expressionEngine;
     objectiveRulesManager;
     treeDesigner;
     toolbar;
@@ -36,6 +38,7 @@ export class App {
         this.setConfig(config);
         this.initContainer(containerId);
         this.initDataModel();
+        this.initExpressionEngine();
         this.initObjectiveRulesManager();
         this.initSidebar();
         this.initTreeDesigner();
@@ -63,9 +66,12 @@ export class App {
         // this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = ()=>self.onNodeAddedOrRemoved();
         this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = (node)=> Utils.waitForFinalEvent(()=>this.onNodeAddedOrRemoved(), 'onNodeAddedOrRemoved');
     }
+    initExpressionEngine() {
+        this.expressionEngine =  new ExpressionEngine(this.dataModel.expressionScope);
+    }
 
     initObjectiveRulesManager(){
-        this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel);
+        this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel, this.expressionEngine);
         this.objectiveRulesManager.recompute();
 
     }

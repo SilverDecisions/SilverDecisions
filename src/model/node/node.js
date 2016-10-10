@@ -1,19 +1,17 @@
-import {Utils} from '../../utils'
 import {Point} from '../point'
+import {ObjectWithIdAndComputedValues} from '../object-with-id-and-computed-values'
 
-export class Node {
+export class Node extends ObjectWithIdAndComputedValues{
 
     type;
     childEdges=[];
     name='';
-
-    computed={}; //computed values
     location; //Point
 
-    $id = Utils.guid(); //internal id
     $symbol;
 
     constructor(type, symbol, location){
+        super();
         this.location=location;
         if(!location){
             this.location = new Point(0,0);

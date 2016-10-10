@@ -1,6 +1,6 @@
-import {Utils} from '../utils'
+import {ObjectWithIdAndComputedValues} from './object-with-id-and-computed-values'
 
-export class Edge {
+export class Edge extends ObjectWithIdAndComputedValues{
     parentNode;
     childNode;
 
@@ -8,11 +8,8 @@ export class Edge {
     probability=0;
     payoff=0;
 
-    computed={};
-
-    $id = Utils.guid();
-
     constructor(parentNode, childNode, name,payoff, probability, ){
+        super();
         this.parentNode = parentNode;
         this.childNode = childNode;
 

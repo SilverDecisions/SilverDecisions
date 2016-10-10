@@ -10,6 +10,8 @@ export class DataModel {
     nodes = [];
     edges = [];
 
+    expressionScope={};
+
     // undo / redo
     maxStackSize = 15;
     undoStack = [];

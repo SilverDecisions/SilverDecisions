@@ -30,7 +30,7 @@ export class Sidebar{
         var headerText = Sidebar.getHeaderTextForObject(object);
         objectProps.select('.header').html(headerText);
 
-        var fieldList = Sidebar.getFieldListForObject(object);
+        var fieldList = this.getFieldListForObject(object);
         this.updateObjectFields(object, fieldList);
     }
 
@@ -44,7 +44,9 @@ export class Sidebar{
         return '';
     }
 
-    static getFieldListForObject(object) {
+
+    getFieldListForObject(object) {
+        var self = this;
         if(object instanceof model.Node){
             return [{
                 name: 'name',
@@ -63,7 +65,9 @@ export class Sidebar{
                     name: 'payoff',
                     label: 'Payoff',
                     type: 'text',
-                    validator: v=> Utils.isNumeric(v)
+                    validator: v=> {
+                        return self.app.expressionEngine.validate(v)
+                    }
                 }
             ];
             if(object.parentNode instanceof model.ChanceNode){
@@ -71,7 +75,7 @@ export class Sidebar{
                     name: 'probability',
                     label: 'Probability',
                     type: 'text',
-                    validator: v=> Utils.isNumeric(v) && v>=0.0 && v <=1.0
+                    validator: v=> self.app.expressionEngine.validate(v) && v>=0.0 && v <=1.0
                 })
             }
             return list;

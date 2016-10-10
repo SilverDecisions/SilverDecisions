@@ -2,15 +2,16 @@ import {Utils} from '../utils'
 import * as model from '../model/index'
 import {ObjectiveRule} from './objective-rule'
 
+
 export class MaxRule extends ObjectiveRule{
 
-    constructor(){
-        super('max');
+    constructor(expressionEngine){
+        super('max', expressionEngine);
     }
 
     // payoff - parent edge payoff
     computePayoff(node, payoff=0){
-        payoff=parseFloat(payoff);
+        payoff=this.eval(payoff);
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
@@ -20,53 +21,48 @@ export class MaxRule extends ObjectiveRule{
                     bestchild = Math.max(bestchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
-                    e.probability = parseFloat(e.probability);
-                    let computedValues = e.computed[this.name]={}
-                    computedValues.probability = e.childNode.computed[this.name].payoff < bestchild ? 0.0 : 1.0;
+                    this.clearComputedValues(e);
+                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') < bestchild ? 0.0 : 1.0);
                 });
             }else{
                 node.childEdges.forEach(e=>{
                     this.computePayoff(e.childNode, e.payoff);
-                    let computedValues = e.computed[this.name] = {};
-                    computedValues.probability =  parseFloat(e.probability);
+                    this.clearComputedValues(e);
+                    this.cValue(e, 'probability', this.eval(e.probability));
                 });
             }
 
             var sumweight = 0 ;
             node.childEdges.forEach(e=>{
-                sumweight+=e.computed[this.name].probability;
+                sumweight=this.add(sumweight, this.cValue(e, 'probability'));
             });
 
             // console.log(payoff,node.childEdges,'sumweight',sumweight);
 
             node.childEdges.forEach(e=>{
-                childrenPayoff+= e.computed[this.name].probability * e.childNode.computed[this.name].payoff / sumweight;
+                childrenPayoff= this.add(childrenPayoff, this.multiply(this.cValue(e, 'probability'),this.cValue(e.childNode, 'payoff')).div(sumweight));
             });
 
         }
 
-        payoff+=childrenPayoff;
+        payoff=this.add(payoff, childrenPayoff);
+        this.clearComputedValues(node);
+        this.cValue(node, 'childrenPayoff', childrenPayoff);
 
-        let computedValues = node.computed[this.name] = {};
-        computedValues.childrenPayoff = childrenPayoff;
-
-        return computedValues.payoff = Math.round(100000*payoff)/100000;
+        return this.cValue(node, 'payoff', payoff);
     }
 
     //  payoff - parent edge payoff
     computeOptimal(node, payoff=0){
+        node.childEdges.forEach(e=>{
 
-            node.childEdges.forEach(e=>{
-
-                if ((Math.round((node.computed[this.name].payoff - payoff)*100000)/100000 == e.childNode.computed[this.name].payoff) || !(node instanceof model.DecisionNode) ) {
-                    e.computed[this.name].optimal = true;
-                    this.computeOptimal(e.childNode);
-                }else{
-                    e.computed[this.name].optimal = false;
-                }
-            })
-
-
+            if ( this.subtract(this.cValue(node,'payoff'),payoff).eq(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
+                this.cValue(e, 'optimal', true);
+                this.computeOptimal(e.childNode);
+            }else{
+                this.cValue(e, 'optimal', false);
+            }
+        })
     }
 
 }

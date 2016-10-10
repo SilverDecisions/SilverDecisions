@@ -2,13 +2,14 @@ import {MaxRule} from './max-rule'
 
 
 export class ObjectiveRulesManager{
-
+    expressionEngine;
     currentRule;
     ruleByName={};
 
-    constructor(currentRuleName, data){
+    constructor(currentRuleName, data, expressionEngine){
         this.data = data;
-        var max = new MaxRule();
+        this.expressionEngine=expressionEngine;
+        var max = new MaxRule(expressionEngine);
         this.ruleByName[max.name]=max;
         this.currentRule = this.ruleByName[currentRuleName];
     }
