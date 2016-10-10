@@ -8,6 +8,9 @@ export class ObjectiveRule{
     constructor(name, expressionEngine){
         this.name = name;
         this.expressionEngine = expressionEngine;
+        math.config({
+            number: 'Fraction'
+        });
     }
 
     // oblicza skumulowany payoff

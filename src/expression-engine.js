@@ -14,19 +14,19 @@ export class ExpressionEngine{
     }
 
     add(a, b){
-        return math.add(math.bignumber(a), math.bignumber(b));
+        return math.add(math.fraction(a), math.fraction(b));
     }
 
     subtract(a, b){
-        return math.subtract(math.bignumber(a), math.bignumber(b));
+        return math.subtract(math.fraction(a), math.fraction(b));
     }
 
     divide(a, b){
-        return math.divide(math.bignumber(a), math.bignumber(b));
+        return math.divide(math.fraction(a), math.fraction(b));
     }
 
     multiply(a,b){
-        return math.multiply(math.bignumber(a), math.bignumber(b));
+        return math.multiply(math.fraction(a), math.fraction(b));
     }
 
 

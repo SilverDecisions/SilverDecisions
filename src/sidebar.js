@@ -75,7 +75,7 @@ export class Sidebar{
                     name: 'probability',
                     label: 'Probability',
                     type: 'text',
-                    validator: v=> self.app.expressionEngine.validate(v) && v>=0.0 && v <=1.0
+                    validator: v=> self.app.expressionEngine.validate(v)
                 })
             }
             return list;

@@ -56,7 +56,7 @@ export class MaxRule extends ObjectiveRule{
     computeOptimal(node, payoff=0){
         node.childEdges.forEach(e=>{
 
-            if ( this.subtract(this.cValue(node,'payoff'),payoff).eq(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
+            if ( this.subtract(this.cValue(node,'payoff'),payoff).equals(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
                 this.cValue(e, 'optimal', true);
                 this.computeOptimal(e.childNode);
             }else{

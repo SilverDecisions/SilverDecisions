@@ -180,8 +180,14 @@ export class TreeDesigner {
         var ruleName = this.config.rule;
         var payoff = nodesMerge.select('text.payoff')
             .attr('dominant-baseline', 'hanging')
-            .classed('negative', d=> d.computed[ruleName] && d.computed[ruleName].childrenPayoff<0)
-            .text(d=> d.computed[ruleName] && d.computed[ruleName].childrenPayoff ? '$ '+d.computed[ruleName].childrenPayoff : '');
+            .classed('negative', d=> {
+                var val = d.computedValue(ruleName, 'childrenPayoff');
+                return val!==null && val<0;
+            })
+            .text(d=> {
+                var val = d.computedValue(ruleName, 'childrenPayoff');
+                return val!==null && !isNaN(val) ? '$ '+val : '-'
+            });
 
         var payoffT = payoff;
         if(this.transition){
