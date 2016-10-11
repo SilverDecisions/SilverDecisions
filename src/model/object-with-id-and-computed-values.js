@@ -19,6 +19,10 @@ export class ObjectWithIdAndComputedValues {
     }
 
     clearComputedValues(ruleName){
+        if(ruleName==undefined){
+            this.computed={};
+            return;
+        }
         this.computed[ruleName]={};
     }
 }

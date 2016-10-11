@@ -15,12 +15,28 @@ export class ObjectiveRulesManager{
     }
 
     recompute(){
+
         console.log('recompute');
         this.data.getRoots().forEach(n=>{
-            this.currentRule.computePayoff(n);
-            this.currentRule.computeOptimal(n);
+            this.recomputeTree(n);
         });
 
         return this;
+    }
+
+    recomputeTree(root){
+        this.currentRule.computePayoff(root);
+        this.currentRule.computeOptimal(root);
+
+        return this;
+    }
+
+    clearTree(root){
+        this.data.getAllNodesInSubtree(root).forEach(n=>{
+            n.clearComputedValues();
+            n.childEdges.forEach(e=>{
+                e.clearComputedValues();
+            })
+        })
     }
 }

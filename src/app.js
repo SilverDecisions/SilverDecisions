@@ -1,4 +1,5 @@
 import * as d3 from './d3'
+import {i18n} from './i18n/i18n'
 
 import {Utils} from './utils'
 import * as model from './model/index'
@@ -11,11 +12,14 @@ import {Templates} from './templates'
 import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
 import {ExpressionEngine} from './expression-engine'
+import {Tooltip} from './tooltip'
 
 export class AppConfig {
     width = undefined;
     height = undefined;
     rule = 'max';
+    lng = 'en';
+
 
     constructor(custom) {
         if (custom) {
@@ -36,7 +40,9 @@ export class App {
 
     constructor(containerId, config) {
         this.setConfig(config);
+        this.initI18n();
         this.initContainer(containerId);
+
         this.initDataModel();
         this.initExpressionEngine();
         this.initObjectiveRulesManager();
@@ -57,7 +63,11 @@ export class App {
 
     initContainer(containerId) {
         this.container = d3.select('#' + containerId);
-        this.container.html(Templates.main);
+        this.container.html(Templates.get('main'));
+    }
+
+    initI18n() {
+        i18n.init(this.config.lng);
     }
 
     initDataModel() {
@@ -72,7 +82,7 @@ export class App {
 
     initObjectiveRulesManager(){
         this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel, this.expressionEngine);
-        this.objectiveRulesManager.recompute();
+        this.checkValidityAndRecomputeObjective();
 
     }
 
@@ -132,7 +142,7 @@ export class App {
         if(self.selectedObject){
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.objectiveRulesManager.recompute();
+        this.checkValidityAndRecomputeObjective();
         self.updateView();
     }
 
@@ -142,18 +152,44 @@ export class App {
         if(self.selectedObject){
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.objectiveRulesManager.recompute();
+        this.checkValidityAndRecomputeObjective();
         self.updateView();
     }
 
     onNodeAddedOrRemoved() {
         console.log('onNodeAddedOrRemoved');
-        this.objectiveRulesManager.recompute();
+        this.checkValidityAndRecomputeObjective();
         this.updateView();
     }
 
     onObjectUpdated(object){
-        this.objectiveRulesManager.recompute();
+        this.checkValidityAndRecomputeObjective();
         this.treeDesigner.redraw(true);
+    }
+
+
+    checkValidityAndRecomputeObjective(){
+        this.validationResults = [];
+        this.dataModel.getRoots().forEach(root=> {
+            var vr = this.dataModel.validate(root);
+            this.validationResults.push(vr);
+            if(vr.isValid()){
+                this.objectiveRulesManager.recomputeTree(root);
+            }else{
+                this.objectiveRulesManager.clearTree(root);
+            }
+        });
+        this.updateValidationMessages();
+    }
+
+    updateValidationMessages() {
+        var self = this;
+        if(!this.treeDesigner){
+            setTimeout(function(){
+                self.treeDesigner.updateValidationMessages(self.validationResults);
+            },1);
+        }else{
+            self.treeDesigner.updateValidationMessages(self.validationResults);
+        }
     }
 }

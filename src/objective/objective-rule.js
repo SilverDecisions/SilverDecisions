@@ -1,5 +1,6 @@
 import *  as _ from 'lodash'
 import * as math from 'mathjs'
+import {ExpressionEngine} from '../expression-engine'
 
 export class ObjectiveRule{
     name;
@@ -37,17 +38,17 @@ export class ObjectiveRule{
     }
 
     add(a,b){
-        return this.expressionEngine.add(a,b)
+        return ExpressionEngine.add(a,b)
     }
     subtract(a,b){
-        return this.expressionEngine.subtract(a,b)
+        return ExpressionEngine.subtract(a,b)
     }
     divide(a,b){
-        return this.expressionEngine.divide(a,b)
+        return ExpressionEngine.divide(a,b)
     }
 
     multiply(a,b){
-        return this.expressionEngine.multiply(a,b)
+        return ExpressionEngine.multiply(a,b)
     }
 
 

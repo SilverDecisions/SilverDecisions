@@ -141,6 +141,23 @@
       &.dragging path, &.selected path{
         stroke-dasharray: 3;
       }
+
+      .error-indicator{
+        display: none;
+        fill: red;
+        font-weight: bold;
+        font-size: 1.2em;
+
+      }
+
+      &.error{
+        .error-indicator{
+          display: block;
+          animation: pulse 1.3s ease-in;
+          -webkit-animation: pulse 1.3s ease-in;
+          -webkit-animation-iteration-count: infinite;
+        }
+      }
     }
 
     .decision-node{
@@ -258,14 +275,14 @@
       }
 
       @-webkit-keyframes pulse {
-        0% { stroke-width: $stroke-width-selected; opacity: 1.0; }
-        50% { stroke-width: $stroke-width;; opacity: 1; }
-        100% { stroke-width: $stroke-width-selected; opacity: 1.0; }
+        0% { opacity: 1.0;}
+        50% { opacity: 0.3; }
+        100% {  opacity: 1.0;}
       }
       @keyframes pulse {
-        0% { stroke-width: $stroke-width-selected; opacity: 1.0; }
-        50% { stroke-width: $stroke-width; opacity: 1; }
-        100% { stroke-width: $stroke-width-selected; opacity: 1.0; }
+        0% { opacity: 1.0;}
+        50% { opacity: 0.3;}
+        100% {  opacity: 1.0;}
       }
     }
 
@@ -317,4 +334,15 @@
 
 
 }
-
+.sd-tooltip {
+  position: absolute;
+  pointer-events: none;
+  font-size: 11px;
+  background: #fdfdfd;
+  padding: 3px 5px;
+  border-radius: 8px;
+  box-shadow: 1px 3px 3px #b7b7b7;
+  text-align: center;
+  z-index: 1000;
+  //border: 1px solid #ccc;
+}

@@ -64,6 +64,14 @@ export class Layout{
             .attr('text-anchor', 'middle')
     }
 
+    nodeIndicatorPosition(selection) {
+        return selection
+            .attr('x', this.config.nodeSize / 2 + 8)
+            .attr('y', - this.config.nodeSize/2)
+            .attr('dominant-baseline', 'central')
+            .attr('text-anchor', 'middle')
+    }
+
     edgeLineD(edge){
         var line = d3.line()
             .x(d=> d[0])

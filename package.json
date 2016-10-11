@@ -34,6 +34,7 @@
     "gulp-sourcemaps": "^1.6.0",
     "gulp-strip-debug": "^1.1.0",
     "gulp-uglify": "^1.5.3",
+    "i18next": "^3.4.3",
     "material-design-lite": "^1.2.1",
     "mathjs": "^3.5.3",
     "merge-stream": "^1.0.0",

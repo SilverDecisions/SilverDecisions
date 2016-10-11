@@ -13,19 +13,19 @@ export class ExpressionEngine{
         return this.parser.eval(expr+"");
     }
 
-    add(a, b){
+    static add(a, b){
         return math.add(math.fraction(a), math.fraction(b));
     }
 
-    subtract(a, b){
+    static subtract(a, b){
         return math.subtract(math.fraction(a), math.fraction(b));
     }
 
-    divide(a, b){
+    static divide(a, b){
         return math.divide(math.fraction(a), math.fraction(b));
     }
 
-    multiply(a,b){
+    static multiply(a,b){
         return math.multiply(math.fraction(a), math.fraction(b));
     }
 

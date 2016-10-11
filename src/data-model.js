@@ -1,6 +1,8 @@
 import {Utils} from './utils'
 import * as model from './model/index'
 import *  as _ from 'lodash'
+import {TreeValidator} from './validation/tree-validator'
+import {ExpressionEngine} from './expression-engine'
 
 /*
 * Data model manager
@@ -202,6 +204,12 @@ export class DataModel {
         return result;
     }
 
+    getAllNodesInSubtree(node){
+        var descendants = this.getAllDescendantNodes(node);
+        descendants.unshift(node);
+        return descendants;
+    }
+
     isUndoAvailable(){
         return !!this.undoStack.length
     }
@@ -261,6 +269,10 @@ export class DataModel {
         this._fireUndoRedoCallback();
 
         return this;
+    }
+
+    validate(root){
+        return TreeValidator.validate(this.getAllNodesInSubtree(root));
     }
 
 

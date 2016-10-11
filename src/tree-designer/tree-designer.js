@@ -7,6 +7,8 @@ import {MainContextMenu} from './main-context-menu'
 import {NodeContextMenu} from './node-context-menu'
 import {Layout} from './layout'
 import {NodeDragHandler} from './node-drag-handler'
+import {Tooltip} from '../tooltip'
+import {ValidationResult} from '../validation/validation-result'
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -158,6 +160,7 @@ export class TreeDesigner {
 
         var labelEnter = nodesEnter.append('text').attr('class', 'label');
         var payoffEnter = nodesEnter.append('text').attr('class', 'payoff computed');
+        var indicatorEnter = nodesEnter.append('text').attr('class', 'error-indicator').text('!!');
 
         var nodesMerge = nodesEnter.merge(nodes);
 
@@ -186,7 +189,7 @@ export class TreeDesigner {
             })
             .text(d=> {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
-                return val!==null && !isNaN(val) ? '$ '+val : '-'
+                return val!==null && !isNaN(val) ? '$ '+val : ''
             });
 
         var payoffT = payoff;
@@ -198,12 +201,17 @@ export class TreeDesigner {
         this.layout.nodePayoffPosition(payoffT);
 
 
+        var indicator = nodesMerge.select('text.error-indicator');
+        this.layout.nodeIndicatorPosition(indicatorEnter);
+        this.layout.nodeIndicatorPosition(indicator);
 
 
         nodesMerge.call(this.nodeDragHandler.drag);
         nodesMerge.on('contextmenu', this.nodeContextMenu);
         nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
     }
+
+
 
 
     redrawEdges() {
@@ -220,6 +228,7 @@ export class TreeDesigner {
         var labelEnter = edgesEnter.append('text').attr('class', 'label');
         var payoffEnter = edgesEnter.append('text').attr('class', 'payoff');
         var probabilityEnter = edgesEnter.append('text').attr('class', 'probability');
+
 
         var edgesMerge = edgesEnter.merge(edges);
 
@@ -267,6 +276,37 @@ export class TreeDesigner {
 
 
     }
+    updateValidationMessages(validationResults) {
+        var nodes = this.mainGroup.selectAll('.node');
+        nodes.classed('error', false);
+
+        validationResults.forEach(validationResult=>{
+            if(validationResult.isValid()){
+                return;
+            }
+
+            Object.getOwnPropertyNames(validationResult.objectIdToError).forEach(id=>{
+                var errors = validationResult.objectIdToError[id];
+                var nodeSelection = this.getNodeD3SelectionById(id);
+                nodeSelection.classed('error', true);
+                var tooltipHtml = '';
+                errors.forEach(e=>{
+                    if(tooltipHtml){
+                        tooltipHtml+='<br/>'
+                    }
+                    tooltipHtml+=ValidationResult.getMessage(e);
+                });
+
+                nodeSelection.select('.error-indicator').on('mouseover', function (d) {
+                    Tooltip.show(tooltipHtml);
+                }).on("mouseout", function (d) {
+                    Tooltip.hide();
+                });
+
+            })
+        });
+    }
+
 
     initEdgeMarker() {
         console.log(this.svg);
@@ -442,7 +482,11 @@ export class TreeDesigner {
     }
 
     getNodeD3Selection(node){
-        return this.mainGroup.select('#node-'+node.$id);
+        return this.getNodeD3SelectionById(node.$id);
+    }
+
+    getNodeD3SelectionById(id){
+        return this.mainGroup.select('#node-'+id);
     }
 
     getSelectedNodes() {

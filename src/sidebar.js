@@ -1,4 +1,5 @@
 import * as d3 from './d3'
+import {i18n} from './i18n/i18n'
 
 import {Utils} from './utils'
 import * as model from './model/index'
@@ -50,7 +51,6 @@ export class Sidebar{
         if(object instanceof model.Node){
             return [{
                 name: 'name',
-                label: 'Label',
                 type: 'text'
             }]
         }
@@ -58,12 +58,10 @@ export class Sidebar{
             var list = [
                 {
                     name: 'name',
-                    label: 'Label',
                     type: 'text'
                 },
                 {
                     name: 'payoff',
-                    label: 'Payoff',
                     type: 'text',
                     validator: v=> {
                         return self.app.expressionEngine.validate(v)
@@ -73,7 +71,6 @@ export class Sidebar{
             if(object.parentNode instanceof model.ChanceNode){
                 list.push( {
                     name: 'probability',
-                    label: 'Probability',
                     type: 'text',
                     validator: v=> self.app.expressionEngine.validate(v)
                 })
@@ -89,6 +86,8 @@ export class Sidebar{
 
     updateObjectFields(object, fieldList) {
         var self = this;
+        var objectType = object instanceof model.Node ? 'node' : 'edge';
+
         var objectProps = this.container.select('#object-properties');
         var content = objectProps.select('.content');
         var fields = content.selectAll('div.object-field').data(fieldList);
@@ -99,7 +98,7 @@ export class Sidebar{
         var fieldsMerge = fieldsEnter.merge(fields);
         fieldsMerge.select('label')
             .attr('for', d=>'object-field-'+d.name)
-            .html(d=>d.label);
+            .html(d=>i18n.t(objectType+'.'+d.name));
         fieldsMerge.select('input')
             .attr('type', d=>d.type)
             .attr('name', d=>d.name)
