@@ -13,6 +13,11 @@ export class Templates{
     static toolbar =
         '<div id="toolbar">' +
             '<div class="toolbar-group">'+
+                '<button id="new-diagram-button" class="icon-button" title="<%= i18n.t("toolbar.newDiagram")%>"><i class="material-icons">insert_drive_file</i></button>'+
+                '<button id="open-diagram-button" class="icon-button" title="<%= i18n.t("toolbar.openDiagram")%>"><i class="material-icons">folder_open</i></button>'+
+                '<button id="save-diagram-button" class="icon-button" title="<%= i18n.t("toolbar.saveDiagram")%>"><i class="material-icons">save</i></button>'+
+            '</div>'+
+            '<div class="toolbar-group">'+
                 '<label><%= i18n.t("toolbar.export.label")%></label>'+
                 '<button id="saveButton"><%= i18n.t("toolbar.export.png")%></button>'+
                 '<button id="saveButtonSvg"><%= i18n.t("toolbar.export.svg")%></button>'+

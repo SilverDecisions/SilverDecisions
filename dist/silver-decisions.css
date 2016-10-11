@@ -80,11 +80,10 @@
         padding-right: 7px; }
       #silver-decisions #toolbar .toolbar-group*:not(:first-child):not(:last-child) {
         padding: 0 7px;
-        border-left: 2px solid #d8d8d8;
-        border-right: 2px solid #d8d8d8;
-        border-collapse: collapse; }
+        border-left: 2px solid #d8d8d8; }
       #silver-decisions #toolbar .toolbar-group:last-child {
-        padding-left: 7px; }
+        padding-left: 7px;
+        border-left: 2px solid #d8d8d8; }
   #silver-decisions #main-region {
     display: flex;
     flex: 1; }
@@ -262,6 +261,8 @@
     #silver-decisions button.active {
       background: #3f51b5;
       color: #fff; }
+    #silver-decisions button.icon-button {
+      padding: 0; }
 
 .sd-tooltip {
   position: absolute;

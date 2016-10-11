@@ -31,6 +31,7 @@
 
     .toolbar-group{
       display: inline-block;
+      $toolbar-border-color: #d8d8d8;
 
       label{
         display: inline-block;
@@ -44,12 +45,12 @@
       }
       &*:not(:first-child):not(:last-child) {
         padding: 0 7px;
-        border-left: 2px solid #d8d8d8;
-        border-right: 2px solid #d8d8d8;
-        border-collapse: collapse;
+        border-left: 2px solid $toolbar-border-color;
+
       }
       &:last-child {
         padding-left:7px;
+        border-left: 2px solid $toolbar-border-color;
       }
     }
   }
@@ -364,6 +365,10 @@
     &.active{
       background: #3f51b5;
       color: #fff;
+    }
+
+    &.icon-button{
+      padding: 0;
     }
   }
 

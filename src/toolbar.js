@@ -1,5 +1,5 @@
 import * as d3 from './d3'
-
+import {i18n} from './i18n/i18n'
 import {Utils} from './utils'
 import * as model from './model/index'
 import {Exporter} from './exporter'
@@ -12,10 +12,30 @@ export class Toolbar{
     constructor(container, app){
         this.app = app;
         this.container = container;
+        this.initDiagramButtons();
         this.initExportToPngButton();
         this.initExportSvgButton();
         this.initAutoLayoutButtons();
         this.initUndoRedoButtons();
+    }
+
+    initDiagramButtons(){
+
+        this.newDiagramButton = this.container.select('#new-diagram-button').on('click', ()=>{
+            if(!confirm(i18n.t('confirm.newDiagram'))){
+                return;
+            }
+            this.app.newDiagram();
+        });
+        this.openDiagramButton = this.container.select('#open-diagram-button').on('click', ()=>{
+            if(!confirm(i18n.t('confirm.openDiagram'))){
+                return;
+            }
+            this.app.openDiagram();
+        });
+        this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
+            this.app.saveDiagram();
+        });
     }
 
     initExportToPngButton() {

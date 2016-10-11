@@ -193,4 +193,16 @@ export class App {
             self.treeDesigner.updateValidationMessages(self.validationResults);
         }
     }
+
+    newDiagram(){
+        console.log('newDiagram');
+    }
+
+    openDiagram(){
+        console.log('openDiagram');
+    }
+
+    saveDiagram(){
+        console.log('saveDiagram');
+    }
 }
