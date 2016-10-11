@@ -12,12 +12,20 @@ export class Templates{
 
     static toolbar =
         '<div id="toolbar">' +
-            '<button id="saveButton" class="mdl-button mdl-js-button mdl-button--raised"><%= i18n.t("toolbar.exportToPng")%></button>'+
-            '<button id="saveButtonSvg"><%= i18n.t("toolbar.exportToSvg")%></button>'+
-            '<button id="treeAutoLayoutButton">Tree auto layout</button>'+
-            '<button id="clusterAutoLayoutButton">Cluster auto layout</button>'+
-            '<button id="undoButton" disabled="disabled" title="<%= i18n.t("toolbar.undo")%>"><i class="material-icons">undo</i></button>'+
-            '<button id="redoButton" disabled="disabled" title="<%= i18n.t("toolbar.redo")%>"><i class="material-icons">redo</i></button>'+
+            '<div class="toolbar-group">'+
+                '<label><%= i18n.t("toolbar.export.label")%></label>'+
+                '<button id="saveButton"><%= i18n.t("toolbar.export.png")%></button>'+
+                '<button id="saveButtonSvg"><%= i18n.t("toolbar.export.svg")%></button>'+
+            '</div>'+
+            '<div class="toolbar-group">'+
+                '<label><%= i18n.t("toolbar.layout.label")%></label>'+
+                '<button id="treeAutoLayoutButton"><%= i18n.t("toolbar.layout.tree")%></button>'+
+                '<button id="clusterAutoLayoutButton"><%= i18n.t("toolbar.layout.cluster")%></button>'+
+            '</div>'+
+            '<div class="toolbar-group">'+
+                '<button id="undoButton" disabled="disabled" title="<%= i18n.t("toolbar.undo")%>"><i class="material-icons">undo</i></button>'+
+                '<button id="redoButton" disabled="disabled" title="<%= i18n.t("toolbar.redo")%>"><i class="material-icons">redo</i></button>'+
+            '</div>'+
         '</div>';
 
 

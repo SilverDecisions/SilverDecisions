@@ -1,7 +1,15 @@
 module.exports = {
     'toolbar': {
-        'exportToPng': 'Export to Png',
-        'exportToSvg': 'Export to Svg',
+        'export':{
+            'label': 'Export to',
+            'png': 'Png',
+            'svg': 'Svg'
+        },
+        'layout':{
+            'label': 'Auto layout',
+            'tree': 'Tree',
+            'cluster': 'Cluster'
+        },
         'undo': 'Undo',
         'redo': 'Redo'
     },

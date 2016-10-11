@@ -9,6 +9,7 @@
 }
 
 #silver-decisions{
+
   /*@import "../../node_modules/material-design-lite/src/material-design-lite";*/
   display: flex;
   //align-items: stretch;
@@ -16,12 +17,40 @@
   height: 100%;
   background: #efefef;
   #toolbar{
+    font-family: Roboto, Helvetica, Arial, sans-serif;
     @include card-mixin();
     flex: 0;
     padding: 7px 5px;
 
     button{
       margin-right: 4px;
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+
+    .toolbar-group{
+      display: inline-block;
+
+      label{
+        display: inline-block;
+        font-size: 10px;
+        text-transform: uppercase;
+        margin-right: 4px;
+      }
+
+      &:first-child {
+        padding-right:7px;
+      }
+      &*:not(:first-child):not(:last-child) {
+        padding: 0 7px;
+        border-left: 2px solid #d8d8d8;
+        border-right: 2px solid #d8d8d8;
+        border-collapse: collapse;
+      }
+      &:last-child {
+        padding-left:7px;
+      }
     }
   }
 
@@ -30,6 +59,7 @@
     flex: 1;
 
     #sidebar{
+      font-family: Roboto, Helvetica, Arial, sans-serif;
       $sidebar-width: 200px;
       width: $sidebar-width;
 
@@ -329,6 +359,11 @@
       background-color: rgba(0,0,0,.12);
       color: rgba(0,0,0,.26);
       box-shadow: none;
+    }
+
+    &.active{
+      background: #3f51b5;
+      color: #fff;
     }
   }
 

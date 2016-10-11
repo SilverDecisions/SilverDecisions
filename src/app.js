@@ -46,8 +46,9 @@ export class App {
         this.initDataModel();
         this.initExpressionEngine();
         this.initObjectiveRulesManager();
-        this.initSidebar();
+
         this.initTreeDesigner();
+        this.initSidebar();
         this.initToolbar();
 
     }

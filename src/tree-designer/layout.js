@@ -11,6 +11,8 @@ export class Layout{
 
     currentAutoLayout=null;
 
+    onAutoLayoutChanged=[];
+
     nodeTypeOrder = {
         'decision' : 0,
         'chance': 0,
@@ -33,6 +35,7 @@ export class Layout{
     }
     disableAutoLayout(){
         this.currentAutoLayout = false;
+        this._fireOnAutoLayoutChangedCallbacks();
     }
 
 
@@ -75,7 +78,7 @@ export class Layout{
     edgeLineD(edge){
         var line = d3.line()
             .x(d=> d[0])
-            .y(d=> d[1])
+            .y(d=> d[1]);
         // .curve(d3.curveCatmullRom.alpha(0.5));
 
 
@@ -150,6 +153,7 @@ export class Layout{
     autoLayout(type, withoutStateSaving){
         var self=this;
         if(!this.data.nodes.length){
+            this._fireOnAutoLayoutChangedCallbacks();
             return;
         }
         if(!withoutStateSaving){
@@ -157,7 +161,10 @@ export class Layout{
                 data:{
                     currentAutoLayout: self.currentAutoLayout
                 },
-                onRevert: (data)=> self.currentAutoLayout = data.currentAutoLayout
+                onRevert: (data)=> {
+                    self.currentAutoLayout = data.currentAutoLayout;
+                    self._fireOnAutoLayoutChangedCallbacks();
+                }
             });
         }
 
@@ -206,6 +213,7 @@ export class Layout{
         // this.transition = false;
 
         this.currentAutoLayout = type;
+        this._fireOnAutoLayoutChangedCallbacks();
         return this;
     }
 
@@ -266,6 +274,10 @@ export class Layout{
 
     static backupNodeLocation(node) {
         node.$location = new model.Point(node.location);
+    }
+
+    _fireOnAutoLayoutChangedCallbacks(){
+        this.onAutoLayoutChanged.forEach(c=>c(this.currentAutoLayout));
     }
 
 }
