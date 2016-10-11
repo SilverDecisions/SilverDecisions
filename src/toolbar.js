@@ -3,6 +3,7 @@ import {i18n} from './i18n/i18n'
 import {Utils} from './utils'
 import * as model from './model/index'
 import {Exporter} from './exporter'
+import {FileLoader} from './file-loader'
 
 export class Toolbar{
 
@@ -31,10 +32,16 @@ export class Toolbar{
             if(!confirm(i18n.t('confirm.openDiagram'))){
                 return;
             }
-            this.app.openDiagram();
+            FileLoader.openFile(model=>{
+                this.app.openDiagram(model);
+            });
+
+
         });
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
-            this.app.saveDiagram();
+            var json = this.app.serialize();
+            var blob = new Blob([json], {type: "application/json"});
+            Exporter.saveAs(blob, 'diagram.json');
         });
     }
 

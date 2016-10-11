@@ -195,14 +195,37 @@ export class App {
     }
 
     newDiagram(){
-        console.log('newDiagram');
+        this.dataModel.clear();
+        this.updateView();
     }
 
-    openDiagram(){
-        console.log('openDiagram');
+    openDiagram(diagramData){
+        var self = this;
+        this.dataModel.clear();
+        this.dataModel.load(diagramData.trees);
+        this.updateView();
+
     }
 
-    saveDiagram(){
-        console.log('saveDiagram');
+    serialize(filterLocation, filterComputed){
+        var self = this;
+        var obj={
+            rule: self.objectiveRulesManager.currentRule.name,
+            trees: self.dataModel.getRoots()
+        };
+
+        return JSON.stringify(obj, function(k, v) {
+            if(k.startsWith('$') || k=='parentNode'){
+                return undefined;
+            }
+            if(filterLocation && k=='location'){
+                return undefined;
+            }
+            if(filterComputed && k=='computed'){
+                return undefined;
+            }
+
+            return v;
+        }, 2);
     }
 }

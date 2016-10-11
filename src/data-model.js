@@ -23,11 +23,40 @@ export class DataModel {
     nodeRemovedCallback = null;
 
     constructor() {
-        var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
-        var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
-        var n3 = this.addNode(new model.TerminalNode(new model.Point(250,200)), n1).setName('leave game').setPayoff(0).childNode;
-        var n4 = this.addNode(new model.TerminalNode(new model.Point(400,50)), n2).setName('win').setPayoff(20).setProbability(0.1).childNode;
-        var n5 = this.addNode(new model.TerminalNode(new model.Point(400,150)), n2).setName('lose').setPayoff(0).setProbability(0.9).childNode;
+        // var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
+        // var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
+        // var n3 = this.addNode(new model.TerminalNode(new model.Point(250,200)), n1).setName('leave game').setPayoff(0).childNode;
+        // var n4 = this.addNode(new model.TerminalNode(new model.Point(400,50)), n2).setName('win').setPayoff(20).setProbability(0.1).childNode;
+        // var n5 = this.addNode(new model.TerminalNode(new model.Point(400,150)), n2).setName('lose').setPayoff(0).setProbability(0.9).childNode;
+    }
+
+    /*Loads serialized data*/
+    load(roots){
+        console.log('roots',roots);
+        roots.forEach(nodeData=>{
+            var node = this.createNodeFromData(nodeData);
+        })
+    }
+
+    createNodeFromData(data, parent){
+        var node;
+        var location = new model.Point(data.location.x,data.location.y);
+        if(model.DecisionNode.$TYPE == data.type){
+            node = new model.DecisionNode(location);
+        }else if(model.ChanceNode.$TYPE == data.type){
+            node = new model.ChanceNode(location);
+        }else if(model.TerminalNode.$TYPE == data.type){
+            node = new model.TerminalNode(location);
+        }
+        node.name = data.name;
+        var edgeOrNode = this.addNode(node, parent);
+        data.childEdges.forEach(ed=>{
+            var edge = this.createNodeFromData(ed.childNode, node);
+            edge.payoff = ed.payoff;
+            edge.probability = ed.probability;
+            edge.name = ed.name;
+        });
+        return edgeOrNode;
     }
 
     /*returns node or edge from parent to this node*/
@@ -273,6 +302,13 @@ export class DataModel {
 
     validate(root){
         return TreeValidator.validate(this.getAllNodesInSubtree(root));
+    }
+
+    clear(){
+        this.nodes.length=0;
+        this.edges.length=0;
+        this.undoStack.length=0;
+        this.redoStack.length=0;
     }
 
 

@@ -152,6 +152,11 @@ export class Layout{
 
     autoLayout(type, withoutStateSaving){
         var self=this;
+
+        if(self.currentAutoLayout==type){
+            return;
+        }
+
         if(!this.data.nodes.length){
             this._fireOnAutoLayoutChangedCallbacks();
             return;

@@ -3,7 +3,9 @@ import * as d3 from '../../d3'
 
 export class DecisionNode extends Node{
 
+    static $TYPE = 'decision';
+
     constructor(location){
-        super('decision', d3.symbolSquare, location);
+        super(DecisionNode.$TYPE, d3.symbolSquare, location);
     }
 }

@@ -212,8 +212,6 @@ export class TreeDesigner {
     }
 
 
-
-
     redrawEdges() {
         var self = this;
         var edgesContainer = this.mainGroup.selectOrAppend('g.edges');

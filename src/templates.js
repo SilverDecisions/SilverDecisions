@@ -42,18 +42,17 @@ export class Templates{
         '</div>';
     static sidebar =
         '<div id="sidebar">' +
-        Templates.nodeProperties+
+            Templates.nodeProperties+
         '</div>';
 
     static main =
         '<div id="silver-decisions">'+
-
-        Templates.toolbar+
-        '<div id="main-region">' +
-        Templates.sidebar+
-        '<div id="tree-designer-container"></div>'+
-        '</div>'+
-
+             Templates.toolbar+
+            '<div id="main-region">' +
+                Templates.sidebar+
+                '<div id="tree-designer-container"></div>'+
+            '</div>'+
+            '<input type="file" style="display:none" id="sd-file-input"/>'+
         '</div>';
 }
 
