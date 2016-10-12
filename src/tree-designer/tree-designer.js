@@ -392,8 +392,9 @@ export class TreeDesigner {
     addNode(node, parent){
         this.data.saveState();
         this.data.addNode(node, parent);
+
         this.redraw();
-        this.layout.update();
+        this.layout.update(node);
         return node;
     }
 
@@ -447,6 +448,7 @@ export class TreeDesigner {
         var attached = this.data.attachSubtree(toAttach, node);
 
         attached.moveTo(node.location.x+120, node.location.y, true);
+        self.layout.moveNodeToEmptyPlace(attached);
         self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 
         this.redraw();

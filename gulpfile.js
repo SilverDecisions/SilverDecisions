@@ -29,7 +29,6 @@ gulp.task('build-css', function () {
         .pipe(plugins.rename({extname: '.min.css'}))
         .pipe(gulp.dest('./dist'));
 
-
     return pipe;
 });
 

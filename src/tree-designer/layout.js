@@ -1,6 +1,7 @@
 import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'
+import * as _ from "lodash";
 
 /*Tree layout manager*/
 export class Layout{
@@ -19,6 +20,9 @@ export class Layout{
         'terminal': 1
     };
 
+    gridHeight = 75;
+    gridWidth=150;
+    treeMargin = 50;
 
     constructor(treeDesigner, data, config){
         this.treeDesigner = treeDesigner;
@@ -28,11 +32,50 @@ export class Layout{
 
     }
 
-    update(){
+    update(node){
         if(this.currentAutoLayout){
-            this.autoLayout(this.currentAutoLayout, true);
+            return this.autoLayout(this.currentAutoLayout, true);
+        }
+        if(!node){
+            return this;
+        }
+
+        this.moveNodeToEmptyPlace(node);
+    }
+
+    moveNodeToEmptyPlace(node){
+        var positionMap = {};
+
+        this.data.nodes.forEach(n=>{
+            if(node == n){
+                return;
+            }
+            var x = n.location.x;
+            var y = n.location.y;
+            _.set(positionMap, x+'.'+y, n);
+        });
+        var stepX = this.config.nodeSize/2;
+        var stepY = this.config.nodeSize+10;
+        var stepXsameParent = 0;
+        var stepYsameParent = 75;
+        var changed = false;
+        var colidingNode;
+        var newLocation = new model.Point(node.location);
+        while(colidingNode =_.get(positionMap, newLocation.x+'.'+newLocation.y, null)){
+            changed=true;
+            var sameParent = node.$parent && colidingNode.$parent && node.$parent==colidingNode.$parent;
+            if(sameParent){
+                newLocation.move(stepXsameParent, stepYsameParent);
+            }else{
+                newLocation.move(stepX, stepY);
+            }
+        }
+        if(changed){
+            node.moveTo(newLocation.x,newLocation.y, true);
+            this.treeDesigner.redraw(true);
         }
     }
+
     disableAutoLayout(){
         this.currentAutoLayout = false;
         this._fireOnAutoLayoutChangedCallbacks();
@@ -172,8 +215,6 @@ export class Layout{
             return;
         }
 
-        var treeMargin = 50;
-
         var prevTreeMaxY = self.getNodeMinY();
         this.data.getRoots().forEach(r=>{
             var root = d3.hierarchy(r, d=>{
@@ -182,7 +223,7 @@ export class Layout{
 
             root.sort((a,b)=>self.nodeTypeOrder[a.data.type]-self.nodeTypeOrder[b.data.type]);
 
-            var height = 75, width=150;
+
 
             var layout;
             if(type=='cluster'){
@@ -190,7 +231,7 @@ export class Layout{
             }else{
                 layout = d3.tree();
             }
-            layout.nodeSize([height, width]);
+            layout.nodeSize([self.gridHeight, self.gridWidth]);
 
             layout(root);
             var minY = 999999999;
@@ -208,7 +249,7 @@ export class Layout{
                 maxY = Math.max(maxY, d.data.location.y);
             });
 
-            prevTreeMaxY = maxY + self.config.nodeSize+treeMargin;
+            prevTreeMaxY = maxY + self.config.nodeSize+self.treeMargin;
         });
 
 
