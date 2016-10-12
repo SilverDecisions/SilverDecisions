@@ -5,6 +5,7 @@ import {Utils} from './utils'
 import * as model from './model/index'
 
 import {ObjectiveRulesManager} from './objective/objective-rules-manager'
+import  {TreeValidator} from './validation/tree-validator'
 
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
 import {DataModel} from './data-model'
@@ -45,6 +46,7 @@ export class App {
 
         this.initDataModel();
         this.initExpressionEngine();
+        this.initTreeValidator();
         this.initObjectiveRulesManager();
 
         this.initTreeDesigner();
@@ -77,8 +79,13 @@ export class App {
         // this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = ()=>self.onNodeAddedOrRemoved();
         this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = (node)=> Utils.waitForFinalEvent(()=>this.onNodeAddedOrRemoved(), 'onNodeAddedOrRemoved');
     }
+
+
     initExpressionEngine() {
         this.expressionEngine =  new ExpressionEngine(this.dataModel.expressionScope);
+    }
+    initTreeValidator(){
+        this.treeValidator = new TreeValidator(this.expressionEngine);
     }
 
     initObjectiveRulesManager(){
@@ -135,6 +142,7 @@ export class App {
 
         this.treeDesigner.redraw(true);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
+        this.toolbar.update();
     }
 
     undo(){
@@ -172,7 +180,7 @@ export class App {
     checkValidityAndRecomputeObjective(){
         this.validationResults = [];
         this.dataModel.getRoots().forEach(root=> {
-            var vr = this.dataModel.validate(root);
+            var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
             this.validationResults.push(vr);
             if(vr.isValid()){
                 this.objectiveRulesManager.recomputeTree(root);

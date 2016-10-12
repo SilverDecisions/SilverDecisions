@@ -5,18 +5,23 @@ import {ExpressionEngine} from '../expression-engine'
 
 export class TreeValidator{
 
-    static validate(nodes){
+    expressionEngine;
+    constructor(expressionEngine){
+        this.expressionEngine=expressionEngine;
+    }
+
+    validate(nodes){
 
         var validationResult = new ValidationResult();
 
         nodes.forEach(n=>{
-            TreeValidator.validateNode(n, validationResult);
+            this.validateNode(n, validationResult);
         });
 
         return validationResult;
     }
 
-    static validateNode(node, validationResult = new ValidationResult()){
+    validateNode(node, validationResult = new ValidationResult()){
 
             if(node instanceof model.TerminalNode){
                 return;
@@ -27,7 +32,7 @@ export class TreeValidator{
             if(node instanceof model.ChanceNode){
                 var probabilitySum = 0;
                 node.childEdges.forEach(e=>{
-                    probabilitySum = ExpressionEngine.add(probabilitySum, e.probability);
+                    probabilitySum = ExpressionEngine.add(probabilitySum, this.expressionEngine.eval(e.probability));
                 });
 
                 if(!probabilitySum || !probabilitySum.equals(1)){

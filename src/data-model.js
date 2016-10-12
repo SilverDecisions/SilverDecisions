@@ -1,8 +1,6 @@
 import {Utils} from './utils'
 import * as model from './model/index'
 import *  as _ from 'lodash'
-import {TreeValidator} from './validation/tree-validator'
-import {ExpressionEngine} from './expression-engine'
 
 /*
 * Data model manager
@@ -32,12 +30,12 @@ export class DataModel {
 
     /*Loads serialized data*/
     load(roots){
-        console.log('roots',roots);
         roots.forEach(nodeData=>{
             var node = this.createNodeFromData(nodeData);
         })
     }
 
+    /*create node from serialized data*/
     createNodeFromData(data, parent){
         var node;
         var location = new model.Point(data.location.x,data.location.y);
@@ -76,10 +74,23 @@ export class DataModel {
     _addChild(parent, child) {
         var self = this;
         var edge = new model.Edge(parent, child);
+        self._setEdgeInitialProbability(edge);
         self.edges.push(edge);
+
         parent.childEdges.push(edge);
         child.$parent = parent;
         return edge;
+    }
+
+    _setEdgeInitialProbability(edge){
+        if(edge.parentNode instanceof model.ChanceNode){
+            if(edge.parentNode.childEdges.length==0){ //if node is first child set edge probability to 1
+                edge.probability=1.0;
+            }else{
+                edge.probability=0.0;
+            }
+        }
+
     }
 
     /*removes given node and its subtree*/
@@ -298,10 +309,6 @@ export class DataModel {
         this._fireUndoRedoCallback();
 
         return this;
-    }
-
-    validate(root){
-        return TreeValidator.validate(this.getAllNodesInSubtree(root));
     }
 
     clear(){

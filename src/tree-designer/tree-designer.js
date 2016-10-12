@@ -270,7 +270,7 @@ export class TreeDesigner {
         this.layout.edgeProbabilityPosition(edgesMergeT.select('text.probability'))
             .attr('dominant-baseline', 'hanging') //TODO not working in IE
             .attr('text-anchor', 'end')
-            .text(d=>d.probability ? d.probability: '')
+            .text(d=>d.probability!==undefined ? d.probability: '')
 
 
     }

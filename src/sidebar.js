@@ -3,6 +3,8 @@ import {i18n} from './i18n/i18n'
 
 import {Utils} from './utils'
 import * as model from './model/index'
+import {PayoffValidator} from './validation/payoff-validator'
+import {ProbabilityValidator} from './validation/probability-validator'
 
 export class Sidebar{
 
@@ -63,16 +65,14 @@ export class Sidebar{
                 {
                     name: 'payoff',
                     type: 'text',
-                    validator: v=> {
-                        return self.app.expressionEngine.validate(v)
-                    }
+                    validator: new PayoffValidator(self.app.expressionEngine)
                 }
             ];
             if(object.parentNode instanceof model.ChanceNode){
                 list.push( {
                     name: 'probability',
                     type: 'text',
-                    validator: v=> self.app.expressionEngine.validate(v)
+                    validator: new ProbabilityValidator(self.app.expressionEngine)
                 })
             }
             return list;
@@ -104,7 +104,7 @@ export class Sidebar{
             .attr('name', d=>d.name)
             .attr('id', d=>'object-field-'+d.name)
             .on('change keyup', function(d, i){
-                if(d.validator && !d.validator(this.value)){
+                if(d.validator && !d.validator.validate(this.value)){
                     d3.select(this).classed('invalid', true);
                     return;
                 }
@@ -121,7 +121,7 @@ export class Sidebar{
                 this.value = object[d.name];
                 temp[i]={};
                 temp[i].pristineVal = this.value;
-                if(d.validator && !d.validator(this.value)){
+                if(d.validator && !d.validator.validate(this.value)){
                     d3.select(this).classed('invalid', true);
                 }
             });

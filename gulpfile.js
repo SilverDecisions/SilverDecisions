@@ -3,6 +3,7 @@ var del = require('del');
 var merge = require('merge-stream');
 var plugins = require('gulp-load-plugins')();
 var browserSync = require('browser-sync').create();
+var argv = require('yargs').argv;
 
 var browserify = require("browserify");
 var source = require('vinyl-source-stream');
@@ -16,22 +17,26 @@ gulp.task('clean', function (cb) {
     return del(['tmp', 'dist'], cb);
 });
 
+
 gulp.task('build-css', function () {
     var fileName = projectName;
-    return gulp.src('./src/styles/*')
-        .pipe(plugins.plumber({ errorHandler: onError }))
+    var pipe = gulp.src('./src/styles/*')
+        .pipe(plugins.plumber({errorHandler: onError}))
         .pipe(plugins.sass())
-        .pipe(plugins.concat(fileName+'.css'))
+        .pipe(plugins.concat(fileName + '.css'))
         .pipe(gulp.dest('./dist'))
         .pipe(plugins.minifyCss())
-        .pipe(plugins.rename({ extname: '.min.css' }))
+        .pipe(plugins.rename({extname: '.min.css'}))
         .pipe(gulp.dest('./dist'));
+
+
+    return pipe;
 });
 
 
 gulp.task('build-js', function () {
     var jsFileName =  projectName;
-    return browserify({
+    var pipe = browserify({
         basedir: '.',
         debug: true,
         entries: ['src/index.js'],
@@ -44,15 +49,20 @@ gulp.task('build-js', function () {
         .pipe(plugins.plumber({ errorHandler: onError }))
         .pipe(source(jsFileName+'.js'))
         .pipe(gulp.dest("dist"))
-        .pipe(buffer())
+        .pipe(buffer());
+    var development = (argv.dev === undefined) ? false : true;
+    if(!development){
+        pipe.pipe(sourcemaps.init({loadMaps: true}))
+            .pipe(plugins.stripDebug())
+            .pipe(plugins.uglify())
+            .pipe(plugins.rename({ extname: '.min.js' }))
 
-        .pipe(sourcemaps.init({loadMaps: true}))
-        .pipe(plugins.stripDebug())
-        .pipe(plugins.uglify())
-        .pipe(plugins.rename({ extname: '.min.js' }))
+            .pipe(sourcemaps.write('./'))
+            .pipe(gulp.dest("dist"));
+    }
 
-        .pipe(sourcemaps.write('./'))
-        .pipe(gulp.dest("dist"));
+
+    return pipe;
 });
 
 
@@ -61,7 +71,7 @@ gulp.task('build-clean', ['clean'], function () {
 });
 
 gulp.task('build', ['build-css', 'build-js'], function () {
-    
+
 });
 
 gulp.task('watch', function() {

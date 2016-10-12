@@ -71,9 +71,15 @@ export class Toolbar{
         self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.onLayoutChanged(layout));
         this.layoutButtons={};
         this.layoutButtons['tree'] = this.container.select('#treeAutoLayoutButton').on('click', function () {
+            if(self.app.treeDesigner.layout.currentAutoLayout=='tree'){
+                return;
+            }
             self.app.treeDesigner.autoLayout('tree');
         });
         this.layoutButtons['cluster'] = this.container.select('#clusterAutoLayoutButton').on('click', function () {
+            if(self.app.treeDesigner.layout.currentAutoLayout=='cluster'){
+                return;
+            }
             self.app.treeDesigner.autoLayout('cluster');
         });
     }
@@ -101,8 +107,14 @@ export class Toolbar{
 
     onUndoRedoChanged() {
         console.log('onUndoRedoChanged');
+        this.updateUndoRedoButtons();
+    }
+    updateUndoRedoButtons(){
         this.undoButton.attr("disabled", this.app.dataModel.isUndoAvailable() ? null : 'disabled');
         this.redoButton.attr("disabled", this.app.dataModel.isRedoAvailable() ? null : 'disabled');
-        this.initAutoLayoutButtons();
+    }
+
+    update(){
+        this.updateUndoRedoButtons();
     }
 }

@@ -153,14 +153,8 @@ export class Layout{
     autoLayout(type, withoutStateSaving){
         var self=this;
 
-        if(self.currentAutoLayout==type){
-            return;
-        }
 
-        if(!this.data.nodes.length){
-            this._fireOnAutoLayoutChangedCallbacks();
-            return;
-        }
+
         if(!withoutStateSaving){
             this.data.saveState({
                 data:{
@@ -171,6 +165,11 @@ export class Layout{
                     self._fireOnAutoLayoutChangedCallbacks();
                 }
             });
+        }
+        this.currentAutoLayout = type;
+        if(!this.data.nodes.length){
+            this._fireOnAutoLayoutChangedCallbacks();
+            return;
         }
 
         var treeMargin = 50;
@@ -217,7 +216,6 @@ export class Layout{
         this.treeDesigner.redraw(true);
         // this.transition = false;
 
-        this.currentAutoLayout = type;
         this._fireOnAutoLayoutChangedCallbacks();
         return this;
     }

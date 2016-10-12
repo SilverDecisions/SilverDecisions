@@ -5,7 +5,7 @@ export class Edge extends ObjectWithIdAndComputedValues{
     childNode;
 
     name='';
-    probability=0;
+    probability=undefined;
     payoff=0;
 
     constructor(parentNode, childNode, name,payoff, probability, ){
