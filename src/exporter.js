@@ -7,94 +7,42 @@ export class Exporter {
 // Below are the function that handle actual exporting:
 // getSVGString (svgNode ) and svgString2Image( svgString, width, height, format, callback )
     static getSVGString(svgNode) {
-        svgNode.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
-        var cssStyleText = getCSSStyles(svgNode);
-        appendCSS(cssStyleText, svgNode)
+        // svgNode = svgNode.cloneNode(true);
 
+        var svgClone = svgNode.cloneNode(true);
+        appendInlineStyles(svgNode, svgClone);
+
+        function appendInlineStyles(source, target){
+            var cssStyleText = '';
+            var cs = getComputedStyle(source);
+            for (var i= 0; i<cs.length; i++){
+                cssStyleText+='; '+cs.item(i)+': '+ cs.getPropertyValue(cs.item(i));
+            }
+
+
+            target.setAttribute("style", cssStyleText);
+
+            for (var i = 0; i < source.children.length; i++) {
+                var node = source.children[i];
+                appendInlineStyles(node, target.children[i]);
+            }
+        }
+
+        svgClone.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
         var serializer = new XMLSerializer();
-        var svgString = serializer.serializeToString(svgNode);
+
+        var svgString = serializer.serializeToString(svgClone);
         svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink=') // Fix root xlink without namespace
         svgString = svgString.replace(/NS\d+:href/g, 'xlink:href') // Safari NS namespace fix
 
         return svgString;
-
-        function getCSSStyles(parentElement) {
-            var selectorTextArr = getSelectors(parentElement, [], []);
-
-
-            // Extract CSS Rules
-            var extractedCSSText = "";
-            for (var i = 0; i < document.styleSheets.length; i++) {
-                var cssRules = document.styleSheets[i].cssRules;
-                for (var r = 0; r < cssRules.length; r++) {
-                    if (contains(cssRules[r].selectorText, selectorTextArr))
-                        extractedCSSText += cssRules[r].cssText;
-                }
-            }
-            console.log(selectorTextArr);
-            return extractedCSSText;
-
-            function contains(str, arr) {
-                return arr.indexOf(str) !== -1;
-            }
-
-            function getSelectors(element, parentSelectors, selectorTextArr) {
-                // Add Parent element Id and Classes to the list
-                if (!element.tagName) {
-                    return selectorTextArr;
-                }
-
-                if (!contains(element.tagName, selectorTextArr))
-                    selectorTextArr.push(element.tagName);
-
-                if (element.id && !contains('#' + element.id, selectorTextArr))
-                    selectorTextArr.push('#' + element.id);
-                if (element.id && !contains(element.tagName + '#' + element.id, selectorTextArr))
-                    selectorTextArr.push(element.tagName + '#' + element.id);
-
-
-                var allClasses = '';
-                for (var c = 0; c < element.classList.length; c++) {
-                    var className = element.classList[c];
-                    allClasses += '.' + className;
-                    if (!contains('.' + className, selectorTextArr))
-                        selectorTextArr.push('.' + className);
-                    if (!contains(element.tagName + '.' + className, selectorTextArr))
-                        selectorTextArr.push(element.tagName + '.' + className);
-                }
-                if (allClasses) {
-                    if (!contains(allClasses, selectorTextArr))
-                        selectorTextArr.push(allClasses);
-                    if (!contains(element.tagName + allClasses, selectorTextArr))
-                        selectorTextArr.push(element.tagName + allClasses);
-                }
-
-                // Add Children element Ids and Classes to the list
-                var nodes = element.childNodes;
-
-                for (var i = 0; i < nodes.length; i++) {
-                    var node = nodes[i];
-                    getSelectors(node, [], selectorTextArr)
-                }
-
-                return selectorTextArr;
-            }
-        }
-
-        function appendCSS(cssText, element) {
-            var styleElement = document.createElement("style");
-            styleElement.setAttribute("type", "text/css");
-            styleElement.innerHTML = cssText;
-            var refNode = element.hasChildNodes() ? element.children[0] : null;
-            element.insertBefore(styleElement, refNode);
-        }
     }
 
 
     static svgString2Image(svgString, width, height, format, callback) {
         var format = format ? format : 'png';
 
-        var imgsrc = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString))); // Convert SVG string to dataurl
+        var imgsrc = 'data:image/svg+xml,' + (encodeURIComponent(svgString)); // Convert SVG string to dataurl
 
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
@@ -103,6 +51,12 @@ export class Exporter {
         canvas.height = height;
 
         var image = new Image;
+        image.width=width;
+        image.height=height;
+        var target = new Image;
+        target.width=width;
+        target.height=height;
+
         image.onload = function () {
             context.clearRect(0, 0, width, height);
             context.drawImage(image, 0, 0, width, height);
@@ -111,7 +65,6 @@ export class Exporter {
                 var filesize = Math.round(blob.length / 1024) + ' KB';
                 if (callback) callback(blob, filesize);
             });
-
 
         };
 
