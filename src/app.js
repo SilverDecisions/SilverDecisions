@@ -13,13 +13,29 @@ import {Templates} from './templates'
 import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
 import {ExpressionEngine} from './expression-engine'
-import {Tooltip} from './tooltip'
+import {SettingsDialog} from './settings-dialog'
 
 export class AppConfig {
     width = undefined;
     height = undefined;
     rule = 'max';
     lng = 'en';
+    format={// NumberFormat  options
+        payoff:{
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+            // minimumSignificantDigits: 1,
+            useGrouping: true,
+        },
+        probability:{ // NumberFormat  options
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 3,
+        }
+    };
+
+    //https://github.com/d3/d3-format/blob/master/README.md#format
 
 
     constructor(custom) {
@@ -49,8 +65,10 @@ export class App {
         this.initTreeValidator();
         this.initObjectiveRulesManager();
 
+        this.initPayoffNumberFormat();
         this.initTreeDesigner();
         this.initSidebar();
+        this.initSettingsDialog();
         this.initToolbar();
 
     }
@@ -59,7 +77,7 @@ export class App {
         if (!config) {
             this.config = new AppConfig();
         } else {
-            this.config = config;
+            this.config = new AppConfig(config);
         }
         return this;
     }
@@ -99,9 +117,17 @@ export class App {
 
     }
 
+    initSettingsDialog(){
+        this.settingsDialog = new SettingsDialog(this);
+    }
+
     initToolbar(){
         this.toolbar = new Toolbar(this.container.select('#toolbar'), this);
 
+    }
+
+    initPayoffNumberFormat(){
+        this.payoffNumberFormat = new Intl.NumberFormat([],this.config.format.payoff);
     }
 
     initTreeDesigner() {
@@ -116,7 +142,8 @@ export class App {
             },
             onSelectionCleared: function(){
                 self.onSelectionCleared();
-            }
+            },
+            payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v)
         };
         this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel,config);
     }
@@ -209,8 +236,19 @@ export class App {
 
     openDiagram(diagramData){
         var self = this;
+        if(diagramData.lng){
+            this.config.lng = diagramData.lng;
+        }
+        if(diagramData.rule){
+            this.config.rule = diagramData.rule;
+        }
+        if(diagramData.format){
+            this.config.format = diagramData.format;
+        }
+        this.setConfig(this.config);
         this.dataModel.clear();
         this.dataModel.load(diagramData.trees);
+        this.updatePayoffNumberFormat();
         this.updateView();
 
     }
@@ -218,7 +256,9 @@ export class App {
     serialize(filterLocation, filterComputed){
         var self = this;
         var obj={
+            lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,
+            format: self.config.format,
             trees: self.dataModel.getRoots()
         };
 
@@ -235,5 +275,10 @@ export class App {
 
             return v;
         }, 2);
+    }
+
+    updatePayoffNumberFormat(){
+        this.initPayoffNumberFormat();
+        this.updateView();
     }
 }

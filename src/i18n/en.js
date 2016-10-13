@@ -14,16 +14,26 @@ module.exports = {
             'cluster': 'Cluster'
         },
         'undo': 'Undo',
-        'redo': 'Redo'
+        'redo': 'Redo',
+        'settings': 'Settings'
     },
     'node':{
-        'name': 'Label',
+        'name': 'Label'
     },
     'edge':{
         'name': 'Label',
         'payoff': 'Payoff',
         'probability': 'Probability'
 
+    },
+    'settingsDialog':{
+        'title': 'Settings',
+        'payoff':{
+            'title': 'Payoff number format',
+            'currency': 'Currency',
+            'minimumFractionDigits': 'Minimum fraction digits',
+            'maximumFractionDigits': 'Maximum fraction digits'
+        }
     },
     'validation':{
         'incompletePath': 'Path not ending with terminal node',

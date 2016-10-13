@@ -18,6 +18,7 @@ export class Toolbar{
         this.initExportSvgButton();
         this.initAutoLayoutButtons();
         this.initUndoRedoButtons();
+        this.initSettingsButton();
     }
 
     initDiagramButtons(){
@@ -83,6 +84,12 @@ export class Toolbar{
                 return;
             }
             self.app.treeDesigner.autoLayout('cluster');
+        });
+    }
+
+    initSettingsButton(){
+        this.settingsButton = this.container.select('#settings-button').on('click', ()=>{
+            this.app.settingsDialog.open();
         });
     }
 

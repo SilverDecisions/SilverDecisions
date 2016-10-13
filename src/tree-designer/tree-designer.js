@@ -23,6 +23,7 @@ export class TreeDesignerConfig {
         nodeSize: 40,
         limitNodePositioning: true
     };
+    payoffNumberFormatter= (v)=> v;
 
     onNodeSelected = (node) => {};
     onEdgeSelected = (edge) => {};
@@ -34,6 +35,7 @@ export class TreeDesignerConfig {
         }
     }
 }
+
 
 export class TreeDesigner {
 
@@ -189,7 +191,7 @@ export class TreeDesigner {
             })
             .text(d=> {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
-                return val!==null && !isNaN(val) ? '$ '+val : ''
+                return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
             });
 
         var payoffT = payoff;
@@ -257,7 +259,7 @@ export class TreeDesigner {
         var payoffText = edgesMerge.select('text.payoff')
             .attr('dominant-baseline', 'hanging')
             .classed('negative', d=>d.payoff<0)
-            .text(d=>'$ '+d.payoff);
+            .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff));
 
         var payoffTextT = payoffText;
         if(this.transition){

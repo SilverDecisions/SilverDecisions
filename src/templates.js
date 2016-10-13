@@ -31,6 +31,9 @@ export class Templates{
                 '<button id="undoButton" disabled="disabled" title="<%= i18n.t("toolbar.undo")%>"><i class="material-icons">undo</i></button>'+
                 '<button id="redoButton" disabled="disabled" title="<%= i18n.t("toolbar.redo")%>"><i class="material-icons">redo</i></button>'+
             '</div>'+
+            '<div class="toolbar-group">'+
+                '<button id="settings-button" title="<%= i18n.t("toolbar.settings")%>"><i class="material-icons">settings</i></button>'+
+            '</div>'+
         '</div>';
 
 
@@ -45,6 +48,36 @@ export class Templates{
             Templates.nodeProperties+
         '</div>';
 
+
+    static settingsDialog =
+        '<div id="sd-settings-dialog" class="sd-modal">'+
+            '<div class="sd-modal-content">'+
+                '<div class="sd-modal-header">'+
+                    '<span class="sd-close-modal"><i class="material-icons">close</i></span>'+
+                    '<h2><%= i18n.t("settingsDialog.title")%></h2>'+
+
+                '</div>'+
+                '<div class="sd-modal-body">'+
+                    '<form id="sd-settings-form">'+
+                        '<h4><%= i18n.t("settingsDialog.payoff.title")%></h4>'+
+                        '<div class="sd-form-group">' +
+                            '<label for="sd-payoff-currency"><%= i18n.t("settingsDialog.payoff.currency")%></label>' +
+                            '<input type="text" id="sd-payoff-currency" name="payoff-currency">' +
+                        '</div> '+
+                        '<div class="sd-form-group">' +
+                            '<label for="sd-payoff-minimumFractionDigits"><%= i18n.t("settingsDialog.payoff.minimumFractionDigits")%></label>' +
+                            '<input type="number" id="sd-payoff-minimumFractionDigits" name="payoff-minimumFractionDigits">' +
+                        '</div> '+
+                        '<div class="sd-form-group">' +
+                            '<label for="sd-payoff-maximumFractionDigits"><%= i18n.t("settingsDialog.payoff.maximumFractionDigits")%></label>' +
+                            '<input type="number" id="sd-payoff-maximumFractionDigits" name="payoff-maximumFractionDigits">' +
+                        '</div> '+
+                    '</form>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
+
+
     static main =
         '<div id="silver-decisions">'+
              Templates.toolbar+
@@ -53,6 +86,7 @@ export class Templates{
                 '<div id="tree-designer-container"></div>'+
             '</div>'+
             '<input type="file" style="display:none" id="sd-file-input"/>'+
+             Templates.settingsDialog+
         '</div>';
 }
 
