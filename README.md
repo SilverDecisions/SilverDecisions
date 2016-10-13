@@ -2,6 +2,8 @@
 
 Software for creating and analyzing decision trees.
 
+If you are a SilverDecisions user please visit project [Wiki](https://github.com/bkamins/SilverDecisions/wiki).
+
 ## Developer quick start guide
 
 1. Clone the repository
