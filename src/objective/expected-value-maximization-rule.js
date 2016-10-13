@@ -2,11 +2,13 @@ import {Utils} from '../utils'
 import * as model from '../model/index'
 import {ObjectiveRule} from './objective-rule'
 
+/*expected value maximization rule*/
+export class ExpectedValueMaximizationRule extends ObjectiveRule{
 
-export class MaxRule extends ObjectiveRule{
+    static NAME = 'expected-value-maximization';
 
     constructor(expressionEngine){
-        super('max', expressionEngine);
+        super(ExpectedValueMaximizationRule.NAME, expressionEngine);
     }
 
     // payoff - parent edge payoff

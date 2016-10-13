@@ -1,4 +1,4 @@
-import {MaxRule} from './max-rule'
+import {ExpectedValueMaximizationRule} from './expected-value-maximization-rule'
 
 
 export class ObjectiveRulesManager{
@@ -9,7 +9,7 @@ export class ObjectiveRulesManager{
     constructor(currentRuleName, data, expressionEngine){
         this.data = data;
         this.expressionEngine=expressionEngine;
-        var max = new MaxRule(expressionEngine);
+        var max = new ExpectedValueMaximizationRule(expressionEngine);
         this.ruleByName[max.name]=max;
         this.currentRule = this.ruleByName[currentRuleName];
     }

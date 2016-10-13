@@ -14,11 +14,12 @@ import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
 import {ExpressionEngine} from './expression-engine'
 import {SettingsDialog} from './settings-dialog'
+import {ExpectedValueMaximizationRule} from './objective/expected-value-maximization-rule'
 
 export class AppConfig {
     width = undefined;
     height = undefined;
-    rule = 'max';
+    rule = ExpectedValueMaximizationRule.NAME;
     lng = 'en';
     format={// NumberFormat  options
         payoff:{
@@ -36,7 +37,6 @@ export class AppConfig {
     };
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
-
 
     constructor(custom) {
         if (custom) {
@@ -271,6 +271,11 @@ export class App {
             }
             if(filterComputed && k=='computed'){
                 return undefined;
+            }
+
+            if(v!==null && v!==undefined && v.toFraction){
+                console.log(v);
+                return v.toFraction(true);
             }
 
             return v;

@@ -89,6 +89,8 @@ export class DataModel {
             }else{
                 edge.probability=0.0;
             }
+        }else{
+            edge.probability=undefined;
         }
 
     }
