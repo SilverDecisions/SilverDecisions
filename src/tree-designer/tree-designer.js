@@ -424,7 +424,7 @@ export class TreeDesigner {
         this.data.removeNode(node);
 
 
-        if(this.layout.currentAutoLayout){
+        if(!this.layout.isManualLayout()){
             this.layout.update();
         }else{
             this.redraw();

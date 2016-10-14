@@ -10,7 +10,9 @@ export class Layout{
     data;
     config;
 
-    currentAutoLayout=null;
+    static MANUAL_LAYOUT_NAME = 'manual';
+
+    currentLayout=Layout.MANUAL_LAYOUT_NAME;
 
     onAutoLayoutChanged=[];
 
@@ -19,6 +21,7 @@ export class Layout{
         'chance': 0,
         'terminal': 1
     };
+
 
     gridHeight = 75;
     gridWidth=150;
@@ -33,14 +36,16 @@ export class Layout{
     }
 
     update(node){
-        if(this.currentAutoLayout){
-            return this.autoLayout(this.currentAutoLayout, true);
+        if(node){
+            this.moveNodeToEmptyPlace(node);
         }
-        if(!node){
-            return this;
+        if(!this.isManualLayout()){
+            return this.autoLayout(this.currentLayout, true);
         }
+    }
 
-        this.moveNodeToEmptyPlace(node);
+    isManualLayout(){
+        return this.currentLayout == Layout.MANUAL_LAYOUT_NAME;
     }
 
     getNewChildLocation(parent){
@@ -81,7 +86,7 @@ export class Layout{
     }
 
     disableAutoLayout(){
-        this.currentAutoLayout = false;
+        this.currentLayout = Layout.MANUAL_LAYOUT_NAME;
         this._fireOnAutoLayoutChangedCallbacks();
     }
 
@@ -213,15 +218,15 @@ export class Layout{
         if(!withoutStateSaving){
             this.data.saveState({
                 data:{
-                    currentAutoLayout: self.currentAutoLayout
+                    currentLayout: self.currentLayout
                 },
                 onRevert: (data)=> {
-                    self.currentAutoLayout = data.currentAutoLayout;
+                    self.currentLayout = data.currentLayout;
                     self._fireOnAutoLayoutChangedCallbacks();
                 }
             });
         }
-        this.currentAutoLayout = type;
+        this.currentLayout = type;
         if(!this.data.nodes.length){
             this._fireOnAutoLayoutChangedCallbacks();
             return;
@@ -233,8 +238,8 @@ export class Layout{
                 return d.childEdges.map(e=>e.childNode);
             });
 
-            root.sort((a,b)=>self.nodeTypeOrder[a.data.type]-self.nodeTypeOrder[b.data.type]);
-
+            // root.sort((a,b)=>self.nodeTypeOrder[a.data.type]-self.nodeTypeOrder[b.data.type]);
+            root.sort((a,b)=>a.data.location.y - b.data.location.y);
 
 
             var layout;
@@ -333,7 +338,7 @@ export class Layout{
     }
 
     _fireOnAutoLayoutChangedCallbacks(){
-        this.onAutoLayoutChanged.forEach(c=>c(this.currentAutoLayout));
+        this.onAutoLayoutChanged.forEach(c=>c(this.currentLayout));
     }
 
 

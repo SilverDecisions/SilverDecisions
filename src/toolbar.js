@@ -16,7 +16,7 @@ export class Toolbar{
         this.initDiagramButtons();
         this.initExportToPngButton();
         this.initExportSvgButton();
-        this.initAutoLayoutButtons();
+        this.initLayoutButtons();
         this.initUndoRedoButtons();
         this.initSettingsButton();
     }
@@ -69,22 +69,30 @@ export class Toolbar{
         });
     }
 
-    initAutoLayoutButtons() {
+    initLayoutButtons() {
         var self = this;
         self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.onLayoutChanged(layout));
         this.layoutButtons={};
+        this.layoutButtons['manual'] = this.container.select('#manualLayoutButton').on('click', function () {
+            if(self.app.treeDesigner.layout.currentLayout=='manual'){
+                return;
+            }
+            self.app.treeDesigner.layout.disableAutoLayout();
+        });
         this.layoutButtons['tree'] = this.container.select('#treeAutoLayoutButton').on('click', function () {
-            if(self.app.treeDesigner.layout.currentAutoLayout=='tree'){
+            if(self.app.treeDesigner.layout.currentLayout=='tree'){
                 return;
             }
             self.app.treeDesigner.autoLayout('tree');
         });
         this.layoutButtons['cluster'] = this.container.select('#clusterAutoLayoutButton').on('click', function () {
-            if(self.app.treeDesigner.layout.currentAutoLayout=='cluster'){
+            if(self.app.treeDesigner.layout.currentLayout=='cluster'){
                 return;
             }
             self.app.treeDesigner.autoLayout('cluster');
         });
+
+        this.onLayoutChanged(self.app.treeDesigner.layout.currentLayout)
     }
 
     initSettingsButton(){

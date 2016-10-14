@@ -24,6 +24,7 @@ export class Templates{
             '</div>'+
             '<div class="toolbar-group">'+
                 '<label><%= i18n.t("toolbar.layout.label")%></label>'+
+                '<button id="manualLayoutButton"><%= i18n.t("toolbar.layout.manual")%></button>'+
                 '<button id="treeAutoLayoutButton"><%= i18n.t("toolbar.layout.tree")%></button>'+
                 '<button id="clusterAutoLayoutButton"><%= i18n.t("toolbar.layout.cluster")%></button>'+
             '</div>'+

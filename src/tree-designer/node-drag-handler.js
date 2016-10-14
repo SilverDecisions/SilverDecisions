@@ -37,12 +37,14 @@ export class NodeDragHandler{
             .on("drag", function (d) {
                 self.onDrag.call(this, d, self);
             })
-            .on("end", this.dragEnded);
+            .on("end", function (d) {
+                self.dragEnded.call(this, d, self);
+            })
     }
 
 
     dragStarted(d,self) {
-        self.treeDesigner.layout.disableAutoLayout();
+        // self.treeDesigner.layout.disableAutoLayout();
         ContextMenu.hide();
         var node = d3.select(this);
         if(!node.classed("selected")){
@@ -76,9 +78,9 @@ export class NodeDragHandler{
         self.treeDesigner.updatePlottingRegionSize();
     }
 
-    dragEnded(){
-        var self = this;
+    dragEnded(draggedNode, self){
         var node = d3.select(this).classed("dragging", false);
+        self.treeDesigner.layout.update()
     }
 
 

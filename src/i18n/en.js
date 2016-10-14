@@ -9,7 +9,8 @@ module.exports = {
             'svg': 'Svg'
         },
         'layout':{
-            'label': 'Auto layout',
+            'label': 'Layout',
+            'manual': 'Manual',
             'tree': 'Tree',
             'cluster': 'Cluster'
         },
