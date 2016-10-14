@@ -110,6 +110,14 @@ export class Layout{
             .attr('text-anchor', 'middle')
     }
 
+    nodeAggregatedPayoffPosition(selection) {
+        return selection
+            .attr('x', this.config.nodeSize / 2 + 7)
+            .attr('y', 0)
+            // .attr('text-anchor', 'middle')
+            .attr('dominant-baseline', 'central')
+    }
+
     nodeIndicatorPosition(selection) {
         return selection
             .attr('x', this.config.nodeSize / 2 + 8)

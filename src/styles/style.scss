@@ -159,6 +159,13 @@
         }
       }
 
+      .aggregated-payoff{
+        fill: #006f00;
+        &.negative{
+          fill: #b60000;
+        }
+      }
+
       path{
         -webkit-transition: fill 0.25s; /* Safari */
         transition: fill 0.25s;

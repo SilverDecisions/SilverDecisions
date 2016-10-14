@@ -43,4 +43,8 @@ export class ExpressionEngine{
             return false;
         }
     }
+
+    serialize(v){
+        return math.fraction(v).toFraction(true);
+    }
 }

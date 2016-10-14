@@ -11,15 +11,16 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
         super(ExpectedValueMaximizationRule.NAME, expressionEngine);
     }
 
-    // payoff - parent edge payoff
-    computePayoff(node, payoff=0){
+    // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
+    computePayoff(node, payoff=0, aggregatedPayoff=0){
         payoff=this.eval(payoff);
+
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
                 var bestchild = -99999999999;
                 node.childEdges.forEach(e=>{
-                    var childPayoff = this.computePayoff(e.childNode, e.payoff);
+                    var childPayoff = this.computePayoff(e.childNode, e.payoff, this.add(e.payoff, aggregatedPayoff));
                     bestchild = Math.max(bestchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
@@ -28,7 +29,7 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
                 });
             }else{
                 node.childEdges.forEach(e=>{
-                    this.computePayoff(e.childNode, e.payoff);
+                    this.computePayoff(e.childNode, e.payoff, this.add(e.payoff, aggregatedPayoff));
                     this.clearComputedValues(e);
                     this.cValue(e, 'probability', this.eval(e.probability));
                 });
@@ -47,9 +48,17 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
 
         }
 
+
+
+
         payoff=this.add(payoff, childrenPayoff);
         this.clearComputedValues(node);
-        this.cValue(node, 'childrenPayoff', childrenPayoff);
+
+        if(node instanceof model.TerminalNode){
+            this.cValue(node, 'aggregatedPayoff', aggregatedPayoff);
+        }else{
+            this.cValue(node, 'childrenPayoff', childrenPayoff);
+        }
 
         return this.cValue(node, 'payoff', payoff);
     }

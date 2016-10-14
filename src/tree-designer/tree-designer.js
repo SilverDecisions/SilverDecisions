@@ -163,6 +163,7 @@ export class TreeDesigner {
         var labelEnter = nodesEnter.append('text').attr('class', 'label');
         var payoffEnter = nodesEnter.append('text').attr('class', 'payoff computed');
         var indicatorEnter = nodesEnter.append('text').attr('class', 'error-indicator').text('!!');
+        var aggregatedPayoffEnter = nodesEnter.append('text').attr('class', 'aggregated-payoff').text('!!');
 
         var nodesMerge = nodesEnter.merge(nodes);
 
@@ -201,6 +202,24 @@ export class TreeDesigner {
 
         this.layout.nodePayoffPosition(payoffEnter);
         this.layout.nodePayoffPosition(payoffT);
+
+        var aggregatedPayoff = nodesMerge.select('text.aggregated-payoff')
+            .classed('negative', d=> {
+                var val = d.computedValue(ruleName, 'aggregatedPayoff');
+                return val!==null && val<0;
+            })
+            .text(d=> {
+                var val = d.computedValue(ruleName, 'aggregatedPayoff');
+                return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
+            });
+
+        var aggregatedPayoffT = aggregatedPayoff;
+        if(this.transition){
+            aggregatedPayoffT = aggregatedPayoff.transition();
+        }
+
+        this.layout.nodeAggregatedPayoffPosition(aggregatedPayoffEnter);
+        this.layout.nodeAggregatedPayoffPosition(aggregatedPayoffT);
 
 
         var indicator = nodesMerge.select('text.error-indicator');

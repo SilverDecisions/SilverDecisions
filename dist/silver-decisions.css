@@ -223,6 +223,10 @@
       cursor: move; }
       #silver-decisions svg.tree-designer .node .payoff {
         fill: #0000d7; }
+      #silver-decisions svg.tree-designer .node .aggregated-payoff {
+        fill: #006f00; }
+        #silver-decisions svg.tree-designer .node .aggregated-payoff.negative {
+          fill: #b60000; }
       #silver-decisions svg.tree-designer .node path {
         -webkit-transition: fill 0.25s;
         /* Safari */

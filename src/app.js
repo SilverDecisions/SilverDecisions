@@ -70,6 +70,7 @@ export class App {
         this.initSidebar();
         this.initSettingsDialog();
         this.initToolbar();
+        this.initOnBeforeUnload();
 
     }
 
@@ -262,6 +263,7 @@ export class App {
             trees: self.dataModel.getRoots()
         };
 
+
         return JSON.stringify(obj, function(k, v) {
             if(k.startsWith('$') || k=='parentNode'){
                 return undefined;
@@ -273,11 +275,9 @@ export class App {
                 return undefined;
             }
 
-            if(v!==null && v!==undefined && v.toFraction){
-                console.log(v);
-                return v.toFraction(true);
+            if(v!==null && v!==undefined && v.mathjs){
+                return self.expressionEngine.serialize(v);
             }
-
             return v;
         }, 2);
     }
@@ -285,5 +285,18 @@ export class App {
     updatePayoffNumberFormat(){
         this.initPayoffNumberFormat();
         this.updateView();
+    }
+
+    initOnBeforeUnload() {
+        var self = this;
+        window.addEventListener("beforeunload", function (e) {
+            if(!(self.dataModel.isUndoAvailable()||self.dataModel.isRedoAvailable())){
+                return;
+            }
+
+            var dialogText = i18n.t('confirm.beforeunload');
+            e.returnValue = dialogText;
+            return dialogText;
+        });
     }
 }

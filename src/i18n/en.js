@@ -41,6 +41,7 @@ module.exports = {
     },
     'confirm':{
         'newDiagram': 'Do you really want to clear current diagram? All unsaved data will be lost.',
-        'openDiagram': 'Are you sure? All unsaved diagram data will be lost.'
+        'openDiagram': 'Are you sure? All unsaved diagram data will be lost.',
+        'beforeunload': 'Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost.'
     }
 };
