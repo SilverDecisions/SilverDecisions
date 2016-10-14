@@ -20,7 +20,7 @@ If you are a SilverDecisions user please visit project [Wiki](https://github.com
 * `demo` - demo usage of SilverDecisions
 * `dist` - distribution folder generated with gulp 
 * `src` - source files directory
-  * `styles` - scss styles source directory (sass-lang.com) 
+  * `styles` - css styles source directory (sass-lang.com) 
 * `test` 
 
 ## User testing guide
@@ -28,3 +28,13 @@ If you are a SilverDecisions user please visit project [Wiki](https://github.com
 * Versions ready for user testing will be clearly tagged in git repository (please do not submit bugs for development versions)
 * You can use `index.html` in `demo` directory to perform tests (in versions tagged for testing everything will be properly biult)
 * Submit atomic comments using GitHub issues
+* Label usage guide:
+
+| Issue label | Usage |
+| --- | --- |
+| `bug` | application does not work correctly |
+| `needs doc` | aplication feature may be nonintuitive should be documented |
+| `enchancement` | standard requests for new features |
+| `future enchancement` | requests for new features that are important but not urgent |
+| `minor enchancement` | requests for new features that are cosmetic changes (low development priority) |
+| `question` | topics not directly related to development requests |
