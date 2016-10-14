@@ -43,6 +43,10 @@ export class Layout{
         this.moveNodeToEmptyPlace(node);
     }
 
+    getNewChildLocation(parent){
+        return new model.Point(parent.location.x + 150, parent.location.y)
+    }
+
     moveNodeToEmptyPlace(node){
         var positionMap = {};
 
@@ -331,6 +335,8 @@ export class Layout{
     _fireOnAutoLayoutChangedCallbacks(){
         this.onAutoLayoutChanged.forEach(c=>c(this.currentAutoLayout));
     }
+
+
 
 }
 

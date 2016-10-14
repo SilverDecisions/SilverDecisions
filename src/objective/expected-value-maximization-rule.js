@@ -69,7 +69,7 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
 
             if ( this.subtract(this.cValue(node,'payoff'),payoff).equals(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
                 this.cValue(e, 'optimal', true);
-                this.computeOptimal(e.childNode);
+                this.computeOptimal(e.childNode, e.payoff);
             }else{
                 this.cValue(e, 'optimal', false);
             }

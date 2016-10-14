@@ -468,7 +468,8 @@ export class TreeDesigner {
         self.copyNode(toAttach);
         var attached = this.data.attachSubtree(toAttach, node);
 
-        attached.moveTo(node.location.x+120, node.location.y, true);
+        var location = self.layout.getNewChildLocation(node);
+        attached.moveTo(location.x, location.y, true);
         self.layout.moveNodeToEmptyPlace(attached);
         self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 

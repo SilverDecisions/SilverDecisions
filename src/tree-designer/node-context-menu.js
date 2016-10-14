@@ -45,21 +45,21 @@ export class NodeContextMenu extends ContextMenu {
             menu.push({
                 title: 'Add Decision Node',
                 action: function (elm, d, i) {
-                    var newNode = new model.DecisionNode(new model.Point(d.location.x + 150, d.location.y));
+                    var newNode = new model.DecisionNode(treeDesigner.layout.getNewChildLocation(d));
                     treeDesigner.addNode(newNode, d)
                 }
             });
             menu.push({
                 title: 'Add Chance Node',
                 action: function (elm, d, i) {
-                    var newNode = new model.ChanceNode(new model.Point(d.location.x + 150, d.location.y));
+                    var newNode = new model.ChanceNode(treeDesigner.layout.getNewChildLocation(d));
                     treeDesigner.addNode(newNode, d)
                 }
             });
             menu.push({
                 title: 'Add Terminal Node',
                 action: function (elm, d, i) {
-                    var newNode = new model.TerminalNode(new model.Point(d.location.x + 150, d.location.y));
+                    var newNode = new model.TerminalNode(treeDesigner.layout.getNewChildLocation(d));
                     treeDesigner.addNode(newNode, d)
                 }
             });
