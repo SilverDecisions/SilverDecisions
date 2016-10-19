@@ -143,6 +143,8 @@
 
   svg.tree-designer{
 
+    $edge-optimal-color: #006f00;
+
     font-size: 12px;
     position: absolute;
     //top: 0;
@@ -171,6 +173,13 @@
         transition: fill 0.25s;
       }
 
+
+      &.optimal{
+        path{
+          //stroke: darken($edge-optimal-color, 2%);
+          stroke-width: 1.5px;
+        }
+      }
 
       &.selected{
 
@@ -248,7 +257,7 @@
       }
     }
 
-    $edge-optimal-color: #006f00;
+
 
     marker#arrow-optimal{
       path{

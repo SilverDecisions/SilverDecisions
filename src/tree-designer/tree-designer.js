@@ -166,6 +166,7 @@ export class TreeDesigner {
         var aggregatedPayoffEnter = nodesEnter.append('text').attr('class', 'aggregated-payoff').text('!!');
 
         var nodesMerge = nodesEnter.merge(nodes);
+        nodesMerge.classed('optimal', (d)=>self.isOptimal(d));
 
         var nodesMergeT = nodesMerge;
         if(this.transition){
@@ -232,6 +233,10 @@ export class TreeDesigner {
         nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
     }
 
+    isOptimal(d){
+        var ruleName = this.config.rule;
+        return d.computedValue(ruleName, 'optimal');
+    }
 
     redrawEdges() {
         var self = this;
@@ -251,23 +256,21 @@ export class TreeDesigner {
 
         var edgesMerge = edgesEnter.merge(edges);
 
-        var ruleName = this.config.rule;
+
         var optimalClassName = 'optimal';
-
-        var isOptimal = d=>d.computed[ruleName] && d.computed[ruleName].optimal;
-
-        edgesMerge.classed(optimalClassName, isOptimal);
+        edgesMerge.classed(optimalClassName, (d)=>self.isOptimal(d));
 
         var edgesMergeT = edgesMerge;
         if(this.transition){
             edgesMergeT = edgesMerge.transition();
         }
+
         edgesMergeT.select('path')
             .attr('d', d=> this.layout.edgeLineD(d))
             // .attr("stroke", "black")
             // .attr("stroke-width", 2)
             .attr("fill", "none")
-            .attr("marker-end", d => "url(#arrow"+(isOptimal(d)?'-optimal':'')+")")
+            .attr("marker-end", d => "url(#arrow"+(self.isOptimal(d)?'-optimal':'')+")")
             .attr("shape-rendering", "optimizeQuality")
 
 

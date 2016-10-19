@@ -231,6 +231,8 @@
         -webkit-transition: fill 0.25s;
         /* Safari */
         transition: fill 0.25s; }
+      #silver-decisions svg.tree-designer .node.optimal path {
+        stroke-width: 1.5px; }
       #silver-decisions svg.tree-designer .node.dragging path, #silver-decisions svg.tree-designer .node.selected path {
         stroke-dasharray: 3; }
       #silver-decisions svg.tree-designer .node .error-indicator {

@@ -65,8 +65,8 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
 
     //  payoff - parent edge payoff
     computeOptimal(node, payoff=0){
+        this.cValue(node, 'optimal', true);
         node.childEdges.forEach(e=>{
-
             if ( this.subtract(this.cValue(node,'payoff'),payoff).equals(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
                 this.cValue(e, 'optimal', true);
                 this.computeOptimal(e.childNode, e.payoff);
