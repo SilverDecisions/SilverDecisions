@@ -8,6 +8,44 @@
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
 
+@mixin scrollbar-mixin(){
+  &::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+
+
+  &::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+  }
+
+  /*&::-webkit-scrollbar {
+    width: 14px;
+    height: 14px;
+  }
+  &::-webkit-scrollbar-thumb {
+    height: 6px;
+    border: 4px solid rgba(0, 0, 0, 0);
+    background-clip: padding-box;
+    -webkit-border-radius: 7px;
+    background-color: rgba(0, 0, 0, 0.15);
+    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
+  }
+  &::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  &::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }*/
+}
+
 #silver-decisions{
 
   /*@import "../../node_modules/material-design-lite/src/material-design-lite";*/
@@ -58,19 +96,29 @@
   #main-region{
     display: flex;
     flex: 1;
-
+    overflow: hidden;
     #sidebar{
+
       font-family: Roboto, Helvetica, Arial, sans-serif;
       $sidebar-width: 200px;
-      width: $sidebar-width;
+      min-width: $sidebar-width;
+      overflow: hidden;
+      padding: 5px 0;
+
+      #sidebar-inner{
+        height: 100%;
+        overflow: auto;
+        @include scrollbar-mixin();
+        padding: 0 5px;
+      }
 
       #object-properties{
         opacity: 0;
         @include card-mixin();
-        margin: 5px 0 5px 5px;
+        margin: 0 0 5px 0;
         min-height: 20px;
         //padding: 7px 7px;
-        padding-bottom: 7px;
+        padding: 0 7px 7px;
         -webkit-transition: opacity 0.3s; /* Safari */
         transition: opacity 0.3s;
         &.visible{
@@ -80,23 +128,23 @@
 
         .header{
           font-weight: bold;
-          padding: 7px;
-          border-bottom: 1px solid rgba(0,0,0,.1);
+          padding: 7px 0;
+          border-bottom: 1px solid rgba(0,0,0,.3);
         }
 
         .content{
           .object-field{
-
+            font-size: 12px;
             //margin-top: 7px;
-            padding: 7px;
+            //padding: 7px 0;
             label{
-              display: block;
-              font-size: 12px;
+              //display: block;
+              //font-size: 12px;
             }
             input{
-              padding: 4px;
+           /*   padding: 4px;
               border-radius: 2px;
-              border: 1px solid #ccc;
+              border: 1px solid #ccc;*/
 
               &.invalid{
 
@@ -106,6 +154,35 @@
               }
             }
           }
+
+          .children-properties{
+            //padding-top: 7px;
+            margin-top: 7px;
+            border-top: 1px solid rgba(0,0,0,.3);
+            display: none;
+
+            .children-properties-header{
+              border-bottom: 1px solid rgba(0,0,0,.3);
+              font-size: 14px;
+              text-align: center;
+              padding: 5px 0;
+            }
+
+            &.visible{
+              display: block;
+            }
+
+            .child-object{
+              margin-top: 12px;
+              .child-header{
+                font-size: 13px;
+                text-align: center;
+
+              }
+            }
+
+
+          }
         }
       }
     }
@@ -113,6 +190,7 @@
 
   #tree-designer-container{
     @include card-mixin();
+    @include scrollbar-mixin();
     position: relative;
     flex: 1;
 
@@ -125,20 +203,7 @@
       overflow-x: auto;
     }
 
-    &::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
 
-
-    &::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: darkgrey;
-      outline: 1px solid slategrey;
-    }
   }
 
   svg.tree-designer{

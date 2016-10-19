@@ -39,14 +39,22 @@ export class Templates{
 
 
 
-    static nodeProperties =
+    static objectProperties =
         '<div id="object-properties">' +
             '<div class="header"></div> '+
-            '<div class="content"></div> '+
+            '<div class="content">' +
+                '<div class="main-properties"></div> '+
+                '<div class="children-properties">' +
+                    '<div class="children-properties-header"></div> '+
+                    '<div class="children-properties-content"></div>' +
+                '</div> '+
+            '</div> '+
         '</div>';
     static sidebar =
         '<div id="sidebar">' +
-            Templates.nodeProperties+
+            '<div id="sidebar-inner">'+
+            Templates.objectProperties+
+            '</div>'+
         '</div>';
 
 

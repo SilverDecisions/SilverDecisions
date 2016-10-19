@@ -156,13 +156,17 @@ export class App {
         this.selectedObject = object;
         setTimeout(function(){
             self.sidebar.updateObjectPropertiesView(self.selectedObject);
+            self.treeDesigner.updatePlottingRegionSize();
         },10)
-
     }
 
     onSelectionCleared(){
+        var self=this;
         this.selectedObject=null;
         this.sidebar.hideObjectProperties();
+        setTimeout(function(){
+            self.treeDesigner.updatePlottingRegionSize();
+        },10);
         // console.log();
     }
 
