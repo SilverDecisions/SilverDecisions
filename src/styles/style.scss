@@ -248,6 +248,14 @@
       }
     }
 
+    $edge-optimal-color: #006f00;
+
+    marker#arrow-optimal{
+      path{
+        fill: $edge-optimal-color;
+      }
+    }
+
     .edge{
       $stroke-width: 1.5;
       $stroke-width-selected: $stroke-width + 2;
@@ -278,7 +286,7 @@
       &.optimal{
         path{
           stroke-width: $stroke-width-selected - 1.1;
-          stroke: #006f00;
+          stroke: $edge-optimal-color;
         }
 
       }
@@ -378,7 +386,6 @@
       padding: 0;
     }
   }
-
 
 }
 .sd-tooltip {

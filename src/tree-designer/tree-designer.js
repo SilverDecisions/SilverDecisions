@@ -252,7 +252,11 @@ export class TreeDesigner {
         var edgesMerge = edgesEnter.merge(edges);
 
         var ruleName = this.config.rule;
-        edgesMerge.classed('optimal', d=>d.computed[ruleName] && d.computed[ruleName].optimal);
+        var optimalClassName = 'optimal';
+
+        var isOptimal = d=>d.computed[ruleName] && d.computed[ruleName].optimal;
+
+        edgesMerge.classed(optimalClassName, isOptimal);
 
         var edgesMergeT = edgesMerge;
         if(this.transition){
@@ -263,7 +267,7 @@ export class TreeDesigner {
             // .attr("stroke", "black")
             // .attr("stroke-width", 2)
             .attr("fill", "none")
-            .attr("marker-end", "url(#arrow)")
+            .attr("marker-end", d => "url(#arrow"+(isOptimal(d)?'-optimal':'')+")")
             .attr("shape-rendering", "optimizeQuality")
 
 
@@ -294,6 +298,7 @@ export class TreeDesigner {
             .text(d=>d.probability!==undefined ? d.probability: '')
 
 
+        edgesContainer.selectAll('.edge.'+optimalClassName).raise();
     }
     updateValidationMessages(validationResults) {
         var nodes = this.mainGroup.selectAll('.node');
@@ -333,6 +338,18 @@ export class TreeDesigner {
 
         defs.append("marker")
             .attr("id","arrow")
+            .attr("viewBox","0 -5 10 10")
+            .attr("refX",5)
+            .attr("refY",0)
+            .attr("markerWidth",4)
+            .attr("markerHeight",4)
+            .attr("orient","auto")
+            .append("path")
+            .attr("d", "M0,-5L10,0L0,5")
+            .attr("class","arrowHead");
+
+        defs.append("marker")
+            .attr("id","arrow-optimal")
             .attr("viewBox","0 -5 10 10")
             .attr("refX",5)
             .attr("refY",0)

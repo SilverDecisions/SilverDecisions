@@ -55,7 +55,7 @@ export class Toolbar{
             Exporter.svgString2Image(svgString,  4*svgWidth, 4*svgHeight, 'png', save); // passes Blob and filesize String to the callback
 
             function save(dataBlob, filesize) {
-                Exporter.saveAs(dataBlob, 'export.png');
+                Exporter.saveAs(dataBlob, 'diagram.png');
             }
         });
     }
@@ -65,7 +65,7 @@ export class Toolbar{
         this.container.select('#saveButtonSvg').on('click', function () {
             var svgString = Exporter.getSVGString(svg.node());
             var blob = new Blob([svgString], {type: "image/svg+xml"});
-            Exporter.saveAs(blob, 'export.svg');
+            Exporter.saveAs(blob, 'diagram.svg');
         });
     }
 
