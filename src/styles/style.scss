@@ -19,7 +19,7 @@
   #toolbar{
     font-family: Roboto, Helvetica, Arial, sans-serif;
     @include card-mixin();
-    flex: 0;
+    flex: 0 1 auto;
     padding: 7px 5px;
 
     button{
