@@ -37,18 +37,23 @@ export class Templates{
             '</div>'+
         '</div>';
 
-
     static layoutOptions =
         '<div id="layout-options">' +
             '<div class="header"><%= i18n.t("layoutOptions.header")%></div> '+
             '<div class="content">' +
                 '<div class="input-group">' +
-                    '<input id="grid-width" name="grid-width" type="range" min="105" max="300" step="5" />' +
-                    '<label for="grid-width"><%= i18n.t("layoutOptions.gridWidth")%></label>' +
+                    '<input id="edge-slant-width-max" name="edge-slant-width-max" type="range" min="0" max="150" step="5" />' +
+                    '<label for="edge-slant-width-max"><%= i18n.t("layoutOptions.edgeSlantWidthMax")%></label>' +
                 '</div>' +
-                '<div class="input-group">' +
-                    '<input id="grid-height" name="grid-height" type="range" min="55" max="150" step="5" />' +
-                    '<label for="grid-height"><%= i18n.t("layoutOptions.gridHeight")%></label>' +
+                '<div id="auto-layout-options">' +
+                    '<div class="input-group">' +
+                        '<input id="grid-width" name="grid-width" type="range" min="105" max="300" step="5" />' +
+                        '<label for="grid-width"><%= i18n.t("layoutOptions.gridWidth")%></label>' +
+                    '</div>' +
+                    '<div class="input-group">' +
+                        '<input id="grid-height" name="grid-height" type="range" min="55" max="150" step="5" />' +
+                        '<label for="grid-height"><%= i18n.t("layoutOptions.gridHeight")%></label>' +
+                    '</div>' +
                 '</div>' +
             '</div>' +
         '</div>';

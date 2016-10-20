@@ -156,7 +156,7 @@ export class Layout{
         var sign = dX>=0 ? 1 : -1;
 
         var slantStartXOffset = Math.min(dX/2, 30);
-        var slantWidth = Math.min(20, Math.max(dX/2 - slantStartXOffset, 0));
+        var slantWidth = Math.min(this.config.edgeSlantWidthMax, Math.max(dX/2 - slantStartXOffset, 0));
 
         var point1 = [parentNode.location.x +this.config.nodeSize/2 + 1, parentNode.location.y];
         var point2 = [parentNode.location.x+slantStartXOffset, parentNode.location.y];
@@ -261,6 +261,30 @@ export class Layout{
 
         this.config.gridHeight=gridHeight;
         this.update();
+    }
+
+    setEdgeSlantWidthMax(width, withoutStateSaving){
+        var self=this;
+        if(this.config.edgeSlantWidthMax==width){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.data.saveState({
+                data:{
+                    edgeSlantWidthMax: self.config.edgeSlantWidthMax
+                },
+                onUndo: (data)=> {
+                    self.config.edgeSlantWidthMax = data.edgeSlantWidthMax;
+                    self._fireOnAutoLayoutChangedCallbacks();
+                },
+                onRedo: (data)=> {
+                    self.setEdgeSlantWidthMax(width, true);
+                }
+            });
+        }
+
+        this.config.edgeSlantWidthMax=width;
+        this.treeDesigner.redraw(true);
     }
 
     autoLayout(type, withoutStateSaving){

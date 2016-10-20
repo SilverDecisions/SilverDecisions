@@ -121,11 +121,6 @@
 
         margin: 0 0 5px 0;
         padding: 0 7px 7px;
-        display:none;
-        &.visible{
-          display: block;
-          opacity: 1;
-        }
 
         .header{
           font-weight: bold;
@@ -143,6 +138,13 @@
             border: none;
             display: inline-block;
             width: 100%;
+          }
+          #auto-layout-options{
+            display:none;
+            &.visible{
+              display: block;
+              opacity: 1;
+            }
           }
         }
       }

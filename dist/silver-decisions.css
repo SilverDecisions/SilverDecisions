@@ -263,11 +263,7 @@
         box-sizing: border-box;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
         margin: 0 0 5px 0;
-        padding: 0 7px 7px;
-        display: none; }
-        #silver-decisions #main-region #sidebar #layout-options.visible {
-          display: block;
-          opacity: 1; }
+        padding: 0 7px 7px; }
         #silver-decisions #main-region #sidebar #layout-options .header {
           font-weight: bold;
           padding: 7px 0;
@@ -280,6 +276,11 @@
           border: none;
           display: inline-block;
           width: 100%; }
+        #silver-decisions #main-region #sidebar #layout-options .content #auto-layout-options {
+          display: none; }
+          #silver-decisions #main-region #sidebar #layout-options .content #auto-layout-options.visible {
+            display: block;
+            opacity: 1; }
       #silver-decisions #main-region #sidebar #object-properties {
         opacity: 0;
         border: 1px solid #bfbfbf;

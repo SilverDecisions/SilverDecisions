@@ -23,7 +23,8 @@ export class TreeDesignerConfig {
         nodeSize: 40,
         limitNodePositioning: true,
         gridHeight: 75,
-        gridWidth: 150
+        gridWidth: 150,
+        edgeSlantWidthMax: 20
     };
     fontFamily= '"Times New Roman", Times, serif';
     fontSize= '12px';

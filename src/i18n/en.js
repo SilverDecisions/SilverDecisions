@@ -37,7 +37,8 @@ module.exports = {
         }
     },
     'layoutOptions':{
-        'header': 'Auto Layout',
+        'header': 'Layout',
+        'edgeSlantWidthMax': 'Edge slant (max)',
         'gridWidth': 'Width',
         'gridHeight': 'Height'
     },
