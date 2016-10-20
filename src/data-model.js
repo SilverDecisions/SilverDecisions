@@ -283,6 +283,7 @@ export class DataModel {
         }
 
         this._pushToStack(this.redoStack, {
+            revertConf: newState.revertConf,
             nodes: self.nodes,
             edges: self.edges
         });
@@ -302,11 +303,12 @@ export class DataModel {
         }
 
         this._pushToStack(this.undoStack, {
+            revertConf: newState.revertConf,
             nodes: self.nodes,
             edges: self.edges
         });
 
-        this._setNewState(newState);
+        this._setNewState(newState, true);
 
         this._fireUndoRedoCallback();
 
@@ -321,7 +323,7 @@ export class DataModel {
     }
 
 
-    _setNewState(newState) {
+    _setNewState(newState, redo) {
         var nodeById = Utils.getObjectByIdMap(newState.nodes);
         var edgeById = Utils.getObjectByIdMap(newState.edges);
         this.nodes = newState.nodes;
@@ -336,9 +338,19 @@ export class DataModel {
 
         });
 
-        if(newState.revertConf && newState.revertConf.onRevert){
-            newState.revertConf.onRevert(newState.revertConf.data);
+        if(newState.revertConf){
+            if(!redo && newState.revertConf.onUndo){
+                // console.log('onUndo');
+                newState.revertConf.onUndo(newState.revertConf.data);
+            }
+            if(redo && newState.revertConf.onRedo){
+                // console.log('onRedo');
+                newState.revertConf.onRedo(newState.revertConf.data);
+            }
+
+
         }
+        this.revertConf = newState.revertConf;
     }
 
     _pushToStack(stack, obj){

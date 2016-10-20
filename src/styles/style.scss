@@ -102,6 +102,7 @@
       font-family: Roboto, Helvetica, Arial, sans-serif;
       $sidebar-width: 200px;
       min-width: $sidebar-width;
+      max-width: $sidebar-width;
       overflow: hidden;
       padding: 5px 0;
 
@@ -110,6 +111,40 @@
         overflow: auto;
         @include scrollbar-mixin();
         padding: 0 5px;
+      }
+
+      $border: 1px solid rgba(0,0,0,.3);
+
+      #layout-options{
+
+        @include card-mixin();
+
+        margin: 0 0 5px 0;
+        padding: 0 7px 7px;
+        display:none;
+        &.visible{
+          display: block;
+          opacity: 1;
+        }
+
+        .header{
+          font-weight: bold;
+          padding: 7px 0;
+          border-bottom: $border;
+        }
+
+        .content{
+          .input-group{
+            font-size: 12px;
+            margin-top: 1.1em;
+            margin-bottom: 0;
+          }
+          input{
+            border: none;
+            display: inline-block;
+            width: 100%;
+          }
+        }
       }
 
       #object-properties{
@@ -129,7 +164,7 @@
         .header{
           font-weight: bold;
           padding: 7px 0;
-          border-bottom: 1px solid rgba(0,0,0,.3);
+          border-bottom: $border;
         }
 
         .content{
@@ -158,11 +193,11 @@
           .children-properties{
             //padding-top: 7px;
             margin-top: 7px;
-            border-top: 1px solid rgba(0,0,0,.3);
+            border-top: $border;
             display: none;
 
             .children-properties-header{
-              border-bottom: 1px solid rgba(0,0,0,.3);
+              border-bottom: $border;
               font-size: 14px;
               text-align: center;
               padding: 5px 0;

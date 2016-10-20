@@ -14,6 +14,30 @@ export class Sidebar{
     constructor(container, app){
         this.app = app;
         this.container = container;
+
+        this.initLayoutOptions();
+    }
+
+    initLayoutOptions(){
+        var self = this;
+        this.layoutOptionsContainer = this.container.select('#layout-options');
+        this.gridWidth = this.layoutOptionsContainer.select('input#grid-width').on('change', function(){
+            self.app.treeDesigner.layout.setGridWidth(this.value);
+
+        });
+
+        this.gridHeight = this.layoutOptionsContainer.select('input#grid-height').on('change', function(){
+            self.app.treeDesigner.layout.setGridHeight(this.value);
+        });
+        self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.updateLayoutOptions());
+        this.updateLayoutOptions();
+    }
+
+    updateLayoutOptions(){
+        this.gridWidth.node().value = this.app.treeDesigner.config.layout.gridWidth;
+        this.gridHeight.node().value = this.app.treeDesigner.config.layout.gridHeight;
+        this.layoutOptionsContainer.classed('visible', !this.app.treeDesigner.layout.isManualLayout());
+
     }
 
     displayObjectProperties(object){
@@ -181,7 +205,5 @@ export class Sidebar{
 
         fields.exit().remove();
     }
-
-
 
 }

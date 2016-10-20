@@ -22,9 +22,6 @@ export class Layout{
         'terminal': 1
     };
 
-
-    gridHeight = 75;
-    gridWidth=150;
     treeMargin = 50;
 
     constructor(treeDesigner, data, config){
@@ -218,6 +215,54 @@ export class Layout{
         return 9999999;
     }
 
+    setGridWidth(width, withoutStateSaving){
+        var self=this;
+        if(this.config.gridWidth==width){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.data.saveState({
+                data:{
+                    gridWidth: self.config.gridWidth
+                },
+                onUndo: (data)=> {
+                    self.config.gridWidth = data.gridWidth;
+                    self._fireOnAutoLayoutChangedCallbacks();
+                },
+                onRedo: (data)=> {
+                    self.setGridWidth(width, true);
+                }
+            });
+        }
+
+        this.config.gridWidth=width;
+        this.update();
+    }
+
+    setGridHeight(gridHeight, withoutStateSaving){
+        var self=this;
+        if(this.config.gridHeight==gridHeight){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.data.saveState({
+                data:{
+                    gridHeight: self.config.gridHeight
+                },
+                onUndo: (data)=> {
+                    self.config.gridHeight = data.gridHeight;
+                    self._fireOnAutoLayoutChangedCallbacks();
+                },
+                onRedo: (data)=> {
+                    self.setGridHeight(gridHeight, true);
+                }
+            });
+        }
+
+        this.config.gridHeight=gridHeight;
+        this.update();
+    }
+
     autoLayout(type, withoutStateSaving){
         var self=this;
 
@@ -226,11 +271,15 @@ export class Layout{
         if(!withoutStateSaving){
             this.data.saveState({
                 data:{
+                    newLayout: type,
                     currentLayout: self.currentLayout
                 },
-                onRevert: (data)=> {
+                onUndo: (data)=> {
                     self.currentLayout = data.currentLayout;
                     self._fireOnAutoLayoutChangedCallbacks();
+                },
+                onRedo: (data)=> {
+                    self.autoLayout(data.newLayout, true);
                 }
             });
         }
@@ -256,7 +305,7 @@ export class Layout{
             }else{
                 layout = d3.tree();
             }
-            layout.nodeSize([self.gridHeight, self.gridWidth]);
+            layout.nodeSize([self.config.gridHeight, self.config.gridWidth]);
 
             layout(root);
             var minY = 999999999;

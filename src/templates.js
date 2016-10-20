@@ -38,6 +38,20 @@ export class Templates{
         '</div>';
 
 
+    static layoutOptions =
+        '<div id="layout-options">' +
+            '<div class="header"><%= i18n.t("layoutOptions.header")%></div> '+
+            '<div class="content">' +
+                '<div class="input-group">' +
+                    '<input id="grid-width" name="grid-width" type="range" min="105" max="300" step="5" />' +
+                    '<label for="grid-width"><%= i18n.t("layoutOptions.gridWidth")%></label>' +
+                '</div>' +
+                '<div class="input-group">' +
+                    '<input id="grid-height" name="grid-height" type="range" min="55" max="150" step="5" />' +
+                    '<label for="grid-height"><%= i18n.t("layoutOptions.gridHeight")%></label>' +
+                '</div>' +
+            '</div>' +
+        '</div>';
 
     static objectProperties =
         '<div id="object-properties">' +
@@ -53,10 +67,10 @@ export class Templates{
     static sidebar =
         '<div id="sidebar">' +
             '<div id="sidebar-inner">'+
+            Templates.layoutOptions+
             Templates.objectProperties+
             '</div>'+
         '</div>';
-
 
     static settingsDialog =
         '<div id="sd-settings-dialog" class="sd-modal">'+
@@ -85,6 +99,7 @@ export class Templates{
                 '</div>'+
             '</div>'+
         '</div>';
+
 
 
     static main =

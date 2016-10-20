@@ -21,7 +21,9 @@ export class TreeDesignerConfig {
     };
     layout= {
         nodeSize: 40,
-        limitNodePositioning: true
+        limitNodePositioning: true,
+        gridHeight: 75,
+        gridWidth: 150
     };
     fontFamily= '"Times New Roman", Times, serif';
     fontSize= '12px';

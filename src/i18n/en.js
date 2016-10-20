@@ -36,6 +36,11 @@ module.exports = {
             'maximumFractionDigits': 'Maximum fraction digits'
         }
     },
+    'layoutOptions':{
+        'header': 'Auto Layout',
+        'gridWidth': 'Width',
+        'gridHeight': 'Height'
+    },
     'validation':{
         'incompletePath': 'Path not ending with terminal node',
         'probabilityDoNotSumUpTo1': 'Probabilities do not sum up to 1'

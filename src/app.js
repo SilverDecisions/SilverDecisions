@@ -175,6 +175,7 @@ export class App {
         this.treeDesigner.redraw(true);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
         this.toolbar.update();
+        this.sidebar.updateLayoutOptions();
     }
 
     undo(){
