@@ -120,15 +120,45 @@
         @include card-mixin();
 
         margin: 0 0 5px 0;
-        padding: 0 7px 7px;
+        padding: 0 7px 0;
+
+        &.sd-extended{
+          padding: 0 7px 7px;
+          .header{
+            border-bottom: $border;
+            .toggle-button{
+              .icon-arrow-up{
+                display: block;
+              }
+              .icon-arrow-down{
+                display: none;
+              }
+            }
+          }
+          .content{
+            display: block;
+          }
+        }
 
         .header{
           font-weight: bold;
           padding: 7px 0;
-          border-bottom: $border;
+
+          .toggle-button{
+            cursor: pointer;
+            float: right;
+            .icon-arrow-up{
+              display: none;
+            }
+            .icon-arrow-down{
+              display: block;
+            }
+          }
         }
 
+
         .content{
+          display: none;
           .input-group{
             font-size: 12px;
             margin-top: 1.1em;

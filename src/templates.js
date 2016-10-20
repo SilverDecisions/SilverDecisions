@@ -39,7 +39,13 @@ export class Templates{
 
     static layoutOptions =
         '<div id="layout-options">' +
-            '<div class="header"><%= i18n.t("layoutOptions.header")%></div> '+
+            '<div class="header">' +
+                '<%= i18n.t("layoutOptions.header")%> ' +
+                '<span class="toggle-button">' +
+                    '<i class="material-icons icon-arrow-up">keyboard_arrow_up</i>' +
+                    '<i class="material-icons icon-arrow-down">keyboard_arrow_down</i>' +
+                '</span>' +
+            '</div> '+
             '<div class="content">' +
                 '<div class="input-group">' +
                     '<input id="edge-slant-width-max" name="edge-slant-width-max" type="range" min="0" max="150" step="5" />' +

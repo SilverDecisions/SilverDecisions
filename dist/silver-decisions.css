@@ -263,24 +263,42 @@
         box-sizing: border-box;
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
         margin: 0 0 5px 0;
-        padding: 0 7px 7px; }
+        padding: 0 7px 0; }
+        #silver-decisions #main-region #sidebar #layout-options.sd-extended {
+          padding: 0 7px 7px; }
+          #silver-decisions #main-region #sidebar #layout-options.sd-extended .header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3); }
+            #silver-decisions #main-region #sidebar #layout-options.sd-extended .header .toggle-button .icon-arrow-up {
+              display: block; }
+            #silver-decisions #main-region #sidebar #layout-options.sd-extended .header .toggle-button .icon-arrow-down {
+              display: none; }
+          #silver-decisions #main-region #sidebar #layout-options.sd-extended .content {
+            display: block; }
         #silver-decisions #main-region #sidebar #layout-options .header {
           font-weight: bold;
-          padding: 7px 0;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.3); }
-        #silver-decisions #main-region #sidebar #layout-options .content .input-group {
-          font-size: 12px;
-          margin-top: 1.1em;
-          margin-bottom: 0; }
-        #silver-decisions #main-region #sidebar #layout-options .content input {
-          border: none;
-          display: inline-block;
-          width: 100%; }
-        #silver-decisions #main-region #sidebar #layout-options .content #auto-layout-options {
+          padding: 7px 0; }
+          #silver-decisions #main-region #sidebar #layout-options .header .toggle-button {
+            cursor: pointer;
+            float: right; }
+            #silver-decisions #main-region #sidebar #layout-options .header .toggle-button .icon-arrow-up {
+              display: none; }
+            #silver-decisions #main-region #sidebar #layout-options .header .toggle-button .icon-arrow-down {
+              display: block; }
+        #silver-decisions #main-region #sidebar #layout-options .content {
           display: none; }
-          #silver-decisions #main-region #sidebar #layout-options .content #auto-layout-options.visible {
-            display: block;
-            opacity: 1; }
+          #silver-decisions #main-region #sidebar #layout-options .content .input-group {
+            font-size: 12px;
+            margin-top: 1.1em;
+            margin-bottom: 0; }
+          #silver-decisions #main-region #sidebar #layout-options .content input {
+            border: none;
+            display: inline-block;
+            width: 100%; }
+          #silver-decisions #main-region #sidebar #layout-options .content #auto-layout-options {
+            display: none; }
+            #silver-decisions #main-region #sidebar #layout-options .content #auto-layout-options.visible {
+              display: block;
+              opacity: 1; }
       #silver-decisions #main-region #sidebar #object-properties {
         opacity: 0;
         border: 1px solid #bfbfbf;

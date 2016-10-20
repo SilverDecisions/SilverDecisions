@@ -37,6 +37,10 @@ export class Sidebar{
 
         self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.updateLayoutOptions());
 
+        this.layoutOptionsContainer.select('.toggle-button').on('click', () => {
+            this.layoutOptionsContainer.classed('sd-extended', !this.layoutOptionsContainer.classed('sd-extended'));
+        });
+
         this.updateLayoutOptions();
     }
 
