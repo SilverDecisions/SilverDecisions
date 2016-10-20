@@ -352,11 +352,14 @@
         fill: #006f00; }
         #silver-decisions svg.tree-designer .node .aggregated-payoff.negative {
           fill: #b60000; }
+      #silver-decisions svg.tree-designer .node .probability-to-enter {
+        fill: #0000d7; }
       #silver-decisions svg.tree-designer .node path {
         -webkit-transition: fill 0.25s;
         /* Safari */
         transition: fill 0.25s; }
       #silver-decisions svg.tree-designer .node.optimal path {
+        stroke: #006500;
         stroke-width: 1.5px; }
       #silver-decisions svg.tree-designer .node.dragging path, #silver-decisions svg.tree-designer .node.selected path {
         stroke-dasharray: 3; }

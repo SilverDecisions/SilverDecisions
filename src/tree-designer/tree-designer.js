@@ -23,7 +23,24 @@ export class TreeDesignerConfig {
         nodeSize: 40,
         limitNodePositioning: true
     };
-    payoffNumberFormatter= (v)=> v;
+    fontFamily= '"Times New Roman", Times, serif';
+    fontSize= '12px';
+    node={ //TODO
+      chance:{
+          fill: '#ffff44',
+          stroke: '#666600',
+          strokeWidth: '',
+          selected:{
+              fill: '#aaaa00',
+              stroke: '#666600'
+          }
+      }
+    };
+
+
+
+    payoffNumberFormatter = (v)=> v;
+    probabilityNumberFormatter  = (v)=> v;
 
     onNodeSelected = (node) => {};
     onEdgeSelected = (edge) => {};
@@ -163,7 +180,8 @@ export class TreeDesigner {
         var labelEnter = nodesEnter.append('text').attr('class', 'label');
         var payoffEnter = nodesEnter.append('text').attr('class', 'payoff computed');
         var indicatorEnter = nodesEnter.append('text').attr('class', 'error-indicator').text('!!');
-        var aggregatedPayoffEnter = nodesEnter.append('text').attr('class', 'aggregated-payoff').text('!!');
+        var aggregatedPayoffEnter = nodesEnter.append('text').attr('class', 'aggregated-payoff');
+        var probabilityToEnterEnter = nodesEnter.append('text').attr('class', 'probability-to-enter');
 
         var nodesMerge = nodesEnter.merge(nodes);
         nodesMerge.classed('optimal', (d)=>self.isOptimal(d));
@@ -221,6 +239,19 @@ export class TreeDesigner {
 
         this.layout.nodeAggregatedPayoffPosition(aggregatedPayoffEnter);
         this.layout.nodeAggregatedPayoffPosition(aggregatedPayoffT);
+
+        var probabilityToEnter = nodesMerge.select('text.probability-to-enter')
+            .text(d=>{
+                var val = d.computedValue(ruleName, 'probabilityToEnter');
+                return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): ''
+            });
+
+        var probabilityToEnterT = probabilityToEnter;
+        if(this.transition){
+            probabilityToEnterT = probabilityToEnter.transition();
+        }
+        this.layout.nodeProbabilityToEnterPosition(probabilityToEnterEnter);
+        this.layout.nodeProbabilityToEnterPosition(probabilityToEnterT);
 
 
         var indicator = nodesMerge.select('text.error-indicator');

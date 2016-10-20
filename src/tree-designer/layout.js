@@ -122,9 +122,17 @@ export class Layout{
     nodeAggregatedPayoffPosition(selection) {
         return selection
             .attr('x', this.config.nodeSize / 2 + 7)
-            .attr('y', 0)
+            .attr('y', -this.config.nodeSize / 2+ 5)
             // .attr('text-anchor', 'middle')
-            .attr('dominant-baseline', 'central')
+            .attr('dominant-baseline', 'hanging')
+    }
+
+    nodeProbabilityToEnterPosition(selection) {
+        return selection
+            .attr('x', this.config.nodeSize / 2 + 7)
+            .attr('y', this.config.nodeSize / 2 -5)
+            // .attr('text-anchor', 'middle')
+            // .attr('dominant-baseline', 'central')
     }
 
     nodeIndicatorPosition(selection) {

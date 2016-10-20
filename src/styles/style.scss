@@ -209,6 +209,7 @@
   svg.tree-designer{
 
     $edge-optimal-color: #006f00;
+    $probabilityColor: #0000d7;
 
     font-size: 12px;
     position: absolute;
@@ -233,6 +234,10 @@
         }
       }
 
+      .probability-to-enter{
+        fill: $probabilityColor;
+      }
+
       path{
         -webkit-transition: fill 0.25s; /* Safari */
         transition: fill 0.25s;
@@ -241,7 +246,7 @@
 
       &.optimal{
         path{
-          //stroke: darken($edge-optimal-color, 2%);
+          stroke: darken($edge-optimal-color, 2%);
           stroke-width: 1.5px;
         }
       }
@@ -354,7 +359,7 @@
       }
 
       .probability{
-        fill: #0000d7;
+        fill: $probabilityColor;
       }
 
       &.optimal{
