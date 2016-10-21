@@ -47,6 +47,14 @@ export class Templates{
                 '</span>' +
             '</div> '+
             '<div class="content">' +
+            '<div class="input-group">' +
+                '<input id="margin-horizontal" name="margin-horizontal" type="range" min="5" max="150" step="5" />' +
+                '<label for="margin-horizontal"><%= i18n.t("layoutOptions.marginHorizontal")%></label>' +
+            '</div>' +
+            '<div class="input-group">' +
+                '<input id="margin-vertical" name="margin-vertical" type="range" min="5" max="150" step="5" />' +
+                '<label for="margin-vertical"><%= i18n.t("layoutOptions.marginVertical")%></label>' +
+            '</div>' +
                 '<div class="input-group">' +
                     '<input id="edge-slant-width-max" name="edge-slant-width-max" type="range" min="0" max="150" step="5" />' +
                     '<label for="edge-slant-width-max"><%= i18n.t("layoutOptions.edgeSlantWidthMax")%></label>' +

@@ -23,16 +23,27 @@ export class Sidebar{
         this.layoutOptionsContainer = this.container.select('#layout-options');
         this.autoLayoutOptionsGroup = this.layoutOptionsContainer.select('#auto-layout-options');
         this.gridWidth = this.layoutOptionsContainer.select('input#grid-width').on('change', function(){
-            self.app.treeDesigner.layout.setGridWidth(this.value);
+            self.app.treeDesigner.layout.setGridWidth(parseInt(this.value));
 
         });
 
         this.gridHeight = this.layoutOptionsContainer.select('input#grid-height').on('change', function(){
-            self.app.treeDesigner.layout.setGridHeight(this.value);
+            self.app.treeDesigner.layout.setGridHeight(parseInt(this.value));
         });
 
         this.edgeSlantWidthMax = this.layoutOptionsContainer.select('input#edge-slant-width-max').on('change', function(){
-            self.app.treeDesigner.layout.setEdgeSlantWidthMax(this.value);
+            self.app.treeDesigner.layout.setEdgeSlantWidthMax(parseInt(this.value));
+        });
+
+        this.marginHorizontal = this.layoutOptionsContainer.select('input#margin-horizontal').on('change', function(){
+            var m = {};
+            m.left=m.right = parseInt(this.value);
+            self.app.treeDesigner.setMargin(m);
+        });
+        this.marginVertical = this.layoutOptionsContainer.select('input#margin-vertical').on('change', function(){
+            var m = {};
+            m.top=m.bottom = parseInt(this.value);
+            self.app.treeDesigner.setMargin(m);
         });
 
         self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.updateLayoutOptions());
@@ -46,7 +57,8 @@ export class Sidebar{
 
     updateLayoutOptions(){
         this.edgeSlantWidthMax.node().value = this.app.treeDesigner.config.layout.edgeSlantWidthMax;
-
+        this.marginHorizontal.node().value = this.app.treeDesigner.config.margin.left;
+        this.marginVertical.node().value = this.app.treeDesigner.config.margin.top;
         this.gridWidth.node().value = this.app.treeDesigner.config.layout.gridWidth;
         this.gridHeight.node().value = this.app.treeDesigner.config.layout.gridHeight;
         this.autoLayoutOptionsGroup.classed('visible', !this.app.treeDesigner.layout.isManualLayout());

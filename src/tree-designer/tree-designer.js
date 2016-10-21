@@ -117,15 +117,18 @@ export class TreeDesigner {
         this.availableWidth = Utils.sanitizeWidth(this.config.width, this.container, this.config.margin);
     }
 
+
+
     initSvg() {
         var self = this;
         this.computeAvailableSpace();
         this.svg = this.container.selectOrAppend('svg.tree-designer');
         this.svg.attr('width', this.availableWidth).attr('height', this.availableHeight);
 
-        var margin = this.config.margin;
+
         this.mainGroup = this.svg.selectOrAppend('g.main-group');
-        this.mainGroup.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+        this.updateMargin();
+
 
         if (!this.config.width) {
             d3.select(window)
@@ -133,6 +136,38 @@ export class TreeDesigner {
                     self.updatePlottingRegionSize();
                 });
         }
+    }
+
+    updateMargin(withTransitions){
+        var self = this;
+        var margin = this.config.margin;
+        var group = this.mainGroup;
+        if(withTransitions){
+            group = group.transition();
+        }
+        group.attr("transform", "translate(" + margin.left + "," + margin.top + ")").on("end", ()=> self.updatePlottingRegionSize());
+    }
+
+    setMargin(margin, withoutStateSaving){
+        var self=this;
+        if(this.config.margin.left==margin){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.data.saveState({
+                data:{
+                    margin: self.config.margin
+                },
+                onUndo: (data)=> {
+                    self.setMargin(data.margin, true);
+                },
+                onRedo: (data)=> {
+                    self.setMargin(margin, true);
+                }
+            });
+        }
+        Utils.deepExtend(this.config.margin, margin);
+        this.updateMargin(true);
     }
 
     initContainer(container) {
@@ -164,7 +199,6 @@ export class TreeDesigner {
         if(changed){
             this.updateBrushExtent()
         }
-
     }
 
     redrawNodes() {

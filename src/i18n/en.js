@@ -38,6 +38,8 @@ module.exports = {
     },
     'layoutOptions':{
         'header': 'Layout',
+        'marginHorizontal': 'Horizontal Margin',
+        'marginVertical': 'Vertical Margin',
         'edgeSlantWidthMax': 'Edge slant (max)',
         'gridWidth': 'Width',
         'gridHeight': 'Height'
