@@ -47,15 +47,22 @@
 }
 
 #silver-decisions{
-
+  font-family: Roboto, Helvetica, Arial, sans-serif;
   /*@import "../../node_modules/material-design-lite/src/material-design-lite";*/
   display: flex;
   //align-items: stretch;
   flex-direction: column;
   height: 100%;
   background: #efefef;
+
+  a {
+    color: #0096a9;
+    font-weight: 500;
+    text-decoration: none;
+  }
+
   #toolbar{
-    font-family: Roboto, Helvetica, Arial, sans-serif;
+
     @include card-mixin();
     flex: 0 1 auto;
     padding: 7px 5px;
@@ -274,7 +281,7 @@
   }
 
   svg.tree-designer{
-
+    font-family: "Times New Roman", Times, serif;
     $edge-optimal-color: #006f00;
     $probabilityColor: #0000d7;
 
@@ -567,5 +574,9 @@
       }
     }
   }
+
+}
+
+#sd-about-dialog{
 
 }

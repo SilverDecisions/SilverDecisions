@@ -15,6 +15,7 @@ import {Toolbar} from './toolbar'
 import {ExpressionEngine} from './expression-engine'
 import {SettingsDialog} from './settings-dialog'
 import {ExpectedValueMaximizationRule} from './objective/expected-value-maximization-rule'
+import {AboutDialog} from "./about-dialog";
 
 export class AppConfig {
     width = undefined;
@@ -46,6 +47,8 @@ export class AppConfig {
 }
 
 export class App {
+    static version = '0.2.0';
+
     config;
     container;
     dataModel; //Data model manager
@@ -69,6 +72,7 @@ export class App {
         this.initTreeDesigner();
         this.initSidebar();
         this.initSettingsDialog();
+        this.initAboutDialog();
         this.initToolbar();
         this.initOnBeforeUnload();
 
@@ -85,7 +89,7 @@ export class App {
 
     initContainer(containerId) {
         this.container = d3.select('#' + containerId);
-        this.container.html(Templates.get('main'));
+        this.container.html(Templates.get('main', {version: App.version}));
     }
 
     initI18n() {
@@ -120,6 +124,10 @@ export class App {
 
     initSettingsDialog(){
         this.settingsDialog = new SettingsDialog(this);
+    }
+
+    initAboutDialog(){
+        this.aboutDialog = new AboutDialog(this);
     }
 
     initToolbar(){

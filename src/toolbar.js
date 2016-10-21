@@ -19,6 +19,7 @@ export class Toolbar{
         this.initLayoutButtons();
         this.initUndoRedoButtons();
         this.initSettingsButton();
+        this.initAboutButton();
     }
 
     initDiagramButtons(){
@@ -98,6 +99,12 @@ export class Toolbar{
     initSettingsButton(){
         this.settingsButton = this.container.select('#settings-button').on('click', ()=>{
             this.app.settingsDialog.open();
+        });
+    }
+
+    initAboutButton(){
+        this.aboutButton = this.container.select('#about-button').on('click', ()=>{
+            this.app.aboutDialog.open();
         });
     }
 

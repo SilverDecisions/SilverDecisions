@@ -152,6 +152,7 @@
     background-color: #3F51B5;
     color: white; }
   .sd-modal .sd-modal-body {
+    font-size: 13px;
     padding: 15px 16px; }
   .sd-modal .sd-close-modal {
     color: #aaa;
@@ -181,13 +182,17 @@
     opacity: 1; } }
 
 #silver-decisions {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
   /*@import "../../node_modules/material-design-lite/src/material-design-lite";*/
   display: flex;
   flex-direction: column;
   height: 100%;
   background: #efefef; }
+  #silver-decisions a {
+    color: #0096a9;
+    font-weight: 500;
+    text-decoration: none; }
   #silver-decisions #toolbar {
-    font-family: Roboto, Helvetica, Arial, sans-serif;
     border: 1px solid #bfbfbf;
     border-radius: 2px;
     background: white;
@@ -386,6 +391,7 @@
     #silver-decisions #tree-designer-container.with-overflow-x {
       overflow-x: auto; }
   #silver-decisions svg.tree-designer {
+    font-family: "Times New Roman", Times, serif;
     font-size: 12px;
     position: absolute; }
     #silver-decisions svg.tree-designer .node {

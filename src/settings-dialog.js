@@ -1,19 +1,10 @@
 import * as d3 from './d3'
-import {i18n} from './i18n/i18n'
+import {Dialog} from './dialog'
 
-import {Utils} from './utils'
-
-export class SettingsDialog{
-
-    app;
-
-    container;
+export class SettingsDialog extends Dialog{
 
     constructor(app){
-        this.app = app;
-        this.container = app.container.select('#sd-settings-dialog');
-        this.container.select('.sd-close-modal').on('click', ()=>this.close());
-
+        super(app.container.select('#sd-settings-dialog'), app);
 
         this.payoffCurrencyInput = this.container.select('input#sd-payoff-currency').on('change', function(){
             app.config.format.payoff.currency = this.value;
@@ -31,13 +22,10 @@ export class SettingsDialog{
         });
     }
 
-    open(){
+    onOpen(){
         this.payoffCurrencyInput.node().value = this.app.config.format.payoff.currency;
         this.payoffMinimumFractionDigitsInput.node().value = this.app.config.format.payoff.minimumFractionDigits;
         this.payoffMaximumFractionDigitsInput.node().value = this.app.config.format.payoff.maximumFractionDigits;
-        this.container.classed('open', true);
     }
-    close(){
-        this.container.classed('open', false);
-    }
+
 }

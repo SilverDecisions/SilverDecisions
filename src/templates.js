@@ -4,9 +4,9 @@ import {i18n} from './i18n/i18n'
 export class Templates{
 
 
-    static get(templateName){
+    static get(templateName, variables){
         var compiled = _.template(Templates[templateName],{ 'imports': { 'i18n': i18n } });
-        return compiled()
+        return compiled(variables)
 
     }
 
@@ -34,6 +34,7 @@ export class Templates{
             '</div>'+
             '<div class="toolbar-group">'+
                 '<button id="settings-button" title="<%= i18n.t("toolbar.settings")%>"><i class="material-icons">settings</i></button>'+
+                '<button id="about-button" title="<%= i18n.t("toolbar.about")%>"><i class="material-icons">info_outline</i></button>'+
             '</div>'+
         '</div>';
 
@@ -119,7 +120,31 @@ export class Templates{
             '</div>'+
         '</div>';
 
-
+    static aboutDialog =
+        '<div id="sd-about-dialog" class="sd-modal">'+
+            '<div class="sd-modal-content">'+
+                '<div class="sd-modal-header">'+
+                    '<span class="sd-close-modal"><i class="material-icons">close</i></span>'+
+                    '<h2><%= i18n.t("aboutDialog.title")%></h2>'+
+                '</div>'+
+                '<div class="sd-modal-body">'+
+                    '<p><strong>SilverDecisions <%= version %></strong><br/>A free and open source decision tree software.</p>' +
+                    '<p class="sd-project-team">Project team:' +
+                    '<ul>' +
+                        '<li><a href="http://bogumilkaminski.pl/">Bogumił Kamiński</a> (project manager)</li>' +
+                        '<li><a href="http://akson.sgh.waw.pl/~pszufe/">Przemysław Szufel</a> (deputy project manager)</li>' +
+                        '<li><a href="https://github.com/mwasiluk">Michał Wasiluk</a> (developer)</li>' +
+                        '<li>Marcin Czupryna (tester)</li>' +
+                        '<li><a href="http://www.michaljakubczyk.pl/">Michał Jakubczyk</a> (tester)</p></li>' +
+                    '</ul>'+
+                    '<p>The project is developed at Decision Support and Analysis Division, Warsaw School of Economics.<br/>Contact: silverdecisions@sgh.waw.pl</p>'+
+                    '<p>Software is developed as a part of <a href="http://routetopa.eu/">ROUTE-TO-PA</a> Project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Its aim is to allow a transparent communication between public administration and citizens regarding public data about decision making processes performed by public administration.</p>' +
+                    '<p>All the source files are licensed under the terms of the GNU General Public License version 3.</p>' +
+                    '<p>For more information visit our website at <a href="http://silverdecisions.pl/">http://silverdecisions.pl/</a>.</p>' +
+                    '<p>Documentation of SilverDecisions is available <a href="https://github.com/bkamins/SilverDecisions/wiki/Documentation">here</a> </p>'+
+                '</div>'+
+            '</div>'+
+        '</div>';
 
     static main =
         '<div id="silver-decisions">'+
@@ -130,6 +155,7 @@ export class Templates{
             '</div>'+
             '<input type="file" style="display:none" id="sd-file-input"/>'+
              Templates.settingsDialog+
+             Templates.aboutDialog+
         '</div>';
 }
 

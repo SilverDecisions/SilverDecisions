@@ -9,6 +9,7 @@ import {Layout} from './layout'
 import {NodeDragHandler} from './node-drag-handler'
 import {Tooltip} from '../tooltip'
 import {ValidationResult} from '../validation/validation-result'
+import * as _ from "lodash";
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -98,6 +99,7 @@ export class TreeDesigner {
 
     redraw(withTransitions){
         var self = this;
+        this.updateMargin(withTransitions);
         if(withTransitions){
             self.transitionPrev = self.transition;
             self.transition = true;
@@ -150,13 +152,10 @@ export class TreeDesigner {
 
     setMargin(margin, withoutStateSaving){
         var self=this;
-        if(this.config.margin.left==margin){
-            return;
-        }
         if(!withoutStateSaving){
             this.data.saveState({
                 data:{
-                    margin: self.config.margin
+                    margin: _.clone(self.config.margin)
                 },
                 onUndo: (data)=> {
                     self.setMargin(data.margin, true);

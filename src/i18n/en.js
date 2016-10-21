@@ -16,7 +16,8 @@ module.exports = {
         },
         'undo': 'Undo',
         'redo': 'Redo',
-        'settings': 'Settings'
+        'settings': 'Settings',
+        'about': 'About'
     },
     'node':{
         'name': 'Label'
@@ -35,6 +36,9 @@ module.exports = {
             'minimumFractionDigits': 'Minimum fraction digits',
             'maximumFractionDigits': 'Maximum fraction digits'
         }
+    },
+    'aboutDialog':{
+        'title': 'About'
     },
     'layoutOptions':{
         'header': 'Layout',
