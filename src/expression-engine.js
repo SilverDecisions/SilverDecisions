@@ -1,5 +1,5 @@
-import * as math from 'mathjs'
 import {Utils} from './utils'
+import * as math from './mathjs'
 
 export class ExpressionEngine{
 

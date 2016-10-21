@@ -1,5 +1,4 @@
 import *  as _ from 'lodash'
-import * as math from 'mathjs'
 import {ExpressionEngine} from '../expression-engine'
 
 export class ObjectiveRule{
@@ -9,9 +8,6 @@ export class ObjectiveRule{
     constructor(name, expressionEngine){
         this.name = name;
         this.expressionEngine = expressionEngine;
-        math.config({
-            number: 'Fraction'
-        });
     }
 
     // oblicza skumulowany payoff
@@ -38,17 +34,17 @@ export class ObjectiveRule{
     }
 
     add(a,b){
-        return ExpressionEngine.add(a,b)
+        return ExpressionEngine.add(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
     }
     subtract(a,b){
-        return ExpressionEngine.subtract(a,b)
+        return ExpressionEngine.subtract(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
     }
     divide(a,b){
-        return ExpressionEngine.divide(a,b)
+        return ExpressionEngine.divide(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
     }
 
     multiply(a,b){
-        return ExpressionEngine.multiply(a,b)
+        return ExpressionEngine.multiply(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
     }
 
 
