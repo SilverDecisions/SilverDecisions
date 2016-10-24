@@ -21,13 +21,14 @@ export class TreeDesignerConfig {
         bottom: 25
     };
     layout= {
+        type: 'tree',
         nodeSize: 40,
         limitNodePositioning: true,
         gridHeight: 75,
         gridWidth: 150,
         edgeSlantWidthMax: 20
     };
-    fontFamily= '"Times New Roman", Times, serif';
+    /*fontFamily= '"Times New Roman", Times, serif';
     fontSize= '12px';
     node={ //TODO
       chance:{
@@ -39,7 +40,7 @@ export class TreeDesignerConfig {
               stroke: '#666600'
           }
       }
-    };
+    };*/
 
 
 
@@ -74,6 +75,9 @@ export class TreeDesigner {
 
     setConfig(config) {
         this.config = new TreeDesignerConfig(config);
+        if(this.layout){
+            this.layout.config=this.config.layout;
+        }
         return this;
     }
 
@@ -229,7 +233,7 @@ export class TreeDesigner {
         }
         nodesMergeT.attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')');
 
-        this.layout.drawNodeSymbol(nodesMerge.select('path'));
+        this.layout.drawNodeSymbol(nodesMerge.select('path'),this.transition);
 
 
         this.layout.nodeLabelPosition(labelEnter);
@@ -238,7 +242,7 @@ export class TreeDesigner {
             .attr('text-anchor', 'middle')
             .text(d=>d.name);
 
-        var ruleName = this.config.rule;
+        var ruleName = this.config.$rule;
         var payoff = nodesMerge.select('text.payoff')
             .attr('dominant-baseline', 'hanging')
             .classed('negative', d=> {
@@ -301,7 +305,7 @@ export class TreeDesigner {
     }
 
     isOptimal(d){
-        var ruleName = this.config.rule;
+        var ruleName = this.config.$rule;
         return d.computedValue(ruleName, 'optimal');
     }
 

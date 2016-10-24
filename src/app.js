@@ -141,21 +141,27 @@ export class App {
 
     initTreeDesigner() {
         var self=this;
-        var config = {
-            rule: self.config.rule,
-            onNodeSelected: function(node){
+        var config = this.getTreeDesignerInitialConfig();
+        this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel,config);
+    }
+
+    getTreeDesignerInitialConfig() {
+        var self = this;
+        return {
+            $rule: self.config.rule,
+            onNodeSelected: function (node) {
                 self.onObjectSelected(node);
             },
-            onEdgeSelected: function(edge){
+            onEdgeSelected: function (edge) {
                 self.onObjectSelected(edge);
             },
-            onSelectionCleared: function(){
+            onSelectionCleared: function () {
                 self.onSelectionCleared();
             },
             payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v)
         };
-        this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel,config);
     }
+
     onObjectSelected(object){
         var self = this;
         if(this.selectedObject===object){
@@ -262,6 +268,10 @@ export class App {
         this.setConfig(this.config);
         this.dataModel.clear();
         this.dataModel.load(diagramData.trees);
+
+        if(diagramData.treeDesigner){
+            this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
+        }
         this.updatePayoffNumberFormat();
         this.updateView();
 
@@ -273,6 +283,7 @@ export class App {
             lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,
             format: self.config.format,
+            treeDesigner: self.treeDesigner.config,
             trees: self.dataModel.getRoots()
         };
 

@@ -12,7 +12,6 @@ export class Layout{
 
     static MANUAL_LAYOUT_NAME = 'manual';
 
-    currentLayout=Layout.MANUAL_LAYOUT_NAME;
 
     onAutoLayoutChanged=[];
 
@@ -23,12 +22,12 @@ export class Layout{
     };
 
     treeMargin = 50;
+    targetSymbolSize={};
 
     constructor(treeDesigner, data, config){
         this.treeDesigner = treeDesigner;
         this.data = data;
         this.config = config;
-        this.minMarginBetweenNodes = this.config.nodeSize + 30;
 
     }
 
@@ -37,12 +36,12 @@ export class Layout{
             this.moveNodeToEmptyPlace(node);
         }
         if(!this.isManualLayout()){
-            return this.autoLayout(this.currentLayout, true);
+            return this.autoLayout(this.config.type, true);
         }
     }
 
     isManualLayout(){
-        return this.currentLayout == Layout.MANUAL_LAYOUT_NAME;
+        return this.config.type == Layout.MANUAL_LAYOUT_NAME;
     }
 
     getNewChildLocation(parent){
@@ -51,6 +50,9 @@ export class Layout{
 
     moveNodeToEmptyPlace(node){
         var positionMap = {};
+
+        node.location.x = Math.max(this.getNodeMinX(node), node.location.x);
+        node.location.y = Math.max(this.getNodeMinY(node), node.location.y);
 
         this.data.nodes.forEach(n=>{
             if(node == n){
@@ -83,23 +85,38 @@ export class Layout{
     }
 
     disableAutoLayout(){
-        this.currentLayout = Layout.MANUAL_LAYOUT_NAME;
+        this.config.type = Layout.MANUAL_LAYOUT_NAME;
         this._fireOnAutoLayoutChangedCallbacks();
     }
 
 
-    drawNodeSymbol(path){
+    drawNodeSymbol(path, transition){
         var self = this;
-        this.nodeSymbol = d3.symbol().type(d=> d.$symbol)
-            .size(d=>64);
         var nodeSize = this.config.nodeSize;
+        this.nodeSymbol = d3.symbol().type(d=> d.$symbol)
+            .size(d=>d.$symolSize ? _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", 64) : 64);
+
         path.attr('transform', 'rotate(-90)')
-            .attr('d', self.nodeSymbol)
             .each(function (d) {
                 var path = d3.select(this);
-                var box = path.node().getBBox();
-                var error = Math.min(nodeSize / box.width, nodeSize / box.height);
-                path.attr("d", self.nodeSymbol.size(error * error * 64));
+                var prev = path.attr("d");
+                if(!prev){
+                    path.attr("d", self.nodeSymbol);
+                }
+                var size = _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']");
+                if(!size){
+                    var box = path.node().getBBox();
+                    var error = Math.min(nodeSize / box.width, nodeSize / box.height);
+                    size = error * error * (d.$symolSize||64);
+                    _.set(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", size);
+                }
+                if(transition){
+                    path =  path.transition();
+                }
+                path.attr("d", self.nodeSymbol);
+
+                d.$symolSize = size;
+
             });
     }
 
@@ -117,17 +134,19 @@ export class Layout{
     }
 
     nodeAggregatedPayoffPosition(selection) {
+        var fontSize = 12;
         return selection
             .attr('x', this.config.nodeSize / 2 + 7)
-            .attr('y', -this.config.nodeSize / 2+ 5)
+            .attr('y', -Math.max(fontSize+ 5, this.config.nodeSize / 2)+ 5)
             // .attr('text-anchor', 'middle')
             .attr('dominant-baseline', 'hanging')
     }
 
     nodeProbabilityToEnterPosition(selection) {
+        var fontSize = 12;
         return selection
             .attr('x', this.config.nodeSize / 2 + 7)
-            .attr('y', this.config.nodeSize / 2 -5)
+            .attr('y', Math.max(fontSize+ 5, this.config.nodeSize / 2) -5)
             // .attr('text-anchor', 'middle')
             // .attr('dominant-baseline', 'central')
     }
@@ -155,11 +174,11 @@ export class Layout{
 
         var sign = dX>=0 ? 1 : -1;
 
-        var slantStartXOffset = Math.min(dX/2, 30);
+        var slantStartXOffset = Math.min(dX/2, this.config.nodeSize/2+10);
         var slantWidth = Math.min(this.config.edgeSlantWidthMax, Math.max(dX/2 - slantStartXOffset, 0));
 
         var point1 = [parentNode.location.x +this.config.nodeSize/2 + 1, parentNode.location.y];
-        var point2 = [parentNode.location.x+slantStartXOffset, parentNode.location.y];
+        var point2 = [Math.max(parentNode.location.x+slantStartXOffset, point1[0]), parentNode.location.y];
         var point3 = [parentNode.location.x+slantStartXOffset+slantWidth, childNode.location.y];
         var point4 = [childNode.location.x - (sign*(Math.max(0, Math.min(this.config.nodeSize/2+8, dX/2)))), childNode.location.y];
         // var point2 = [parentNode.location.x+dX/2-slantWidth/2, parentNode.location.y];
@@ -193,12 +212,15 @@ export class Layout{
 
     }
 
+    getMinMarginBetweenNodes(){
+      return this.config.nodeSize + 30;
+    }
 
 
     getNodeMinX(d){
         var self = this;
         if(d && d.$parent){// && !self.isNodeSelected(d.$parent)
-            return d.$parent.location.x + self.minMarginBetweenNodes;
+            return d.$parent.location.x + self.getMinMarginBetweenNodes();
         }
         return self.config.nodeSize/2;
     }
@@ -210,7 +232,7 @@ export class Layout{
     getNodeMaxX(d){
         var self = this;
         if(d && d.childEdges.length){
-            return d3.min(d.childEdges, e=>e.childNode.location.x)-self.minMarginBetweenNodes;
+            return d3.min(d.childEdges, e=>e.childNode.location.x)-self.getMinMarginBetweenNodes();
         }
         return 9999999;
     }
@@ -226,8 +248,7 @@ export class Layout{
                     gridWidth: self.config.gridWidth
                 },
                 onUndo: (data)=> {
-                    self.config.gridWidth = data.gridWidth;
-                    self._fireOnAutoLayoutChangedCallbacks();
+                    self.setGridWidth(data.gridWidth, true);
                 },
                 onRedo: (data)=> {
                     self.setGridWidth(width, true);
@@ -250,8 +271,7 @@ export class Layout{
                     gridHeight: self.config.gridHeight
                 },
                 onUndo: (data)=> {
-                    self.config.gridHeight = data.gridHeight;
-                    self._fireOnAutoLayoutChangedCallbacks();
+                    self.setGridHeight(data.gridHeight, true);
                 },
                 onRedo: (data)=> {
                     self.setGridHeight(gridHeight, true);
@@ -261,6 +281,33 @@ export class Layout{
 
         this.config.gridHeight=gridHeight;
         this.update();
+    }
+
+    setNodeSize(nodeSize, withoutStateSaving){
+        var self=this;
+        if(this.config.nodeSize==nodeSize){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.data.saveState({
+                data:{
+                    nodeSize: self.config.nodeSize
+                },
+                onUndo: (data)=> {
+                    self.setNodeSize(data.nodeSize, true);
+                },
+                onRedo: (data)=> {
+                    self.setNodeSize(nodeSize, true);
+                }
+            });
+        }
+
+        this.config.nodeSize=nodeSize;
+        this.update();
+        if(this.isManualLayout()){
+            this.fitNodesInPlottingRegion(self.data.getRoots());
+            this.treeDesigner.redraw(true);
+        }
     }
 
     setEdgeSlantWidthMax(width, withoutStateSaving){
@@ -274,8 +321,7 @@ export class Layout{
                     edgeSlantWidthMax: self.config.edgeSlantWidthMax
                 },
                 onUndo: (data)=> {
-                    self.config.edgeSlantWidthMax = data.edgeSlantWidthMax;
-                    self._fireOnAutoLayoutChangedCallbacks();
+                    self.setEdgeSlantWidthMax(data.edgeSlantWidthMax, true);
                 },
                 onRedo: (data)=> {
                     self.setEdgeSlantWidthMax(width, true);
@@ -296,10 +342,10 @@ export class Layout{
             this.data.saveState({
                 data:{
                     newLayout: type,
-                    currentLayout: self.currentLayout
+                    currentLayout: self.config.type
                 },
                 onUndo: (data)=> {
-                    self.currentLayout = data.currentLayout;
+                    self.config.type = data.currentLayout;
                     self._fireOnAutoLayoutChangedCallbacks();
                 },
                 onRedo: (data)=> {
@@ -307,7 +353,7 @@ export class Layout{
                 }
             });
         }
-        this.currentLayout = type;
+        this.config.type = type;
         if(!this.data.nodes.length){
             this._fireOnAutoLayoutChangedCallbacks();
             return;
@@ -364,8 +410,12 @@ export class Layout{
         var topY = d3.min(nodes, n=>n.location.y);
         var minY = self.getNodeMinY();
         var dy = topY - minY;
-        if(dy<0){
-            nodes.forEach(n=>n.move(0, -dy));
+
+        var minX = d3.min(nodes, n=>n.location.x);
+        var dx = minX - self.getNodeMinX();
+
+        if(dy<0 ||  dx<0){
+            nodes.forEach(n=>n.move(-dx, -dy));
         }
     }
 
@@ -419,7 +469,7 @@ export class Layout{
     }
 
     _fireOnAutoLayoutChangedCallbacks(){
-        this.onAutoLayoutChanged.forEach(c=>c(this.currentLayout));
+        this.onAutoLayoutChanged.forEach(c=>c(this.config.type));
     }
 
 

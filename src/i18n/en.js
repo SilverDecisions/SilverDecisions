@@ -44,6 +44,7 @@ module.exports = {
         'header': 'Layout',
         'marginHorizontal': 'Horizontal Margin',
         'marginVertical': 'Vertical Margin',
+        'nodeSize': 'Node size',
         'edgeSlantWidthMax': 'Edge slant (max)',
         'gridWidth': 'Width',
         'gridHeight': 'Height'

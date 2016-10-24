@@ -75,25 +75,29 @@ export class Toolbar{
         self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.onLayoutChanged(layout));
         this.layoutButtons={};
         this.layoutButtons['manual'] = this.container.select('#manualLayoutButton').on('click', function () {
-            if(self.app.treeDesigner.layout.currentLayout=='manual'){
+            if(self.app.treeDesigner.config.layout.type=='manual'){
                 return;
             }
             self.app.treeDesigner.layout.disableAutoLayout();
         });
         this.layoutButtons['tree'] = this.container.select('#treeAutoLayoutButton').on('click', function () {
-            if(self.app.treeDesigner.layout.currentLayout=='tree'){
+            if(self.app.treeDesigner.config.layout.type=='tree'){
                 return;
             }
             self.app.treeDesigner.autoLayout('tree');
         });
         this.layoutButtons['cluster'] = this.container.select('#clusterAutoLayoutButton').on('click', function () {
-            if(self.app.treeDesigner.layout.currentLayout=='cluster'){
+            if(self.app.treeDesigner.config.layout.type=='cluster'){
                 return;
             }
             self.app.treeDesigner.autoLayout('cluster');
         });
 
-        this.onLayoutChanged(self.app.treeDesigner.layout.currentLayout)
+        this.updateLayoutButtons();
+    }
+
+    updateLayoutButtons() {
+        this.onLayoutChanged(this.app.treeDesigner.config.layout.type)
     }
 
     initSettingsButton(){
@@ -140,5 +144,6 @@ export class Toolbar{
 
     update(){
         this.updateUndoRedoButtons();
+        this.updateLayoutButtons();
     }
 }

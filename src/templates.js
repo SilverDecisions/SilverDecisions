@@ -48,14 +48,18 @@ export class Templates{
                 '</span>' +
             '</div> '+
             '<div class="content">' +
-            '<div class="input-group">' +
-                '<input id="margin-horizontal" name="margin-horizontal" type="range" min="5" max="150" step="5" />' +
-                '<label for="margin-horizontal"><%= i18n.t("layoutOptions.marginHorizontal")%></label>' +
-            '</div>' +
-            '<div class="input-group">' +
-                '<input id="margin-vertical" name="margin-vertical" type="range" min="5" max="150" step="5" />' +
-                '<label for="margin-vertical"><%= i18n.t("layoutOptions.marginVertical")%></label>' +
-            '</div>' +
+                '<div class="input-group">' +
+                    '<input id="margin-horizontal" name="margin-horizontal" type="range" min="5" max="150" step="5" />' +
+                    '<label for="margin-horizontal"><%= i18n.t("layoutOptions.marginHorizontal")%></label>' +
+                '</div>' +
+                '<div class="input-group">' +
+                    '<input id="margin-vertical" name="margin-vertical" type="range" min="5" max="150" step="5" />' +
+                    '<label for="margin-vertical"><%= i18n.t("layoutOptions.marginVertical")%></label>' +
+                '</div>' +
+                '<div class="input-group">' +
+                    '<input id="node-size" name="node-size" type="range" min="20" max="60" step="5" />' +
+                    '<label for="node-size"><%= i18n.t("layoutOptions.nodeSize")%></label>' +
+                '</div>' +
                 '<div class="input-group">' +
                     '<input id="edge-slant-width-max" name="edge-slant-width-max" type="range" min="0" max="150" step="5" />' +
                     '<label for="edge-slant-width-max"><%= i18n.t("layoutOptions.edgeSlantWidthMax")%></label>' +
@@ -131,11 +135,11 @@ export class Templates{
                     '<p><strong>SilverDecisions <%= version %></strong><br/>A free and open source decision tree software.</p>' +
                     '<p class="sd-project-team">Project team:' +
                     '<ul>' +
-                        '<li><a href="http://bogumilkaminski.pl/">Bogumił Kamiński</a> (project manager)</li>' +
-                        '<li><a href="http://akson.sgh.waw.pl/~pszufe/">Przemysław Szufel</a> (deputy project manager)</li>' +
-                        '<li><a href="https://github.com/mwasiluk">Michał Wasiluk</a> (developer)</li>' +
+                        '<li><a href="http://bogumilkaminski.pl/" target="_blank">Bogumił Kamiński</a> (project manager)</li>' +
+                        '<li><a href="http://akson.sgh.waw.pl/~pszufe/" target="_blank">Przemysław Szufel</a> (deputy project manager)</li>' +
+                        '<li><a href="https://github.com/mwasiluk" target="_blank">Michał Wasiluk</a> (developer)</li>' +
                         '<li>Marcin Czupryna (tester)</li>' +
-                        '<li><a href="http://www.michaljakubczyk.pl/">Michał Jakubczyk</a> (tester)</p></li>' +
+                        '<li><a href="http://www.michaljakubczyk.pl/" target="_blank">Michał Jakubczyk</a> (tester)</p></li>' +
                     '</ul>'+
                     '<p>The project is developed at Decision Support and Analysis Division, Warsaw School of Economics.<br/>Contact: silverdecisions@sgh.waw.pl</p>'+
                     '<p>Software is developed as a part of <a href="http://routetopa.eu/">ROUTE-TO-PA</a> Project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Its aim is to allow a transparent communication between public administration and citizens regarding public data about decision making processes performed by public administration.</p>' +

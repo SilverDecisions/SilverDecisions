@@ -31,6 +31,10 @@ export class Sidebar{
             self.app.treeDesigner.layout.setGridHeight(parseInt(this.value));
         });
 
+        this.nodeSize = this.layoutOptionsContainer.select('input#node-size').on('change', function(){
+            self.app.treeDesigner.layout.setNodeSize(parseInt(this.value));
+        });
+
         this.edgeSlantWidthMax = this.layoutOptionsContainer.select('input#edge-slant-width-max').on('change', function(){
             self.app.treeDesigner.layout.setEdgeSlantWidthMax(parseInt(this.value));
         });
@@ -56,6 +60,7 @@ export class Sidebar{
     }
 
     updateLayoutOptions(){
+        this.nodeSize.node().value = this.app.treeDesigner.config.layout.nodeSize;
         this.edgeSlantWidthMax.node().value = this.app.treeDesigner.config.layout.edgeSlantWidthMax;
         this.marginHorizontal.node().value = this.app.treeDesigner.config.margin.left;
         this.marginVertical.node().value = this.app.treeDesigner.config.margin.top;
