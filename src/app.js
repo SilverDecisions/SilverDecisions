@@ -47,7 +47,7 @@ export class AppConfig {
 }
 
 export class App {
-    static version = '0.2.0';
+    static version = ''; // version is set from package.json
 
     config;
     container;

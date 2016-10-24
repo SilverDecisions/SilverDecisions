@@ -1,2 +1,2 @@
 
-var app = new SilverDecisions.App('app-container');
+var app = new SilverDecisions('app-container');

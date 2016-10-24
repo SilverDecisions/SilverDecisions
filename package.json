@@ -11,7 +11,7 @@
     "url": "git+https://github.com/bkamins/SilverDecisions.git"
   },
   "author": "Michał Wasiluk, Bogumił Kamiński",
-  "license": "MIT",
+  "license": "LGPL-3.0",
   "bugs": {
     "url": "https://github.com/bkamins/SilverDecisions/issues"
   },

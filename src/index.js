@@ -1,7 +1,11 @@
 import {D3Extensions} from './d3-extensions'
+import {App} from './app'
+import {version} from '../package.json';
 D3Extensions.extend();
 
-export {App} from './app'
+App.version = version;
+module.exports = App;
+
 
 
 
