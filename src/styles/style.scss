@@ -23,27 +23,6 @@
     background-color: darkgrey;
     outline: 1px solid slategrey;
   }
-
-  /*&::-webkit-scrollbar {
-    width: 14px;
-    height: 14px;
-  }
-  &::-webkit-scrollbar-thumb {
-    height: 6px;
-    border: 4px solid rgba(0, 0, 0, 0);
-    background-clip: padding-box;
-    -webkit-border-radius: 7px;
-    background-color: rgba(0, 0, 0, 0.15);
-    -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05);
-  }
-  &::-webkit-scrollbar-button {
-    width: 0;
-    height: 0;
-    display: none;
-  }
-  &::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }*/
 }
 
 #silver-decisions{
@@ -537,6 +516,12 @@
 
     &.icon-button{
       padding: 0;
+      background: none;
+      box-shadow: none;
+      &:hover:not([disabled]){
+        background: rgba(158,158,158,.1);
+        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+      }
     }
   }
 

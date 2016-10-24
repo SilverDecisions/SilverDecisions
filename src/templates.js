@@ -29,12 +29,12 @@ export class Templates{
                 '<button id="clusterAutoLayoutButton"><%= i18n.t("toolbar.layout.cluster")%></button>'+
             '</div>'+
             '<div class="toolbar-group">'+
-                '<button id="undoButton" disabled="disabled" title="<%= i18n.t("toolbar.undo")%>"><i class="material-icons">undo</i></button>'+
-                '<button id="redoButton" disabled="disabled" title="<%= i18n.t("toolbar.redo")%>"><i class="material-icons">redo</i></button>'+
+                '<button id="undoButton" class="icon-button" disabled="disabled" title="<%= i18n.t("toolbar.undo")%>"><i class="material-icons">undo</i></button>'+
+                '<button id="redoButton" class="icon-button" disabled="disabled" title="<%= i18n.t("toolbar.redo")%>"><i class="material-icons">redo</i></button>'+
             '</div>'+
             '<div class="toolbar-group">'+
-                '<button id="settings-button" title="<%= i18n.t("toolbar.settings")%>"><i class="material-icons">settings</i></button>'+
-                '<button id="about-button" title="<%= i18n.t("toolbar.about")%>"><i class="material-icons">info_outline</i></button>'+
+                '<button id="settings-button" class="icon-button" title="<%= i18n.t("toolbar.settings")%>"><i class="material-icons">settings</i></button>'+
+                '<button id="about-button" class="icon-button" title="<%= i18n.t("toolbar.about")%>"><i class="material-icons">info_outline</i></button>'+
             '</div>'+
         '</div>';
 
