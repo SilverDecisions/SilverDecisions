@@ -136,7 +136,7 @@ export class Templates{
                     '<p class="sd-project-team">Project team:' +
                     '<ul>' +
                         '<li><a href="http://bogumilkaminski.pl/" target="_blank">Bogumił Kamiński</a> (project manager)</li>' +
-                        '<li><a href="http://akson.sgh.waw.pl/~pszufe/" target="_blank">Przemysław Szufel</a> (deputy project manager)</li>' +
+                        '<li><a href="https://szufel.pl/" target="_blank">Przemysław Szufel</a> (deputy project manager)</li>' +
                         '<li><a href="https://github.com/mwasiluk" target="_blank">Michał Wasiluk</a> (developer)</li>' +
                         '<li>Marcin Czupryna (tester)</li>' +
                         '<li><a href="http://www.michaljakubczyk.pl/" target="_blank">Michał Jakubczyk</a> (tester)</p></li>' +

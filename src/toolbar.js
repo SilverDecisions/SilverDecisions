@@ -43,7 +43,7 @@ export class Toolbar{
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
             var json = this.app.serialize();
             var blob = new Blob([json], {type: "application/json"});
-            Exporter.saveAs(blob, 'diagram.json');
+            Exporter.saveAs(blob, Exporter.getExportFileName('json'));
         });
     }
 
@@ -56,7 +56,7 @@ export class Toolbar{
             Exporter.svgString2Image(svgString,  4*svgWidth, 4*svgHeight, 'png', save); // passes Blob and filesize String to the callback
 
             function save(dataBlob, filesize) {
-                Exporter.saveAs(dataBlob, 'diagram.png');
+                Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
             }
         });
     }
@@ -66,7 +66,7 @@ export class Toolbar{
         this.container.select('#saveButtonSvg').on('click', function () {
             var svgString = Exporter.getSVGString(svg.node());
             var blob = new Blob([svgString], {type: "image/svg+xml"});
-            Exporter.saveAs(blob, 'diagram.svg');
+            Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
         });
     }
 

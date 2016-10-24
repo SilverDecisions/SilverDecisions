@@ -1,5 +1,6 @@
 import {dataURLtoBlob} from 'blueimp-canvas-to-blob'
 import {saveAs} from 'file-saver'
+import * as d3 from './d3'
 
 export class Exporter {
     static saveAs = saveAs;
@@ -71,4 +72,11 @@ export class Exporter {
         image.src = imgsrc;
     }
 
+    //decisiontree@yyyy.mm.dd_hh.mm.ss
+    static getExportFileName(ext){
+        var name = 'decisiontree';
+        var format = d3.timeFormat("%Y.%m.%d._%H.%M.%S");
+        var date = new Date();
+        return name+'@'+format(date)+'.'+ext;
+    }
 }
