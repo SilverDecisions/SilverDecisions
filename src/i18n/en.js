@@ -57,5 +57,12 @@ module.exports = {
         'newDiagram': 'Do you really want to clear current diagram? All unsaved data will be lost.',
         'openDiagram': 'Are you sure? All unsaved diagram data will be lost.',
         'beforeunload': 'Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost.'
+    },
+    'error':{
+        'jsonParse': 'Error parsing file!',
+        'fileApiNotSupported':'The file API isn\'t supported on this browser yet.',
+        'inputFilesProperty':'Your browser doesn\'t seem to support the `files` property of file inputs.',
+        'notSilverDecisionsFile':'Not a SilverDecisions file!',
+        'malformedData':'Error reading tree data!'
     }
 };

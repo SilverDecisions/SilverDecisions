@@ -52,8 +52,12 @@ gulp.task('build-js', function () {
     var development = (argv.dev === undefined) ? false : true;
     if(!development){
         pipe.pipe(sourcemaps.init({loadMaps: true}))
-            .pipe(plugins.stripDebug())
-            .pipe(plugins.uglify())
+            // .pipe(plugins.stripDebug())
+            .pipe(plugins.uglify({
+                compress: {
+                    drop_console: true
+                }
+            }))
             .pipe(plugins.rename({ extname: '.min.js' }))
 
             .pipe(sourcemaps.write('./'))

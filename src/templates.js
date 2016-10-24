@@ -157,7 +157,7 @@ export class Templates{
                 Templates.sidebar+
                 '<div id="tree-designer-container"></div>'+
             '</div>'+
-            '<input type="file" style="display:none" id="sd-file-input"/>'+
+            '<input type="file" style="display:none" id="sd-file-input" accept=".json"/>'+
              Templates.settingsDialog+
              Templates.aboutDialog+
         '</div>';

@@ -256,21 +256,33 @@ export class App {
 
     openDiagram(diagramData){
         var self = this;
-        if(diagramData.lng){
-            this.config.lng = diagramData.lng;
-        }
-        if(diagramData.rule){
-            this.config.rule = diagramData.rule;
-        }
-        if(diagramData.format){
-            this.config.format = diagramData.format;
-        }
-        this.setConfig(this.config);
-        this.dataModel.clear();
-        this.dataModel.load(diagramData.trees);
 
-        if(diagramData.treeDesigner){
-            this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
+        if(!diagramData.SilverDecisions){
+            alert(i18n.t('error.notSilverDecisionsFile'));
+            return;
+        }
+        try{
+            if(diagramData.lng){
+                this.config.lng = diagramData.lng;
+            }
+            if(diagramData.rule){
+                this.config.rule = diagramData.rule;
+            }
+            if(diagramData.format){
+                this.config.format = diagramData.format;
+            }
+            this.setConfig(this.config);
+            this.dataModel.clear();
+
+
+
+            this.dataModel.load(diagramData.trees);
+
+            if(diagramData.treeDesigner){
+                this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
+            }
+        }catch (e){
+            alert(i18n.t('error.malformedData'));
         }
         this.updatePayoffNumberFormat();
         this.updateView();

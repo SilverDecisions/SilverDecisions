@@ -1,3 +1,4 @@
+import {i18n} from './i18n/i18n'
 
 export class FileLoader{
 
@@ -13,12 +14,12 @@ export class FileLoader{
 
 
             if (typeof window.FileReader !== 'function') {
-                alert("The file API isn't supported on this browser yet.");
+                alert(i18n.t('error.fileApiNotSupported'));
                 return;
             }
             input =  document.getElementById('sd-file-input');
             if (!input.files) {
-                alert("This browser doesn't seem to support the `files` property of file inputs.");
+                alert(i18n.t('error.inputFilesProperty'));
                 return;
             }
 
@@ -33,8 +34,14 @@ export class FileLoader{
 
 
             function receivedText(e) {
-                var fileContent = JSON.parse(e.target.result);
-                callback(fileContent);
+                try{
+                    var fileContent = JSON.parse(e.target.result);
+                    callback(fileContent);
+                }catch (e){
+                    alert(i18n.t('error.jsonParse'));
+                    console.log(e);
+                }
+
                 input.value = null;
             }
         }
