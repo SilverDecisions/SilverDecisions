@@ -45,7 +45,7 @@ export class Layout{
     }
 
     getNewChildLocation(parent){
-        return new model.Point(parent.location.x + 150, parent.location.y)
+        return new model.Point(parent.location.x + this.config.gridWidth, parent.location.y)
     }
 
     moveNodeToEmptyPlace(node){

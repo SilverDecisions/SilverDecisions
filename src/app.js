@@ -280,6 +280,7 @@ export class App {
     serialize(filterLocation, filterComputed){
         var self = this;
         var obj={
+            SilverDecisions: App.version,
             lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,
             format: self.config.format,
