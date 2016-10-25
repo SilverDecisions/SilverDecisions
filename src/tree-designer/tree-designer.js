@@ -140,6 +140,7 @@ export class TreeDesigner {
         if(this.layout){
             this.layout.config=this.config.layout;
         }
+        this.updateCustomStyles();
         return this;
     }
 

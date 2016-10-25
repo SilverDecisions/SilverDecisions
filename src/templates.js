@@ -195,7 +195,7 @@ export class Templates{
     static styleRule(selector, props){
         var s = selector+ '{';
         props.forEach(p=> s+=Templates.styleProp(p[0], p[1]));
-        s+='} '
+        s+='} ';
         return s;
     }
     static styleProp(styleName, variableName){
@@ -290,10 +290,17 @@ export class Templates{
             ['stroke', 'edge.stroke'],
             ['stroke-width', 'edge.strokeWidth']
         ])+
+        Templates.styleRule(Templates.treeDesignerSelector+' marker#arrow path',[
+            ['fill', 'edge.stroke'],
+        ])+
         Templates.styleRule(Templates.edgeSelector('optimal')+' path',[
             ['stroke', 'edge.optimal.stroke'],
             ['stroke-width', 'edge.optimal.strokeWidth']
         ])+
+        Templates.styleRule(Templates.treeDesignerSelector+' marker#arrow-optimal path',[
+            ['fill', 'edge.optimal.stroke'],
+        ])+
+
         Templates.styleRule(Templates.edgeSelector('selected')+' path',[
             ['stroke', 'edge.selected.stroke'],
             ['stroke-width', 'edge.selected.strokeWidth']
