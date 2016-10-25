@@ -10,6 +10,7 @@ import {NodeDragHandler} from './node-drag-handler'
 import {Tooltip} from '../tooltip'
 import {ValidationResult} from '../validation/validation-result'
 import * as _ from "lodash";
+import {Templates} from "../templates";
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -31,19 +32,18 @@ export class TreeDesignerConfig {
     fontFamily= 'serif';
     fontSize= '12px';
     node = {
+        strokeWidth: '1px',
+        optimal: {
+            strokeWidth: '1.5px',
+        },
         label: {
             fontSize: '1em',
             color: 'back'
         },
         payoff: {
             fontSize: '1em',
-            color: '#006f00',
+            color: 'black',
             negativeColor: '#b60000'
-        },
-        strokeWidth: '1px',
-        optimal: {
-            strokeWidth: '1.5px',
-            stroke: '#006f00',
         },
         decision: {
             fill: '#ff7777',
@@ -72,30 +72,30 @@ export class TreeDesignerConfig {
             },
             payoff: {
                 fontSize: '1em',
-                color: '#006f00',
+                color: 'black',
                 negativeColor: '#b60000'
             },
         }
     };
     edge={
-        stroke: '#666600',
+        stroke: '#424242',
         strokeWidth: '1.5',
+        optimal:{
+            stroke: '#006f00',
+            strokeWidth: '2.4',
+        },
+        selected:{
+            stroke: '#045ad1',
+            strokeWidth: '3.5',
+        },
         label: {
             fontSize: '1em',
             color: 'back'
         },
         payoff:{
             fontSize: '1em',
-            color: '#006f00',
+            color: 'black',
             negativeColor: '#b60000'
-        },
-        optimal:{
-            stroke: '#424242',
-            strokeWidth: '2.4',
-        },
-        selected:{
-            stroke: '#045ad1',
-            strokeWidth: '3.5',
         }
 
     };
@@ -151,7 +151,12 @@ export class TreeDesigner {
         this.initEdgeMarker();
         this.initNodeContextMenu();
         this.initNodeDragHandler();
+        this.updateCustomStyles();
         this.redraw();
+    }
+
+    updateCustomStyles(){
+        d3.select('head').selectOrAppend('style#sd-tree-designer-style').html(Templates.get('treeDesignerStyles', this.config));
     }
 
     initLayout(){
@@ -297,11 +302,27 @@ export class TreeDesigner {
             nodesMergeT = nodesMerge.transition();
             nodesMergeT.on('end', ()=> self.updatePlottingRegionSize())
         }
-        nodesMergeT.attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')');
+        nodesMergeT
+            .attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')')
 
-        this.layout.drawNodeSymbol(nodesMerge.select('path'),this.transition);
+        var path = nodesMerge.select('path');
+        this.layout.drawNodeSymbol(path,this.transition);
 
-
+        /*path
+            .style('fill', d=> {
+                // if(self.isNodeSelected(d)){
+                //     return self.config.node[d.type].selected.fill
+                // }
+                return self.config.node[d.type].fill
+            })
+            .style('stroke', d=> self.config.node[d.type].stroke)
+            .style('stroke-width', d=> {
+                if(self.config.node[d.type].strokeWidth!==undefined){
+                    return self.config.node[d.type].strokeWidth;
+                }
+                return self.config.node.strokeWidth;
+            });
+        */
         this.layout.nodeLabelPosition(labelEnter);
         this.layout.nodeLabelPosition(nodesMergeT.select('text.label'))
 

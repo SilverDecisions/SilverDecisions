@@ -47,7 +47,84 @@ module.exports = {
             'title': 'Probability number format',
             'style': 'Style',
             'minimumFractionDigits': 'Minimum fraction digits',
-            'maximumFractionDigits': 'Maximum fraction digits'
+            'maximumFractionDigits': 'Maximum fraction digits',
+            'fontSize': 'Font size',
+            'color': 'Color'
+        },
+        'node':{
+            'title': 'Node',
+            'strokeWidth': 'Stroke width',
+            optimal: {
+                strokeWidth: 'Optimal stroke width',
+            },
+            label: {
+                'title': 'Label',
+                fontSize: 'Label font size',
+                color: 'Label color'
+            },
+            payoff: {
+                'title': 'Payoff',
+                fontSize: 'Font size',
+                color: 'Color',
+                negativeColor: 'Negative color'
+            },
+            decision: {
+                'title': 'Decision Node',
+                fill: 'Fill color',
+                stroke: 'Stroke color',
+
+                selected: {
+                    fill: 'Selected fill color',
+                }
+            },
+            chance: {
+                'title': 'Chance Node',
+                fill: 'Fill color',
+                stroke: 'Stroke color',
+                selected: {
+                    fill: 'Selected fill color',
+                }
+            },
+            terminal:{
+                'title': 'Terminal Node',
+                fill: 'Fill color',
+                stroke: 'Stroke color',
+                selected: {
+                    fill: 'Selected fill color',
+                },
+                payoff: {
+                    'title': 'Payoff',
+                    fontSize: 'Font size',
+                    color: 'Color',
+                    negativeColor: 'Negative color'
+                },
+            }
+        },
+        edge:{
+            'title': 'Edge',
+            stroke: 'Color',
+            'strokeWidth': 'Stroke width',
+            optimal:{
+                'title': 'Optimal',
+                stroke: 'Color',
+                'strokeWidth': 'Stroke width',
+            },
+            selected:{
+                'title': 'Selected',
+                stroke: 'Color',
+                'strokeWidth': 'Stroke width',
+            },
+            label: {
+                'title': 'Label',
+                fontSize: 'Font size',
+                color: 'Color'
+            },
+            payoff:{
+                'title': 'Payoff',
+                fontSize: 'Font size',
+                color: 'Color',
+                negativeColor: 'Negative color'
+            }
         }
     },
     'aboutDialog':{

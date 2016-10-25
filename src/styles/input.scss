@@ -13,6 +13,7 @@
       width: 100%;
       border: none;
       border-bottom: 1px solid rgba(0,0,0,.12);
+      background: none;
     }
     input:focus {
       outline: none;
@@ -41,7 +42,9 @@
     select ~ label{
       top: -1.2em;
     }
-
+    input[type=color] ~ label{
+      top: -1.2em;
+    }
 
     input.invalid ~ .bar{
       &:before, &:after {

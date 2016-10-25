@@ -30,12 +30,13 @@ export class AppConfig {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
             // minimumSignificantDigits: 1,
-            useGrouping: true,
+            useGrouping: true
         },
         probability:{ // NumberFormat  options
             style: 'decimal',
             minimumFractionDigits: 2,
             maximumFractionDigits: 3,
+            useGrouping: true
         }
     };
 

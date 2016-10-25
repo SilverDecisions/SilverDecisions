@@ -30,25 +30,97 @@ export class SettingsDialog extends Dialog{
             .addField('maximumFractionDigits', 'number', app, 'config.format.payoff.maximumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:app.config.format.payoff.minimumFractionDigits, maximumFractionDigits:v}); return true;}catch (e){return false}}})
         this.formGroups.push(payoffGroup);
 
-        group = new FormGroup('probability', ()=>app.updateProbabilityNumberFormat());
+        group = new FormGroup('probability', ()=>{
+            app.updateProbabilityNumberFormat();
+            app.treeDesigner.updateCustomStyles();
+        });
         group
             .addSelectField('style', app, 'config.format.probability.style', ['decimal', 'percent'])
             .addField('minimumFractionDigits', 'number', app, 'config.format.probability.minimumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:v, maximumFractionDigits:app.config.format.probability.maximumFractionDigits}); return true;}catch (e){return false}}})
             .addField('maximumFractionDigits', 'number', app, 'config.format.probability.maximumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:app.config.format.probability.minimumFractionDigits, maximumFractionDigits:v}); return true;}catch (e){return false}}})
+            .addField('fontSize', 'text', app.treeDesigner, 'config.probability.fontSize')
+            .addField('color', 'color', app.treeDesigner, 'config.probability.color');
         this.formGroups.push(group);
+
+
+        var nodeGroup = new FormGroup('node', ()=>app.treeDesigner.updateCustomStyles());
+        nodeGroup
+            .addField('strokeWidth', 'text', app.treeDesigner, 'config.node.strokeWidth')
+            .addField('optimal.strokeWidth', 'text', app.treeDesigner, 'config.node.optimal.strokeWidth')
+
+        nodeGroup.addGroup('label')
+            .addField('fontSize', 'text', app.treeDesigner, 'config.node.label.fontSize')
+            .addField('color', 'color', app.treeDesigner, 'config.node.label.color');
+
+        nodeGroup.addGroup('payoff')
+            .addField('fontSize', 'text', app.treeDesigner, 'config.node.payoff.fontSize')
+            .addField('color', 'color', app.treeDesigner, 'config.node.payoff.color')
+            .addField('negativeColor', 'color', app.treeDesigner, 'config.node.payoff.negativeColor');
+
+        this.formGroups.push(nodeGroup);
+
+        nodeGroup.addGroup('decision')
+            .addField('fill', 'color', app.treeDesigner, 'config.node.decision.fill')
+            .addField('stroke', 'color', app.treeDesigner, 'config.node.decision.stroke')
+            .addField('selected.fill', 'color', app.treeDesigner, 'config.node.decision.selected.fill');
+
+
+        nodeGroup.addGroup('chance')
+            .addField('fill', 'color', app.treeDesigner, 'config.node.chance.fill')
+            .addField('stroke', 'color', app.treeDesigner, 'config.node.chance.stroke')
+            .addField('selected.fill', 'color', app.treeDesigner, 'config.node.chance.selected.fill');
+
+        nodeGroup.addGroup('terminal')
+            .addField('fill', 'color', app.treeDesigner, 'config.node.terminal.fill')
+            .addField('stroke', 'color', app.treeDesigner, 'config.node.terminal.stroke')
+            .addField('selected.fill', 'color', app.treeDesigner, 'config.node.terminal.selected.fill')
+            .addGroup('payoff')
+                .addField('fontSize', 'text', app.treeDesigner, 'config.node.terminal.payoff.fontSize')
+                .addField('color', 'color', app.treeDesigner, 'config.node.terminal.payoff.color')
+                .addField('negativeColor', 'color', app.treeDesigner, 'config.node.terminal.payoff.negativeColor');
+
+
+
+        var edgeGroup = new FormGroup('edge', ()=>app.treeDesigner.updateCustomStyles())
+            .addField('stroke', 'color', app.treeDesigner, 'config.edge.stroke')
+            .addField('strokeWidth', 'text', app.treeDesigner, 'config.edge.strokeWidth');
+
+        edgeGroup.addGroup('optimal')
+            .addField('strokeWidth', 'text', app.treeDesigner, 'config.edge.optimal.strokeWidth')
+            .addField('stroke', 'color', app.treeDesigner, 'config.edge.optimal.stroke');
+
+        edgeGroup.addGroup('selected')
+            .addField('strokeWidth', 'text', app.treeDesigner, 'config.edge.selected.strokeWidth')
+            .addField('stroke', 'color', app.treeDesigner, 'config.edge.selected.stroke');
+
+        edgeGroup.addGroup('label')
+            .addField('fontSize', 'text', app.treeDesigner, 'config.edge.label.fontSize')
+            .addField('color', 'color', app.treeDesigner, 'config.edge.label.color');
+
+        edgeGroup.addGroup('payoff')
+            .addField('fontSize', 'text', app.treeDesigner, 'config.edge.payoff.fontSize')
+            .addField('color', 'color', app.treeDesigner, 'config.edge.payoff.color')
+            .addField('negativeColor', 'color', app.treeDesigner, 'config.edge.payoff.negativeColor');
+        this.formGroups.push(edgeGroup);
+
 
         this.initView();
 
     }
 
-    initView() {
+    initFormGroups(container, data){
+        var self = this;
         var temp = {};
+        var formGroups = container.selectAll('div.sd-form-group').filter(function(d) { return this.parentNode==container.node(); }).data(data);
+        var formGroupsEnter = formGroups.enter().appendSelector('div.sd-form-group').attr('id', d=>d.id).html(d=>Templates.get('settingsDialogFormGroup', d));
+        formGroupsEnter.select('.toggle-button').on('click', (d) => {
+            var g = container.select('#'+d.id);
+            g.classed('sd-extended', !g.classed('sd-extended'));
+        });
 
+        var formGroupsMerge = formGroupsEnter.merge(formGroups);
+        var inputGroups = formGroupsMerge.select('  .sd-form-group-content > .sd-form-group-inputs').selectAll('div.input-group').data(d=>d.fields);
 
-        var formGroups = this.container.select('form#sd-settings-form').selectAll('div.sd-form-group').data(this.formGroups);
-        var formGroupsEnter = formGroups.enter().appendSelector('div.sd-form-group').html(d=>Templates.get('settingsDialogFormGroup', d));
-
-        var inputGroups = formGroupsEnter.merge(formGroups).selectAll('div.input-group').data(d=>d.fields);
 
         var inputGroupsEnter = inputGroups.enter().appendSelector('div.input-group').html(d=>d.type=='select'? Templates.get('selectInputGroup', d):Templates.get('inputGroup', d));
 
@@ -82,6 +154,15 @@ export class SettingsDialog extends Dialog{
 
         });
 
+        formGroupsMerge.each(function(d){
+            self.initFormGroups(d3.select(this).select('.sd-form-group-content > .sd-form-group-child-groups'), d.groups);
+        });
+    }
+
+    initView() {
+        var temp = {};
+        this.initFormGroups(this.container.select('form#sd-settings-form'), this.formGroups);
+
     }
 
     onOpen(){
@@ -91,11 +172,14 @@ export class SettingsDialog extends Dialog{
 }
 
 export class FormGroup{
+    id;
     name;
     fields=[];
+    groups=[];
     valueUpdateCallback;
 
     constructor(name, valueUpdateCallback){
+        this.id = 'sd-form-group-'+name.replace(/\./g, '-');
         this.name = name;
         this.valueUpdateCallback = valueUpdateCallback;
     }
@@ -113,6 +197,13 @@ export class FormGroup{
         configInputField.valueUpdateCallback = this.valueUpdateCallback;
         this.fields.push(configInputField);
         return this;
+    }
+
+    addGroup(name){
+        var groupName = this.name+'.'+name;
+        var group = new FormGroup(groupName, this.valueUpdateCallback);
+        this.groups.push(group);
+        return group;
     }
 }
 
