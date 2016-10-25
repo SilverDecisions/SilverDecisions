@@ -45,8 +45,11 @@ export class SettingsDialog extends Dialog{
 
         var nodeGroup = new FormGroup('node', ()=>app.treeDesigner.updateCustomStyles());
         nodeGroup
-            .addField('strokeWidth', 'text', app.treeDesigner, 'config.node.strokeWidth')
-            .addField('optimal.strokeWidth', 'text', app.treeDesigner, 'config.node.optimal.strokeWidth')
+            .addField('strokeWidth', 'text', app.treeDesigner, 'config.node.strokeWidth');
+
+        nodeGroup.addGroup('optimal')
+            .addField('strokeWidth', 'text', app.treeDesigner, 'config.node.optimal.strokeWidth')
+            .addField('stroke', 'color', app.treeDesigner, 'config.node.optimal.stroke');
 
         nodeGroup.addGroup('label')
             .addField('fontSize', 'text', app.treeDesigner, 'config.node.label.fontSize')

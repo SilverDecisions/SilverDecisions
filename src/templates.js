@@ -228,7 +228,8 @@ export class Templates{
             ['fill', 'node.fill'],
             ['stroke-width', 'node.strokeWidth']
         ])+
-        Templates.styleRule(Templates.nodeSelector(null, 'optimal')+' path',[
+        Templates.styleRule(Templates.nodeSelector('decision', 'optimal')+' path, '+Templates.nodeSelector('chance', 'optimal')+' path,' +Templates.nodeSelector('terminal', 'optimal')+' path',[
+            ['stroke', 'node.optimal.stroke'],
             ['stroke-width', 'node.optimal.strokeWidth']
         ])+
         Templates.styleRule(Templates.nodeSelector()+' .label',[

@@ -54,8 +54,10 @@ module.exports = {
         'node':{
             'title': 'Node',
             'strokeWidth': 'Stroke width',
-            optimal: {
-                strokeWidth: 'Optimal stroke width',
+            optimal:{
+                'title': 'Optimal',
+                stroke: 'Color',
+                'strokeWidth': 'Stroke width',
             },
             label: {
                 'title': 'Label',

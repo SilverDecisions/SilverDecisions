@@ -34,6 +34,7 @@ export class TreeDesignerConfig {
     node = {
         strokeWidth: '1px',
         optimal: {
+            stroke: '#006f00',
             strokeWidth: '1.5px',
         },
         label: {
