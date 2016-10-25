@@ -32,11 +32,16 @@
     }
 
     /* active state */
-    input:focus ~ label, input:not(.empty) ~ label {
+    select ~ label, input:focus ~ label, input:not(.empty) ~ label {
       top: -.85em;
       font-size: 0.85em;
       color: #5264AE;
     }
+
+    select ~ label{
+      top: -1.2em;
+    }
+
 
     input.invalid ~ .bar{
       &:before, &:after {

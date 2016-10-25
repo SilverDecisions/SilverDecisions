@@ -30,9 +30,22 @@ module.exports = {
     },
     'settingsDialog':{
         'title': 'Settings',
+        'general':{
+            'title': 'General',
+            'fontSize': 'Font size',
+            'fontFamily': 'Font family',
+            'numberFormatLocale': 'Number format locale',
+        },
         'payoff':{
             'title': 'Payoff number format',
             'currency': 'Currency',
+            'style': 'Style',
+            'minimumFractionDigits': 'Minimum fraction digits',
+            'maximumFractionDigits': 'Maximum fraction digits'
+        },
+        'probability':{
+            'title': 'Probability number format',
+            'style': 'Style',
             'minimumFractionDigits': 'Minimum fraction digits',
             'maximumFractionDigits': 'Maximum fraction digits'
         }

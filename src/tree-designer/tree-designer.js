@@ -28,20 +28,81 @@ export class TreeDesignerConfig {
         gridWidth: 150,
         edgeSlantWidthMax: 20
     };
-    /*fontFamily= '"Times New Roman", Times, serif';
+    fontFamily= 'serif';
     fontSize= '12px';
-    node={ //TODO
-      chance:{
-          fill: '#ffff44',
-          stroke: '#666600',
-          strokeWidth: '',
-          selected:{
-              fill: '#aaaa00',
-              stroke: '#666600'
-          }
-      }
-    };*/
+    node = {
+        label: {
+            fontSize: '1em',
+            color: 'back'
+        },
+        payoff: {
+            fontSize: '1em',
+            color: '#006f00',
+            negativeColor: '#b60000'
+        },
+        strokeWidth: '1px',
+        optimal: {
+            strokeWidth: '1.5px',
+            stroke: '#006f00',
+        },
+        decision: {
+            fill: '#ff7777',
+            stroke: '#660000',
 
+            selected: {
+                fill: '#aa3333',
+                // stroke: '#666600'
+            }
+        },
+        chance: {
+            fill: '#ffff44',
+            stroke: '#666600',
+
+            selected: {
+                fill: '#aaaa00',
+                // stroke: '#666600'
+            }
+        },
+        terminal:{
+            fill: '#44ff44',
+            stroke: 'black',
+            selected: {
+                fill: '#00aa00',
+                // stroke: 'black'
+            },
+            payoff: {
+                fontSize: '1em',
+                color: '#006f00',
+                negativeColor: '#b60000'
+            },
+        }
+    };
+    edge={
+        stroke: '#666600',
+        strokeWidth: '1.5',
+        label: {
+            fontSize: '1em',
+            color: 'back'
+        },
+        payoff:{
+            fontSize: '1em',
+            color: '#006f00',
+            negativeColor: '#b60000'
+        },
+        optimal:{
+            stroke: '#424242',
+            strokeWidth: '2.4',
+        },
+        selected:{
+            stroke: '#045ad1',
+            strokeWidth: '3.5',
+        }
+
+    };
+    probability = {
+        fontSize: '1em',
+        color: '#0000d7'
+    };
 
 
     payoffNumberFormatter = (v)=> v;
@@ -130,7 +191,7 @@ export class TreeDesigner {
         this.computeAvailableSpace();
         this.svg = this.container.selectOrAppend('svg.tree-designer');
         this.svg.attr('width', this.availableWidth).attr('height', this.availableHeight);
-
+        this.updateSvgStyles();
 
         this.mainGroup = this.svg.selectOrAppend('g.main-group');
         this.updateMargin();
@@ -142,6 +203,11 @@ export class TreeDesigner {
                     self.updatePlottingRegionSize();
                 });
         }
+    }
+
+    updateSvgStyles(){
+        this.svg.style('font-family', this.config.fontFamily);
+        this.svg.style('font-size', this.config.fontSize);
     }
 
     updateMargin(withTransitions){
@@ -364,12 +430,15 @@ export class TreeDesigner {
         }
         this.layout.edgePayoffPosition(payoffEnter);
         this.layout.edgePayoffPosition(payoffTextT);
-
+        var ruleName = this.config.$rule;
         this.layout.edgeProbabilityPosition(probabilityEnter);
         this.layout.edgeProbabilityPosition(edgesMergeT.select('text.probability'))
             .attr('dominant-baseline', 'hanging') //TODO not working in IE
             .attr('text-anchor', 'end')
-            .text(d=>d.probability!==undefined ? d.probability: '')
+            .text(d=>{
+                var val = d.computedValue(ruleName, 'probability');
+                return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): d.probability
+            });
 
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();

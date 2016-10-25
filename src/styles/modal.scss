@@ -3,7 +3,7 @@
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
   z-index: 1; /* Sit on top */
-  padding-top: 60px; /* Location of the box */
+  padding-top: 10vh; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -28,7 +28,11 @@
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.4s;
     animation-name: animatetop;
-    animation-duration: 0.4s
+    animation-duration: 0.4s;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+
   }
 
   .sd-modal-header {
@@ -39,6 +43,7 @@
   .sd-modal-body {
     font-size: 13px;
     padding: 15px 16px;
+    overflow: auto;
   }
 
   /* The Close Button */

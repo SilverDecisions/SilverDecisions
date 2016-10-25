@@ -23,6 +23,7 @@ export class AppConfig {
     rule = ExpectedValueMaximizationRule.NAME;
     lng = 'en';
     format={// NumberFormat  options
+        locales: 'en',
         payoff:{
             style: 'currency',
             currency: 'USD',
@@ -32,6 +33,7 @@ export class AppConfig {
             useGrouping: true,
         },
         probability:{ // NumberFormat  options
+            style: 'decimal',
             minimumFractionDigits: 2,
             maximumFractionDigits: 3,
         }
@@ -67,7 +69,7 @@ export class App {
         this.initExpressionEngine();
         this.initTreeValidator();
         this.initObjectiveRulesManager();
-
+        this.initProbabilityNumberFormat();
         this.initPayoffNumberFormat();
         this.initTreeDesigner();
         this.initSidebar();
@@ -136,7 +138,11 @@ export class App {
     }
 
     initPayoffNumberFormat(){
-        this.payoffNumberFormat = new Intl.NumberFormat([],this.config.format.payoff);
+
+        this.payoffNumberFormat = new Intl.NumberFormat(this.config.format.locales,this.config.format.payoff);
+    }
+    initProbabilityNumberFormat(){
+        this.probabilityNumberFormat = new Intl.NumberFormat(this.config.format.locales,this.config.format.probability);
     }
 
     initTreeDesigner() {
@@ -158,7 +164,8 @@ export class App {
             onSelectionCleared: function () {
                 self.onSelectionCleared();
             },
-            payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v)
+            payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v),
+            probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v)
         };
     }
 
@@ -319,8 +326,19 @@ export class App {
         }, 2);
     }
 
+    updateNumberFormats(){
+        this.initPayoffNumberFormat();
+        this.initProbabilityNumberFormat();
+        this.updateView();
+    }
+
     updatePayoffNumberFormat(){
         this.initPayoffNumberFormat();
+        this.updateView();
+    }
+
+    updateProbabilityNumberFormat(){
+        this.initProbabilityNumberFormat();
         this.updateView();
     }
 

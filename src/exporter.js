@@ -75,7 +75,7 @@ export class Exporter {
     //decisiontree@yyyy.mm.dd_hh.mm.ss
     static getExportFileName(ext){
         var name = 'decisiontree';
-        var format = d3.timeFormat("%Y.%m.%d._%H.%M.%S");
+        var format = d3.timeFormat("%Y.%m.%d_%H.%M.%S");
         var date = new Date();
         return name+'@'+format(date)+'.'+ext;
     }
