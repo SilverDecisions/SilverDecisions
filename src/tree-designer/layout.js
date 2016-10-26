@@ -23,6 +23,7 @@ export class Layout{
 
     treeMargin = 50;
     targetSymbolSize={};
+    nodeSeparation = (a, b) => a.parent == b.parent ? 1 : 1.2
 
     constructor(treeDesigner, data, config){
         this.treeDesigner = treeDesigner;
@@ -376,6 +377,7 @@ export class Layout{
                 layout = d3.tree();
             }
             layout.nodeSize([self.config.gridHeight, self.config.gridWidth]);
+            layout.separation(self.nodeSeparation);
 
             layout(root);
             var minY = 999999999;
