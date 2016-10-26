@@ -150,7 +150,7 @@ export class TreeDesigner {
         this.initLayout();
         this.initMainContextMenu();
         this.initBrush();
-        this.initEdgeMarker();
+        this.initEdgeMarkers();
         this.initNodeContextMenu();
         this.initNodeDragHandler();
         this.updateCustomStyles();
@@ -498,24 +498,19 @@ export class TreeDesigner {
     }
 
 
-    initEdgeMarker() {
+    initEdgeMarkers() {
         console.log(this.svg);
         var defs = this.svg.append("svg:defs");
 
-        defs.append("marker")
-            .attr("id","arrow")
-            .attr("viewBox","0 -5 10 10")
-            .attr("refX",5)
-            .attr("refY",0)
-            .attr("markerWidth",4)
-            .attr("markerHeight",4)
-            .attr("orient","auto")
-            .append("path")
-            .attr("d", "M0,-5L10,0L0,5")
-            .attr("class","arrowHead");
+        this.initArrowMarker("arrow");
+        this.initArrowMarker("arrow-optimal");
+        this.initArrowMarker("arrow-selected");
+    }
+    initArrowMarker(id) {
 
+        var defs = this.svg.select("defs");
         defs.append("marker")
-            .attr("id","arrow-optimal")
+            .attr("id",id)
             .attr("viewBox","0 -5 10 10")
             .attr("refX",5)
             .attr("refY",0)
@@ -699,6 +694,7 @@ export class TreeDesigner {
     }
 
     clearSelection(){
+        this.mainGroup.selectAll(".edge.selected").select('path').attr("marker-end", d => "url(#arrow"+(this.isOptimal(d)?'-optimal':'')+")")
         this.mainGroup.selectAll(".selected").classed('selected', false);
         this.config.onSelectionCleared();
     }
@@ -707,8 +703,12 @@ export class TreeDesigner {
         if(clearSelectionBeforeSelect){
             this.clearSelection();
         }
+
         this.config.onEdgeSelected(edge);
-        this.mainGroup.select('#edge-'+edge.$id).classed('selected', true);
+        this.mainGroup.select('#edge-'+edge.$id)
+            .classed('selected', true)
+            .select('path')
+            .attr("marker-end", d => "url(#arrow-selected)")
     }
 
     isNodeSelected(node){
@@ -724,7 +724,7 @@ export class TreeDesigner {
             this.config.onNodeSelected(node);
         }
 
-        this.mainGroup.select('#node-'+node.$id).classed('selected', true);
+        this.getNodeD3SelectionById(node.$id).classed('selected', true);
     }
 
     selectSubTree(node, clearSelectionBeforeSelect,skipCallback) {

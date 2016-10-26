@@ -262,6 +262,8 @@
   svg.tree-designer{
     font-family: "Times New Roman", Times, serif;
     $edge-optimal-color: #006f00;
+    $edge-selected-color: #045ad1;
+
     $probabilityColor: #0000d7;
 
     font-size: 12px;
@@ -387,7 +389,11 @@
         fill: $edge-optimal-color;
       }
     }
-
+    marker#arrow-selected{
+      path{
+        fill: $edge-selected-color;
+      }
+    }
     .edge{
       $stroke-width: 1.5;
       $stroke-width-selected: $stroke-width + 2;
@@ -437,7 +443,7 @@
       &.selected{
         path{
           stroke-width: $stroke-width-selected;
-          stroke: #045ad1;
+          stroke: $edge-selected-color;
         }
 
 

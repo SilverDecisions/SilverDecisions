@@ -305,6 +305,10 @@ export class Templates{
             ['stroke', 'edge.selected.stroke'],
             ['stroke-width', 'edge.selected.strokeWidth']
         ])+
+        Templates.styleRule(Templates.treeDesignerSelector+' marker#arrow-selected path',[
+            ['fill', 'edge.selected.stroke'],
+        ])+
+
         Templates.styleRule(Templates.edgeSelector()+' .label',[
             ['font-size', 'edge.label.fontSize'],
             ['fill', 'edge.label.color']

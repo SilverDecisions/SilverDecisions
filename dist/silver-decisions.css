@@ -412,6 +412,8 @@
       fill: #00aa00; }
     #silver-decisions svg.tree-designer marker#arrow-optimal path {
       fill: #006f00; }
+    #silver-decisions svg.tree-designer marker#arrow-selected path {
+      fill: #045ad1; }
     #silver-decisions svg.tree-designer .edge {
       cursor: pointer; }
       #silver-decisions svg.tree-designer .edge path {
