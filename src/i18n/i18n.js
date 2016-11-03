@@ -1,5 +1,5 @@
 import i18next from 'i18next';
-import * as en from './en'
+import * as en from './en.json'
 
 export class i18n{
 
