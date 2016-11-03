@@ -21,12 +21,12 @@ math.import(require('mathjs/lib/type/fraction'));
 //
 // To load all functions of a specific category:
 //
-//     math.import(require('mathjs/lib/function/arithmetic'));
+    math.import(require('mathjs/lib/function/arithmetic'));
 //
-math.import(require('mathjs/lib/function/arithmetic/add'));
-math.import(require('mathjs/lib/function/arithmetic/subtract'));
-math.import(require('mathjs/lib/function/arithmetic/multiply'));
-math.import(require('mathjs/lib/function/arithmetic/divide'));
+// math.import(require('mathjs/lib/function/arithmetic/add'));
+// math.import(require('mathjs/lib/function/arithmetic/subtract'));
+// math.import(require('mathjs/lib/function/arithmetic/multiply'));
+// math.import(require('mathjs/lib/function/arithmetic/divide'));
 // math.import(require('mathjs/lib/function/utils/format'));
 
 // Expressions:
