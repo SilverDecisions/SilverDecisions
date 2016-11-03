@@ -14,8 +14,7 @@ export class Toolbar{
         this.app = app;
         this.container = container;
         this.initDiagramButtons();
-        this.initExportToPngButton();
-        this.initExportSvgButton();
+        this.initExportToolbarGroup();
         this.initLayoutButtons();
         this.initUndoRedoButtons();
         this.initSettingsButton();
@@ -59,30 +58,7 @@ export class Toolbar{
         this.saveDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.save);
     }
 
-    initExportToPngButton() {
-        var svg = this.app.treeDesigner.svg;
-        var svgWidth = svg.attr('width');
-        var svgHeight = svg.attr('height');
-        this.container.select('#saveButton').on('click', function () {
-            var svgString = Exporter.getSVGString(svg.node());
-            Exporter.svgString2Image(svgString,  4*svgWidth, 4*svgHeight, 'png', save); // passes Blob and filesize String to the callback
 
-            function save(dataBlob, filesize) {
-                Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
-            }
-        })
-            .classed(this.hiddenClass, !this.app.config.buttons.exportToPng)
-    }
-
-    initExportSvgButton() {
-        var svg = this.app.treeDesigner.svg;
-        this.container.select('#saveButtonSvg').on('click', function () {
-            var svgString = Exporter.getSVGString(svg.node());
-            var blob = new Blob([svgString], {type: "image/svg+xml"});
-            Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
-        })
-            .classed(this.hiddenClass, !this.app.config.buttons.exportToSvg)
-    }
 
     initLayoutButtons() {
         var self = this;
@@ -159,5 +135,39 @@ export class Toolbar{
     update(){
         this.updateUndoRedoButtons();
         this.updateLayoutButtons();
+    }
+
+    initExportToolbarGroup() {
+        this.container.select('#export-toolbar-group').classed(this.hiddenClass, !this.app.config.showExport);
+        if(!this.app.config.showExport){
+            return;
+        }
+        this.initExportToPngButton();
+        this.initExportSvgButton();
+
+    }
+    initExportToPngButton() {
+        var svg = this.app.treeDesigner.svg;
+        var svgWidth = svg.attr('width');
+        var svgHeight = svg.attr('height');
+        this.container.select('#saveButton').on('click', function () {
+            var svgString = Exporter.getSVGString(svg.node());
+            Exporter.svgString2Image(svgString,  4*svgWidth, 4*svgHeight, 'png', save); // passes Blob and filesize String to the callback
+
+            function save(dataBlob, filesize) {
+                Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
+            }
+        })
+            .classed(this.hiddenClass, !this.app.config.buttons.exportToPng)
+    }
+
+    initExportSvgButton() {
+        var svg = this.app.treeDesigner.svg;
+        this.container.select('#saveButtonSvg').on('click', function () {
+            var svgString = Exporter.getSVGString(svg.node());
+            var blob = new Blob([svgString], {type: "image/svg+xml"});
+            Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
+        })
+            .classed(this.hiddenClass, !this.app.config.buttons.exportToSvg)
     }
 }

@@ -26,6 +26,7 @@ export class AppConfig {
         exportToPng: true,
         exportToSvg: true,
     };
+    showExport = true;
     jsonFileDownload= true;
     width = undefined;
     height = undefined;
