@@ -61,7 +61,7 @@ export class App {
     toolbar;
     sidebar;
 
-    constructor(containerId, config) {
+    constructor(containerId, config, diagramData) {
         this.setConfig(config);
         this.initI18n();
         this.initContainer(containerId);
@@ -78,6 +78,10 @@ export class App {
         this.initAboutDialog();
         this.initToolbar();
         this.initOnBeforeUnload();
+
+        if(diagramData){
+            this.openDiagram(diagramData);
+        }
 
     }
 
