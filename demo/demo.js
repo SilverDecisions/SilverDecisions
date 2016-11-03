@@ -229,5 +229,17 @@ var data = {
     ]
 };
 var app = new SilverDecisions('app-container', {
-    readOnly: false
+    readOnly: false,
+    buttons:{
+        new: true,
+        save: true,
+        open: true,
+        exportToPng: true,
+        exportToSvg: true,
+    },
+    jsonFileDownload: true
 }, data);
+
+document.addEventListener('SilverDecisionsSaveEvent', function(data){
+    console.log(data);
+});

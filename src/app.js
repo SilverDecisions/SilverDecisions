@@ -19,6 +19,14 @@ import {AboutDialog} from "./about-dialog";
 
 export class AppConfig {
     readOnly = false;
+    buttons={
+        new: true,
+        save: true,
+        open: true,
+        exportToPng: true,
+        exportToSvg: true,
+    };
+    jsonFileDownload= true;
     width = undefined;
     height = undefined;
     rule = ExpectedValueMaximizationRule.NAME;
@@ -316,18 +324,18 @@ export class App {
         };
 
 
-        return JSON.stringify(obj, function(k, v) {
-            if(k.startsWith('$') || k=='parentNode'){
+        return JSON.stringify(obj, function (k, v) {
+            if (k.startsWith('$') || k == 'parentNode') {
                 return undefined;
             }
-            if(filterLocation && k=='location'){
+            if (filterLocation && k == 'location') {
                 return undefined;
             }
-            if(filterComputed && k=='computed'){
+            if (filterComputed && k == 'computed') {
                 return undefined;
             }
 
-            if(v!==null && v!==undefined && v.mathjs){
+            if (v !== null && v !== undefined && v.mathjs) {
                 return self.expressionEngine.serialize(v);
             }
             return v;

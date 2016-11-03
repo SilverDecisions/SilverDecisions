@@ -546,3 +546,6 @@
       margin-left: 15px; }
       #sd-settings-dialog .sd-form-group .sd-form-group .sd-form-group h4 {
         font-size: 0.85em; }
+
+.sd-hidden {
+  display: none !important; }

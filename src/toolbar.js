@@ -9,7 +9,7 @@ export class Toolbar{
 
     app;
     container;
-
+    hiddenClass = 'sd-hidden';
     constructor(container, app){
         this.app = app;
         this.container = container;
@@ -24,12 +24,14 @@ export class Toolbar{
 
     initDiagramButtons(){
 
+
         this.newDiagramButton = this.container.select('#new-diagram-button').on('click', ()=>{
             if(!confirm(i18n.t('confirm.newDiagram'))){
                 return;
             }
             this.app.newDiagram();
         });
+        this.newDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.new);
         this.openDiagramButton = this.container.select('#open-diagram-button').on('click', ()=>{
             if(!confirm(i18n.t('confirm.openDiagram'))){
                 return;
@@ -40,11 +42,21 @@ export class Toolbar{
 
 
         });
+        this.openDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.open);
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
             var json = this.app.serialize();
-            var blob = new Blob([json], {type: "application/json"});
-            Exporter.saveAs(blob, Exporter.getExportFileName('json'));
+
+
+            var event = new  CustomEvent('SilverDecisionsSaveEvent',{ 'detail': json });
+            document.dispatchEvent(event);
+
+            if(this.app.config.jsonFileDownload){
+                var blob = new Blob([json], {type: "application/json"});
+                Exporter.saveAs(blob, Exporter.getExportFileName('json'));
+            }
+
         });
+        this.saveDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.save);
     }
 
     initExportToPngButton() {
@@ -58,7 +70,8 @@ export class Toolbar{
             function save(dataBlob, filesize) {
                 Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
             }
-        });
+        })
+            .classed(this.hiddenClass, !this.app.config.buttons.exportToPng)
     }
 
     initExportSvgButton() {
@@ -67,7 +80,8 @@ export class Toolbar{
             var svgString = Exporter.getSVGString(svg.node());
             var blob = new Blob([svgString], {type: "image/svg+xml"});
             Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
-        });
+        })
+            .classed(this.hiddenClass, !this.app.config.buttons.exportToSvg)
     }
 
     initLayoutButtons() {
