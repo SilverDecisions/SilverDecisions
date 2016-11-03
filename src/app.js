@@ -18,6 +18,7 @@ import {ExpectedValueMaximizationRule} from './objective/expected-value-maximiza
 import {AboutDialog} from "./about-dialog";
 
 export class AppConfig {
+    readOnly = false;
     width = undefined;
     height = undefined;
     rule = ExpectedValueMaximizationRule.NAME;
@@ -97,6 +98,7 @@ export class App {
     initContainer(containerId) {
         this.container = d3.select('#' + containerId);
         this.container.html(Templates.get('main', {version: App.version}));
+        this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
 
     initI18n() {
@@ -159,6 +161,7 @@ export class App {
     getTreeDesignerInitialConfig() {
         var self = this;
         return {
+            $readOnly: self.config.readOnly,
             $rule: self.config.rule,
             onNodeSelected: function (node) {
                 self.onObjectSelected(node);

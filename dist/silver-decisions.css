@@ -201,6 +201,10 @@
     color: #0096a9;
     font-weight: 500;
     text-decoration: none; }
+  #silver-decisions.sd-read-only #toolbar {
+    display: none; }
+  #silver-decisions.sd-read-only #sidebar {
+    display: none; }
   #silver-decisions #toolbar {
     border: 1px solid #bfbfbf;
     border-radius: 2px;

@@ -105,6 +105,7 @@ export class TreeDesignerConfig {
         color: '#0000d7'
     };
 
+    $readOnly= false;
 
     payoffNumberFormatter = (v)=> v;
     probabilityNumberFormatter  = (v)=> v;
@@ -148,12 +149,17 @@ export class TreeDesigner {
 
         this.initSvg();
         this.initLayout();
-        this.initMainContextMenu();
+
         this.initBrush();
         this.initEdgeMarkers();
-        this.initNodeContextMenu();
-        this.initNodeDragHandler();
+
+
         this.updateCustomStyles();
+        if(!this.config.$readOnly){
+            this.initMainContextMenu();
+            this.initNodeContextMenu();
+            this.initNodeDragHandler();
+        }
         this.redraw();
     }
 
@@ -387,8 +393,10 @@ export class TreeDesigner {
         this.layout.nodeIndicatorPosition(indicatorEnter);
         this.layout.nodeIndicatorPosition(indicator);
 
+        if(this.nodeDragHandler){
+            nodesMerge.call(this.nodeDragHandler.drag);
+        }
 
-        nodesMerge.call(this.nodeDragHandler.drag);
         nodesMerge.on('contextmenu', this.nodeContextMenu);
         nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
     }

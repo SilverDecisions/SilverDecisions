@@ -40,6 +40,15 @@
     text-decoration: none;
   }
 
+  &.sd-read-only{
+    #toolbar{
+      display: none;
+    }
+    #sidebar{
+      display: none;
+    }
+  }
+
   #toolbar{
 
     @include card-mixin();
