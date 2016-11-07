@@ -110,8 +110,8 @@
 
       $border: 1px solid rgba(0,0,0,.3);
 
-      #layout-options{
 
+      @mixin extendable-card-mixin(){
         @include card-mixin();
 
         margin: 0 0 5px 0;
@@ -150,10 +150,17 @@
             }
           }
         }
+        .content{
+          display: none;
+        }
+      }
+
+      #layout-options{
+
+        @include extendable-card-mixin();
 
 
         .content{
-          display: none;
           .input-group{
             font-size: 12px;
             margin-top: 1.1em;
@@ -173,6 +180,12 @@
           }
         }
       }
+
+      #diagram-details-box{
+        @include extendable-card-mixin();
+
+      }
+
 
       #object-properties{
         opacity: 0;
@@ -279,6 +292,11 @@
     position: absolute;
     //top: 0;
     //left: 0;
+
+    .sd-title{
+      text-anchor: middle;
+      font-size: 16px;
+    }
 
 
     .node{

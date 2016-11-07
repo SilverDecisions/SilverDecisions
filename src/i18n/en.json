@@ -140,6 +140,11 @@
     "gridWidth": "Width",
     "gridHeight": "Height"
   },
+  "diagramDetails":{
+    "header": "Details",
+    "title" : "Title",
+    "description" : "Description"
+  },
   "validation":{
     "incompletePath": "Path not ending with terminal node",
     "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1"

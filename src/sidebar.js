@@ -16,6 +16,7 @@ export class Sidebar{
         this.container = container;
 
         this.initLayoutOptions();
+        this.initDiagramDetails();
     }
 
     initLayoutOptions(){
@@ -67,6 +68,29 @@ export class Sidebar{
         this.gridWidth.node().value = this.app.treeDesigner.config.layout.gridWidth;
         this.gridHeight.node().value = this.app.treeDesigner.config.layout.gridHeight;
         this.autoLayoutOptionsGroup.classed('visible', !this.app.treeDesigner.layout.isManualLayout());
+    }
+
+    initDiagramDetails() {
+        var self = this;
+        this.diagramDetailsContainer = this.container.select('#diagram-details-box');
+        this.diagramDetailsContainer.select('.toggle-button').on('click', () => {
+            this.diagramDetailsContainer.classed('sd-extended', !this.diagramDetailsContainer.classed('sd-extended'));
+        });
+
+        this.diagramTitle = this.diagramDetailsContainer.select('input#diagram-title').on('change', function(){
+            self.app.setDiagramTitle(this.value);
+        });
+
+        this.diagramDescription = this.diagramDetailsContainer.select('input#diagram-description').on('change', function(){
+            self.app.setDiagramDescription(this.value);
+        });
+
+        this.updateDiagramDetails();
+    }
+
+    updateDiagramDetails(){
+        this.diagramTitle.node().value = this.app.config.title;
+        this.diagramDescription.node().value = this.app.config.description;
     }
 
     displayObjectProperties(object){
@@ -234,5 +258,4 @@ export class Sidebar{
 
         fields.exit().remove();
     }
-
 }

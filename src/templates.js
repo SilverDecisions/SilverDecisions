@@ -88,10 +88,35 @@ export class Templates{
                 '</div> '+
             '</div> '+
         '</div>';
+
+    static diagramDetailsBox =
+        '<div id="diagram-details-box">' +
+            '<div class="header">' +
+                '<%= i18n.t("diagramDetails.header")%> ' +
+                '<span class="toggle-button">' +
+                    '<i class="material-icons icon-arrow-up">keyboard_arrow_up</i>' +
+                    '<i class="material-icons icon-arrow-down">keyboard_arrow_down</i>' +
+            '</span>' +
+            '</div> ' +
+            '<div class="content">' +
+                '<div class="input-group">' +
+                    '<input id="diagram-title" type="text" name="diagram-title">' +
+                    '<span class="bar"></span>' +
+                    '<label for="diagram-title"><%= i18n.t("diagramDetails.title") %></label>'+
+                '</div>' +
+                '<div class="input-group">' +
+                    '<input id="diagram-description" type="text" name="diagram-description">' +
+                    '<span class="bar"></span>' +
+                    '<label for="diagram-description"><%= i18n.t("diagramDetails.description") %></label>'+
+                '</div>' +
+            '</div>'+
+        '</div>';
+
     static sidebar =
         '<div id="sidebar">' +
             '<div id="sidebar-inner">'+
             Templates.layoutOptions+
+            Templates.diagramDetailsBox+
             Templates.objectProperties+
             '</div>'+
         '</div>';
@@ -102,7 +127,6 @@ export class Templates{
                 '<div class="sd-modal-header">'+
                     '<span class="sd-close-modal"><i class="material-icons">close</i></span>'+
                     '<h2><%= i18n.t("settingsDialog.title")%></h2>'+
-
                 '</div>'+
                 '<div class="sd-modal-body">'+
                     '<form id="sd-settings-form">'+

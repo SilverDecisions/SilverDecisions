@@ -230,7 +230,8 @@ export class TreeDesigner {
         if(withTransitions){
             group = group.transition();
         }
-        group.attr("transform", "translate(" + margin.left + "," + margin.top + ")").on("end", ()=> self.updatePlottingRegionSize());
+        var topMargin = margin.top+this.getTitleGroupHeight();
+        group.attr("transform", "translate(" + margin.left + "," + topMargin + ")").on("end", ()=> self.updatePlottingRegionSize());
     }
 
     setMargin(margin, withoutStateSaving){
@@ -749,5 +750,33 @@ export class TreeDesigner {
 
     autoLayout(type, withoutStateSaving){
         this.layout.autoLayout(type, withoutStateSaving);
+    }
+
+    updateDiagramTitle(titleValue){
+        this.diagramTitle = titleValue;
+        var svgWidth = this.svg.attr('width');
+        var svgHeight = this.svg.attr('height');
+        this.titleContainer = this.svg.selectOrAppend('g.sd-title-container');
+        this.titleContainer.attr('transform', 'translate('+(svgWidth/2)+','+this.config.margin.top+')');
+        var title = this.titleContainer.selectOrAppend('text.sd-title');
+
+        if(!titleValue){
+            titleValue = '';
+        }
+
+        title.text(titleValue);
+
+        this.updateMargin(true);
+    }
+
+    updateDiagramDescription(descriptionValue){
+
+    }
+
+    getTitleGroupHeight(){
+        if(!this.titleContainer){
+            return 0;
+        }
+        return this.titleContainer.node().getBBox().height; //TODO
     }
 }

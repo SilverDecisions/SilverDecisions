@@ -2,6 +2,8 @@ var data = {
     "SilverDecisions": "0.2.0",
     "lng": "en",
     "rule": "expected-value-maximization",
+    "title": 'Diagram title',
+    "description": 'Diagram description',
     "format": {
         "locales": "en",
         "payoff": {
@@ -237,6 +239,7 @@ var app = new SilverDecisions('app-container', {
         exportToPng: true,
         exportToSvg: true,
     },
+    showExport: true,
     jsonFileDownload: true
 }, data);
 

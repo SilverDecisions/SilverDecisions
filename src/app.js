@@ -49,6 +49,8 @@ export class AppConfig {
             useGrouping: true
         }
     };
+    title='';
+    description='';
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
 
@@ -214,6 +216,7 @@ export class App {
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
         this.toolbar.update();
         this.sidebar.updateLayoutOptions();
+        this.sidebar.updateDiagramDetails();
     }
 
     undo(){
@@ -305,6 +308,13 @@ export class App {
             if(diagramData.treeDesigner){
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
             }
+            if(diagramData.title){
+                this.setDiagramTitle(diagramData.title, true);
+            }
+            if(diagramData.description){
+
+                this.setDiagramDescription(diagramData.description, true);
+            }
         }catch (e){
             alert(i18n.t('error.malformedData'));
         }
@@ -319,6 +329,8 @@ export class App {
             SilverDecisions: App.version,
             lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,
+            title: self.config.title,
+            description: self.config.description,
             format: self.config.format,
             treeDesigner: self.treeDesigner.config,
             trees: self.dataModel.getRoots()
@@ -371,4 +383,52 @@ export class App {
             return dialogText;
         });
     }
+
+    setDiagramTitle(title, withoutStateSaving){
+        var self=this;
+        console.log('setDiagramTitle', title);
+        if(this.config.title==title){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.dataModel.saveState({
+                data:{
+                    title: self.config.title
+                },
+                onUndo: (data)=> {
+                    self.setDiagramTitle(data.title, true);
+                },
+                onRedo: (data)=> {
+                    self.setDiagramTitle(title, true);
+                }
+            });
+        }
+
+        this.config.title=title;
+        this.treeDesigner.updateDiagramTitle(title);
+    }
+
+    setDiagramDescription(description, withoutStateSaving){
+        var self=this;
+        if(this.config.description==description){
+            return;
+        }
+        if(!withoutStateSaving){
+            this.dataModel.saveState({
+                data:{
+                    description: self.config.description
+                },
+                onUndo: (data)=> {
+                    self.setDiagramDescription(data.description, true);
+                },
+                onRedo: (data)=> {
+                    self.setDiagramDescription(description, true);
+                }
+            });
+        }
+
+        this.config.description=description;
+        this.treeDesigner.updateDiagramDescription(description);
+    }
+
 }
