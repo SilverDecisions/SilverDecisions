@@ -73,6 +73,8 @@ export class Sidebar{
     initDiagramDetails() {
         var self = this;
         this.diagramDetailsContainer = this.container.select('#diagram-details-box');
+        this.diagramDetailsContainer.classed('sd-hidden', !this.app.config.showDetails);
+
         this.diagramDetailsContainer.select('.toggle-button').on('click', () => {
             this.diagramDetailsContainer.classed('sd-extended', !this.diagramDetailsContainer.classed('sd-extended'));
         });

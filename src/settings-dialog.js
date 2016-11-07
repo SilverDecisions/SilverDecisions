@@ -107,6 +107,17 @@ export class SettingsDialog extends Dialog{
         this.formGroups.push(edgeGroup);
 
 
+        var titleGroup = new FormGroup('diagramTitle', ()=>app.treeDesigner.updateCustomStyles().redraw());
+        titleGroup
+            .addField('fontSize', 'text', app.treeDesigner, 'config.title.fontSize')
+            .addField('color', 'color', app.treeDesigner, 'config.title.color')
+
+        .addGroup('margin')
+            .addField('top', 'number', app.treeDesigner, 'config.title.margin.top')
+            .addField('bottom', 'number', app.treeDesigner, 'config.title.margin.bottom')
+
+        this.formGroups.push(titleGroup);
+
         this.initView();
 
     }

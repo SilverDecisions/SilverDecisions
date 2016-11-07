@@ -126,6 +126,16 @@
         "color": "Color",
         "negativeColor": "Negative color"
       }
+    },
+    "diagramTitle":{
+      "title": "Diagram title",
+      "fontSize": "Font size",
+      "color": "Color",
+      "margin":{
+        "title": "Margin",
+        "top": "Top",
+        "bottom": "Bottom"
+      }
     }
   },
   "aboutDialog":{

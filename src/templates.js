@@ -344,7 +344,14 @@ export class Templates{
         ])+
         Templates.styleRule(Templates.edgeSelector()+' .payoff.negative',[
             ['fill', 'edge.payoff.negativeColor'],
-        ]);
+        ])+
+
+        Templates.styleRule(Templates.treeDesignerSelector+' .sd-title-container text.sd-title',[
+            ['font-size', 'title.fontSize'],
+            ['fill', 'title.color']
+        ])
+
+
 }
 
 

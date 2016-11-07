@@ -27,6 +27,7 @@ export class AppConfig {
         exportToSvg: true,
     };
     showExport = true;
+    showDetails = true;
     jsonFileDownload= true;
     width = undefined;
     height = undefined;
@@ -51,6 +52,7 @@ export class AppConfig {
     };
     title='';
     description='';
+
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
 

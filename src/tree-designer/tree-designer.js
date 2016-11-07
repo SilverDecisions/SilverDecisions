@@ -104,6 +104,14 @@ export class TreeDesignerConfig {
         fontSize: '1em',
         color: '#0000d7'
     };
+    title = {
+        fontSize: '16px',
+        color: '#000000',
+        margin:{
+            top: 15,
+            bottom: 10
+        }
+    };
 
     $readOnly= false;
 
@@ -165,6 +173,7 @@ export class TreeDesigner {
 
     updateCustomStyles(){
         d3.select('head').selectOrAppend('style#sd-tree-designer-style').html(Templates.get('treeDesignerStyles', this.config));
+        return this;
     }
 
     initLayout(){
@@ -184,6 +193,7 @@ export class TreeDesigner {
         }
         this.redrawNodes();
         this.redrawEdges();
+        this.redrawDiagramTitle();
         if(withTransitions){
             self.transition =  self.transitionPrev;
         }
@@ -214,6 +224,7 @@ export class TreeDesigner {
             d3.select(window)
                 .on("resize.tree-designer", function () {
                     self.updatePlottingRegionSize();
+                    self.redrawDiagramTitle();
                 });
         }
     }
@@ -230,7 +241,12 @@ export class TreeDesigner {
         if(withTransitions){
             group = group.transition();
         }
-        var topMargin = margin.top+this.getTitleGroupHeight();
+
+        var topMargin = margin.top;
+        if(this.diagramTitle){
+            topMargin = parseInt(this.config.title.margin.top) + this.getTitleGroupHeight() +  Math.max(topMargin, parseInt(this.config.title.margin.bottom));
+        }
+
         group.attr("transform", "translate(" + margin.left + "," + topMargin + ")").on("end", ()=> self.updatePlottingRegionSize());
     }
 
@@ -250,6 +266,7 @@ export class TreeDesigner {
             });
         }
         Utils.deepExtend(this.config.margin, margin);
+        this.redrawDiagramTitle();
         this.updateMargin(true);
     }
 
@@ -753,30 +770,45 @@ export class TreeDesigner {
     }
 
     updateDiagramTitle(titleValue){
-        this.diagramTitle = titleValue;
-        var svgWidth = this.svg.attr('width');
-        var svgHeight = this.svg.attr('height');
-        this.titleContainer = this.svg.selectOrAppend('g.sd-title-container');
-        this.titleContainer.attr('transform', 'translate('+(svgWidth/2)+','+this.config.margin.top+')');
-        var title = this.titleContainer.selectOrAppend('text.sd-title');
-
         if(!titleValue){
             titleValue = '';
         }
-
-        title.text(titleValue);
-
+        this.diagramTitle = titleValue;
+        this.redrawDiagramTitle();
         this.updateMargin(true);
     }
+
+    redrawDiagramTitle(){
+        var svgWidth = this.svg.attr('width');
+        var svgHeight = this.svg.attr('height');
+        this.titleContainer = this.svg.selectOrAppend('g.sd-title-container');
+
+        var title = this.titleContainer.selectOrAppend('text.sd-title');
+        title.text(this.diagramTitle);
+
+        var titleHeight = title.node().getBBox().height;
+
+        var marginTop = parseInt(this.config.title.margin.top);
+        this.titleContainer.attr('transform', 'translate('+(svgWidth/2)+','+( marginTop)+')');
+
+    }
+
 
     updateDiagramDescription(descriptionValue){
 
     }
 
-    getTitleGroupHeight(){
+
+    getTitleGroupHeight(withMargins){
         if(!this.titleContainer){
             return 0;
         }
-        return this.titleContainer.node().getBBox().height; //TODO
+        var h = this.titleContainer.node().getBBox().height;
+        if(withMargins){
+            h+= parseInt(this.config.title.margin.bottom);
+            h+= parseInt(this.config.title.margin.top);
+        }
+        return h;
     }
+
 }
