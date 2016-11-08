@@ -303,20 +303,15 @@ export class App {
             this.setConfig(this.config);
             this.dataModel.clear();
 
-
-
             this.dataModel.load(diagramData.trees);
 
             if(diagramData.treeDesigner){
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
             }
-            if(diagramData.title){
-                this.setDiagramTitle(diagramData.title, true);
-            }
-            if(diagramData.description){
 
-                this.setDiagramDescription(diagramData.description, true);
-            }
+            this.setDiagramTitle(diagramData.title || '', true);
+            this.setDiagramDescription(diagramData.description || '', true);
+
         }catch (e){
             alert(i18n.t('error.malformedData'));
         }

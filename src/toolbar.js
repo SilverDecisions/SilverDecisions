@@ -148,16 +148,8 @@ export class Toolbar{
     }
     initExportToPngButton() {
         var svg = this.app.treeDesigner.svg;
-        var svgWidth = svg.attr('width');
-        var svgHeight = svg.attr('height');
-        this.container.select('#saveButton').on('click', function () {
-            var svgString = Exporter.getSVGString(svg.node());
-            Exporter.svgString2Image(svgString,  4*svgWidth, 4*svgHeight, 'png', save); // passes Blob and filesize String to the callback
-
-            function save(dataBlob, filesize) {
-                Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
-            }
-        })
+        this.container.select('#saveButton')
+            .on('click', () => Exporter.saveAsPng(svg))
             .classed(this.hiddenClass, !this.app.config.buttons.exportToPng)
     }
 

@@ -39,12 +39,11 @@ export class Exporter {
         return svgString;
     }
 
-
     static svgString2Image(svgString, width, height, format, callback) {
         var format = format ? format : 'png';
-
         var imgsrc = 'data:image/svg+xml,' + (encodeURIComponent(svgString)); // Convert SVG string to dataurl
 
+        // var canvas = document.createElement("canvas");
         var canvas = document.createElement("canvas");
         var context = canvas.getContext("2d");
 
@@ -58,10 +57,10 @@ export class Exporter {
         target.width=width;
         target.height=height;
 
-        image.onload = function () {
-            context.clearRect(0, 0, width, height);
-            context.drawImage(image, 0, 0, width, height);
 
+        image.onload = function () {
+            // context.clearRect(0, 0, width, height);
+            context.drawImage(image, 0, 0, width, height);
             canvas.toBlob(function (blob) {
                 var filesize = Math.round(blob.length / 1024) + ' KB';
                 if (callback) callback(blob, filesize);
@@ -78,5 +77,19 @@ export class Exporter {
         var format = d3.timeFormat("%Y.%m.%d_%H.%M.%S");
         var date = new Date();
         return name+'@'+format(date)+'.'+ext;
+    }
+
+    static saveAsPng(svg) {
+        var svgString = Exporter.getSVGString(svg.node());
+        var svgWidth = svg.attr('width');
+        var svgHeight = svg.attr('height');
+
+        var pngWidth = 4*svgWidth;
+        var pngHeight = 4*svgHeight;
+        Exporter.svgString2Image(svgString,  pngWidth, pngHeight, 'png', save); // passes Blob and filesize String to the callback
+
+        function save(dataBlob, filesize) {
+            Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
+        }
     }
 }

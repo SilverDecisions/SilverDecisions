@@ -212,6 +212,7 @@ export class Templates{
             '<input type="file" style="display:none" id="sd-file-input" accept=".json"/>'+
              Templates.settingsDialog+
              Templates.aboutDialog+
+            // '<canvas id="canvas"></canvas>'+
         '</div>';
 
 
