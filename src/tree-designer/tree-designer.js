@@ -29,8 +29,10 @@ export class TreeDesignerConfig {
         gridWidth: 150,
         edgeSlantWidthMax: 20
     };
-    fontFamily= 'sans-serif';
-    fontSize= '12px';
+    fontFamily = 'sans-serif';
+    fontSize = '12px';
+    fontWeight = 'normal';
+    fontStyle = 'normal';
     node = {
         strokeWidth: '1px',
         optimal: {
@@ -106,6 +108,8 @@ export class TreeDesignerConfig {
     };
     title = {
         fontSize: '16px',
+        fontWeight: 'bold',
+        fontStyle: 'normal',
         color: '#000000',
         margin:{
             top: 15,
@@ -216,7 +220,6 @@ export class TreeDesigner {
         this.computeAvailableSpace();
         this.svg = this.container.selectOrAppend('svg.tree-designer');
         this.svg.attr('width', this.availableWidth).attr('height', this.availableHeight);
-        this.updateSvgStyles();
 
         this.mainGroup = this.svg.selectOrAppend('g.main-group');
         this.updateMargin();
@@ -229,11 +232,6 @@ export class TreeDesigner {
                     self.redrawDiagramTitle();
                 });
         }
-    }
-
-    updateSvgStyles(){
-        this.svg.style('font-family', this.config.fontFamily);
-        this.svg.style('font-size', this.config.fontSize);
     }
 
     updateMargin(withTransitions){

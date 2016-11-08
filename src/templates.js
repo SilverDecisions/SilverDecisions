@@ -248,6 +248,13 @@ export class Templates{
     }
 
     static treeDesignerStyles =
+
+        Templates.styleRule(Templates.treeDesignerSelector,[
+            ['font-size', 'fontSize'],
+            ['font-family', 'fontFamily'],
+            ['font-weight', 'fontWeight'],
+            ['font-style', 'fontStyle']
+        ])+
         //   node
         Templates.styleRule(Templates.nodeSelector()+' path',[
             ['fill', 'node.fill'],
@@ -349,9 +356,10 @@ export class Templates{
 
         Templates.styleRule(Templates.treeDesignerSelector+' .sd-title-container text.sd-title',[
             ['font-size', 'title.fontSize'],
+            ['font-weight', 'title.fontWeight'],
+            ['font-style', 'title.fontStyle'],
             ['fill', 'title.color']
         ])
-
 
 }
 

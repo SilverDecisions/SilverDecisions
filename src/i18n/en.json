@@ -34,6 +34,8 @@
       "title": "General",
       "fontSize": "Font size",
       "fontFamily": "Font family",
+      "fontWeight": "Font weight",
+      "fontStyle": "Font style",
       "numberFormatLocale": "Number format locale"
     },
     "payoff":{
@@ -130,6 +132,8 @@
     "diagramTitle":{
       "title": "Diagram title",
       "fontSize": "Font size",
+      "fontWeight": "Font weight",
+      "fontStyle": "Font style",
       "color": "Color",
       "margin":{
         "title": "Margin",

@@ -8,16 +8,21 @@ export class SettingsDialog extends Dialog{
 
     formGroups=[];
 
+    static fontWeightOptions = ['normal', 'bold', 'lighter', 'bolder'];
+    static fontStyleOptions = ['normal', 'italic', 'oblique'];
+
     constructor(app){
         super(app.container.select('#sd-settings-dialog'), app);
 
         var group = new FormGroup('general', ()=> {
-            app.treeDesigner.updateSvgStyles();
+            app.treeDesigner.updateCustomStyles();
             app.updateNumberFormats();
         });
         group
             .addField('fontFamily', 'text', app.treeDesigner, 'config.fontFamily')
             .addField('fontSize', 'text', app.treeDesigner, 'config.fontSize')
+            .addSelectField('fontWeight', app.treeDesigner, 'config.fontWeight', SettingsDialog.fontWeightOptions)
+            .addSelectField('fontStyle', app.treeDesigner, 'config.fontStyle', SettingsDialog.fontStyleOptions)
             .addField('numberFormatLocale', 'text', app, 'config.format.locales', {validate: (v)=>{try{new Intl.NumberFormat(v); return true;}catch (e){return false}}});
         this.formGroups.push(group);
 
@@ -110,6 +115,8 @@ export class SettingsDialog extends Dialog{
         var titleGroup = new FormGroup('diagramTitle', ()=>app.treeDesigner.updateCustomStyles().redraw());
         titleGroup
             .addField('fontSize', 'text', app.treeDesigner, 'config.title.fontSize')
+            .addSelectField('fontWeight', app.treeDesigner, 'config.title.fontWeight', SettingsDialog.fontWeightOptions)
+            .addSelectField('fontStyle', app.treeDesigner, 'config.title.fontStyle', SettingsDialog.fontStyleOptions)
             .addField('color', 'color', app.treeDesigner, 'config.title.color')
 
         .addGroup('margin')

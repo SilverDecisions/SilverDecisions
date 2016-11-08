@@ -279,8 +279,16 @@ export class App {
     }
 
     newDiagram(){
-        this.dataModel.clear();
+        this.clear();
         this.updateView();
+    }
+
+    clear(){
+        this.dataModel.clear();
+        this.setDiagramTitle('', true);
+        this.setDiagramDescription('', true);
+        this.treeDesigner.setConfig(Utils.deepExtend(this.getTreeDesignerInitialConfig()));
+
     }
 
     openDiagram(diagramData){
