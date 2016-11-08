@@ -29,7 +29,7 @@ export class TreeDesignerConfig {
         gridWidth: 150,
         edgeSlantWidthMax: 20
     };
-    fontFamily= 'serif';
+    fontFamily= 'sans-serif';
     fontSize= '12px';
     node = {
         strokeWidth: '1px',
