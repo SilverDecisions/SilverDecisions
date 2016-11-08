@@ -32,7 +32,7 @@ export class SettingsDialog extends Dialog{
 
         group = new FormGroup('probability', ()=>{
             app.updateProbabilityNumberFormat();
-            app.treeDesigner.updateCustomStyles();
+            app.treeDesigner.updateCustomStyles().redraw();
         });
         group
             .addSelectField('style', app, 'config.format.probability.style', ['decimal', 'percent'])
@@ -43,7 +43,7 @@ export class SettingsDialog extends Dialog{
         this.formGroups.push(group);
 
 
-        var nodeGroup = new FormGroup('node', ()=>app.treeDesigner.updateCustomStyles());
+        var nodeGroup = new FormGroup('node', ()=>app.treeDesigner.updateCustomStyles().redraw());
         nodeGroup
             .addField('strokeWidth', 'text', app.treeDesigner, 'config.node.strokeWidth');
 
@@ -84,7 +84,7 @@ export class SettingsDialog extends Dialog{
 
 
 
-        var edgeGroup = new FormGroup('edge', ()=>app.treeDesigner.updateCustomStyles())
+        var edgeGroup = new FormGroup('edge', ()=>app.treeDesigner.updateCustomStyles().redraw())
             .addField('stroke', 'color', app.treeDesigner, 'config.edge.stroke')
             .addField('strokeWidth', 'text', app.treeDesigner, 'config.edge.strokeWidth');
 

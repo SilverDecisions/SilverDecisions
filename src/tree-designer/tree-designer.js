@@ -199,7 +199,9 @@ export class TreeDesigner {
         }
         setTimeout(function(){
             self.updatePlottingRegionSize();
-        },10)
+        },10);
+
+        return this;
     }
 
     computeAvailableSpace(){
@@ -357,7 +359,7 @@ export class TreeDesigner {
 
         var ruleName = this.config.$rule;
         var payoff = nodesMerge.select('text.payoff')
-            .attr('dominant-baseline', 'hanging')
+            // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=> {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
                 return val!==null && val<0;
@@ -469,7 +471,7 @@ export class TreeDesigner {
             .text(d=>d.name);
 
         var payoffText = edgesMerge.select('text.payoff')
-            .attr('dominant-baseline', 'hanging')
+            // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=>d.payoff<0)
             .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff));
 
@@ -480,15 +482,18 @@ export class TreeDesigner {
         this.layout.edgePayoffPosition(payoffEnter);
         this.layout.edgePayoffPosition(payoffTextT);
         var ruleName = this.config.$rule;
-        this.layout.edgeProbabilityPosition(probabilityEnter);
-        this.layout.edgeProbabilityPosition(edgesMergeT.select('text.probability'))
-            .attr('dominant-baseline', 'hanging') //TODO not working in IE
+
+        var probabilityMerge = edgesMergeT.select('text.probability');
+        probabilityMerge
+            // .attr('dominant-baseline', 'hanging') //TODO not working in IE
             .attr('text-anchor', 'end')
             .text(d=>{
                 var val = d.computedValue(ruleName, 'probability');
                 return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): d.probability
             });
 
+        this.layout.edgeProbabilityPosition(probabilityMerge);
+        this.layout.edgeProbabilityPosition(probabilityEnter);
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();
     }
@@ -785,6 +790,7 @@ export class TreeDesigner {
 
         var title = this.titleContainer.selectOrAppend('text.sd-title');
         title.text(this.diagramTitle);
+        title.attr('dy', '.75em');
 
         var titleHeight = title.node().getBBox().height;
 

@@ -128,7 +128,7 @@ export class Layout{
     }
 
     nodePayoffPosition(selection) {
-        return selection
+        return Layout.setHangingPosition(selection)
             .attr('x', 0)
             .attr('y', this.config.nodeSize / 2 + 7)
             .attr('text-anchor', 'middle')
@@ -136,11 +136,12 @@ export class Layout{
 
     nodeAggregatedPayoffPosition(selection) {
         var fontSize = 12;
-        return selection
+        return Layout.setHangingPosition(selection)
             .attr('x', this.config.nodeSize / 2 + 7)
             .attr('y', -Math.max(fontSize+ 5, this.config.nodeSize / 2)+ 5)
+
             // .attr('text-anchor', 'middle')
-            .attr('dominant-baseline', 'hanging')
+            // .attr('dominant-baseline', 'hanging')
     }
 
     nodeProbabilityToEnterPosition(selection) {
@@ -190,9 +191,10 @@ export class Layout{
     }
 
     edgePayoffPosition(selection) {
-        return selection
+        return Layout.setHangingPosition(selection)
             .attr('x', d=>d.$linePoints[2][0] + 2)
             .attr('y', d=>d.$linePoints[2][1] + 7)
+
     }
 
     edgeLabelPosition(selection) {
@@ -203,13 +205,14 @@ export class Layout{
     }
 
     edgeProbabilityPosition(selection) {
-        return selection
+        return Layout.setHangingPosition(selection)
             .attr('x', function (d) {
                 var len = d3.select(this).node().getComputedTextLength();
                 var min = d.$linePoints[2][0] + 2 + d3.select(this.previousSibling).node().getBBox().width + 7 + len;
                 return Math.max(min, d.$linePoints[3][0] - 8);
             })
             .attr('y', d=>d.$linePoints[2][1] + 7)
+
 
     }
 
@@ -474,7 +477,20 @@ export class Layout{
         this.onAutoLayoutChanged.forEach(c=>c(this.config.type));
     }
 
+    static setHangingPosition(selection){
+        // window.setTimeout(function(){
+        //     selection.each(function(){
+        //         var h =  this.getBBox().height;
+        //         d3.select(this).attr('dy', h);
+        //     });
+        // },0);
+        selection.each(function(){
+            var h =  this.getBBox().height;
+            d3.select(this).attr('dy', '0.75em');
+        });
 
+        return selection;
+    }
 
 }
 
