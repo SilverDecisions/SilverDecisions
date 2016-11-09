@@ -10,6 +10,7 @@ var source = require('vinyl-source-stream');
 var tsify = require("tsify");
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+var Server = require('karma').Server;
 
 var projectName= "silver-decisions"
 
@@ -118,3 +119,13 @@ var onError = function (err) {
     console.log(err);
     this.emit('end');
 };
+
+
+gulp.task('test', function (done) {
+    new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: true
+    }, function () {
+        done();
+    }).start();
+});
