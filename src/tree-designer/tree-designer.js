@@ -116,6 +116,16 @@ export class TreeDesignerConfig {
             bottom: 10
         }
     };
+    description = {
+        fontSize: '16px',
+        fontWeight: 'bold',
+        fontStyle: 'normal',
+        color: '#000000',
+        margin:{
+            top: 5,
+            bottom: 10
+        }
+    };
 
     $readOnly= false;
 
@@ -243,8 +253,9 @@ export class TreeDesigner {
         }
 
         var topMargin = margin.top;
-        if(this.diagramTitle){
-            topMargin = parseInt(this.config.title.margin.top) + this.getTitleGroupHeight() +  Math.max(topMargin, parseInt(this.config.title.margin.bottom));
+        if(this.diagramTitle||this.diagramDescription){
+            topMargin = parseInt(this.diagramTitle ? this.config.title.margin.top : 0) + this.getTitleGroupHeight()
+                +  Math.max(topMargin, parseInt(this.config.title.margin.bottom));
         }
 
         group.attr("transform", "translate(" + margin.left + "," + topMargin + ")").on("end", ()=> self.updatePlottingRegionSize());
@@ -567,7 +578,7 @@ export class TreeDesigner {
             .on("end", brushend);
 
 
-        var mainGroupTranslation = this.getMainGroupTranslation();
+
         this.updateBrushExtent();
 
 
@@ -583,11 +594,13 @@ export class TreeDesigner {
             if(!s)return;
 
             self.mainGroup.selectAll(".node").classed('selected', function (d) {
-
+                var mainGroupTranslation = self.getMainGroupTranslation();
                 var x = d.location.x+mainGroupTranslation[0];
                 var y = d.location.y+mainGroupTranslation[1];
-                return s[0][0] <= x && x <= s[1][0]
-                    && s[0][1] <= y && y <= s[1][1];
+                var nodeSize = self.config.layout.nodeSize;
+                var offset = nodeSize*0.25;
+                return s[0][0] <= x+offset && x-offset <= s[1][0]
+                    && s[0][1] <= y+offset && y-offset <= s[1][1];
             });
         }
         // If the brush is empty, select all circles.
@@ -778,6 +791,7 @@ export class TreeDesigner {
         }
         this.diagramTitle = titleValue;
         this.redrawDiagramTitle();
+        this.redrawDiagramDescription();
         this.updateMargin(true);
     }
 
@@ -788,18 +802,40 @@ export class TreeDesigner {
 
         var title = this.titleContainer.selectOrAppend('text.sd-title');
         title.text(this.diagramTitle);
-        title.attr('dy', '.75em');
-
-        var titleHeight = title.node().getBBox().height;
+        Layout.setHangingPosition(title);
 
         var marginTop = parseInt(this.config.title.margin.top);
         this.titleContainer.attr('transform', 'translate('+(svgWidth/2)+','+( marginTop)+')');
+    }
+    redrawDiagramDescription(){
+        var svgWidth = this.svg.attr('width');
+        var svgHeight = this.svg.attr('height');
+        this.titleContainer = this.svg.selectOrAppend('g.sd-title-container');
 
+        var desc = this.titleContainer.selectOrAppend('text.sd-description');
+        desc.text(this.diagramDescription);
+        Layout.setHangingPosition(desc);
+
+        var title = this.titleContainer.selectOrAppend('text.sd-title');
+
+        var marginTop = 0;
+        if(this.diagramTitle){
+            marginTop += title.node().getBBox().height;
+            marginTop+= Math.max(parseInt(this.config.description.margin.top), 0);
+        }
+
+
+        desc.attr('transform', 'translate(0,'+( marginTop)+')');
     }
 
-
     updateDiagramDescription(descriptionValue){
-
+        if(!descriptionValue){
+            descriptionValue = '';
+        }
+        this.diagramDescription = descriptionValue;
+        this.redrawDiagramTitle();
+        this.redrawDiagramDescription();
+        this.updateMargin(true);
     }
 
 

@@ -16,6 +16,7 @@ import {ExpressionEngine} from './expression-engine'
 import {SettingsDialog} from './settings-dialog'
 import {ExpectedValueMaximizationRule} from './objective/expected-value-maximization-rule'
 import {AboutDialog} from "./about-dialog";
+import * as _ from "lodash";
 
 export class AppConfig {
     readOnly = false;
@@ -322,6 +323,7 @@ export class App {
 
         }catch (e){
             alert(i18n.t('error.malformedData'));
+            console.log(e);
         }
         this.updatePayoffNumberFormat();
         this.updateView();
@@ -389,51 +391,39 @@ export class App {
         });
     }
 
-    setDiagramTitle(title, withoutStateSaving){
+    setConfigParam(path, value, withoutStateSaving, callback){
         var self=this;
-        console.log('setDiagramTitle', title);
-        if(this.config.title==title){
+        var prevValue = _.get(this.config, path);
+
+        if(prevValue==value){
             return;
         }
         if(!withoutStateSaving){
             this.dataModel.saveState({
                 data:{
-                    title: self.config.title
+                    prevValue: prevValue
                 },
                 onUndo: (data)=> {
-                    self.setDiagramTitle(data.title, true);
+                    self.setConfigParam(path, data.prevValue, true, callback);
                 },
                 onRedo: (data)=> {
-                    self.setDiagramTitle(title, true);
+                    self.setConfigParam(path, value, true, callback);
                 }
             });
         }
+        _.set(this.config, path, value);
+        if(callback){
+            callback(value);
+        }
+    }
 
-        this.config.title=title;
-        this.treeDesigner.updateDiagramTitle(title);
+
+    setDiagramTitle(title, withoutStateSaving){
+        this.setConfigParam('title', title, withoutStateSaving, (v) => this.treeDesigner.updateDiagramTitle(v));
     }
 
     setDiagramDescription(description, withoutStateSaving){
-        var self=this;
-        if(this.config.description==description){
-            return;
-        }
-        if(!withoutStateSaving){
-            this.dataModel.saveState({
-                data:{
-                    description: self.config.description
-                },
-                onUndo: (data)=> {
-                    self.setDiagramDescription(data.description, true);
-                },
-                onRedo: (data)=> {
-                    self.setDiagramDescription(description, true);
-                }
-            });
-        }
-
-        this.config.description=description;
-        this.treeDesigner.updateDiagramDescription(description);
+        this.setConfigParam('description', description, withoutStateSaving, (v) => this.treeDesigner.updateDiagramDescription(v));
     }
 
 }

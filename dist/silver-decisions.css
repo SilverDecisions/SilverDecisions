@@ -400,6 +400,9 @@
     #silver-decisions svg.tree-designer .sd-title {
       text-anchor: middle;
       font-size: 16px; }
+    #silver-decisions svg.tree-designer .sd-description {
+      text-anchor: middle;
+      font-size: 12px; }
     #silver-decisions svg.tree-designer .node {
       cursor: move; }
       #silver-decisions svg.tree-designer .node .payoff {

@@ -298,7 +298,11 @@
       font-size: 16px;
       //dominant-baseline: hanging;
     }
-
+    .sd-description{
+      text-anchor: middle;
+      font-size: 12px;
+      //dominant-baseline: hanging;
+    }
 
     .node{
       cursor: move;
