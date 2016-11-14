@@ -10,7 +10,13 @@ var source = require('vinyl-source-stream');
 var tsify = require("tsify");
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
+
+
 var Server = require('karma').Server;
+
+/* nicer browserify errors */
+var gutil = require('gulp-util')
+var chalk = require('chalk')
 
 var projectName= "silver-decisions"
 
@@ -53,7 +59,7 @@ gulp.task('build-js', function () {
     var development = (argv.dev === undefined) ? false : true;
     if(!development){
         pipe.pipe(sourcemaps.init({loadMaps: true}))
-            // .pipe(plugins.stripDebug())
+        // .pipe(plugins.stripDebug())
             .pipe(plugins.uglify({
                 compress: {
                     drop_console: true
@@ -79,15 +85,14 @@ gulp.task('build', ['build-css', 'build-js'], function () {
 });
 
 gulp.task('watch', function() {
-    return gulp.watch(['./src/**/*.html', './src/styles/*.*css', 'src/**/*.js'], ['default']);
+    gulp.watch(['./src/**/*.html', './src/styles/*.*css', 'src/**/*.js'], ['default']);
 });
 
 gulp.task('default', ['build-clean'],  function() {
-
 });
 
 gulp.task('build-templates', function () {
-    gulp.src('src/templates/*.html')
+    return gulp.src('src/templates/*.html')
         .pipe(plugins.html2js('templates.js', {
             adapter: 'javascript',
             base: 'templates',
@@ -96,12 +101,21 @@ gulp.task('build-templates', function () {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default-watch', ['default'], ()=>{ browserSync.reload() });
+gulp.task('default-watch', ['default'], ()=>{ browserSync.reload();  });
 gulp.task('serve', ['default'], ()=>{
+
+    var development = (argv.dev === undefined) ? false : true;
+    var baseDir = "demo";
+    var index = "index.html";
+    if(development){
+        index = "dev.html";
+    }
+
+
     browserSync.init({
         server: {
-            baseDir: "demo",
-            index: "index.html",
+            baseDir: baseDir,
+            index: index,
             routes: {
                 "/bower_components": "bower_components",
                 "/dist": "dist"
@@ -109,14 +123,14 @@ gulp.task('serve', ['default'], ()=>{
         },
         port: 8089,
         open: 'local',
-        browser: "google chrome"
+        browser: "chrome"
     });
     gulp.watch(['i18n/**/*.json', './src/**/*.html', './src/styles/*.*css', 'src/**/*.js', 'examples/**/*.*'], ['default-watch']);
 });
 
 // error function for plumber
 var onError = function (err) {
-    console.log(err);
+    console.log('onError', err);
     this.emit('end');
 };
 
@@ -129,3 +143,28 @@ gulp.task('test', function (done) {
         done();
     }).start();
 });
+
+
+function map_error(err) {
+    if (err.fileName) {
+        // regular error
+        gutil.log(chalk.red(err.name)
+            + ': '
+            + chalk.yellow(err.fileName.replace(__dirname + '/src/js/', ''))
+            + ': '
+            + 'Line '
+            + chalk.magenta(err.lineNumber)
+            + ' & '
+            + 'Column '
+            + chalk.magenta(err.columnNumber || err.column)
+            + ': '
+            + chalk.blue(err.description))
+    } else {
+        // browserify error..
+        gutil.log(chalk.red(err.name)
+            + ': '
+            + chalk.yellow(err.message))
+    }
+
+    this.emit('end');
+}
