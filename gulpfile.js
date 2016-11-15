@@ -52,6 +52,7 @@ gulp.task('build-js', function () {
     })
         .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties"]})
         .bundle()
+        .on('error', map_error)
         .pipe(plugins.plumber({ errorHandler: onError }))
         .pipe(source(jsFileName+'.js'))
         .pipe(gulp.dest("dist"))

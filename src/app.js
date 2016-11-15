@@ -93,6 +93,7 @@ export class App {
         this.initAboutDialog();
         this.initToolbar();
         this.initOnBeforeUnload();
+        this.initKeyCodes();
 
         if(diagramData){
             this.openDiagram(diagramData);
@@ -426,4 +427,76 @@ export class App {
         this.setConfigParam('description', description, withoutStateSaving, (v) => this.treeDesigner.updateDiagramDescription(v));
     }
 
+    initKeyCodes() {
+
+        this.container.on("keyup", (d)=>{
+            if(d3.event.srcElement && d3.event.srcElement.nodeName.toUpperCase()=='INPUT'){ //ignore events from input elements
+                return;
+            }
+
+            var key = d3.event.keyCode;
+            if(key==46){//delete
+                this.treeDesigner.removeSelectedNodes();
+                return;
+            }
+            if(!d3.event.ctrlKey){
+                return;
+            }
+
+            var selectedNodes = this.treeDesigner.getSelectedNodes();
+
+            if(d3.event.altKey && selectedNodes.length==1){
+                var selectedNode = selectedNodes[0];
+                if(key==68){ // ctrl + alt + d
+                    this.treeDesigner.addDecisionNode(selectedNode);
+                }else if(key==67){ // ctrl + alt + c
+                    this.treeDesigner.addChanceNode(selectedNode);
+                } else if(key==84){ // ctrl + alt + t
+                    this.treeDesigner.addTerminalNode(selectedNode);
+                }
+                return;
+            }
+
+            if(key==90){//ctrl + z
+                this.undo();
+                return;
+            }
+            if(key==89){//ctrl + y
+                this.redo();
+                return;
+            }
+
+            if(key==65){//ctrl + a
+                if(selectedNodes.length==1){
+                    this.treeDesigner.selectSubTree(selectedNodes[0])
+                }else{
+                    this.treeDesigner.selectAllNodes();
+                }
+                // d3.event.preventDefault()
+                return;
+            }
+
+            if(key==86){//ctrl + v
+                if(selectedNodes.length==1){
+                    this.treeDesigner.pasteToNode(selectedNodes[0])
+                }else if(selectedNodes.length==0){
+
+                }
+                return;
+            }
+
+            if(!selectedNodes.length){
+                return;
+            }
+
+            if(key==88){//ctrl + x
+                this.treeDesigner.cutSelectedNodes();
+
+            }else if(key==67){//ctrl + c
+                this.treeDesigner.copySelectedNodes();
+
+            }
+
+        });
+    }
 }

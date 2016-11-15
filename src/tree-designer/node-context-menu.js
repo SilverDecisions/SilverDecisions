@@ -12,13 +12,15 @@ export class NodeContextMenu extends ContextMenu {
             var copyMenuItem = {
                 title: 'Copy',
                 action: function (elm, d, i) {
-                    treeDesigner.copyNode(d);
+                    treeDesigner.selectNode(d, !treeDesigner.isNodeSelected(d));
+                    treeDesigner.copySelectedNodes();
                 }
             };
             var cutMenuItem = {
                 title: 'Cut',
                 action: function (elm, d, i) {
-                    treeDesigner.cutNode(d);
+                    treeDesigner.selectNode(d, !treeDesigner.isNodeSelected(d));
+                    treeDesigner.cutSelectedNodes();
                 }
             };
             var pasteMenuItem = {
@@ -26,7 +28,7 @@ export class NodeContextMenu extends ContextMenu {
                 action: function (elm, d, i) {
                     treeDesigner.pasteToNode(d);
                 },
-                disabled: !treeDesigner.copiedNode
+                disabled: !treeDesigner.copiedNodes || !treeDesigner.copiedNodes.length
 
             };
             var deleteMenuItem = {
@@ -45,22 +47,19 @@ export class NodeContextMenu extends ContextMenu {
             menu.push({
                 title: 'Add Decision Node',
                 action: function (elm, d, i) {
-                    var newNode = new model.DecisionNode(treeDesigner.layout.getNewChildLocation(d));
-                    treeDesigner.addNode(newNode, d)
+                    treeDesigner.addDecisionNode(d)
                 }
             });
             menu.push({
                 title: 'Add Chance Node',
                 action: function (elm, d, i) {
-                    var newNode = new model.ChanceNode(treeDesigner.layout.getNewChildLocation(d));
-                    treeDesigner.addNode(newNode, d)
+                    treeDesigner.addChanceNode(d)
                 }
             });
             menu.push({
                 title: 'Add Terminal Node',
                 action: function (elm, d, i) {
-                    var newNode = new model.TerminalNode(treeDesigner.layout.getNewChildLocation(d));
-                    treeDesigner.addNode(newNode, d)
+                    treeDesigner.addTerminalNode(d)
                 }
             });
             menu.push({divider: true});

@@ -639,6 +639,19 @@ export class TreeDesigner {
         return node;
     }
 
+    addDecisionNode(parent){
+        var newNode = new model.DecisionNode(this.layout.getNewChildLocation(parent));
+        this.addNode(newNode, parent)
+    }
+    addChanceNode(parent){
+        var newNode = new model.ChanceNode(this.layout.getNewChildLocation(parent));
+        this.addNode(newNode, parent)
+    }
+    addTerminalNode(parent){
+        var newNode = new model.TerminalNode(this.layout.getNewChildLocation(parent));
+        this.addNode(newNode, parent)
+    }
+
     removeNode(node) {
         this.data.saveState();
         this.data.removeNode(node);
@@ -652,16 +665,28 @@ export class TreeDesigner {
     }
 
     removeSelectedNodes() {
-        this.data.saveState();
         var selectedNodes = this.getSelectedNodes();
+        if(!selectedNodes.length){
+            return;
+        }
+        this.data.saveState();
         this.data.removeNodes(selectedNodes);
         this.clearSelection();
         this.redraw();
         this.layout.update();
     }
 
-    copyNode(d) {
-        this.copiedNode = this.data.cloneSubtree(d);
+    copyNode(d, notClearPrevSelection) {
+        var clone = this.data.cloneSubtree(d);
+        if(notClearPrevSelection){
+            if(!this.copiedNodes){
+                this.copiedNodes=[];
+            }
+            this.copiedNodes.push(clone);
+        }else{
+            this.copiedNodes = [clone];
+        }
+
     }
 
     cutNode(d) {
@@ -669,50 +694,71 @@ export class TreeDesigner {
         this.removeNode(d);
     }
 
+    cutSelectedNodes(){
+        var selectedNodes = this.getSelectedNodes();
+        var selectedRoots = this.data.findSubtreeRoots(selectedNodes);
+        this.copyNodes(selectedRoots);
+        this.removeSelectedNodes();
+    }
+
     copySelectedNodes() {
         var self;
         var selectedNodes = this.getSelectedNodes();
 
         var selectedRoots = this.data.findSubtreeRoots(selectedNodes);
-        this.copiedNodes = selectedRoots.map(d=>this.data.cloneSubtree(d));
-        //TODO
+        this.copyNodes(selectedRoots);
 
+
+    }
+
+    copyNodes(nodes){
+        this.copiedNodes = nodes.map(d=>this.data.cloneSubtree(d));
     }
 
 
 
     pasteToNode(node) {
+        if(!this.copiedNodes || !this.copiedNodes.length){
+            return;
+        }
         this.data.saveState();
         var self = this;
-        var toAttach = this.copiedNode;
-        self.copyNode(toAttach);
-        var attached = this.data.attachSubtree(toAttach, node);
+        self.clearSelection();
+        var nodesToAttach = this.copiedNodes;
+        self.copyNodes(this.copiedNodes);
+        nodesToAttach.forEach(toAttach=>{
+            var attached = this.data.attachSubtree(toAttach, node);
+            var location = self.layout.getNewChildLocation(node);
+            attached.moveTo(location.x, location.y, true);
+            self.layout.moveNodeToEmptyPlace(attached);
+            self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 
-        var location = self.layout.getNewChildLocation(node);
-        attached.moveTo(location.x, location.y, true);
-        self.layout.moveNodeToEmptyPlace(attached);
-        self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
+            this.redraw();
+            self.layout.update();
 
-        this.redraw();
-        self.layout.update();
+            self.selectSubTree(attached);
+        });
 
-        self.selectSubTree(attached, true);
     }
 
     pasteToNewLocation(point) {
         this.data.saveState();
         var self = this;
-        var toAttach = this.copiedNode;
-        self.copyNode(toAttach);
-        var attached = this.data.attachSubtree(toAttach);
+        self.clearSelection();
+        var nodesToAttach = this.copiedNodes;
+        self.copyNodes(this.copiedNodes);
+        nodesToAttach.forEach(toAttach=> {
+            var attached = this.data.attachSubtree(toAttach);
 
-        attached.moveTo(point.x, point.y, true);
-        self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
+            attached.moveTo(point.x, point.y, true);
+            self.layout.moveNodeToEmptyPlace(attached);
+            self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
 
-        this.redraw();
-        self.layout.update();
+            this.redraw();
+            self.layout.update();
 
-        self.selectSubTree(attached, true);
+            self.selectSubTree(attached);
+        });
     }
 
     moveNodeTo(x,y){

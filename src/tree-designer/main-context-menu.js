@@ -30,7 +30,7 @@ export class MainContextMenu extends ContextMenu {
                 action: function (elm, d, i) {
                     treeDesigner.pasteToNewLocation(new model.Point(d3.mouse(treeDesigner.svg.node())).move(treeDesigner.getMainGroupTranslation(true)));
                 },
-                disabled: !treeDesigner.copiedNode
+                disabled: !treeDesigner.copiedNodes || !treeDesigner.copiedNodes.length
 
             });
             menu.push({divider: true});

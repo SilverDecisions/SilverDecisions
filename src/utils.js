@@ -248,7 +248,7 @@ export class Utils {
 
 
     static timers = {};
-    static waitForFinalEvent(callback, uniqueId, ms=10) {
+    static waitForFinalEvent(callback, uniqueId, ms=50) {
         if (!uniqueId) {
             uniqueId = "Don't call this twice without a uniqueId";
         }

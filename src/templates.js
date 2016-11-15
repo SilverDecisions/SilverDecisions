@@ -203,7 +203,7 @@ export class Templates{
         '</div>';
 
     static main =
-        '<div id="silver-decisions">'+
+        '<div id="silver-decisions" tabindex="0">'+
              Templates.toolbar+
             '<div id="main-region">' +
                 Templates.sidebar+
