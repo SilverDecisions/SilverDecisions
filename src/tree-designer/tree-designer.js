@@ -736,7 +736,7 @@ export class TreeDesigner {
             this.redraw();
             self.layout.update();
 
-            self.selectSubTree(attached);
+            self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
 
     }
@@ -757,7 +757,7 @@ export class TreeDesigner {
             this.redraw();
             self.layout.update();
 
-            self.selectSubTree(attached);
+            self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
     }
 

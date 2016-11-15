@@ -447,6 +447,9 @@ export class App {
 
             if(d3.event.altKey && selectedNodes.length==1){
                 let selectedNode = selectedNodes[0];
+                if(selectedNode instanceof model.TerminalNode){
+                    return;
+                }
                 if(key==68){ // ctrl + alt + d
                     this.treeDesigner.addDecisionNode(selectedNode);
                 }else if(key==67){ // ctrl + alt + c
