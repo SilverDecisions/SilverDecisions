@@ -446,7 +446,7 @@ export class App {
             var selectedNodes = this.treeDesigner.getSelectedNodes();
 
             if(d3.event.altKey && selectedNodes.length==1){
-                var selectedNode = selectedNodes[0];
+                let selectedNode = selectedNodes[0];
                 if(key==68){ // ctrl + alt + d
                     this.treeDesigner.addDecisionNode(selectedNode);
                 }else if(key==67){ // ctrl + alt + c
@@ -478,7 +478,11 @@ export class App {
 
             if(key==86){//ctrl + v
                 if(selectedNodes.length==1){
-                    this.treeDesigner.pasteToNode(selectedNodes[0])
+                    let selectedNode = selectedNodes[0];
+                    if(selectedNode instanceof model.TerminalNode){
+                        return;
+                    }
+                    this.treeDesigner.pasteToNode(selectedNode)
                 }else if(selectedNodes.length==0){
 
                 }
