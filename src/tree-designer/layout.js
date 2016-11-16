@@ -33,11 +33,11 @@ export class Layout{
     }
 
     update(node){
-        if(node){
-            this.moveNodeToEmptyPlace(node);
-        }
         if(!this.isManualLayout()){
             return this.autoLayout(this.config.type, true);
+        }
+        if(node){
+            this.moveNodeToEmptyPlace(node);
         }
     }
 
@@ -46,23 +46,40 @@ export class Layout{
     }
 
     getNewChildLocation(parent){
-        return new model.Point(parent.location.x + this.config.gridWidth, parent.location.y)
+        var x = parent.location.x + this.config.gridWidth;
+        var y = parent.location.y;
+        if(parent.childEdges.length){
+            y = parent.childEdges[parent.childEdges.length-1].childNode.location.y+1;
+        }
+
+        return new model.Point(x, y)
     }
 
     moveNodeToEmptyPlace(node){
         var positionMap = {};
-
+        var self = this;
         node.location.x = Math.max(this.getNodeMinX(node), node.location.x);
         node.location.y = Math.max(this.getNodeMinY(node), node.location.y);
 
-        this.data.nodes.forEach(n=>{
-            if(node == n){
-                return;
-            }
-            var x = n.location.x;
-            var y = n.location.y;
-            _.set(positionMap, x+'.'+y, n);
-        });
+
+        this.nodesSortedByX = this.data.nodes.slice();
+        this.nodesSortedByX.sort((a,b)=>a.location.x - b.location.x);
+
+        function findCollidingNode(node, location){
+            return self.nodesSortedByX.find(n=>{
+                if(node == n){
+                    return false;
+                }
+
+                var margin = self.config.nodeSize/3;
+                var x = n.location.x;
+                var y = n.location.y;
+
+                return (location.x - margin <= x && location.x + margin >= x
+                    && location.y - margin <= y && location.y + margin >= y)
+            });
+        }
+
         var stepX = this.config.nodeSize/2;
         var stepY = this.config.nodeSize+10;
         var stepXsameParent = 0;
@@ -70,7 +87,7 @@ export class Layout{
         var changed = false;
         var colidingNode;
         var newLocation = new model.Point(node.location);
-        while(colidingNode =_.get(positionMap, newLocation.x+'.'+newLocation.y, null)){
+        while(colidingNode = findCollidingNode(node, newLocation)){
             changed=true;
             var sameParent = node.$parent && colidingNode.$parent && node.$parent==colidingNode.$parent;
             if(sameParent){

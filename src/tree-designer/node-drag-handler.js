@@ -80,9 +80,8 @@ export class NodeDragHandler{
 
     dragEnded(draggedNode, self){
         var node = d3.select(this).classed("dragging", false);
-        self.treeDesigner.layout.update()
+        self.treeDesigner.layout.update(draggedNode)
     }
-
 
 }
 
