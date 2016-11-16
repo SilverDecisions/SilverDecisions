@@ -136,7 +136,7 @@ var data = {
                     }
                 }
             ],
-            "name": "dilemma",
+            "name": "game\ndilemma",
             "location": {
                 "x": 20,
                 "y": 95

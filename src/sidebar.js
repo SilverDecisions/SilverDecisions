@@ -77,22 +77,29 @@ export class Sidebar{
 
         this.diagramDetailsContainer.select('.toggle-button').on('click', () => {
             this.diagramDetailsContainer.classed('sd-extended', !this.diagramDetailsContainer.classed('sd-extended'));
+            this.updateDiagramDetails();
         });
 
         this.diagramTitle = this.diagramDetailsContainer.select('input#diagram-title').on('change', function(){
             self.app.setDiagramTitle(this.value);
+            Utils.updateInputClass(d3.select(this));
         });
 
-        this.diagramDescription = this.diagramDetailsContainer.select('input#diagram-description').on('change', function(){
+        this.diagramDescription = this.diagramDetailsContainer.select('textarea#diagram-description').on('change', function(){
             self.app.setDiagramDescription(this.value);
+            Utils.updateInputClass(d3.select(this));
         });
+        Utils.elasticTextarea(this.diagramDescription);
 
         this.updateDiagramDetails();
     }
 
     updateDiagramDetails(){
         this.diagramTitle.node().value = this.app.config.title;
+        Utils.updateInputClass(this.diagramTitle);
         this.diagramDescription.node().value = this.app.config.description;
+        Utils.updateInputClass(this.diagramDescription);
+        Utils.autoResizeTextarea(this.diagramDescription.node())
     }
 
     displayObjectProperties(object){
@@ -177,14 +184,14 @@ export class Sidebar{
         if(object instanceof model.Node){
             return [{
                 name: 'name',
-                type: 'text'
+                type: 'textarea'
             }]
         }
         if(object instanceof model.Edge){
             var list = [
                 {
                     name: 'name',
-                    type: 'text'
+                    type: 'textarea'
                 },
                 {
                     name: 'payoff',
@@ -208,7 +215,7 @@ export class Sidebar{
 
 
 
-    updateObjectFields(object, fieldList, container) {
+    updateObjectFields1(object, fieldList, container) {
         var self = this;
         var objectType = object instanceof model.Node ? 'node' : 'edge';
 
@@ -244,7 +251,7 @@ export class Sidebar{
                     self.app.dataModel.saveState();
                 }
                 object[d.name] = this.value;
-                d3.select(this).classed('empty', this.value!==0 && !this.value);
+                Utils.updateInputClass(d3.select(this));
                 self.app.onObjectUpdated(object)
 
             })
@@ -255,7 +262,74 @@ export class Sidebar{
                 if(d.validator && !d.validator.validate(this.value)){
                     d3.select(this).classed('invalid', true);
                 }
-                d3.select(this).classed('empty', this.value!==0 && !this.value);
+                Utils.updateInputClass(d3.select(this));
+            });
+
+        fields.exit().remove();
+    }
+
+    updateObjectFields(object, fieldList, container) {
+        var self = this;
+        var objectType = object instanceof model.Node ? 'node' : 'edge';
+        var getFieldId = d=>'object-'+object.$id+'-field-'+d.name;
+
+        var fields = container.selectAll('div.object-field').data(fieldList);
+        var temp={};
+        var fieldsEnter = fields.enter().appendSelector('div.object-field');
+        var fieldsMerge = fieldsEnter.merge(fields);
+
+        fieldsMerge.each(function(d, i){
+            var fieldSelection = d3.select(this);
+            fieldSelection.html("");
+
+            var input;
+            if(d.type == 'textarea'){
+                input = fieldSelection.append('textarea').attr('rows', 1);
+            }else{
+                input = fieldSelection.append('input');
+            }
+            input.classed('sd-input', true);
+
+            fieldSelection.appendSelector('span.bar');
+            fieldSelection.append('label');
+            fieldSelection.classed('input-group', true);
+        });
+
+        fieldsMerge.select('label')
+            .attr('for', getFieldId)
+            .html(d=>i18n.t(objectType+'.'+d.name));
+        fieldsMerge.select('.sd-input')
+            .attr('type', d=>d.type == 'textarea'? undefined : d.type)
+            .attr('name', d=>d.name)
+            .attr('id', getFieldId)
+            .on('change keyup', function(d, i){
+                if(d.validator && !d.validator.validate(this.value)){
+                    d3.select(this).classed('invalid', true);
+                    return;
+                }
+                d3.select(this).classed('invalid', false);
+                if(d3.event.type=='change' && temp[i].pristineVal!=this.value){
+                    object[d.name] = temp[i].pristineVal;
+                    self.app.dataModel.saveState();
+                }
+                object[d.name] = this.value;
+                Utils.updateInputClass(d3.select(this));
+                self.app.onObjectUpdated(object)
+
+            })
+            .each(function(d, i){
+                this.value = object[d.name];
+                temp[i]={};
+                temp[i].pristineVal = this.value;
+                if(d.validator && !d.validator.validate(this.value)){
+                    d3.select(this).classed('invalid', true);
+                }
+                Utils.updateInputClass(d3.select(this));
+                if(d.type == 'textarea'){
+                    Utils.elasticTextarea(d3.select(this));
+                    Utils.autoResizeTextarea(d3.select(this).node())
+                }
+
             });
 
         fields.exit().remove();

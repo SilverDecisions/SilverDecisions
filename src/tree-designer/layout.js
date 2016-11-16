@@ -199,8 +199,9 @@ export class Layout{
 
     edgeLabelPosition(selection) {
         return selection
-            .attr('x', d=>d.$linePoints[2][0] + 2)
-            .attr('y', d=>d.$linePoints[2][1] - 7)
+            .attr('transform', d=>'translate('+(d.$linePoints[2][0] + 2)+','+(d.$linePoints[2][1] - 7)+')')
+            // .attr('x', d=>d.$linePoints[2][0] + 2)
+            // .attr('y', d=>d.$linePoints[2][1] - 7)
 
     }
 

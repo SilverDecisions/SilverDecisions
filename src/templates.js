@@ -105,7 +105,7 @@ export class Templates{
                     '<label for="diagram-title"><%= i18n.t("diagramDetails.title") %></label>'+
                 '</div>' +
                 '<div class="input-group">' +
-                    '<input id="diagram-description" type="text" name="diagram-description">' +
+                    '<textarea id="diagram-description" name="diagram-description" rows="1"></textarea>' +
                     '<span class="bar"></span>' +
                     '<label for="diagram-description"><%= i18n.t("diagramDetails.description") %></label>'+
                 '</div>' +
@@ -130,19 +130,6 @@ export class Templates{
                 '</div>'+
                 '<div class="sd-modal-body">'+
                     '<form id="sd-settings-form">'+
-                        // '<h4><%= i18n.t("settingsDialog.payoff.title")%></h4>'+
-                        // '<div class="sd-form-group">' +
-                        //     '<label for="sd-payoff-currency"><%= i18n.t("settingsDialog.payoff.currency")%></label>' +
-                        //     '<input type="text" id="sd-payoff-currency" name="payoff-currency">' +
-                        // '</div> '+
-                        // '<div class="sd-form-group">' +
-                        //     '<label for="sd-payoff-minimumFractionDigits"><%= i18n.t("settingsDialog.payoff.minimumFractionDigits")%></label>' +
-                        //     '<input type="number" id="sd-payoff-minimumFractionDigits" name="payoff-minimumFractionDigits">' +
-                        // '</div> '+
-                        // '<div class="sd-form-group">' +
-                        //     '<label for="sd-payoff-maximumFractionDigits"><%= i18n.t("settingsDialog.payoff.maximumFractionDigits")%></label>' +
-                        //     '<input type="number" id="sd-payoff-maximumFractionDigits" name="payoff-maximumFractionDigits">' +
-                        // '</div> '+
                     '</form>'+
                 '</div>'+
             '</div>'+

@@ -3,6 +3,7 @@ import {Dialog} from './dialog'
 import *  as _ from 'lodash'
 import {i18n} from "./i18n/i18n";
 import {Templates} from "./templates";
+import {Utils} from "./utils";
 
 export class SettingsDialog extends Dialog{
 
@@ -159,7 +160,7 @@ export class SettingsDialog extends Dialog{
             if(d.valueUpdateCallback){
                 d.valueUpdateCallback();
             }
-            d3.select(this).classed('empty', this.value!==0 && !this.value);
+            Utils.updateInputClass(d3.select(this));
 
 
         }).each(function(d, i){
@@ -171,7 +172,7 @@ export class SettingsDialog extends Dialog{
             }else{
                 d3.select(this).classed('invalid', false);
             }
-            d3.select(this).classed('empty', this.value!==0 && !this.value);
+            Utils.updateInputClass(d3.select(this));
 
         });
 

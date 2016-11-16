@@ -252,13 +252,13 @@ export class TreeDesigner {
             group = group.transition();
         }
 
-        var topMargin = margin.top;
+        this.topMargin = margin.top;
         if(this.diagramTitle||this.diagramDescription){
-            topMargin = parseInt(this.diagramTitle ? this.config.title.margin.top : 0) + this.getTitleGroupHeight()
-                +  Math.max(topMargin, parseInt(this.config.title.margin.bottom));
+            this.topMargin = parseInt(this.diagramTitle ? this.config.title.margin.top : 0) + this.getTitleGroupHeight()
+                +  Math.max(this.topMargin, parseInt(this.config.title.margin.bottom));
         }
 
-        group.attr("transform", "translate(" + margin.left + "," + topMargin + ")").on("end", ()=> self.updatePlottingRegionSize());
+        group.attr("transform", "translate(" + margin.left + "," + this.topMargin + ")").on("end", ()=> self.updatePlottingRegionSize());
     }
 
     setMargin(margin, withoutStateSaving){
@@ -299,7 +299,7 @@ export class TreeDesigner {
             changed = true;
             this.svg.attr('width', newSvgWidth);
         }
-        var newSvgHeight = mainGroupBox.height+mainGroupBox.y+margin.top+margin.bottom;
+        var newSvgHeight = mainGroupBox.height+mainGroupBox.y+this.topMargin+margin.bottom;
 
         this.container.classed('with-overflow-y', newSvgHeight>=this.availableHeight);
         newSvgHeight = Math.max(newSvgHeight, this.availableHeight);
@@ -361,10 +361,9 @@ export class TreeDesigner {
             });
         */
         this.layout.nodeLabelPosition(labelEnter);
+        nodesMergeT.select('text.label').each(this.updateTextLines);
         this.layout.nodeLabelPosition(nodesMergeT.select('text.label'))
-
             .attr('text-anchor', 'middle')
-            .text(d=>d.name);
 
         var ruleName = this.config.$rule;
         var payoff = nodesMerge.select('text.payoff')
@@ -430,6 +429,19 @@ export class TreeDesigner {
         nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
     }
 
+    updateTextLines(d){ //helper method for splitting text to tspans
+        var lines = d.name ? d.name.split('\n') : [];
+        lines.reverse();
+        var tspans = d3.select(this).selectAll('tspan').data(lines);
+        tspans.enter().append('tspan')
+            .merge(tspans)
+            .text(l=>l)
+            .attr('dy', (d,i)=>i>0 ? '-1.1em': undefined)
+            .attr('x', '0')
+
+        tspans.exit().remove();
+    }
+
     isOptimal(d){
         var ruleName = this.config.$rule;
         return d.computedValue(ruleName, 'optimal');
@@ -446,7 +458,8 @@ export class TreeDesigner {
 
 
         edgesEnter.append('path');
-        var labelEnter = edgesEnter.append('text').attr('class', 'label');
+        var labelEnter = edgesEnter.appendSelector('g.label-group');
+        labelEnter.append('text').attr('class', 'label');
         var payoffEnter = edgesEnter.append('text').attr('class', 'payoff');
         var probabilityEnter = edgesEnter.append('text').attr('class', 'probability');
 
@@ -476,8 +489,9 @@ export class TreeDesigner {
         });
 
         this.layout.edgeLabelPosition(labelEnter);
-        this.layout.edgeLabelPosition(edgesMergeT.select('text.label'))
-            .text(d=>d.name);
+        edgesMergeT.select('text.label').each(this.updateTextLines);
+        this.layout.edgeLabelPosition(edgesMergeT.select('g.label-group'));
+            // .text(d=>d.name);
 
         var payoffText = edgesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')

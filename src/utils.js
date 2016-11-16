@@ -1,3 +1,5 @@
+import * as d3 from './d3'
+
 export class Utils {
     static SQRT_2 = 1.41421356237;
     // usage example deepExtend({}, objA, objB); => should work similar to $.extend(true, {}, objA, objB);
@@ -257,4 +259,31 @@ export class Utils {
         }
         Utils.timers[uniqueId] = setTimeout(callback, ms);
     };
+
+    static updateInputClass(selection){
+        var value = selection.node().value;
+        selection.classed('empty', value!==0 && !value);
+        return selection;
+    }
+
+    static autoResizeTextarea(element){
+        setTimeout(function(){
+            element.style.height = 'auto';
+            element.style.height = element.scrollHeight+'px';
+        }, 0);
+    }
+
+    static elasticTextarea(selection){
+        //
+        // var text=selection.node().value;
+        // var lines=text.split('\n');
+        //
+        // selection.attr('rows',lines.length || 1);
+
+        selection.on('keydown.elastic change.elastic cut paste drop focus.elastic', function(){
+            var e = d3.event;
+            Utils.autoResizeTextarea(e.target)
+        });
+
+    }
 }

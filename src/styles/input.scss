@@ -5,7 +5,7 @@
     margin-top: 1.5em;
     margin-bottom: 0.8em;
 
-    input {
+    input, textarea {
       font-size: 1em;
       padding: 5px;
       box-sizing: border-box;
@@ -15,7 +15,13 @@
       border-bottom: 1px solid rgba(0,0,0,.12);
       background: none;
     }
-    input:focus {
+
+    textarea{
+      /* box-sizing: padding-box; */
+      overflow:hidden;
+    }
+
+    input:focus, textarea:focus  {
       outline: none;
     }
 
@@ -33,7 +39,7 @@
     }
 
     /* active state */
-    select ~ label, input:focus ~ label, input:not(.empty) ~ label {
+    select ~ label, input:focus ~ label, input:not(.empty) ~ label, textarea:focus ~ label, textarea:not(.empty) ~ label  {
       top: -.85em;
       font-size: 0.85em;
       color: #5264AE;
@@ -46,7 +52,7 @@
       top: -1.2em;
     }
 
-    input.invalid ~ .bar{
+    input.invalid ~ .bar, textarea.invalid ~ .bar{
       &:before, &:after {
         background: red;
       }
@@ -79,7 +85,7 @@
 
 
     /* active state */
-    input:focus ~ .bar:before, input:focus ~ .bar:after {
+    input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:before, textarea:focus ~ .bar:after {
       width: 50%;
     }
 

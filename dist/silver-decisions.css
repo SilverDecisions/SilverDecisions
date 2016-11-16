@@ -59,7 +59,7 @@
     /* active state */
     /* BOTTOM BARS ================================= */
     /* active state */ }
-    #silver-decisions .input-group input {
+    #silver-decisions .input-group input, #silver-decisions .input-group textarea {
       font-size: 1em;
       padding: 5px;
       box-sizing: border-box;
@@ -68,7 +68,10 @@
       border: none;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       background: none; }
-    #silver-decisions .input-group input:focus {
+    #silver-decisions .input-group textarea {
+      /* box-sizing: padding-box; */
+      overflow: hidden; }
+    #silver-decisions .input-group input:focus, #silver-decisions .input-group textarea:focus {
       outline: none; }
     #silver-decisions .input-group label {
       color: #999;
@@ -81,7 +84,7 @@
       transition: 0.2s ease all;
       -moz-transition: 0.2s ease all;
       -webkit-transition: 0.2s ease all; }
-    #silver-decisions .input-group select ~ label, #silver-decisions .input-group input:focus ~ label, #silver-decisions .input-group input:not(.empty) ~ label {
+    #silver-decisions .input-group select ~ label, #silver-decisions .input-group input:focus ~ label, #silver-decisions .input-group input:not(.empty) ~ label, #silver-decisions .input-group textarea:focus ~ label, #silver-decisions .input-group textarea:not(.empty) ~ label {
       top: -.85em;
       font-size: 0.85em;
       color: #5264AE; }
@@ -89,7 +92,7 @@
       top: -1.2em; }
     #silver-decisions .input-group input[type=color] ~ label {
       top: -1.2em; }
-    #silver-decisions .input-group input.invalid ~ .bar:before, #silver-decisions .input-group input.invalid ~ .bar:after {
+    #silver-decisions .input-group input.invalid ~ .bar:before, #silver-decisions .input-group input.invalid ~ .bar:after, #silver-decisions .input-group textarea.invalid ~ .bar:before, #silver-decisions .input-group textarea.invalid ~ .bar:after {
       background: red; }
     #silver-decisions .input-group .bar {
       position: relative;
@@ -109,7 +112,7 @@
         left: 50%; }
       #silver-decisions .input-group .bar:after {
         right: 50%; }
-    #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after {
+    #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after, #silver-decisions .input-group textarea:focus ~ .bar:before, #silver-decisions .input-group textarea:focus ~ .bar:after {
       width: 50%; }
 
 /* The Modal (background) */
@@ -327,6 +330,8 @@
               display: block; }
         #silver-decisions #main-region #sidebar #diagram-details-box .content {
           display: none; }
+        #silver-decisions #main-region #sidebar #diagram-details-box .content {
+          font-size: 12px; }
       #silver-decisions #main-region #sidebar #object-properties {
         opacity: 0;
         border: 1px solid #bfbfbf;
