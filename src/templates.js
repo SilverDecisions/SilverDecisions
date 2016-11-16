@@ -346,8 +346,13 @@ export class Templates{
             ['font-weight', 'title.fontWeight'],
             ['font-style', 'title.fontStyle'],
             ['fill', 'title.color']
+        ]) +
+        Templates.styleRule(Templates.treeDesignerSelector+' .sd-title-container text.sd-description',[
+            ['font-size', 'description.fontSize'],
+            ['font-weight', 'description.fontWeight'],
+            ['font-style', 'description.fontStyle'],
+            ['fill', 'description.color']
         ])
-
 }
 
 

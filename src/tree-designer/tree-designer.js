@@ -117,7 +117,8 @@ export class TreeDesignerConfig {
         }
     };
     description = {
-        fontSize: '16px',
+        show: true,
+        fontSize: '12px',
         fontWeight: 'bold',
         fontStyle: 'normal',
         color: '#000000',
@@ -200,6 +201,8 @@ export class TreeDesigner {
 
     redraw(withTransitions){
         var self = this;
+        this.redrawDiagramTitle();
+        this.redrawDiagramDescription();
         this.updateMargin(withTransitions);
         if(withTransitions){
             self.transitionPrev = self.transition;
@@ -207,7 +210,6 @@ export class TreeDesigner {
         }
         this.redrawNodes();
         this.redrawEdges();
-        this.redrawDiagramTitle();
         if(withTransitions){
             self.transition =  self.transitionPrev;
         }
@@ -873,6 +875,11 @@ export class TreeDesigner {
         this.titleContainer = this.svg.selectOrAppend('g.sd-title-container');
 
         var desc = this.titleContainer.selectOrAppend('text.sd-description');
+
+        if(!this.config.description.show){
+            desc.remove();
+            return;
+        }
 
         var lines = this.diagramDescription ? this.diagramDescription.split('\n') : [];
         var tspans = desc.selectAll('tspan').data(lines);

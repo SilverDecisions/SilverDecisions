@@ -141,6 +141,15 @@
         "title": "Margin",
         "top": "Top",
         "bottom": "Bottom"
+      },
+      "description":{
+        "title": "Subtitle (diagram description)",
+        "show": "Show",
+        "fontSize": "Font size",
+        "fontWeight": "Font weight",
+        "fontStyle": "Font style",
+        "color": "Color",
+        "marginTop": "Margin top"
       }
     }
   },

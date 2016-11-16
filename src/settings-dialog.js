@@ -125,7 +125,16 @@ export class SettingsDialog extends Dialog{
 
         .addGroup('margin')
             .addField('top', 'number', app.treeDesigner, 'config.title.margin.top')
-            .addField('bottom', 'number', app.treeDesigner, 'config.title.margin.bottom')
+            .addField('bottom', 'number', app.treeDesigner, 'config.title.margin.bottom');
+
+        titleGroup
+            .addGroup('description')
+            .addField('show', 'checkbox', app.treeDesigner, 'config.description.show')
+            .addField('fontSize', 'text', app.treeDesigner, 'config.description.fontSize')
+            .addSelectField('fontWeight', app.treeDesigner, 'config.description.fontWeight', SettingsDialog.fontWeightOptions)
+            .addSelectField('fontStyle', app.treeDesigner, 'config.description.fontStyle', SettingsDialog.fontStyleOptions)
+            .addField('color', 'color', app.treeDesigner, 'config.description.color')
+            .addField('marginTop', 'number', app.treeDesigner, 'config.description.margin.top');
 
         this.formGroups.push(titleGroup);
 
@@ -163,7 +172,7 @@ export class SettingsDialog extends Dialog{
                 return;
             }
             d3.select(this).classed('invalid', false);
-            console.log(value);
+
             d.valueAccessor.set(value);
             if(d.valueUpdateCallback){
                 d.valueUpdateCallback();
