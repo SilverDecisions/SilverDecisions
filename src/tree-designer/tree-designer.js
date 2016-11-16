@@ -437,7 +437,7 @@ export class TreeDesigner {
             .merge(tspans)
             .text(l=>l)
             .attr('dy', (d,i)=>i>0 ? '-1.1em': undefined)
-            .attr('x', '0')
+            .attr('x', '0');
 
         tspans.exit().remove();
     }
@@ -873,7 +873,16 @@ export class TreeDesigner {
         this.titleContainer = this.svg.selectOrAppend('g.sd-title-container');
 
         var desc = this.titleContainer.selectOrAppend('text.sd-description');
-        desc.text(this.diagramDescription);
+
+        var lines = this.diagramDescription ? this.diagramDescription.split('\n') : [];
+        var tspans = desc.selectAll('tspan').data(lines);
+        tspans.enter().append('tspan')
+            .merge(tspans)
+            .text(l=>l)
+            .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
+            .attr('x', '0');
+
+        tspans.exit().remove();
         Layout.setHangingPosition(desc);
 
         var title = this.titleContainer.selectOrAppend('text.sd-title');
