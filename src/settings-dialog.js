@@ -31,9 +31,12 @@ export class SettingsDialog extends Dialog{
         var payoffGroup = new FormGroup('payoff', ()=>app.updatePayoffNumberFormat());
         payoffGroup
             .addSelectField('style', app, 'config.format.payoff.style', ['currency', 'decimal'])
+            .addSelectField('currencyDisplay', app, 'config.format.payoff.currencyDisplay', ['symbol', 'code', 'name'])
             .addField('currency', 'text', app, 'config.format.payoff.currency', {validate: (v)=>{try{new Intl.NumberFormat([], {currency:v}); return true;}catch (e){return false}}})
             .addField('minimumFractionDigits', 'number', app, 'config.format.payoff.minimumFractionDigits' , {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:v, maximumFractionDigits:app.config.format.payoff.maximumFractionDigits}); return true;}catch (e){return false}}})
             .addField('maximumFractionDigits', 'number', app, 'config.format.payoff.maximumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:app.config.format.payoff.minimumFractionDigits, maximumFractionDigits:v}); return true;}catch (e){return false}}})
+            .addField('useGrouping', 'checkbox', app, 'config.format.payoff.useGrouping')
+
         this.formGroups.push(payoffGroup);
 
         group = new FormGroup('probability', ()=>{
@@ -148,7 +151,11 @@ export class SettingsDialog extends Dialog{
 
 
         inputGroupsEnter.merge(inputGroups).select('input, select').on('change input', function(d,i){
-            if(d.validator && !d.validator.validate(this.value)){
+            var value = this.value;
+            if(d.type=='checkbox'){
+                value = this.checked
+            }
+            if(d.validator && !d.validator.validate(value)){
                 d3.select(this).classed('invalid', true);
                 if(d3.event.type=='change'){
                     this.value = d.valueAccessor.get();
@@ -156,7 +163,8 @@ export class SettingsDialog extends Dialog{
                 return;
             }
             d3.select(this).classed('invalid', false);
-            d.valueAccessor.set(this.value);
+            console.log(value);
+            d.valueAccessor.set(value);
             if(d.valueUpdateCallback){
                 d.valueUpdateCallback();
             }
@@ -164,10 +172,15 @@ export class SettingsDialog extends Dialog{
 
 
         }).each(function(d, i){
-            this.value = d.valueAccessor.get();
+            var value = d.valueAccessor.get();
+            if(d.type=='checkbox'){
+                this.checked = value
+            }else{
+                this.value = value;
+            }
             temp[i]={};
-            temp[i].pristineVal = this.value;
-            if(d.validator && !d.validator.validate(this.value)){
+            temp[i].pristineVal = value;
+            if(d.validator && !d.validator.validate(value)){
                 d3.select(this).classed('invalid', true);
             }else{
                 d3.select(this).classed('invalid', false);

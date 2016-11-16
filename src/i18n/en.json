@@ -41,9 +41,11 @@
     "payoff":{
       "title": "Payoff number format",
       "currency": "Currency",
+      "currencyDisplay": "Currency display",
       "style": "Style",
       "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits"
+      "maximumFractionDigits": "Maximum fraction digits",
+      "useGrouping": "Use grouping separators"
     },
     "probability":{
       "title": "Probability number format",

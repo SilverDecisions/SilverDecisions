@@ -15,6 +15,10 @@
       border-bottom: 1px solid rgba(0,0,0,.12);
       background: none;
     }
+    input[type=checkbox]{
+      width: auto;
+      margin-top: 2em;
+    }
 
     textarea{
       /* box-sizing: padding-box; */
@@ -51,6 +55,11 @@
     input[type=color] ~ label{
       top: -1.2em;
     }
+
+    input[type=checkbox] ~ label{
+      top: -1.4em;
+    }
+
 
     input.invalid ~ .bar, textarea.invalid ~ .bar{
       &:before, &:after {

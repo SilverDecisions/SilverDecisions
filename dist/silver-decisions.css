@@ -68,6 +68,9 @@
       border: none;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       background: none; }
+    #silver-decisions .input-group input[type=checkbox] {
+      width: auto;
+      margin-top: 2em; }
     #silver-decisions .input-group textarea {
       /* box-sizing: padding-box; */
       overflow: hidden; }
@@ -92,6 +95,8 @@
       top: -1.2em; }
     #silver-decisions .input-group input[type=color] ~ label {
       top: -1.2em; }
+    #silver-decisions .input-group input[type=checkbox] ~ label {
+      top: -1.4em; }
     #silver-decisions .input-group input.invalid ~ .bar:before, #silver-decisions .input-group input.invalid ~ .bar:after, #silver-decisions .input-group textarea.invalid ~ .bar:before, #silver-decisions .input-group textarea.invalid ~ .bar:after {
       background: red; }
     #silver-decisions .input-group .bar {

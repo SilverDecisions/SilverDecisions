@@ -39,6 +39,7 @@ export class AppConfig {
         payoff:{
             style: 'currency',
             currency: 'USD',
+            currencyDisplay: 'symbol',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
             // minimumSignificantDigits: 1,
