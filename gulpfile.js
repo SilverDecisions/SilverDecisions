@@ -78,11 +78,14 @@ gulp.task('build-js', function () {
 
 
 gulp.task('build-clean', ['clean'], function () {
-    gulp.start('build');
+    return gulp.start('build');
 });
 
 gulp.task('build', ['build-css', 'build-js'], function () {
-
+    var development = (argv.dev === undefined) ? false : true;
+    if(!development){
+        return generateDocs();
+    }
 });
 
 gulp.task('watch', function() {
@@ -145,6 +148,14 @@ gulp.task('test', function (done) {
     }).start();
 });
 
+gulp.task('docs-gen', function () {
+    return generateDocs();
+});
+
+function generateDocs(){
+    gutil.log('generateDocs');
+    return gulp.src(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css']).pipe(gulp.dest('./docs'));
+}
 
 function map_error(err) {
     if (err.fileName) {

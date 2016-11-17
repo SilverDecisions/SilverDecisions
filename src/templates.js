@@ -163,6 +163,32 @@ export class Templates{
         '<span class="bar"></span>' +
         '<label for="<%= id %>"><%= label %></label>';
 
+
+    static help = //TODO i18n
+        '<div>' +
+            '<h3>Help</h3>' +
+            '<p>' +
+                'Mouse actions:' +
+                '<ul>' +
+                    '<li>left mouse button: node selection</li>' +
+                    '<li>right mouse button: context menu (adding/manipulating nodes)</li>' +
+                    '<li>left mouse dbclick on a node: select a subtree</li>' +
+                '</ul>' +
+            '</p>' +
+            '<p>' +
+                'Keyboard:' +
+                '<ul>' +
+                    '<li>Del: delete selected nodes</li>' +
+                    '<li>Ctrl-C/X: copy/cut selected nodes</li>' +
+                    '<li>Ctrl-V: paste copied nodes as a subtree of a selected node</li>' +
+                    '<li>Ctrl-Y/Z: undo/redo</li>' +
+                    '<li>Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a selected node</li>' +
+                '</ul>' +
+            '</p>' +
+            '<p>Documentation of SilverDecisions is available <a href="https://github.com/bkamins/SilverDecisions/wiki/Documentation" target="_blank">here</a> </p>'+
+        '</div>';
+
+
     static aboutDialog =
         '<div id="sd-about-dialog" class="sd-modal">'+
             '<div class="sd-modal-content">'+
@@ -184,7 +210,7 @@ export class Templates{
                     '<p>Software is developed as a part of <a href="http://routetopa.eu/" target="_blank">ROUTE-TO-PA</a> Project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Its aim is to allow a transparent communication between public administration and citizens regarding public data about decision making processes performed by public administration.</p>' +
                     '<p>All the source files are licensed under the terms of the GNU General Public License version 3.</p>' +
                     '<p>For more information visit our website at <a href="http://silverdecisions.pl/" target="_blank">http://silverdecisions.pl/</a>.</p>' +
-                    '<p>Documentation of SilverDecisions is available <a href="https://github.com/bkamins/SilverDecisions/wiki/Documentation" target="_blank">here</a> </p>'+
+                    Templates.help+
                 '</div>'+
             '</div>'+
         '</div>';
