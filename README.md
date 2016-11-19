@@ -17,6 +17,7 @@ If you are a SilverDecisions user please visit project [website](http://www.silv
 
 ### Project structure
 
+* `docs` - website of SilverDecisions
 * `demo` - demo usage of SilverDecisions
 * `dist` - distribution folder generated with gulp 
 * `src` - source files directory
