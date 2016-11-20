@@ -11,6 +11,7 @@ var tsify = require("tsify");
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
 
+var p = require('./package.json')
 
 var Server = require('karma').Server;
 
@@ -82,10 +83,10 @@ gulp.task('build-clean', ['clean'], function () {
 });
 
 gulp.task('build', ['build-css', 'build-js'], function () {
-    var development = (argv.dev === undefined) ? false : true;
-    if(!development){
-        return generateDocs();
-    }
+    // var development = (argv.dev === undefined) ? false : true;
+    // if(!development){
+    //     return generateDocs();
+    // }
 });
 
 gulp.task('watch', function() {
@@ -148,13 +149,28 @@ gulp.task('test', function (done) {
     }).start();
 });
 
-gulp.task('docs-gen', function () {
+gulp.task('docs-clean', function (cb) {
+    return del(['./docs/silver-decisions-*.min.*'], cb);
+});
+
+gulp.task('docs-gen', ['docs-clean'], function () {
     return generateDocs();
 });
 
 function generateDocs(){
     gutil.log('generateDocs');
-    return gulp.src(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css']).pipe(gulp.dest('./docs'));
+    var basename = "silver-decisions-"+p.version+'.min';
+    var copyFiles = gulp.src(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'])
+        .pipe(plugins.rename({
+            basename: basename
+        }))
+        .pipe(gulp.dest('./docs'));
+
+    var updateReferences = gulp.src('./docs/SilverDecisions.html')
+        .pipe(plugins.replace(/"silver-decisions(.*)\.min/g, '"'+basename))
+        .pipe(gulp.dest('./docs/'));
+
+    return merge(copyFiles, updateReferences)
 }
 
 function map_error(err) {
