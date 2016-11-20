@@ -60,7 +60,7 @@ a:hover {
 #wrapper {
     margin: 0 auto;
     width: 800px;
-    height: 870px;
+    height: 920px;
     background: #FFFFFF;
     box-shadow: 0px 0px 10px #888888;
 }
@@ -68,7 +68,7 @@ a:hover {
 #wrapper2 {
     position: absolute;
     width: 800px;
-    height: 870px;
+    height: 920px;
     background: #FFFFFF;
 }
 
@@ -77,7 +77,8 @@ table {
     margin:10px auto;
 }
 
-td {
+
+table.tabyellow td {
     border-style:solid;
     border-width:15px;
     border-color:white;
@@ -91,12 +92,42 @@ td {
     vertical-align: top;
 }
 
-td a {
+table.tabyellow td a {
   display: inline-block;
   height:100%;
   width:100%;
 }
 
-td a:hover {
+table.tabyellow td a:hover {
   background-color: #FFC31E;
 }
+
+
+
+
+table.taboldsoft td {
+    border-style:solid;
+    border-width:0px;
+    border-color:white;
+    font-weight:bold;
+    font-size: 12px;
+	color:#999999
+    width: 530px;
+    height: 70px;
+    overflow:hidden;
+    word-break:normal;
+    background-color: #EFEFEF;
+    vertical-align: top;
+}
+
+table.taboldsoft td a {
+  display: inline-block;
+  height:100%;
+  width:100%;
+}
+
+table.taboldsoft td a:hover {
+  background-color: #F5F5F5;
+}
+
+

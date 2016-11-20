@@ -2,7 +2,7 @@
 
 Software for creating and analyzing decision trees.
 
-If you are a SilverDecisions user please visit project [Wiki](https://github.com/bkamins/SilverDecisions/wiki).
+If you are a SilverDecisions user please visit project [website](http://www.silverdecisions.pl) or [Wiki](https://github.com/bkamins/SilverDecisions/wiki).
 
 ## Developer quick start guide
 
@@ -17,6 +17,7 @@ If you are a SilverDecisions user please visit project [Wiki](https://github.com
 
 ### Project structure
 
+* `docs` - website of SilverDecisions
 * `demo` - demo usage of SilverDecisions
 * `dist` - distribution folder generated with gulp 
 * `src` - source files directory
@@ -25,8 +26,7 @@ If you are a SilverDecisions user please visit project [Wiki](https://github.com
 
 ## User testing guide
 
-* Versions ready for user testing will be clearly tagged in git repository (please do not submit bugs for development versions)
-* You can use `index.html` in `demo` directory to perform tests (in versions tagged for testing everything will be properly biult)
+* You can use `index.html` in `docs` directory to perform tests. Master contains current production version of SilverDecisions (and this version is served on the website), dev branch, if ahead of master, contains a development version.
 * Submit atomic comments using GitHub issues
 * Label usage guide:
 
