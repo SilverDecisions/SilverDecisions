@@ -208,7 +208,7 @@ export class Templates{
                     '</ul>'+
                     '<p>The project is developed at Decision Support and Analysis Division, Warsaw School of Economics.<br/>Contact: silverdecisions@sgh.waw.pl</p>'+
                     '<p>Software is developed as a part of <a href="http://routetopa.eu/" target="_blank">ROUTE-TO-PA</a> Project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Its aim is to allow a transparent communication between public administration and citizens regarding public data about decision making processes performed by public administration.</p>' +
-                    '<p>All the source files are licensed under the terms of the GNU General Public License version 3.</p>' +
+                    '<p>All the source files are licensed under the terms of the GNU Lesser General Public License version 3.</p>' +
                     '<p>For more information visit our website at <a href="http://silverdecisions.pl/" target="_blank">http://silverdecisions.pl/</a>.</p>' +
                     Templates.help+
                 '</div>'+
