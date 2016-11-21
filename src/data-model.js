@@ -104,7 +104,7 @@ export class DataModel {
         self._removeNode(node);
         var parent = node.$parent;
         if (parent) {
-            var parentEdge = parent.childEdges.find((e, i)=> e.childNode === node);
+            var parentEdge = _.find(parent.childEdges, (e, i)=> e.childNode === node);
             if ($l == 0) {
                 self.removeEdge(parentEdge);
             } else {
@@ -174,11 +174,11 @@ export class DataModel {
     }
 
     findNodeById(id){
-        return this.nodes.find(n=>n.$id == id);
+        return _.find(this.nodes, n=>n.$id == id);
     }
 
     findEdgeById(id){
-        return this.edges.find(e=>e.$id == id);
+        return _.find(this.edges, e=>e.$id == id);
     }
 
     findById(id){

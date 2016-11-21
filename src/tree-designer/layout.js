@@ -66,7 +66,7 @@ export class Layout{
         this.nodesSortedByX.sort((a,b)=>a.location.x - b.location.x);
 
         function findCollidingNode(node, location){
-            return self.nodesSortedByX.find(n=>{
+            return _.find(self.nodesSortedByX, n=>{
                 if(node == n){
                     return false;
                 }
