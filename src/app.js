@@ -291,12 +291,12 @@ export class App {
         this.setDiagramTitle('', true);
         this.setDiagramDescription('', true);
         this.treeDesigner.setConfig(Utils.deepExtend(this.getTreeDesignerInitialConfig()));
-
+        this.onSelectionCleared();
     }
 
     openDiagram(diagramData){
         var self = this;
-
+        this.clear();
         if(!diagramData.SilverDecisions){
             alert(i18n.t('error.notSilverDecisionsFile'));
             return;
