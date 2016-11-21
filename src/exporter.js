@@ -14,18 +14,32 @@ export class Exporter {
         appendInlineStyles(svgNode, svgClone);
 
         function appendInlineStyles(source, target){
+            if(!source){
+                console.log('Exporter.appendInlineStyles - undefined source!');
+                return;
+            }
+            var children = source.children;
+            var targetChildren = target.children;
+            if(!source.children){
+                children = source.childNodes;
+                targetChildren = target.childNodes;
+            }
+
             var cssStyleText = '';
             var cs = getComputedStyle(source);
-            for (var i= 0; i<cs.length; i++){
+            if(!cs){
+                return;
+            }
+            for (let i= 0; i<cs.length; i++){
                 cssStyleText+='; '+cs.item(i)+': '+ cs.getPropertyValue(cs.item(i));
             }
 
 
             target.setAttribute("style", cssStyleText);
 
-            for (var i = 0; i < source.children.length; i++) {
-                var node = source.children[i];
-                appendInlineStyles(node, target.children[i]);
+            for (let i = 0; i < children.length; i++) {
+                var node = children[i];
+                appendInlineStyles(node, targetChildren[i]);
             }
         }
 
