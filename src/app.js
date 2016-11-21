@@ -347,7 +347,7 @@ export class App {
 
 
         return JSON.stringify(obj, function (k, v) {
-            if (k.startsWith('$') || k == 'parentNode') {
+            if (_.startsWith(k, '$') || k == 'parentNode') {
                 return undefined;
             }
             if (filterLocation && k == 'location') {

@@ -45,8 +45,14 @@ export class Toolbar{
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
             var json = this.app.serialize();
 
+            var event;
+            try{
+                event = new  CustomEvent('SilverDecisionsSaveEvent',{ 'detail': json });
+            }catch (e){ //IE
+                event = document.createEvent('CustomEvent');
+                event.initCustomEvent('SilverDecisionsSaveEvent', false, false, json);
+            }
 
-            var event = new  CustomEvent('SilverDecisionsSaveEvent',{ 'detail': json });
             document.dispatchEvent(event);
 
             if(this.app.config.jsonFileDownload){
