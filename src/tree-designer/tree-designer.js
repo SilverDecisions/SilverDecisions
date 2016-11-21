@@ -176,7 +176,6 @@ export class TreeDesigner {
         this.initBrush();
         this.initEdgeMarkers();
 
-
         this.updateCustomStyles();
         if(!this.config.$readOnly){
             this.initMainContextMenu();
@@ -597,10 +596,45 @@ export class TreeDesigner {
 
         this.updateBrushExtent();
 
+        brushContainer.select('.overlay').on("mousemove.edgeSelection", mousemoved);
+        function mousemoved() {
+            var m = d3.mouse(this);
+            var mgt = self.getMainGroupTranslation();
+            var margin = 10;
+
+            var closest = [null, 999999999];
+            var closeEdges = [];
+            self.mainGroup.selectAll('.edge').each(function(d){
+                var selection = d3.select(this);
+                selection.classed('sd-hover', false);
+                var pathNode = selection.select('path').node();
+                var b = pathNode.getBBox();
+                if(b.x+mgt[0] <=m[0] && b.x+b.width+mgt[0] >= m[0] &&
+                   b.y+mgt[1]-margin <=m[1] && b.y+b.height+mgt[1]+margin >= m[1]){
+
+                    var cp = Utils.closestPoint(pathNode, [m[0]-mgt[0], m[1]-mgt[1]]);
+                    if(cp.distance < margin && cp.distance<closest[1]){
+                        closest = [selection, cp.distance];
+                    }
+                }
+
+            });
+
+            self.hoveredEdge = null;
+            if(closest[0]){
+                closest[0].classed('sd-hover', true);
+                self.hoveredEdge = closest[0];
+            }
+
+        }
 
         function brushstart() {
             if (!d3.event.selection) return;
-            self.clearSelection();
+            if(self.hoveredEdge){
+                self.selectEdge(self.hoveredEdge.datum(), true)
+            }else{
+                self.clearSelection();
+            }
             ContextMenu.hide();
         }
 

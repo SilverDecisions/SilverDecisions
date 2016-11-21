@@ -460,10 +460,16 @@
           stroke-width: $stroke-width-selected - 1.1;
           stroke: $edge-optimal-color;
         }
+        &:hover, &.sd-hover{
+          path{
+            stroke-width: $stroke-width-selected - 0.5;
+          }
+        }
 
       }
 
-      &:hover{
+      &:hover, &.sd-hover{
+
         path{
           stroke-width: $stroke-width-selected - 1;
         }
@@ -479,7 +485,11 @@
           stroke-width: $stroke-width-selected;
           stroke: $edge-selected-color;
         }
-
+        &:hover, &.sd-hover{
+          path{
+            stroke-width: $stroke-width-selected;
+          }
+        }
 
         .label{
           font-weight: bold;

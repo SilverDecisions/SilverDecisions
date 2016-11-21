@@ -483,11 +483,15 @@
       #silver-decisions svg.tree-designer .edge.optimal path {
         stroke-width: 2.4;
         stroke: #006f00; }
-      #silver-decisions svg.tree-designer .edge:hover path {
+      #silver-decisions svg.tree-designer .edge.optimal:hover path, #silver-decisions svg.tree-designer .edge.optimal.sd-hover path {
+        stroke-width: 3; }
+      #silver-decisions svg.tree-designer .edge:hover path, #silver-decisions svg.tree-designer .edge.sd-hover path {
         stroke-width: 2.5; }
       #silver-decisions svg.tree-designer .edge.selected path {
         stroke-width: 3.5;
         stroke: #045ad1; }
+      #silver-decisions svg.tree-designer .edge.selected:hover path, #silver-decisions svg.tree-designer .edge.selected.sd-hover path {
+        stroke-width: 3.5; }
       #silver-decisions svg.tree-designer .edge.selected .label {
         font-weight: bold; }
 
