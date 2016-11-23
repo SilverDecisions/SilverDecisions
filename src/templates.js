@@ -28,6 +28,13 @@ export class Templates{
                 '<button id="treeAutoLayoutButton"><%= i18n.t("toolbar.layout.tree")%></button>'+
                 '<button id="clusterAutoLayoutButton"><%= i18n.t("toolbar.layout.cluster")%></button>'+
             '</div>'+
+            '<div id="objective-rule-toolbar-group" class="toolbar-group">'+
+                '<label for="objective-rule-select"><%= i18n.t("toolbar.objectiveRule.label")%></label>' +
+                '<div class="input-group no-floating-label" style="display: inline-block">' +
+                '<select id="objective-rule-select"></select>'+
+                '<span class="bar"></span>' +
+                '</div>'+
+            '</div>'+
             '<div class="toolbar-group">'+
                 '<button id="undoButton" class="icon-button" disabled="disabled" title="<%= i18n.t("toolbar.undo")%>"><i class="material-icons">undo</i></button>'+
                 '<button id="redoButton" class="icon-button" disabled="disabled" title="<%= i18n.t("toolbar.redo")%>"><i class="material-icons">redo</i></button>'+

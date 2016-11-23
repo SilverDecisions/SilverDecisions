@@ -5,7 +5,7 @@
     margin-top: 1.5em;
     margin-bottom: 0.8em;
 
-    input, textarea {
+    input, textarea, select {
       font-size: 1em;
       padding: 5px;
       box-sizing: border-box;
@@ -15,6 +15,18 @@
       border-bottom: 1px solid rgba(0,0,0,.12);
       background: none;
     }
+
+    select{
+      outline: none;
+    }
+
+    &.inline-group{
+      input, textarea, select{
+        display: inline-block;
+        width: auto;
+      }
+    }
+
     input[type=checkbox]{
       width: auto;
       margin-top: 2em;
@@ -29,36 +41,39 @@
       outline: none;
     }
 
-    label {
-      color: #999;
-      font-size: 1.0em;
-      font-weight: normal;
-      position: absolute;
-      pointer-events: none;
-      left: 5px;
-      top: 0.3em;
-      transition: 0.2s ease all;
-      -moz-transition: 0.2s ease all;
-      -webkit-transition: 0.2s ease all;
+    &:not(.no-floating-label){
+      label {
+        color: #999;
+        font-size: 1.0em;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 5px;
+        top: 0.3em;
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all;
+      }
+
+      /* active state */
+      select ~ label, input:focus ~ label, input:not(.empty) ~ label, textarea:focus ~ label, textarea:not(.empty) ~ label  {
+        top: -.85em;
+        font-size: 0.85em;
+        color: #5264AE
+      }
+
+      select ~ label{
+        top: -1.2em;
+      }
+      input[type=color] ~ label{
+        top: -1.2em;
+      }
+
+      input[type=checkbox] ~ label{
+        top: -1.4em;
+      }
     }
 
-    /* active state */
-    select ~ label, input:focus ~ label, input:not(.empty) ~ label, textarea:focus ~ label, textarea:not(.empty) ~ label  {
-      top: -.85em;
-      font-size: 0.85em;
-      color: #5264AE;
-    }
-
-    select ~ label{
-      top: -1.2em;
-    }
-    input[type=color] ~ label{
-      top: -1.2em;
-    }
-
-    input[type=checkbox] ~ label{
-      top: -1.4em;
-    }
 
 
     input.invalid ~ .bar, textarea.invalid ~ .bar{
@@ -94,7 +109,7 @@
 
 
     /* active state */
-    input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:before, textarea:focus ~ .bar:after {
+    input:focus ~ .bar:before, input:focus ~ .bar:after, textarea:focus ~ .bar:before, textarea:focus ~ .bar:after,  select:focus ~ .bar:before,  select:focus ~ .bar:after{
       width: 50%;
     }
 

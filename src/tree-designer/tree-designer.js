@@ -168,6 +168,10 @@ export class TreeDesigner {
         return this;
     }
 
+    setRuleName(ruleName){
+        this.config.$rule = ruleName;
+    }
+
     init(){
 
         this.initSvg();
@@ -509,10 +513,9 @@ export class TreeDesigner {
 
         var probabilityMerge = edgesMergeT.select('text.probability');
         probabilityMerge
-            // .attr('dominant-baseline', 'hanging') //TODO not working in IE
             .attr('text-anchor', 'end')
             .text(d=>{
-                var val = d.computedValue(ruleName, 'probability');
+                var val = d.computedValue(ruleName, '$probability');
                 return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): d.probability
             });
 

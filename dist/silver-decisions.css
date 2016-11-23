@@ -56,10 +56,9 @@
     position: relative;
     margin-top: 1.5em;
     margin-bottom: 0.8em;
-    /* active state */
     /* BOTTOM BARS ================================= */
     /* active state */ }
-    #silver-decisions .input-group input, #silver-decisions .input-group textarea {
+    #silver-decisions .input-group input, #silver-decisions .input-group textarea, #silver-decisions .input-group select {
       font-size: 1em;
       padding: 5px;
       box-sizing: border-box;
@@ -68,6 +67,11 @@
       border: none;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       background: none; }
+    #silver-decisions .input-group select {
+      outline: none; }
+    #silver-decisions .input-group.inline-group input, #silver-decisions .input-group.inline-group textarea, #silver-decisions .input-group.inline-group select {
+      display: inline-block;
+      width: auto; }
     #silver-decisions .input-group input[type=checkbox] {
       width: auto;
       margin-top: 2em; }
@@ -76,27 +80,29 @@
       overflow: hidden; }
     #silver-decisions .input-group input:focus, #silver-decisions .input-group textarea:focus {
       outline: none; }
-    #silver-decisions .input-group label {
-      color: #999;
-      font-size: 1.0em;
-      font-weight: normal;
-      position: absolute;
-      pointer-events: none;
-      left: 5px;
-      top: 0.3em;
-      transition: 0.2s ease all;
-      -moz-transition: 0.2s ease all;
-      -webkit-transition: 0.2s ease all; }
-    #silver-decisions .input-group select ~ label, #silver-decisions .input-group input:focus ~ label, #silver-decisions .input-group input:not(.empty) ~ label, #silver-decisions .input-group textarea:focus ~ label, #silver-decisions .input-group textarea:not(.empty) ~ label {
-      top: -.85em;
-      font-size: 0.85em;
-      color: #5264AE; }
-    #silver-decisions .input-group select ~ label {
-      top: -1.2em; }
-    #silver-decisions .input-group input[type=color] ~ label {
-      top: -1.2em; }
-    #silver-decisions .input-group input[type=checkbox] ~ label {
-      top: -1.4em; }
+    #silver-decisions .input-group:not(.no-floating-label) {
+      /* active state */ }
+      #silver-decisions .input-group:not(.no-floating-label) label {
+        color: #999;
+        font-size: 1.0em;
+        font-weight: normal;
+        position: absolute;
+        pointer-events: none;
+        left: 5px;
+        top: 0.3em;
+        transition: 0.2s ease all;
+        -moz-transition: 0.2s ease all;
+        -webkit-transition: 0.2s ease all; }
+      #silver-decisions .input-group:not(.no-floating-label) select ~ label, #silver-decisions .input-group:not(.no-floating-label) input:focus ~ label, #silver-decisions .input-group:not(.no-floating-label) input:not(.empty) ~ label, #silver-decisions .input-group:not(.no-floating-label) textarea:focus ~ label, #silver-decisions .input-group:not(.no-floating-label) textarea:not(.empty) ~ label {
+        top: -.85em;
+        font-size: 0.85em;
+        color: #5264AE; }
+      #silver-decisions .input-group:not(.no-floating-label) select ~ label {
+        top: -1.2em; }
+      #silver-decisions .input-group:not(.no-floating-label) input[type=color] ~ label {
+        top: -1.2em; }
+      #silver-decisions .input-group:not(.no-floating-label) input[type=checkbox] ~ label {
+        top: -1.4em; }
     #silver-decisions .input-group input.invalid ~ .bar:before, #silver-decisions .input-group input.invalid ~ .bar:after, #silver-decisions .input-group textarea.invalid ~ .bar:before, #silver-decisions .input-group textarea.invalid ~ .bar:after {
       background: red; }
     #silver-decisions .input-group .bar {
@@ -117,7 +123,7 @@
         left: 50%; }
       #silver-decisions .input-group .bar:after {
         right: 50%; }
-    #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after, #silver-decisions .input-group textarea:focus ~ .bar:before, #silver-decisions .input-group textarea:focus ~ .bar:after {
+    #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after, #silver-decisions .input-group textarea:focus ~ .bar:before, #silver-decisions .input-group textarea:focus ~ .bar:after, #silver-decisions .input-group select:focus ~ .bar:before, #silver-decisions .input-group select:focus ~ .bar:after {
       width: 50%; }
 
 /* The Modal (background) */
@@ -240,6 +246,12 @@
       #silver-decisions #toolbar .toolbar-group:last-child {
         padding-left: 7px;
         border-left: 2px solid #d8d8d8; }
+    #silver-decisions #toolbar #objective-rule-toolbar-group .input-group {
+      margin-top: 0;
+      margin-bottom: 0; }
+      #silver-decisions #toolbar #objective-rule-toolbar-group .input-group select {
+        font-size: .9em;
+        padding: 2px; }
   #silver-decisions #main-region {
     display: flex;
     flex: 1;

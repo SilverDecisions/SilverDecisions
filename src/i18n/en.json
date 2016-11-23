@@ -14,6 +14,14 @@
       "tree": "Tree",
       "cluster": "Cluster"
     },
+    "objectiveRule":{
+      "label": "Rule",
+      "options": {
+        "expected-value-maximization":"classic",
+        "maxi-min":"maxi-min",
+        "maxi-max":"maxi-max"
+      }
+    },
     "undo": "Undo",
     "redo": "Redo",
     "settings": "Settings",

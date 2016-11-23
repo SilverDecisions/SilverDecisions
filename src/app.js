@@ -255,14 +255,20 @@ export class App {
         this.treeDesigner.redraw(true);
     }
 
+    setObjectiveRule(ruleName){
+        this.treeDesigner.setRuleName(ruleName);
+        this.objectiveRulesManager.setCurrentRuleByName(ruleName);
+        this.checkValidityAndRecomputeObjective();
+        this.updateView();
+    }
 
-    checkValidityAndRecomputeObjective(){
+    checkValidityAndRecomputeObjective(allRules){
         this.validationResults = [];
         this.dataModel.getRoots().forEach(root=> {
             var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
             this.validationResults.push(vr);
             if(vr.isValid()){
-                this.objectiveRulesManager.recomputeTree(root);
+                this.objectiveRulesManager.recomputeTree(root, allRules);
             }else{
                 this.objectiveRulesManager.clearTree(root);
             }
@@ -328,12 +334,15 @@ export class App {
             console.log(e);
         }
         this.updatePayoffNumberFormat();
+        this.checkValidityAndRecomputeObjective();
         this.updateView();
 
     }
 
     serialize(filterLocation, filterComputed){
         var self = this;
+        self.checkValidityAndRecomputeObjective(true);
+
         var obj={
             SilverDecisions: App.version,
             lng: self.config.lng,

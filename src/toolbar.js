@@ -19,6 +19,7 @@ export class Toolbar{
         this.initUndoRedoButtons();
         this.initSettingsButton();
         this.initAboutButton();
+        this.initObjectiveRuleToolbarGroup();
     }
 
     initDiagramButtons(){
@@ -167,5 +168,23 @@ export class Toolbar{
             Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
         })
             .classed(this.hiddenClass, !this.app.config.buttons.exportToSvg)
+    }
+
+    initObjectiveRuleToolbarGroup() {
+        var self = this;
+        this.objectiveRuleSelect = this.container.select('#objective-rule-select');
+        var rules = this.app.objectiveRulesManager.rules;
+        var options = this.objectiveRuleSelect.selectAll('option').data(rules);
+        options.enter()
+            .append('option')
+            .merge(options)
+            .attr('value', d=>d.name)
+            .text(d=>i18n.t('toolbar.objectiveRule.options.'+d.name));
+
+        this.objectiveRuleSelect.node().value = this.app.objectiveRulesManager.currentRule.name;
+
+        this.objectiveRuleSelect.on('change', function(){
+            self.app.setObjectiveRule(this.value);
+        })
     }
 }
