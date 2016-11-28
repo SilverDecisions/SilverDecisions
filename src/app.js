@@ -363,7 +363,7 @@ export class App {
             format: self.config.format,
             treeDesigner: self.treeDesigner.config,
             trees: self.dataModel.getRoots(),
-            texts: self.texts
+            texts: self.dataModel.texts
         };
 
 

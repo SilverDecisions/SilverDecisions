@@ -42,7 +42,8 @@ export class DataModel {
         if(texts){
             texts.forEach(textData=>{
                 var location = new model.Point(textData.location.x,textData.location.y);
-                var text = new model.Text(textData, textData.value)
+                var text = new model.Text(location, textData.value);
+                this.texts.push(text);
             })
         }
     }
@@ -335,6 +336,7 @@ export class DataModel {
         this.edges.length=0;
         this.undoStack.length=0;
         this.redoStack.length=0;
+        this.texts.length=0;
     }
 
     addText(text){
