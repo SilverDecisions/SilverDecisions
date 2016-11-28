@@ -36,6 +36,9 @@
     "probability": "Probability"
 
   },
+  "text":{
+    "value": "Text"
+  },
   "settingsDialog":{
     "title": "Settings",
     "general":{

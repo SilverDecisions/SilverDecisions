@@ -11,6 +11,8 @@ import {Tooltip} from '../tooltip'
 import {ValidationResult} from '../validation/validation-result'
 import * as _ from "lodash";
 import {Templates} from "../templates";
+import {TextDragHandler} from "./text-drag-handler";
+import {TextContextMenu} from "./text-context-menu";
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -135,6 +137,7 @@ export class TreeDesignerConfig {
 
     onNodeSelected = (node) => {};
     onEdgeSelected = (edge) => {};
+    onTextSelected = (text) => {};
     onSelectionCleared = () => {};
 
     constructor(custom) {
@@ -185,6 +188,8 @@ export class TreeDesigner {
             this.initMainContextMenu();
             this.initNodeContextMenu();
             this.initNodeDragHandler();
+            this.initTextDragHandler();
+            this.initTextContextMenu();
         }
         this.redraw();
     }
@@ -202,6 +207,10 @@ export class TreeDesigner {
         this.nodeDragHandler = new NodeDragHandler(this, this.data);
     }
 
+    initTextDragHandler(){
+        this.textDragHandler = new TextDragHandler(this, this.data);
+    }
+
     redraw(withTransitions){
         var self = this;
         this.redrawDiagramTitle();
@@ -213,6 +222,7 @@ export class TreeDesigner {
         }
         this.redrawNodes();
         this.redrawEdges();
+        this.redrawFloatingTexts();
         if(withTransitions){
             self.transition =  self.transitionPrev;
         }
@@ -524,6 +534,63 @@ export class TreeDesigner {
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();
     }
+
+    redrawFloatingTexts() {
+        var self = this;
+
+
+        var textsContainer = this.mainGroup.selectOrAppend('g.floating-texts');
+        var texts = textsContainer.selectAll('.floating-text').data(this.data.texts, (d,i)=> d.$id);
+        texts.exit().remove();
+        var textsEnter = texts.enter().appendSelector('g.floating-text')
+            .attr('id', d=>'text-'+d.$id);
+
+
+
+        var rectWidth = 40;
+        var rectHeight = 20;
+
+        textsEnter.append('rect').attr('x', -5).attr('y', -16).attr('fill-opacity', 0);
+        textsEnter.append('text');
+
+        var textsMerge = textsEnter.merge(texts);
+        var textsMergeT = textsMerge;
+        if(this.transition){
+            textsMergeT = textsMerge.transition();
+        }
+
+        textsMergeT.attr('transform', d=>'translate(' + d.location.x + '  ' + d.location.y + ')');
+
+        var tspans = textsMerge.select('text').selectAll('tspan').data(d=>d.value ? d.value.split('\n') : []);
+
+        tspans.enter().append('tspan')
+            .merge(tspans)
+            .text(l=>l)
+            .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
+            .attr('x', '0');
+
+        tspans.exit().remove();
+        textsMerge.classed('sd-empty', d=>!d.value || !d.value.trim());
+        textsMerge.select('rect').attr('width', rectWidth).attr('height', rectHeight);
+
+        textsMerge.each(function(d){
+            if(!d.value){
+                return;
+            }
+            var bb = d3.select(this).select('text').node().getBBox();
+            console.log(bb);
+           d3.select(this).select('rect')
+               .attr('y', bb.y-5)
+               .attr('width', Math.max(bb.width+10, rectWidth))
+               .attr('height', Math.max(bb.height+10, rectHeight))
+        });
+
+        if(this.textDragHandler){
+            textsMerge.call(this.textDragHandler.drag);
+        }
+        textsMerge.on('contextmenu', this.textContextMenu);
+    }
+
     updateValidationMessages(validationResults) {
         var nodes = this.mainGroup.selectAll('.node');
         nodes.classed('error', false);
@@ -678,9 +745,22 @@ export class TreeDesigner {
         this.nodeContextMenu = new NodeContextMenu(this);
     }
 
+    initTextContextMenu() {
+        this.textContextMenu = new TextContextMenu(this);
+    }
+
+
+
     initMainContextMenu() {
         this.mainContextMenu = new MainContextMenu(this);
         this.svg.on('contextmenu',this.mainContextMenu);
+    }
+
+    addText(text){
+        this.data.saveState();
+        this.data.addText(text);
+        this.redraw();
+        this.selectText(text);
     }
 
     addNode(node, parent){
@@ -727,6 +807,18 @@ export class TreeDesigner {
         this.clearSelection();
         this.redraw();
         this.layout.update();
+    }
+
+    removeSelectedTexts(){
+        var selectedTexts = this.getSelectedTexts();
+        console.log('selectedTexts',selectedTexts);
+        if(!selectedTexts.length){
+            return;
+        }
+        this.data.saveState();
+        this.data.removeTexts(selectedTexts);
+        this.clearSelection();
+        this.redraw();
     }
 
     copyNode(d, notClearPrevSelection) {
@@ -822,6 +914,10 @@ export class TreeDesigner {
         this.getNodeD3Selection(node).raise().attr('transform', 'translate('+node.location.x+' '+node.location.y+')');
     }
 
+    updateTextPosition(text) {
+        this.getTextD3Selection(text).raise().attr('transform', 'translate('+text.location.x+' '+text.location.y+')');
+    }
+
     getNodeD3Selection(node){
         return this.getNodeD3SelectionById(node.$id);
     }
@@ -829,9 +925,19 @@ export class TreeDesigner {
     getNodeD3SelectionById(id){
         return this.mainGroup.select('#node-'+id);
     }
+    getTextD3Selection(text){
+        return this.getTextD3SelectionById(text.$id);
+    }
+    getTextD3SelectionById(id){
+        return this.mainGroup.select('#text-'+id);
+    }
 
     getSelectedNodes() {
         return this.mainGroup.selectAll(".node.selected").data();
+    }
+
+    getSelectedTexts(){
+        return this.mainGroup.selectAll(".floating-text.selected").data();
     }
 
     clearSelection(){
@@ -866,6 +972,18 @@ export class TreeDesigner {
         }
 
         this.getNodeD3SelectionById(node.$id).classed('selected', true);
+    }
+
+    selectText(text, clearSelectionBeforeSelect, skipCallback){
+        if(clearSelectionBeforeSelect){
+            this.clearSelection();
+        }
+
+        if(!skipCallback){
+            this.config.onTextSelected(text)
+        }
+
+        this.getTextD3SelectionById(text.$id).classed('selected', true);
     }
 
     selectSubTree(node, clearSelectionBeforeSelect,skipCallback) {

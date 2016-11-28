@@ -126,6 +126,9 @@ export class App {
         this.dataModel = new DataModel();
         // this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = ()=>self.onNodeAddedOrRemoved();
         this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = (node)=> Utils.waitForFinalEvent(()=>this.onNodeAddedOrRemoved(), 'onNodeAddedOrRemoved');
+
+        this.dataModel.textAddedCallback = (text)=> Utils.waitForFinalEvent(()=>this.onTextAdded(text), 'onTextAdded');
+        this.dataModel.textRemovedCallback = (text)=> Utils.waitForFinalEvent(()=>this.onTextRemoved(text), 'onTextAdded');
     }
 
 
@@ -184,6 +187,9 @@ export class App {
             },
             onEdgeSelected: function (edge) {
                 self.onObjectSelected(edge);
+            },
+            onTextSelected: function (text){
+                self.onObjectSelected(text);
             },
             onSelectionCleared: function () {
                 self.onSelectionCleared();
@@ -250,6 +256,15 @@ export class App {
         this.updateView();
     }
 
+    onTextAdded(text){
+        console.log('onTextAdded');
+        this.onObjectSelected(text);
+    }
+    onTextRemoved(text){
+        console.log('onTextRemoved');
+        this.updateView();
+    }
+
     onObjectUpdated(object){
         this.checkValidityAndRecomputeObjective();
         this.treeDesigner.redraw(true);
@@ -278,13 +293,9 @@ export class App {
 
     updateValidationMessages() {
         var self = this;
-        if(!this.treeDesigner){
-            setTimeout(function(){
-                self.treeDesigner.updateValidationMessages(self.validationResults);
-            },1);
-        }else{
+        setTimeout(function(){
             self.treeDesigner.updateValidationMessages(self.validationResults);
-        }
+        },1);
     }
 
     newDiagram(){
@@ -320,7 +331,7 @@ export class App {
             this.setConfig(this.config);
             this.dataModel.clear();
 
-            this.dataModel.load(diagramData.trees);
+            this.dataModel.load(diagramData.trees, diagramData.texts);
 
             if(diagramData.treeDesigner){
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
@@ -351,7 +362,8 @@ export class App {
             description: self.config.description,
             format: self.config.format,
             treeDesigner: self.treeDesigner.config,
-            trees: self.dataModel.getRoots()
+            trees: self.dataModel.getRoots(),
+            texts: self.texts
         };
 
 
@@ -447,6 +459,7 @@ export class App {
             var key = d3.event.keyCode;
             if(key==46){//delete
                 this.treeDesigner.removeSelectedNodes();
+                this.treeDesigner.removeSelectedTexts();
                 return;
             }
             if(!d3.event.ctrlKey){

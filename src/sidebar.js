@@ -158,12 +158,15 @@ export class Sidebar{
     }
 
 
-    static getHeaderTextForObject(object) {
+    static getHeaderTextForObject(object) { //TODO i18n
         if(object instanceof model.Node){
             return Utils.capitalizeFirstLetter(object.type)+' Node';
         }
         if(object instanceof model.Edge){
             return 'Edge';
+        }
+        if(object instanceof model.Text){
+            return 'Floating text';
         }
         return '';
     }
@@ -209,68 +212,21 @@ export class Sidebar{
             return list;
 
         }
+        if(object instanceof model.Text){
+            return [{
+                name: 'value',
+                type: 'textarea'
+            }]
+        }
 
         return [];
     }
 
-
-
-    updateObjectFields1(object, fieldList, container) {
-        var self = this;
-        var objectType = object instanceof model.Node ? 'node' : 'edge';
-
-        var fields = container.selectAll('div.object-field').data(fieldList);
-        var temp={};
-        var fieldsEnter = fields.enter().appendSelector('div.object-field');
-
-        fieldsEnter.append('input');
-        // fieldsEnter.appendSelector('span.highlight');
-        fieldsEnter.appendSelector('span.bar');
-        fieldsEnter.append('label');
-
-        fieldsEnter.classed('input-group', true);
-
-        var getFieldId = d=>'object-'+object.$id+'-field-'+d.name;
-
-        var fieldsMerge = fieldsEnter.merge(fields);
-        fieldsMerge.select('label')
-            .attr('for', getFieldId)
-            .html(d=>i18n.t(objectType+'.'+d.name));
-        fieldsMerge.select('input')
-            .attr('type', d=>d.type)
-            .attr('name', d=>d.name)
-            .attr('id', getFieldId)
-            .on('change keyup', function(d, i){
-                if(d.validator && !d.validator.validate(this.value)){
-                    d3.select(this).classed('invalid', true);
-                    return;
-                }
-                d3.select(this).classed('invalid', false);
-                if(d3.event.type=='change' && temp[i].pristineVal!=this.value){
-                    object[d.name] = temp[i].pristineVal;
-                    self.app.dataModel.saveState();
-                }
-                object[d.name] = this.value;
-                Utils.updateInputClass(d3.select(this));
-                self.app.onObjectUpdated(object)
-
-            })
-            .each(function(d, i){
-                this.value = object[d.name];
-                temp[i]={};
-                temp[i].pristineVal = this.value;
-                if(d.validator && !d.validator.validate(this.value)){
-                    d3.select(this).classed('invalid', true);
-                }
-                Utils.updateInputClass(d3.select(this));
-            });
-
-        fields.exit().remove();
-    }
-
     updateObjectFields(object, fieldList, container) {
         var self = this;
-        var objectType = object instanceof model.Node ? 'node' : 'edge';
+
+
+        var objectType = object instanceof model.Node ? 'node' :  object instanceof model.Edge ? 'edge' : 'text';
         var getFieldId = d=>'object-'+object.$id+'-field-'+d.name;
 
         var fields = container.selectAll('div.object-field').data(fieldList);

@@ -10,6 +10,8 @@ export class DataModel {
     nodes = [];
     edges = [];
 
+    texts = []; //floating texts
+
     expressionScope={};
 
     // undo / redo
@@ -20,6 +22,9 @@ export class DataModel {
     nodeAddedCallback = null;
     nodeRemovedCallback = null;
 
+    textAddedCallback=null;
+    textRemovedCallback = null;
+
     constructor() {
         // var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
         // var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
@@ -29,10 +34,17 @@ export class DataModel {
     }
 
     /*Loads serialized data*/
-    load(roots){
+    load(roots, texts){
         roots.forEach(nodeData=>{
             var node = this.createNodeFromData(nodeData);
-        })
+        });
+
+        if(texts){
+            texts.forEach(textData=>{
+                var location = new model.Point(textData.location.x,textData.location.y);
+                var text = new model.Text(textData, textData.value)
+            })
+        }
     }
 
     /*create node from serialized data*/
@@ -267,7 +279,8 @@ export class DataModel {
         this._pushToStack(this.undoStack,{
             revertConf: revertConf,
             nodes: _.cloneDeep(this.nodes),
-            edges: _.cloneDeep(this.edges)
+            edges: _.cloneDeep(this.edges),
+            texts: _.cloneDeep(this.texts)
         });
 
         this._fireUndoRedoCallback();
@@ -285,7 +298,8 @@ export class DataModel {
         this._pushToStack(this.redoStack, {
             revertConf: newState.revertConf,
             nodes: self.nodes,
-            edges: self.edges
+            edges: self.edges,
+            texts: self.texts
         });
 
         this._setNewState(newState);
@@ -305,7 +319,8 @@ export class DataModel {
         this._pushToStack(this.undoStack, {
             revertConf: newState.revertConf,
             nodes: self.nodes,
-            edges: self.edges
+            edges: self.edges,
+            texts: self.texts
         });
 
         this._setNewState(newState, true);
@@ -322,12 +337,30 @@ export class DataModel {
         this.redoStack.length=0;
     }
 
+    addText(text){
+        this.texts.push(text);
+
+        this._fireTextAddedCallback(text);
+    }
+
+    removeTexts(texts){
+       texts.forEach(t=>this.removeText(t));
+    }
+
+    removeText(text){
+        var index  = this.texts.indexOf(text);
+        if (index > -1) {
+            this.texts.splice(index, 1);
+            this._fireTextRemovedCallback(text);
+        }
+    }
 
     _setNewState(newState, redo) {
         var nodeById = Utils.getObjectByIdMap(newState.nodes);
         var edgeById = Utils.getObjectByIdMap(newState.edges);
         this.nodes = newState.nodes;
         this.edges = newState.edges;
+        this.texts= newState.texts;
         this.nodes.forEach(n=> {
             for(var i=0; i<n.childEdges.length; i++){
                 var edge = edgeById[n.childEdges[i].$id];
@@ -374,6 +407,18 @@ export class DataModel {
     _fireNodeRemovedCallback(node) {
         if (this.nodeRemovedCallback) {
             this.nodeRemovedCallback(node);
+        }
+    }
+
+    _fireTextAddedCallback(text) {
+        if (this.textAddedCallback) {
+            this.textAddedCallback(text);
+        }
+    }
+
+    _fireTextRemovedCallback(text) {
+        if (this.textRemovedCallback) {
+            this.textRemovedCallback(text);
         }
     }
 }
