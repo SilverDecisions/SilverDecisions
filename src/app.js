@@ -470,7 +470,7 @@ export class App {
                 return;
             }
 
-            if(key==65){//ctrl + a
+            /*if(key==65){//ctrl + a
                 if(selectedNodes.length==1){
                     this.treeDesigner.selectSubTree(selectedNodes[0])
                 }else{
@@ -478,7 +478,7 @@ export class App {
                 }
                 // d3.event.preventDefault()
                 return;
-            }
+            }*/
 
             if(key==86){//ctrl + v
                 if(selectedNodes.length==1){
