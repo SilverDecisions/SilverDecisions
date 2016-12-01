@@ -1,0 +1,28 @@
+{
+  "name": "silver-decisions",
+  "description": "Software for creating and analyzing decision trees.",
+  "main": [
+    "dist/silver-decisions.js",
+    "dist/silver-decisions.css"
+  ],
+  "authors": [
+    "Michał Wasiluk",
+    "Bogumił Kamiński"
+  ],
+  "license": "LGPL-3.0",
+  "keywords": [
+    "decision",
+    "tree",
+    "creator",
+    "analysis",
+    "d3"
+  ],
+  "homepage": "https://github.com/bkamins/SilverDecisions",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
