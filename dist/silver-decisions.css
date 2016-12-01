@@ -126,6 +126,7 @@
     #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after, #silver-decisions .input-group textarea:focus ~ .bar:before, #silver-decisions .input-group textarea:focus ~ .bar:after, #silver-decisions .input-group select:focus ~ .bar:before, #silver-decisions .input-group select:focus ~ .bar:after {
       width: 50%; }
 
+
 /* The Modal (background) */
 .sd-modal {
   display: none;
@@ -168,7 +169,8 @@
     animation-duration: 0.4s;
     max-height: 80vh;
     display: flex;
-    flex-direction: column; }
+    flex-direction: column;
+    overflow: auto; }
   .sd-modal .sd-modal-header {
     padding: 2px 16px;
     background-color: #3F51B5;
