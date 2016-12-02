@@ -1,6 +1,7 @@
 var jsonUrl = getParameterByName('LOAD_SD_TREE_JSON');
 var lng = getParameterByName('lang');
 var readOnly = getParameterByName('readonly');
+readOnly = readOnly ? readOnly.toLowerCase() === 'true' : false;
 
 if(!lng || ['en'].indexOf(lng.toLowerCase())<0){
     lng = 'en'
