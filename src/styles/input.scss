@@ -33,8 +33,7 @@
     }
 
     textarea{
-      /* box-sizing: padding-box; */
-      overflow:hidden;
+      overflow:hidden!important;
     }
 
     input:focus, textarea:focus  {

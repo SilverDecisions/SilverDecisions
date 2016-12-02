@@ -76,8 +76,7 @@
       width: auto;
       margin-top: 2em; }
     #silver-decisions .input-group textarea {
-      /* box-sizing: padding-box; */
-      overflow: hidden; }
+      overflow: hidden !important; }
     #silver-decisions .input-group input:focus, #silver-decisions .input-group textarea:focus {
       outline: none; }
     #silver-decisions .input-group:not(.no-floating-label) {

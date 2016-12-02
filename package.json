@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/bkamins/SilverDecisions#readme",
   "devDependencies": {
+    "autosize": "^3.0.19",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-preset-es2015": "^6.14.0",
     "babelify": "^7.3.0",

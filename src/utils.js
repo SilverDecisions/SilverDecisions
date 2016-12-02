@@ -1,4 +1,5 @@
 import * as d3 from './d3'
+import * as autosize from 'autosize'
 
 export class Utils {
     static SQRT_2 = 1.41421356237;
@@ -268,23 +269,24 @@ export class Utils {
 
     static autoResizeTextarea(element){
         setTimeout(function(){
-            element.style.height = 'auto';
-            element.style.height = element.scrollHeight+'px';
-        }, 0);
+            element.style.width = "";
+            var width = element.getBoundingClientRect().width;
+            if(width){
+                element.style.width = width+'px';
+            }
+            autosize.update(element);
+        }, 10);
     }
 
     static elasticTextarea(selection){
-        //
-        // var text=selection.node().value;
-        // var lines=text.split('\n');
-        //
-        // selection.attr('rows',lines.length || 1);
-
-        selection.on('keydown.elastic change.elastic cut paste drop focus.elastic', function(){
-            var e = d3.event;
-            Utils.autoResizeTextarea(e.target)
-        });
-
+        setTimeout(function(){
+            selection.style('width',undefined);
+            var width = selection.node().getBoundingClientRect().width;
+            if(width){
+                selection.style('width', width+'px')
+            }
+            autosize.default(selection.node());
+        },10)
     }
 
     static closestPoint(pathNode, point) {

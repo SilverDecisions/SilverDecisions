@@ -112,7 +112,7 @@ export class Templates{
                     '<label for="diagram-title"><%= i18n.t("diagramDetails.title") %></label>'+
                 '</div>' +
                 '<div class="input-group">' +
-                    '<textarea id="diagram-description" name="diagram-description" rows="1"></textarea>' +
+                    '<textarea id="diagram-description" name="diagram-description"></textarea>' +
                     '<span class="bar"></span>' +
                     '<label for="diagram-description"><%= i18n.t("diagramDetails.description") %></label>'+
                 '</div>' +
