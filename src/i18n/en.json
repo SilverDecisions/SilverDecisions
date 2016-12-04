@@ -195,6 +195,9 @@
     "fileApiNotSupported":"The file API isn't supported on this browser yet.",
     "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
     "notSilverDecisionsFile":"Not a SilverDecisions file!",
-    "malformedData":"Error reading tree data!"
+    "malformedData":"Error reading tree data!",
+    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
+    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
+    "svgExportNotSupported": "Export to SVG is not supported in your browser."
   }
 }

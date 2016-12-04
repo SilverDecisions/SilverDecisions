@@ -162,11 +162,8 @@ export class Toolbar{
 
     initExportSvgButton() {
         var svg = this.app.treeDesigner.svg;
-        this.container.select('#saveButtonSvg').on('click', function () {
-            var svgString = Exporter.getSVGString(svg.node());
-            var blob = new Blob([svgString], {type: "image/svg+xml"});
-            Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
-        })
+        this.container.select('#saveButtonSvg')
+            .on('click', () => Exporter.saveAsSvg(svg))
             .classed(this.hiddenClass, !this.app.config.buttons.exportToSvg)
     }
 

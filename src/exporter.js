@@ -1,6 +1,8 @@
 import {dataURLtoBlob} from 'blueimp-canvas-to-blob'
 import {saveAs} from 'file-saver'
 import * as d3 from './d3'
+import {i18n} from "./i18n/i18n";
+import {Utils} from "./utils";
 
 export class Exporter {
     static saveAs = saveAs;
@@ -94,16 +96,41 @@ export class Exporter {
     }
 
     static saveAsPng(svg) {
-        var svgString = Exporter.getSVGString(svg.node());
-        var svgWidth = svg.attr('width');
-        var svgHeight = svg.attr('height');
+        if(Utils.detectIE()){
+            alert(i18n.t('error.pngExportNotSupportedIE'));
+            return;
+        }
+        try{
+            var svgString = Exporter.getSVGString(svg.node());
+            var svgWidth = svg.attr('width');
+            var svgHeight = svg.attr('height');
 
-        var pngWidth = 4*svgWidth;
-        var pngHeight = 4*svgHeight;
-        Exporter.svgString2Image(svgString,  pngWidth, pngHeight, 'png', save); // passes Blob and filesize String to the callback
+            var pngWidth = 4*svgWidth;
+            var pngHeight = 4*svgHeight;
+            Exporter.svgString2Image(svgString,  pngWidth, pngHeight, 'png', save); // passes Blob and filesize String to the callback
 
-        function save(dataBlob, filesize) {
-            Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
+            function save(dataBlob, filesize) {
+                try{
+                    Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
+                }catch (e){
+                    alert(i18n.t('error.pngExportNotSupported'));
+                    console.log(e);
+                }
+            }
+        }catch (e){
+            alert(i18n.t('error.pngExportNotSupported'));
+            console.log(e);
+        }
+    }
+
+    static saveAsSvg(svg) {
+        try{
+            var svgString = Exporter.getSVGString(svg.node());
+            var blob = new Blob([svgString], {type: "image/svg+xml"});
+            Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
+        }catch (e){
+            alert(i18n.t('error.svgExportNotSupported'));
+            console.log(e);
         }
     }
 }
