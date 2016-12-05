@@ -323,13 +323,16 @@ export class App {
                 this.config.lng = diagramData.lng;
             }
             if(diagramData.rule){
-                this.config.rule = diagramData.rule;
+                if(this.objectiveRulesManager.isRuleName(diagramData.rule)){
+                    this.config.rule = diagramData.rule;
+                }else{
+                    delete this.config.rule;
+                }
             }
             if(diagramData.format){
                 this.config.format = diagramData.format;
             }
             this.setConfig(this.config);
-            this.dataModel.clear();
 
             this.dataModel.load(diagramData.trees, diagramData.texts);
 
@@ -342,11 +345,22 @@ export class App {
 
         }catch (e){
             alert(i18n.t('error.malformedData'));
+
             console.log(e);
         }
-        this.updatePayoffNumberFormat();
-        this.checkValidityAndRecomputeObjective();
-        this.updateView();
+        try{
+            this.updateNumberFormats();
+        }catch (e){
+            console.log(e);
+            alert(i18n.t('error.incorrectNumberFormatOptions'));
+            delete this.config.format;
+            this.setConfig(this.config);
+            this.updateNumberFormats();
+        }
+
+        this.setObjectiveRule(this.config.rule);
+        // this.checkValidityAndRecomputeObjective();
+        // this.updateView();
 
     }
 

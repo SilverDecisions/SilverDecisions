@@ -142,6 +142,7 @@ export class Toolbar{
     update(){
         this.updateUndoRedoButtons();
         this.updateLayoutButtons();
+        this.updateObjectiveRuleValue();
     }
 
     initExportToolbarGroup() {
@@ -178,10 +179,14 @@ export class Toolbar{
             .attr('value', d=>d.name)
             .text(d=>i18n.t('toolbar.objectiveRule.options.'+d.name));
 
-        this.objectiveRuleSelect.node().value = this.app.objectiveRulesManager.currentRule.name;
+        this.updateObjectiveRuleValue();
 
         this.objectiveRuleSelect.on('change', function(){
             self.app.setObjectiveRule(this.value);
         })
+    }
+
+    updateObjectiveRuleValue(){
+        this.objectiveRuleSelect.node().value = this.app.objectiveRulesManager.currentRule.name;
     }
 }

@@ -1,6 +1,6 @@
 {
   "name": "silver-decisions",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "description": "Software for creating and analyzing decision trees.",
   "main": "index.js",
   "scripts": {

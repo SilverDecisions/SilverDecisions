@@ -198,6 +198,9 @@
     "malformedData":"Error reading tree data!",
     "pngExportNotSupported": "Export to PNG is not supported in your browser.",
     "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
-    "svgExportNotSupported": "Export to SVG is not supported in your browser."
+    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
+    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
+    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
+    "incorrectNumberFormatOptions": "Incorrect number format options, using default."
   }
 }

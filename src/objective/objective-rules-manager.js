@@ -23,6 +23,10 @@ export class ObjectiveRulesManager{
         this.currentRule = this.ruleByName[currentRuleName];
     }
 
+    isRuleName(ruleName){
+         return !!this.ruleByName[ruleName]
+    }
+
     setCurrentRuleByName(ruleName){
         this.currentRule = this.ruleByName[ruleName];
     }
