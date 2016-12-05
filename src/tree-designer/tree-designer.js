@@ -441,7 +441,7 @@ export class TreeDesigner {
         }
 
         nodesMerge.on('contextmenu', this.nodeContextMenu);
-        nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
+        nodesMerge.on('dblclick', this.nodeContextMenu)
     }
 
     updateTextLines(d){ //helper method for splitting text to tspans
@@ -589,6 +589,8 @@ export class TreeDesigner {
             textsMerge.call(this.textDragHandler.drag);
         }
         textsMerge.on('contextmenu', this.textContextMenu);
+        textsMerge.on('dblclick', this.textContextMenu);
+
     }
 
     updateValidationMessages(validationResults) {
@@ -754,6 +756,7 @@ export class TreeDesigner {
     initMainContextMenu() {
         this.mainContextMenu = new MainContextMenu(this);
         this.svg.on('contextmenu',this.mainContextMenu);
+        this.svg.on('dblclick',this.mainContextMenu);
     }
 
     addText(text){
