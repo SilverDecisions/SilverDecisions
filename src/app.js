@@ -77,10 +77,10 @@ export class App {
     toolbar;
     sidebar;
 
-    constructor(containerId, config, diagramData) {
+    constructor(containerIdOrElem, config, diagramData) {
         this.setConfig(config);
         this.initI18n();
-        this.initContainer(containerId);
+        this.initContainer(containerIdOrElem);
 
         this.initDataModel();
         this.initExpressionEngine();
@@ -111,8 +111,19 @@ export class App {
         return this;
     }
 
-    initContainer(containerId) {
-        this.container = d3.select('#' + containerId);
+    initContainer(containerIdOrElem) {
+
+        if(Utils.isString(containerIdOrElem)){
+            var selector = containerIdOrElem.trim();
+
+            if(!_.startsWith(selector, '#') && !_.startsWith(selector, '.')){
+                selector='#'+selector;
+            }
+            this.container = d3.select(selector);
+        }else{
+            this.container = d3.select(containerIdOrElem);
+        }
+
         this.container.html(Templates.get('main', {version: App.version}));
         this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
