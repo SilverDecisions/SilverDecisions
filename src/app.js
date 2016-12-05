@@ -54,7 +54,7 @@ export class AppConfig {
     };
     title='';
     description='';
-
+    treeDesigner={};
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
 
@@ -190,7 +190,7 @@ export class App {
 
     getTreeDesignerInitialConfig() {
         var self = this;
-        return {
+        return Utils.deepExtend({
             $readOnly: self.config.readOnly,
             $rule: self.config.rule,
             onNodeSelected: function (node) {
@@ -207,7 +207,7 @@ export class App {
             },
             payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v),
             probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v)
-        };
+        }, self.config.treeDesigner);
     }
 
     onObjectSelected(object){

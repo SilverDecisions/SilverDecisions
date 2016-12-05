@@ -156,7 +156,12 @@ var app = new SilverDecisions('app-container', {
     },
     showExport: true,
     showDetails: true,
-    jsonFileDownload: true
+    jsonFileDownload: true,
+    treeDesigner:{
+        description:{
+            show: true
+        }
+    }
 }, data);
 
 document.addEventListener('SilverDecisionsSaveEvent', function(data){
