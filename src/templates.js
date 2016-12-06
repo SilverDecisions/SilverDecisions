@@ -212,7 +212,8 @@ export class Templates{
                         '<li><a href="https://szufel.pl/" target="_blank">Przemysław Szufel</a> (deputy project manager)</li>' +
                         '<li><a href="https://github.com/mwasiluk" target="_blank">Michał Wasiluk</a> (developer)</li>' +
                         '<li>Marcin Czupryna (tester)</li>' +
-                        '<li><a href="http://www.michaljakubczyk.pl/" target="_blank">Michał Jakubczyk</a> (tester)</p></li>' +
+                        '<li><a href="http://www.michaljakubczyk.pl/" target="_blank">Michał Jakubczyk</a> (tester)</li>' +
+                        '<li>Anna Wiertlewska (documentalist)</li>' +
                     '</ul>'+
                     '<p>The project is developed at Decision Support and Analysis Division, Warsaw School of Economics.<br/>Contact: silverdecisions@sgh.waw.pl</p>'+
                     '<p>Software is developed as a part of <a href="http://routetopa.eu/" target="_blank">ROUTE-TO-PA</a> Project that has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Its aim is to allow a transparent communication between public administration and citizens regarding public data about decision making processes performed by public administration.</p>' +
