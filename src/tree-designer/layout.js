@@ -55,6 +55,13 @@ export class Layout{
         return new model.Point(x, y)
     }
 
+    getInjectedNodeLocation(edge){
+
+        var p = edge.$linePoints[2];
+
+        return new model.Point(p[0], p[1])
+    }
+
     moveNodeToEmptyPlace(node){
         var positionMap = {};
         var self = this;

@@ -84,6 +84,17 @@ export class DataModel {
         return node;
     }
 
+    /*injects given node into given edge*/
+    injectNode(node, edge){
+        var parent = edge.parentNode;
+        var child = edge.childNode;
+        this.nodes.push(node);
+        node.$parent = parent;
+        edge.childNode=node;
+        this._addChild(node, child);
+        this._fireNodeAddedCallback(node);
+    }
+
     _addChild(parent, child) {
         var self = this;
         var edge = new model.Edge(parent, child);

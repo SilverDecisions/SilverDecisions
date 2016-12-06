@@ -491,22 +491,32 @@ export class App {
                 return;
             }
 
-            var selectedNodes = this.treeDesigner.getSelectedNodes();
 
-            if(d3.event.altKey && selectedNodes.length==1){
-                let selectedNode = selectedNodes[0];
-                if(selectedNode instanceof model.TerminalNode){
+
+            if(d3.event.altKey){
+                if(this.selectedObject instanceof model.Node){
+                    let selectedNode = this.selectedObject;
+                    if(selectedNode instanceof model.TerminalNode){
+                        return;
+                    }
+                    if(key==68){ // ctrl + alt + d
+                        this.treeDesigner.addDecisionNode(selectedNode);
+                    }else if(key==67){ // ctrl + alt + c
+                        this.treeDesigner.addChanceNode(selectedNode);
+                    } else if(key==84){ // ctrl + alt + t
+                        this.treeDesigner.addTerminalNode(selectedNode);
+                    }
                     return;
+                }else if(this.selectedObject instanceof model.Edge) {
+                    if(key==68){ // ctrl + alt + d
+                        this.treeDesigner.injectDecisionNode(this.selectedObject);
+                    }else if(key==67){ // ctrl + alt + c
+                        this.treeDesigner.injectChanceNode(this.selectedObject);
+                    }
                 }
-                if(key==68){ // ctrl + alt + d
-                    this.treeDesigner.addDecisionNode(selectedNode);
-                }else if(key==67){ // ctrl + alt + c
-                    this.treeDesigner.addChanceNode(selectedNode);
-                } else if(key==84){ // ctrl + alt + t
-                    this.treeDesigner.addTerminalNode(selectedNode);
-                }
-                return;
+
             }
+
 
             if(key==90){//ctrl + z
                 this.undo();
@@ -526,7 +536,7 @@ export class App {
                 // d3.event.preventDefault()
                 return;
             }*/
-
+            var selectedNodes = this.treeDesigner.getSelectedNodes();
             if(key==86){//ctrl + v
                 if(selectedNodes.length==1){
                     let selectedNode = selectedNodes[0];

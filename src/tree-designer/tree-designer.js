@@ -13,6 +13,7 @@ import * as _ from "lodash";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
+import {EdgeContextMenu} from "./edge-context-menu";
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -187,6 +188,7 @@ export class TreeDesigner {
         if(!this.config.$readOnly){
             this.initMainContextMenu();
             this.initNodeContextMenu();
+            this.initEdgeContextMenu();
             this.initNodeDragHandler();
             this.initTextDragHandler();
             this.initTextContextMenu();
@@ -533,6 +535,9 @@ export class TreeDesigner {
         this.layout.edgeProbabilityPosition(probabilityEnter);
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();
+
+        edgesMerge.on('contextmenu', this.edgeContextMenu);
+        edgesMerge.on('dblclick', this.edgeContextMenu)
     }
 
     redrawFloatingTexts() {
@@ -730,6 +735,10 @@ export class TreeDesigner {
             if (!d3.event.selection) return;
             brush.move(brushContainer, null);
 
+            var selectedNodes = self.getSelectedNodes();
+            if(selectedNodes && selectedNodes.length === 1){
+                self.selectNode(selectedNodes[0]);
+            }
             // if (!d3.event.selection) self.mainGroup.selectAll(".selected").classed('selected', false);
         }
     }
@@ -745,6 +754,10 @@ export class TreeDesigner {
 
     initNodeContextMenu() {
         this.nodeContextMenu = new NodeContextMenu(this);
+    }
+
+    initEdgeContextMenu() {
+        this.edgeContextMenu = new EdgeContextMenu(this);
     }
 
     initTextContextMenu() {
@@ -786,6 +799,26 @@ export class TreeDesigner {
     addTerminalNode(parent){
         var newNode = new model.TerminalNode(this.layout.getNewChildLocation(parent));
         this.addNode(newNode, parent)
+    }
+
+    injectNode(node, edge){
+        this.data.saveState();
+        this.data.injectNode(node, edge);
+        this.redraw();
+        this.layout.update(node);
+        return node;
+    }
+
+    injectDecisionNode(edge){
+        var newNode = new model.DecisionNode(this.layout.getInjectedNodeLocation(edge));
+        this.injectNode(newNode, edge);
+
+    }
+
+    injectChanceNode(edge){
+        var newNode = new model.ChanceNode(this.layout.getInjectedNodeLocation(edge));
+        this.injectNode(newNode, edge);
+
     }
 
     removeNode(node) {
