@@ -497,7 +497,10 @@ export class TreeDesigner {
             // .attr("stroke", "black")
             // .attr("stroke-width", 2)
             .attr("fill", "none")
-            .attr("marker-end", d => "url(#arrow"+(self.isOptimal(d)?'-optimal':'')+")")
+            .attr("marker-end", function(d) {
+                var suffix = d3.select(this.parentNode).classed('selected') ? '-selected' : (self.isOptimal(d)?'-optimal':'');
+                return "url(#arrow"+ suffix+")"
+            })
             .attr("shape-rendering", "optimizeQuality")
 
 
@@ -818,7 +821,6 @@ export class TreeDesigner {
     injectChanceNode(edge){
         var newNode = new model.ChanceNode(this.layout.getInjectedNodeLocation(edge));
         this.injectNode(newNode, edge);
-
     }
 
     removeNode(node) {
@@ -986,7 +988,6 @@ export class TreeDesigner {
         if(clearSelectionBeforeSelect){
             this.clearSelection();
         }
-
         this.config.onEdgeSelected(edge);
         this.mainGroup.select('#edge-'+edge.$id)
             .classed('selected', true)
