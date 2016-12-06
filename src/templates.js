@@ -179,7 +179,7 @@ export class Templates{
                 '<ul>' +
                     '<li>left mouse button: node selection</li>' +
                     '<li>right mouse button: context menu (adding/manipulating nodes)</li>' +
-                    '<li>left mouse dbclick on a node: select a subtree</li>' +
+                    '<li>left mouse dbclick: context menu</li>' +
                 '</ul>' +
             '</p>' +
             '<p>' +
@@ -189,7 +189,8 @@ export class Templates{
                     '<li>Ctrl-C/X: copy/cut selected nodes</li>' +
                     '<li>Ctrl-V: paste copied nodes as a subtree of a selected node</li>' +
                     '<li>Ctrl-Y/Z: undo/redo</li>' +
-                    '<li>Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a selected node</li>' +
+                    '<li>Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong></li>' +
+                    '<li>Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong></li>' +
                 '</ul>' +
             '</p>' +
             '<p>Documentation of SilverDecisions is available <a href="https://github.com/bkamins/SilverDecisions/wiki/Documentation" target="_blank">here</a> </p>'+
