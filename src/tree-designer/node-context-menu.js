@@ -75,6 +75,17 @@ export class NodeContextMenu extends ContextMenu {
                 }
             });
 
+            if(d instanceof model.ChanceNode){
+                menu.push({divider: true});
+                menu.push({
+                    title: 'Flip subtree',
+                    action: function (elm, d, i) {
+                        treeDesigner.flipSubTree(d);
+                    },
+                    disabled: !treeDesigner.canFlipSubTree(d)
+                });
+            }
+
             return menu;
         };
 

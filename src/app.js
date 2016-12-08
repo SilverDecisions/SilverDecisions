@@ -145,9 +145,11 @@ export class App {
 
     initExpressionEngine() {
         this.expressionEngine =  new ExpressionEngine(this.dataModel.expressionScope);
+        this.dataModel.setExpressionEngine(this.expressionEngine);
     }
     initTreeValidator(){
         this.treeValidator = new TreeValidator(this.expressionEngine);
+        this.dataModel.setTreeValidator(this.treeValidator);
     }
 
     initObjectiveRulesManager(){

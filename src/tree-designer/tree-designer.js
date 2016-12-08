@@ -531,7 +531,17 @@ export class TreeDesigner {
             .attr('text-anchor', 'end')
             .text(d=>{
                 var val = d.computedValue(ruleName, '$probability');
-                return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): d.probability
+                if(val!==null && !isNaN(val))
+                    return self.config.probabilityNumberFormatter(val);
+
+                val = d.computed['$probability'];
+                if(val!==null && !isNaN(val))
+                    return self.config.probabilityNumberFormatter(val);
+
+                if(d.probability!==null && !isNaN(d.probability))
+                    return self.config.probabilityNumberFormatter(d.probability);
+
+                return d.probability;
             });
 
         this.layout.edgeProbabilityPosition(probabilityMerge);
@@ -910,7 +920,7 @@ export class TreeDesigner {
         var nodesToAttach = this.copiedNodes;
         self.copyNodes(this.copiedNodes);
         nodesToAttach.forEach(toAttach=>{
-            var attached = this.data.attachSubtree(toAttach, node);
+            var attached = this.data.attachSubtree(toAttach, node).childNode;
             var location = self.layout.getNewChildLocation(node);
             attached.moveTo(location.x, location.y, true);
             self.layout.moveNodeToEmptyPlace(attached);
@@ -943,6 +953,19 @@ export class TreeDesigner {
             self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
     }
+
+    canFlipSubTree(node){
+        return this.data.canFlipSubTree(node);
+    }
+
+    flipSubTree(node){
+        this.data.saveState();
+        this.data.flipSubTree(node);
+        this.redraw();
+        this.layout.update();
+    }
+
+
 
     moveNodeTo(x,y){
 
