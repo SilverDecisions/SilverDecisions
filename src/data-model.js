@@ -431,12 +431,11 @@ export class DataModel {
                 if(child.childEdges.length!=grandchildrenNumber){
                     return false;
                 }
-                console.log(grandchildrenEdgeLabelsSet);
+                // console.log(grandchildrenEdgeLabelsSet);
 
                 if(!child.childEdges.every((ge, i)=>grandchildrenEdgeLabels[i] === ge.name.trim())){
                     return false;
                 }
-
 
                 return true;
 
@@ -480,6 +479,7 @@ export class DataModel {
             edge.probability =0;
 
             // console.log(child);
+
             for(var j=0; j< grandChildrenNumber; j++){
                 var grandChild = rootClone.childEdges[j].childNode.childEdges[i].childNode;
 
@@ -491,17 +491,18 @@ export class DataModel {
                 grandChildEdge.probability = this.expressionEngine.evalAndMultiply(rootClone.childEdges[j].probability, rootClone.childEdges[j].childNode.childEdges[i].probability);
                 edge.probability = this.expressionEngine.evalAndAdd(edge.probability,grandChildEdge.probability);
             }
-            var divider = edge.probability;
+
+            var divideGrandChildEdgeProbability = p => ExpressionEngine.divide(p, edge.probability);
             if(edge.probability.equals(0)){
-                divider = 1/childrenNumber;
+                var prob = ExpressionEngine.divide(1, grandChildrenNumber);
+                divideGrandChildEdgeProbability = p => prob;
             }
 
             var probabilitySum = 0.0;
             child.childEdges.forEach(grandChildEdge=> {
-                grandChildEdge.probability = ExpressionEngine.divide(grandChildEdge.probability, divider);
+                grandChildEdge.probability = divideGrandChildEdgeProbability(grandChildEdge.probability);
                 probabilitySum = ExpressionEngine.add(probabilitySum, grandChildEdge.probability);
             });
-
 
             if(!probabilitySum.equals(1)){
                 console.log('Sum of the probabilities is not equal to 1 : ',probabilitySum);
@@ -513,8 +514,6 @@ export class DataModel {
             }
 
         }
-
-
 
         this.callbacksDisabled =callbacksDisabled;
         this._fireNodeAddedCallback();
