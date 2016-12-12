@@ -2,6 +2,7 @@ import {ContextMenu} from '../context-menu'
 import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'
+import {i18n} from "../i18n/i18n";
 
 export class TextContextMenu extends ContextMenu {
     treeDesigner;
@@ -11,7 +12,7 @@ export class TextContextMenu extends ContextMenu {
 
 
             var deleteMenuItem = {
-                title: 'Delete',
+                title: i18n.t('contextMenu.text.delete'),
                 action: function (elm, d, i) {
 
                     treeDesigner.selectText(d, true, true);

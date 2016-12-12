@@ -39,6 +39,29 @@
   "text":{
     "value": "Text"
   },
+  "contextMenu":{
+    "main":{
+      "addDecisionNode": "Add Decision Node",
+      "addChanceNode": "Add Chance Node",
+      "addText": "Add Text",
+      "paste": "Paste",
+      "selectAllNodes": "Select all nodes"
+    },
+    "node":{
+      "copy": "Copy",
+      "cut": "Cut",
+      "paste": "Paste",
+      "delete": "Delete",
+      "addDecisionNode": "Add Decision Node",
+      "addChanceNode": "Add Chance Node",
+      "addTerminalNode": "Add Terminal Node",
+      "selectSubtree": "Select subtree",
+      "flipSubtree": "Flip subtree"
+    },
+    "text":{
+      "delete": "Delete"
+    }
+  },
   "settingsDialog":{
     "title": "Settings",
     "general":{
@@ -180,6 +203,25 @@
     "header": "Details",
     "title" : "Title",
     "description" : "Description"
+  },
+  "objectProperties":{
+    "header":{
+      "node":{
+        "decision":"Decision Node",
+        "chance":"Chance Node",
+        "terminal":"Terminal Node"
+      },
+      "edge": "Edge",
+      "text": "Floating text"
+    },
+    "childrenProperties":{
+      "node":{
+        "header": "Connections",
+        "child": {
+          "header": "Edge #{{number}}"
+        }
+      }
+    }
   },
   "validation":{
     "incompletePath": "Path not ending with terminal node",

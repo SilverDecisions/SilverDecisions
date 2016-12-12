@@ -133,12 +133,13 @@ export class Sidebar{
     updateObjectChildrenProperties(object){
         var self = this;
         var childObjects = this.getChildObjectList(object);
-
+        var objectType = Sidebar.getObjectType(object);
 
         var childPropsSelector = this.objectProps.select('.content .children-properties');
 
         childPropsSelector.classed('visible', childObjects.length);
-        childPropsSelector.select('.children-properties-header').text('Connections');
+
+        childPropsSelector.select('.children-properties-header').text(i18n.t('objectProperties.childrenProperties.'+ objectType+'.header'));
         var childrenContent = childPropsSelector.select('.children-properties-content');
         var children = childrenContent.selectAll('div.child-object').data(childObjects, (d,i)=> d.$id || i);
         var childrenEnter = children.enter().appendSelector('div.child-object');
@@ -150,23 +151,35 @@ export class Sidebar{
 
         function updateChildObjectProperties(child, i){
             var container = d3.select(this);
-            container.selectOrAppend('div.child-header').text('Edge #'+(i+1));
+            container.selectOrAppend('div.child-header').text(i18n.t('objectProperties.childrenProperties.'+ objectType+'.child.header', {number: i+1}));
 
             var fieldList = self.getFieldListForObject(child);
             self.updateObjectFields(child, fieldList, container.selectOrAppend('div.field-list'))
         }
     }
 
-
-    static getHeaderTextForObject(object) { //TODO i18n
+    static getObjectType(object){
         if(object instanceof model.Node){
-            return Utils.capitalizeFirstLetter(object.type)+' Node';
+            return 'node';
         }
         if(object instanceof model.Edge){
-            return 'Edge';
+            return 'edge';
         }
         if(object instanceof model.Text){
-            return 'Floating text';
+            return 'text';
+        }
+        return '';
+    }
+
+    static getHeaderTextForObject(object) {
+        if(object instanceof model.Node){
+            return i18n.t('objectProperties.header.node.'+object.type);
+        }
+        if(object instanceof model.Edge){
+            return i18n.t('objectProperties.header.edge');
+        }
+        if(object instanceof model.Text){
+            return i18n.t('objectProperties.header.text');
         }
         return '';
     }

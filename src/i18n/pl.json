@@ -1,0 +1,248 @@
+{
+  "toolbar": {
+    "newDiagram": "Nowy diagram",
+    "openDiagram": "Otwórz diagram",
+    "saveDiagram": "Zapisz diagram",
+    "export":{
+      "label": "Eksport",
+      "png": "Png",
+      "svg": "Svg"
+    },
+    "layout":{
+      "label": "Układ",
+      "manual": "Ręczny",
+      "tree": "Drzewo",
+      "cluster": "Cluster"
+    },
+    "objectiveRule":{
+      "label": "Reguła",
+      "options": {
+        "expected-value-maximization":"klasyczna",
+        "maxi-min":"maxi-min",
+        "maxi-max":"maxi-max"
+      }
+    },
+    "undo": "Cofnij",
+    "redo": "Ponów",
+    "settings": "Ustawienia",
+    "about": "Informacje"
+  },
+  "node":{
+    "name": "Etykieta"
+  },
+  "edge":{
+    "name": "Etykieta",
+    "payoff": "Wypłata",
+    "probability": "Prawdopodobieństwo"
+
+  },
+  "text":{
+    "value": "Tekst"
+  },
+  "contextMenu":{
+    "main":{
+      "addDecisionNode": "Dodaj Węzeł Decyzji",
+      "addChanceNode": "Dodaj Węzeł Losowy",
+      "addText": "Dodaj Tekst",
+      "paste": "Wklej",
+      "selectAllNodes": "Zaznacz wszystkie węzły"
+    },
+    "node":{
+      "copy": "Kopiuj",
+      "cut": "Wytnij",
+      "paste": "Wklej",
+      "delete": "Usuń",
+      "addDecisionNode": "Dodaj Węzeł Decyzji",
+      "addChanceNode": "Dodaj Węzeł Losowy",
+      "addTerminalNode": "Dodaj Węzeł Terminalny",
+      "selectSubtree": "Zaznacz poddrzewo",
+      "flipSubtree": "Przewróć poddrzewo"
+    },
+    "text":{
+      "delete": "Usuń"
+    }
+  },
+  "settingsDialog":{
+    "title": "Ustawienia",
+    "general":{
+      "title": "Generalne",
+      "fontSize": "Rozmiar czcionki",
+      "fontFamily": "Rodzina czcionek",
+      "fontWeight": "Waga czcionki",
+      "fontStyle": "Styl czcionki",
+      "numberFormatLocale": "Kod lokalizacji językowej liczb"
+    },
+    "payoff":{
+      "title": "Format wypłaty",
+      "currency": "Waluta",
+      "currencyDisplay": "Wyświetlanie waluty",
+      "style": "Styl",
+      "minimumFractionDigits": "Minimalna liczba miejsc po przecinku",
+      "maximumFractionDigits": "Maksymalna liczba miejsc po przecinku",
+      "useGrouping": "Separatory grupowania"
+    },
+    "probability":{
+      "title": "Format prawdopodobieństwa",
+      "style": "Styl",
+      "minimumFractionDigits": "Minimalna liczba miejsc po przecinku",
+      "maximumFractionDigits": "Maksymalna liczba miejsc po przecinku",
+      "fontSize": "Rozmiar czcionki",
+      "color": "Kolor"
+    },
+    "node":{
+      "title": "Węzeł",
+      "strokeWidth": "Szerokość krawędzi",
+      "optimal":{
+        "title": "Optymalny",
+        "stroke": "Kolor",
+        "strokeWidth": "Szerokość krawędzi"
+      },
+      "label": {
+        "title": "Etykieta",
+        "fontSize": "Rozmiar czcionki etykiety",
+        "color": "Kolor etykiety"
+      },
+      "payoff": {
+        "title": "Wypłata",
+        "fontSize": "Rozmiar czcionki",
+        "color": "Kolor",
+        "negativeColor": "Kolor wartości ujemnej"
+      },
+      "decision": {
+        "title": "Węzeł Decyzji",
+        "fill": "Kolor wypełnienia",
+        "stroke": "Kolor krawędzi",
+        "selected": {
+          "fill": "Kolor wypełnienia po zaznaczeniu"
+        }
+      },
+      "chance": {
+        "title": "Węzeł Losowy",
+        "fill": "Kolor wypełnienia",
+        "stroke": "Kolor krawędzi",
+        "selected": {
+          "fill": "Kolor wypełnienia po zaznaczeniu"
+        }
+      },
+      "terminal":{
+        "title": "Węzeł Terminalny",
+        "fill": "Kolor wypełnienia",
+        "stroke": "Kolor krawędzi",
+        "selected": {
+          "fill": "Kolor wypełnienia po zaznaczeniu"
+        },
+        "payoff": {
+          "title": "Wypłata",
+          "fontSize": "Rozmiar czcionki",
+          "color": "Kolor",
+          "negativeColor": "Kolor wartości ujemnej"
+        }
+      }
+    },
+    "edge":{
+      "title": "Krawędź",
+      "stroke": "Kolor",
+      "strokeWidth": "Szerokość krawędzi",
+      "optimal":{
+        "title": "Optymalna",
+        "stroke": "Kolor",
+        "strokeWidth": "Szerokość krawędzi"
+      },
+      "selected":{
+        "title": "Zaznaczona",
+        "stroke": "Kolor",
+        "strokeWidth": "Szerokość krawędzi"
+      },
+      "label": {
+        "title": "Etykieta",
+        "fontSize": "Rozmiar czcionki",
+        "color": "Kolor"
+      },
+      "payoff":{
+        "title": "Wypłata",
+        "fontSize": "Rozmiar czcionki",
+        "color": "Kolor",
+        "negativeColor": "Kolor wartości ujemnej"
+      }
+    },
+    "diagramTitle":{
+      "title": "Tytuł diagramu",
+      "fontSize": "Rozmiar czcionki",
+      "fontWeight": "Waga czcionki",
+      "fontStyle": "Styl czcionki",
+      "color": "Kolor",
+      "margin":{
+        "title": "Margines",
+        "top": "Górny",
+        "bottom": "Dolny"
+      },
+      "description":{
+        "title": "Podtytuł (opis diagramu)",
+        "show": "Wyświetl",
+        "fontSize": "Rozmiar czcionki",
+        "fontWeight": "Waga czcionki",
+        "fontStyle": "Styl czcionki",
+        "color": "Kolor",
+        "marginTop": "Margines górny"
+      }
+    }
+  },
+  "aboutDialog":{
+    "title": "Informacje"
+  },
+  "layoutOptions":{
+    "header": "Układ",
+    "marginHorizontal": "Margines w poziomie",
+    "marginVertical": "Margines pionie",
+    "nodeSize": "Rozmiar węzła",
+    "edgeSlantWidthMax": "Skos krawędzi (maksymalny)",
+    "gridWidth": "Szerokość",
+    "gridHeight": "Wysokość"
+  },
+  "diagramDetails":{
+    "header": "Szczegóły",
+    "title" : "Tytuł",
+    "description" : "Opis"
+  },
+  "objectProperties":{
+    "header":{
+      "node":{
+        "decision":"Węzeł Decyzji",
+        "chance":"Węzeł Losowy",
+        "terminal":"Węzeł Terminalny"
+      },
+      "edge": "Krawędź",
+      "text": "Pływający tekst"
+    },
+    "childrenProperties":{
+      "node":{
+        "header": "Połączenia",
+        "child": {
+          "header": "Krawędź #{{number}}"
+        }
+      }
+    }
+  },
+  "validation":{
+    "incompletePath": "Ścieżka niezakończona węzłem terminalnym",
+    "probabilityDoNotSumUpTo1": "Prawdopodobieństwa nie sumują sie do 1"
+  },
+  "confirm":{
+    "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
+    "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
+    "beforeunload": "Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost."
+  },
+  "error":{
+    "jsonParse": "Error parsing file!",
+    "fileApiNotSupported":"The file API isn't supported on this browser yet.",
+    "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
+    "notSilverDecisionsFile":"Not a SilverDecisions file!",
+    "malformedData":"Error reading tree data!",
+    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
+    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
+    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
+    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
+    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
+    "incorrectNumberFormatOptions": "Incorrect number format options, using default."
+  }
+}
