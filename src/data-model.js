@@ -455,7 +455,6 @@ export class DataModel {
 
         var childrenNumber = oldGrandChildrenNumber;
         var grandChildrenNumber = oldChildrenNumber;
-        console.log(childrenNumber, grandChildrenNumber);
 
         var callbacksDisabled = this.callbacksDisabled;
         this.callbacksDisabled =true;

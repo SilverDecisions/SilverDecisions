@@ -131,7 +131,6 @@ export class Toolbar{
     }
 
     onUndoRedoChanged() {
-        console.log('onUndoRedoChanged');
         this.updateUndoRedoButtons();
     }
     updateUndoRedoButtons(){

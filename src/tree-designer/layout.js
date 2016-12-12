@@ -33,6 +33,9 @@ export class Layout{
     }
 
     update(node){
+        if(node && node.$parent){
+            node.$parent.childEdges.sort((a,b)=>a.childNode.location.y - b.childNode.location.y)
+        }
         if(!this.isManualLayout()){
             return this.autoLayout(this.config.type, true);
         }

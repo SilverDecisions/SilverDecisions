@@ -644,7 +644,6 @@ export class TreeDesigner {
 
 
     initEdgeMarkers() {
-        console.log(this.svg);
         var defs = this.svg.append("svg:defs");
 
         this.initArrowMarker("arrow");

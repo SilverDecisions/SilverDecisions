@@ -46,7 +46,7 @@ export class ExpressionEngine{
     }
 
     static compare(a, b){
-
+        return math.compare(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b))
     }
 
 

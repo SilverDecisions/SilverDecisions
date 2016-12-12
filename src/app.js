@@ -264,7 +264,6 @@ export class App {
     }
 
     onNodeAddedOrRemoved() {
-        console.log('onNodeAddedOrRemoved');
         this.checkValidityAndRecomputeObjective();
         this.updateView();
     }
