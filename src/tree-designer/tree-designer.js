@@ -14,6 +14,7 @@ import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
 import {EdgeContextMenu} from "./edge-context-menu";
+import * as Hammer from "hammerjs"
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -444,6 +445,13 @@ export class TreeDesigner {
 
         nodesMerge.on('contextmenu', this.nodeContextMenu);
         nodesMerge.on('dblclick', this.nodeContextMenu)
+        nodesMerge.each(function(d, i){
+            var nodeElem = this;
+            var hammer = new Hammer.default(nodeElem);
+            hammer.on('press', function(){
+                self.nodeDragHandler.cancelDrag();
+            })
+        })
     }
 
     updateTextLines(d){ //helper method for splitting text to tspans
@@ -551,6 +559,13 @@ export class TreeDesigner {
 
         edgesMerge.on('contextmenu', this.edgeContextMenu);
         edgesMerge.on('dblclick', this.edgeContextMenu)
+        edgesMerge.each(function(d, i){
+            var elem = this;
+            var hammer = new Hammer.default(elem);
+            hammer.on('press', function(){
+
+            })
+        })
     }
 
     redrawFloatingTexts() {
@@ -608,6 +623,13 @@ export class TreeDesigner {
         }
         textsMerge.on('contextmenu', this.textContextMenu);
         textsMerge.on('dblclick', this.textContextMenu);
+        textsMerge.each(function(d, i){
+            var elem = this;
+            var hammer = new Hammer.default(elem);
+            hammer.on('press', function(){
+
+            })
+        })
 
     }
 
@@ -782,6 +804,7 @@ export class TreeDesigner {
         this.mainContextMenu = new MainContextMenu(this);
         this.svg.on('contextmenu',this.mainContextMenu);
         this.svg.on('dblclick',this.mainContextMenu);
+        var hammer = new Hammer.default(this.svg.node());
     }
 
     addText(text){
