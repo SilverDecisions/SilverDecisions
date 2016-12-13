@@ -171,7 +171,7 @@ export class Templates{
         '<label for="<%= id %>"><%= label %></label>';
 
 
-    static help = //TODO i18n
+    static help =
         '<div>' +
             '<h3><%= i18n.t("help.header")%></h3>' +
             '<p>' +

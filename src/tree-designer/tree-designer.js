@@ -447,8 +447,11 @@ export class TreeDesigner {
         nodesMerge.on('dblclick', this.nodeContextMenu)
         nodesMerge.each(function(d, i){
             var nodeElem = this;
-            var hammer = new Hammer.default(nodeElem);
-            hammer.on('press', function(){
+            var mc = new Hammer.Manager(nodeElem);
+            mc.add(new Hammer.Press({
+                pointerType: Hammer.POINTER_TOUCH
+            }));
+            mc.on('press', function(){
                 self.nodeDragHandler.cancelDrag();
             })
         })
@@ -561,10 +564,10 @@ export class TreeDesigner {
         edgesMerge.on('dblclick', this.edgeContextMenu)
         edgesMerge.each(function(d, i){
             var elem = this;
-            var hammer = new Hammer.default(elem);
-            hammer.on('press', function(){
-
-            })
+            var mc = new Hammer.Manager(elem);
+            mc.add(new Hammer.Press({
+                pointerType: Hammer.POINTER_TOUCH
+            }));
         })
     }
 
@@ -625,10 +628,10 @@ export class TreeDesigner {
         textsMerge.on('dblclick', this.textContextMenu);
         textsMerge.each(function(d, i){
             var elem = this;
-            var hammer = new Hammer.default(elem);
-            hammer.on('press', function(){
-
-            })
+            var mc = new Hammer.Manager(elem);
+            mc.add(new Hammer.Press({
+                pointerType: Hammer.POINTER_TOUCH
+            }));
         })
 
     }
@@ -804,7 +807,11 @@ export class TreeDesigner {
         this.mainContextMenu = new MainContextMenu(this);
         this.svg.on('contextmenu',this.mainContextMenu);
         this.svg.on('dblclick',this.mainContextMenu);
-        var hammer = new Hammer.default(this.svg.node());
+
+        var mc = new Hammer.Manager(this.svg.node());
+        mc.add(new Hammer.Press({
+            pointerType: Hammer.POINTER_TOUCH
+        }));
     }
 
     addText(text){
