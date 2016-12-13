@@ -13,7 +13,7 @@ If you are a SilverDecisions user please visit project [website](http://www.silv
 
 > Build project with `gulp` 
 
-> Watch chages and rebuild project automatically with `gulp watch`
+> Watch changes and rebuild project automatically with `gulp watch`
 
 ### Project structure
 
