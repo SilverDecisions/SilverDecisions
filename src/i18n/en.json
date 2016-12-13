@@ -58,6 +58,10 @@
       "selectSubtree": "Select subtree",
       "flipSubtree": "Flip subtree"
     },
+    "edge":{
+      "injectDecisionNode": "Inject Decision Node",
+      "injectChanceNode": "Inject Chance Node"
+    },
     "text":{
       "delete": "Delete"
     }
@@ -189,6 +193,29 @@
   },
   "aboutDialog":{
     "title": "About"
+  },
+  "help":{
+    "header": "Help",
+    "mouse": {
+      "header":"Mouse actions:",
+      "list":{
+        "1": "left mouse button: node/edge selection",
+        "2": "right mouse button: context menu (adding/manipulating nodes)",
+        "3": "left mouse dbclick: context menu"
+      }
+    },
+    "keyboard": {
+      "header":"Keyboard:",
+      "list":{
+        "1": "Del: delete selected nodes",
+        "2": "Ctrl-C/X: copy/cut selected nodes",
+        "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
+        "4": "Ctrl-Y/Z: undo/redo",
+        "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
+        "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
+      }
+    },
+    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
   },
   "layoutOptions":{
     "header": "Layout",

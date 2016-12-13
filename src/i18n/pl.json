@@ -58,6 +58,10 @@
       "selectSubtree": "Zaznacz poddrzewo",
       "flipSubtree": "Przewróć poddrzewo"
     },
+    "edge":{
+      "injectDecisionNode": "Wstrzyknij Węzeł Decyzyjny",
+      "injectChanceNode": "Wstrzyknij Węzeł Losowy"
+    },
     "text":{
       "delete": "Usuń"
     }
@@ -189,6 +193,29 @@
   },
   "aboutDialog":{
     "title": "Informacje"
+  },
+  "help":{
+    "header": "Pomoc",
+    "mouse": {
+      "header":"Akcje myszy:",
+      "list":{
+        "1": "lewy klawisz myszy: wybór węzła/krawędzi",
+        "2": "prawy klawisz myszy: menu kontekstowe (dodawanie/manipulowanie węzłami)",
+        "3": "podwójne kliknięcie lewym przyciskiem myszy: menu kontekstowe"
+      }
+    },
+    "keyboard": {
+      "header":"Skróty klawiszowe:",
+      "list":{
+        "1": "Del: usuwanie wybranych węzłów",
+        "2": "Ctrl-C/X: kopiowanie/wycinanie wybranych węzłów",
+        "3": "Ctrl-V: wklej skopiowane węzły jako poddrzewo wybranego węzła",
+        "4": "Ctrl-Y/Z: cofnij/ponów",
+        "5": "Ctrl-Alt-D/C/T: dodaj nowy węzeł Decyzyjny/Losowy/Końcowy jako dziecko <strong>wybranego węzła</strong>",
+        "6": "Ctrl-Alt-D/C: Wstrzyknij nowy węzeł Decyzyjny/Losowy do <strong>wybranej krawędzi</strong>"
+      }
+    },
+    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
   },
   "layoutOptions":{
     "header": "Układ",

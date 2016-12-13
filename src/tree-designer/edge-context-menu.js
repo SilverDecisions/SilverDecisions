@@ -2,6 +2,7 @@ import {ContextMenu} from '../context-menu'
 import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'
+import {i18n} from "../i18n/i18n";
 
 export class EdgeContextMenu extends ContextMenu {
     treeDesigner;
@@ -12,13 +13,13 @@ export class EdgeContextMenu extends ContextMenu {
             var menu = [];
 
             menu.push({
-                title: 'Inject Decision Node',
+                title: i18n.t('contextMenu.edge.injectDecisionNode'),
                 action: function (elm, d, i) {
                     treeDesigner.injectDecisionNode(d)
                 }
             });
             menu.push({
-                title: 'Inject Chance Node',
+                title: i18n.t('contextMenu.edge.injectChanceNode'),
                 action: function (elm, d, i) {
                     treeDesigner.injectChanceNode(d)
                 }

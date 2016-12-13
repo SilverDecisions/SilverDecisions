@@ -173,29 +173,28 @@ export class Templates{
 
     static help = //TODO i18n
         '<div>' +
-            '<h3>Help</h3>' +
+            '<h3><%= i18n.t("help.header")%></h3>' +
             '<p>' +
-                'Mouse actions:' +
+                '<%= i18n.t("help.mouse.header")%>' +
                 '<ul>' +
-                    '<li>left mouse button: node selection</li>' +
-                    '<li>right mouse button: context menu (adding/manipulating nodes)</li>' +
-                    '<li>left mouse dbclick: context menu</li>' +
+                    '<li><%= i18n.t("help.mouse.list.1")%></li>' +
+                    '<li><%= i18n.t("help.mouse.list.2")%></li>' +
+                    '<li><%= i18n.t("help.mouse.list.3")%></li>' +
                 '</ul>' +
             '</p>' +
             '<p>' +
-                'Keyboard:' +
+                '<%= i18n.t("help.keyboard.header")%>' +
                 '<ul>' +
-                    '<li>Del: delete selected nodes</li>' +
-                    '<li>Ctrl-C/X: copy/cut selected nodes</li>' +
-                    '<li>Ctrl-V: paste copied nodes as a subtree of a selected node</li>' +
-                    '<li>Ctrl-Y/Z: undo/redo</li>' +
-                    '<li>Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong></li>' +
-                    '<li>Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong></li>' +
+                    '<li><%= i18n.t("help.keyboard.list.1")%></li>' +
+                    '<li><%= i18n.t("help.keyboard.list.2")%></li>' +
+                    '<li><%= i18n.t("help.keyboard.list.3")%></li>' +
+                    '<li><%= i18n.t("help.keyboard.list.4")%></li>' +
+                    '<li><%= i18n.t("help.keyboard.list.5")%></li>' +
+                    '<li><%= i18n.t("help.keyboard.list.6")%></li>' +
                 '</ul>' +
             '</p>' +
-            '<p>Documentation of SilverDecisions is available <a href="https://github.com/bkamins/SilverDecisions/wiki/Documentation" target="_blank">here</a> </p>'+
+            '<p><%= i18n.t("help.docs")%></p>'+
         '</div>';
-
 
     static aboutDialog =
         '<div id="sd-about-dialog" class="sd-modal">'+
