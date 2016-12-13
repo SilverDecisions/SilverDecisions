@@ -12,7 +12,7 @@
       "label": "Układ",
       "manual": "Ręczny",
       "tree": "Drzewo",
-      "cluster": "Cluster"
+      "cluster": "Zgrupowany"
     },
     "objectiveRule":{
       "label": "Reguła",
@@ -41,7 +41,7 @@
   },
   "contextMenu":{
     "main":{
-      "addDecisionNode": "Dodaj Węzeł Decyzji",
+      "addDecisionNode": "Dodaj Węzeł Decyzyjny",
       "addChanceNode": "Dodaj Węzeł Losowy",
       "addText": "Dodaj Tekst",
       "paste": "Wklej",
@@ -52,9 +52,9 @@
       "cut": "Wytnij",
       "paste": "Wklej",
       "delete": "Usuń",
-      "addDecisionNode": "Dodaj Węzeł Decyzji",
+      "addDecisionNode": "Dodaj Węzeł Decyzyjny",
       "addChanceNode": "Dodaj Węzeł Losowy",
-      "addTerminalNode": "Dodaj Węzeł Terminalny",
+      "addTerminalNode": "Dodaj Węzeł Końcowy",
       "selectSubtree": "Zaznacz poddrzewo",
       "flipSubtree": "Przewróć poddrzewo"
     },
@@ -65,7 +65,7 @@
   "settingsDialog":{
     "title": "Ustawienia",
     "general":{
-      "title": "Generalne",
+      "title": "Ogólne",
       "fontSize": "Rozmiar czcionki",
       "fontFamily": "Rodzina czcionek",
       "fontWeight": "Waga czcionki",
@@ -109,7 +109,7 @@
         "negativeColor": "Kolor wartości ujemnej"
       },
       "decision": {
-        "title": "Węzeł Decyzji",
+        "title": "Węzeł Decyzyjny",
         "fill": "Kolor wypełnienia",
         "stroke": "Kolor krawędzi",
         "selected": {
@@ -125,7 +125,7 @@
         }
       },
       "terminal":{
-        "title": "Węzeł Terminalny",
+        "title": "Węzeł Końcowy",
         "fill": "Kolor wypełnienia",
         "stroke": "Kolor krawędzi",
         "selected": {
@@ -207,9 +207,9 @@
   "objectProperties":{
     "header":{
       "node":{
-        "decision":"Węzeł Decyzji",
+        "decision":"Węzeł Decyzyjny",
         "chance":"Węzeł Losowy",
-        "terminal":"Węzeł Terminalny"
+        "terminal":"Węzeł Końcowy"
       },
       "edge": "Krawędź",
       "text": "Pływający tekst"
@@ -224,25 +224,25 @@
     }
   },
   "validation":{
-    "incompletePath": "Ścieżka niezakończona węzłem terminalnym",
+    "incompletePath": "Ostatnim węzłem w ścieżce powinien być Węzeł Końcowy",
     "probabilityDoNotSumUpTo1": "Prawdopodobieństwa nie sumują sie do 1"
   },
   "confirm":{
-    "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
-    "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
-    "beforeunload": "Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost."
+    "newDiagram": "Czy jesteś pewien, że chcesz porzucić obecny diagram? Wszystkie niezapisane zmiany zostaną utracone.",
+    "openDiagram": "Czy jesteś pewien? Wszystkie niezapisane zmiany zostaną utracone.",
+    "beforeunload": "Czy jesteś pewien, że chcesz zamknąć SilverDecisions? Wszystkie niezapisane zmiany zostaną utracone."
   },
   "error":{
-    "jsonParse": "Error parsing file!",
-    "fileApiNotSupported":"The file API isn't supported on this browser yet.",
-    "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
-    "notSilverDecisionsFile":"Not a SilverDecisions file!",
-    "malformedData":"Error reading tree data!",
-    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
-    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
-    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
-    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
-    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
-    "incorrectNumberFormatOptions": "Incorrect number format options, using default."
+    "jsonParse": "Błąd przetwarzania danych z pliku!",
+    "fileApiNotSupported":"Funckja 'file API' nie jest wspierana w tej przeglądarce internetowej.",
+    "inputFilesProperty":"Twoje przeglądarka nie wspiera opcji `pliki` przy otwieraniu pliku.",
+    "notSilverDecisionsFile":"Plik niezgodny z formatem SilverDecisions!",
+    "malformedData":"Błąd odczytu danych drzewa!",
+    "pngExportNotSupported": "Eksport do obrazu PNG nie jest wspierany w Twojej przeglądarce.",
+    "pngExportNotSupportedIE": "Eksport do obrazu PNG nie jest wspierany w przeglądarce Internet Explorer.",
+    "svgExportNotSupported": "Eksport do obrazu SVG nie jest wspierany w Twojej przeglądarce.",
+    "incorrectPayoffNumberFormatOptions": "Niewłaściwe ustawienia dla formatu wypłaty.",
+    "incorrectProbabilityNumberFormatOptions": "Niewłaściwe ustawienia dla formatu prawdopodobieństw.",
+    "incorrectNumberFormatOptions": "Niewłaściwe ustawiono formatowanie liczb. Przyjęto ustawienia domyślne."
   }
 }
