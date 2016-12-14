@@ -220,7 +220,7 @@
   "layoutOptions":{
     "header": "Układ",
     "marginHorizontal": "Margines w poziomie",
-    "marginVertical": "Margines pionie",
+    "marginVertical": "Margines w pionie",
     "nodeSize": "Rozmiar węzła",
     "edgeSlantWidthMax": "Skos krawędzi (maksymalny)",
     "gridWidth": "Szerokość",

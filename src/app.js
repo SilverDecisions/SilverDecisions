@@ -123,8 +123,8 @@ export class App {
         }else{
             this.container = d3.select(containerIdOrElem);
         }
-
-        this.container.html(Templates.get('main', {version: App.version}));
+        var self = this;
+        this.container.html(Templates.get('main', {version: App.version, 'lng': self.config.lng}));
         this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
 

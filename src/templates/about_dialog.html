@@ -1,0 +1,17 @@
+<div id="sd-about-dialog" class="sd-modal">
+    <div class="sd-modal-content">
+        <div class="sd-modal-header">
+            <span class="sd-close-modal"><i class="material-icons">close</i></span>
+            <h2><%= i18n.t("aboutDialog.title")%></h2>
+        </div>
+        <div class="sd-modal-body">
+            <% if (lng == "pl") { %>
+                <%= include('about_pl', variables) %>
+            <% } else { %>
+                <%= include('about_en', variables) %>
+            <% } %>
+
+            <%= include('help', variables) %>
+        </div>
+    </div>
+</div>

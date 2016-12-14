@@ -1,0 +1,37 @@
+<div id="layout-options">
+    <div class="header">
+        <%= i18n.t("layoutOptions.header")%>
+        <span class="toggle-button">
+            <i class="material-icons icon-arrow-up">keyboard_arrow_up</i>
+            <i class="material-icons icon-arrow-down">keyboard_arrow_down</i>
+        </span>
+    </div>
+    <div class="content">
+        <div class="input-group">
+            <input id="margin-horizontal" name="margin-horizontal" type="range" min="5" max="150" step="5"/>
+            <label for="margin-horizontal"><%= i18n.t("layoutOptions.marginHorizontal")%></label>
+        </div>
+        <div class="input-group">
+            <input id="margin-vertical" name="margin-vertical" type="range" min="5" max="150" step="5"/>
+            <label for="margin-vertical"><%= i18n.t("layoutOptions.marginVertical")%></label>
+        </div>
+        <div class="input-group">
+            <input id="node-size" name="node-size" type="range" min="20" max="60" step="5"/>
+            <label for="node-size"><%= i18n.t("layoutOptions.nodeSize")%></label>
+        </div>
+        <div class="input-group">
+            <input id="edge-slant-width-max" name="edge-slant-width-max" type="range" min="0" max="150" step="5"/>
+            <label for="edge-slant-width-max"><%= i18n.t("layoutOptions.edgeSlantWidthMax")%></label>
+        </div>
+        <div id="auto-layout-options">
+            <div class="input-group">
+                <input id="grid-width" name="grid-width" type="range" min="105" max="300" step="5"/>
+                <label for="grid-width"><%= i18n.t("layoutOptions.gridWidth")%></label>
+            </div>
+            <div class="input-group">
+                <input id="grid-height" name="grid-height" type="range" min="55" max="150" step="5"/>
+                <label for="grid-height"><%= i18n.t("layoutOptions.gridHeight")%></label>
+            </div>
+        </div>
+    </div>
+</div>

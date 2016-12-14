@@ -1,6 +1,7 @@
 import i18next from 'i18next';
 import * as en from './en.json'
 import * as pl from './pl.json'
+import * as it from './it.json'
 
 export class i18n{
 
@@ -8,12 +9,16 @@ export class i18n{
         var self = this;
         i18next.init({
             lng: lng,
+            fallbackLng: 'en',
             resources: {
                 en: {
                     translation: en
                 },
                 pl: {
                     translation: pl
+                },
+                it: {
+                    translation: it
                 }
             }
         }, (err, t) => {

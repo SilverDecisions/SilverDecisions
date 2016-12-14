@@ -46,11 +46,10 @@
     "karma-intl-shim": "^1.0.3",
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.2",
-    "material-design-lite": "^1.2.1",
     "mathjs": "^3.5.3",
     "merge-stream": "^1.0.0",
     "phantomjs": "^2.1.7",
-    "tsify": "^1.0.7",
+    "stringify": "^5.1.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^6.0.0"

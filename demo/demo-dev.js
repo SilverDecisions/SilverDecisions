@@ -146,7 +146,7 @@ var data = {
     ]
 };
 var app = new SilverDecisions('app-container', {
-    lng: 'pl',
+    lng: 'en',
     readOnly: false,
     buttons:{
         new: true,

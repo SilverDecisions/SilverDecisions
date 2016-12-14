@@ -7,11 +7,11 @@ var argv = require('yargs').argv;
 
 var browserify = require("browserify");
 var source = require('vinyl-source-stream');
-var tsify = require("tsify");
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
 
-var p = require('./package.json')
+var p = require('./package.json'),
+stringify = require('stringify');
 
 var Server = require('karma').Server;
 
@@ -50,6 +50,8 @@ gulp.task('build-js', function () {
         cache: {},
         packageCache: {},
         standalone: 'SilverDecisions'
+    }).transform(stringify, {
+        appliesTo: { includeExtensions: ['.html'] }
     })
         .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties"]})
         .bundle()
