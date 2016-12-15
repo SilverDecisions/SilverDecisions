@@ -27,25 +27,26 @@
                 <table class="tabyellow">
                     <tr>
 					    
-                        <td>		
-                            <a href="javascript:document.getElementById('form1').submit();" style="height:80%">							
+                        <td  id="p1">		
+                            <a href="javascript:document.getElementById('form1').submit();" style="height:80%" OnMouseOver="javascript:document.getElementById('p1').style.background='#FFC31E';document.getElementById('p2').style.background='#FFC31E'" OnMouseOut="javascript:document.getElementById('p1').style.background='orange';document.getElementById('p2').style.background='orange'">							
                                 <img src="running31.png" style="padding-top:20px; padding-left:20px; padding-bottom:20px; width:50px; vertical-align:middle" alt="Run"> Run
                                <object><p style="color: #666666; padding-left: 20px; padding-right: 20px">Launches SilverDecisions in your browser 
 								</p></object>							
                             </a>
-							<center>
+							<center id="p2">
 							<p style="font-weight:normal">							
 							Choose your language 
-							 <select name="lang"><option value="en">english</option><option value="pl">polish</option></select>
+							 <select name="lang" style="background-color: orange;border:solid 1px;border-color: #DD5C00" ><option value="en">english</option><option value="pl">polish</option></select>
 							</p>
 							</center>
                         </td>
 						
                         <td>
-                            <a href="https://github.com/bkamins/SilverDecisions/wiki" target="_blank">
+                            <a href="https://github.com/bkamins/SilverDecisions/wiki" target="_blank"  style="height:105%">
                                 <img src="book119.png" style="padding-top:20px; padding-left:20px; padding-bottom:20px; width:50px; vertical-align:middle" alt="Manual" > Manual
                                 <object><p style="color: #666666; padding-left: 20px; padding-right: 20px">Read the documentation and browse example decision trees</p></object>
                             </a>
+						
                         </td>
                     </tr>
                     <tr>
@@ -77,7 +78,7 @@
 
                 <!--Icons made by Freepik, Dave Gandy, Icons8 from www.flaticon.com-->
                 <div id="footer">
-                    <p style="padding-left: 170px; padding-right:170px">Project team: Bogumił Kamiński, Przemysław Szufel, Michał Wasiluk, Michał Jakubczyk, Marcin Czupryna, Aanna Wiertlewska</p>
+                    <p style="padding-left: 170px; padding-right:170px">Project team: Bogumił Kamiński, Przemysław Szufel, Michał Wasiluk, Michał Jakubczyk, Marcin Czupryna, Anna Wiertlewska</p>
                     <p>Contact: <code style="color:#4863A0">silverdecisions [@] sgh.waw.pl</code></p>
                     <p>SilverDecisions is developed at <a style="text-decoration:underline; color:#4863A0" target="_blank" href="http://kolegia.sgh.waw.pl/pl/kae/struktura/ie/struktura/zwiad/Strony/default.aspx">Decision Support Analysis Division</a>, <a style="text-decoration:underline; color:#4863A0" target="_blank" href="http://www.sgh.waw.pl/en/Pages/default.aspx">Warsaw School of Economics</a>.</p>
                     <p>All the source files are licensed under the terms of the GNU Lesser General Public License version 3.</p>
