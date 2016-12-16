@@ -89,10 +89,10 @@ export class NodeDragHandler{
     }
 
     dragEnded(draggedNode, self){
+        var node = d3.select(this).classed("dragging", false);
         if(self.ignoredDrag){
             return;
         }
-        var node = d3.select(this).classed("dragging", false);
         self.treeDesigner.layout.update(draggedNode)
     }
 
