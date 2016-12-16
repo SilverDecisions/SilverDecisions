@@ -215,7 +215,7 @@
         "6": "Ctrl-Alt-D/C: Wstrzyknij nowy węzeł Decyzyjny/Losowy do <strong>wybranej krawędzi</strong>"
       }
     },
-    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
+    "docs": "Dokumentacja SilverDecisions jest dostępna <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">tutaj</a>"
   },
   "layoutOptions":{
     "header": "Układ",
