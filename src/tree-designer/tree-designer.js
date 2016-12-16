@@ -244,6 +244,7 @@ export class TreeDesigner {
 
 
     initSvg() {
+        var c = this;
         var self = this;
         this.computeAvailableSpace();
         this.svg = this.container.selectOrAppend('svg.tree-designer');
@@ -260,6 +261,23 @@ export class TreeDesigner {
                     self.redrawDiagramTitle();
                 });
         }
+
+        var mc = new Hammer.Manager(this.svg.node(), {touchAction : 'auto'});
+        mc.add(new Hammer.Press({
+            pointerType: 'touch'
+        }));
+
+        mc.add(new Hammer.Pinch({
+            pointerType: 'touch'
+        }));
+
+        var cancel;
+        mc.on('pinchstart', function(){
+            self.disableBrush();
+        })
+        mc.on('pinch', function(){
+            cancel = Utils.waitForFinalEvent(()=>self.enableBrush(), 'pinchend', 5000)
+        })
     }
 
     updateMargin(withTransitions){
@@ -328,6 +346,8 @@ export class TreeDesigner {
         if(changed){
             this.updateBrushExtent()
         }
+
+
     }
 
     redrawNodes() {
@@ -449,10 +469,12 @@ export class TreeDesigner {
             var nodeElem = this;
             var mc = new Hammer.Manager(nodeElem);
             mc.add(new Hammer.Press({
-                pointerType: Hammer.POINTER_TOUCH
+                pointerType: 'touch'
             }));
-            mc.on('press', function(){
-                self.nodeDragHandler.cancelDrag();
+            mc.on('press', function(e){
+                if(e.pointerType=='touch'){
+                    self.nodeDragHandler.cancelDrag();
+                }
             })
         })
     }
@@ -630,7 +652,7 @@ export class TreeDesigner {
             var elem = this;
             var mc = new Hammer.Manager(elem);
             mc.add(new Hammer.Press({
-                pointerType: Hammer.POINTER_TOUCH
+                pointerType: 'touch'
             }));
         })
 
@@ -698,7 +720,8 @@ export class TreeDesigner {
     }
     initBrush() {
         var self = this;
-        var brushContainer = this.brushContainer= this.svg.selectOrInsert("g.brush", ":first-child")
+
+        var brushContainer = self.brushContainer = this.brushContainer= this.svg.selectOrInsert("g.brush", ":first-child")
             .attr("class", "brush");
 
         var brush = this.brush = d3.brush()
@@ -780,6 +803,25 @@ export class TreeDesigner {
         }
     }
 
+    disableBrush(){
+        if(!this.brushDisabled){
+            Utils.growl('Brush disabled')
+        }
+        this.brushDisabled = true;
+        this.brushContainer.selectAll('*').remove();
+
+    }
+
+    enableBrush(){
+        if(this.brushDisabled){
+            Utils.growl('Brush enabled')
+            this.initBrush();
+            this.brushDisabled = false;
+        }
+
+
+    }
+
     getMainGroupTranslation(invert) {
         var translation = Utils.getTranslation(this.mainGroup.attr("transform"));
         if(invert){
@@ -807,11 +849,6 @@ export class TreeDesigner {
         this.mainContextMenu = new MainContextMenu(this);
         this.svg.on('contextmenu',this.mainContextMenu);
         this.svg.on('dblclick',this.mainContextMenu);
-
-        var mc = new Hammer.Manager(this.svg.node());
-        mc.add(new Hammer.Press({
-            pointerType: Hammer.POINTER_TOUCH
-        }));
     }
 
     addText(text){

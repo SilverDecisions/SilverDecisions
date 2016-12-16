@@ -16,6 +16,7 @@ export class Templates{
     static selectInputGroup = require('./templates/select_input_group.html');
     static help = require('./templates/help.html');
     static aboutDialog = require('./templates/about_dialog.html');
+    static growl = require('./templates/growl_message.html');
     static main = require('./templates/main.html');
 
     static get(templateName, variables){

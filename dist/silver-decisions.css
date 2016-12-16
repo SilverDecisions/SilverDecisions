@@ -622,3 +622,18 @@
 
 .sd-hidden {
   display: none !important; }
+
+.sd-growl-list {
+  position: fixed;
+  top: 50px;
+  right: 20px; }
+
+.sd-growl-message {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  background: white;
+  border: 1px solid #3a3a3a;
+  border-radius: 7px;
+  box-shadow: 1px 3px 3px #b7b7b7;
+  padding: 5px 10px;
+  margin-bottom: 7px;
+  font-size: 14px; }
