@@ -488,7 +488,8 @@ export class App {
                 this.treeDesigner.removeSelectedTexts();
                 return;
             }
-            if(!d3.event.ctrlKey){
+
+            if(!d3.event.ctrlKey && !d3.event.metaKey){
                 return;
             }
 
