@@ -48,7 +48,6 @@ a:hover {
     text-align: center;
     font-size: 30px;
     color: #8E8E8E;
-    padding-bottom: 15px;
 }
 
 #footer {
@@ -129,5 +128,4 @@ table.taboldsoft td a {
 table.taboldsoft td a:hover {
   background-color: #F5F5F5;
 }
-
 

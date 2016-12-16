@@ -14,26 +14,39 @@
             ga('require', 'displayfeatures');
             ga('send', 'pageview');
         </script>
-    </head>
+
+		</head>
     <body>
+	
         <p></p>
         <div id="wrapper">
             <div id="wrapper2">
                 <div id="header"><img src="silverdecisions2.png" alt="SilverDecisions"></div>
                 <div id="motto">A free and open source decision tree software</div>
+				<form action="SilverDecisions.html" method="GET" name="form1" id="form1" target="_blank">
                 <table class="tabyellow">
                     <tr>
-                        <td>
-                            <a href="SilverDecisions.html"  target="_blank">
+					    
+                        <td  id="p1">		
+                            <a href="javascript:document.getElementById('form1').submit();" style="height:80%" OnMouseOver="javascript:document.getElementById('p1').style.background='#FFC31E';document.getElementById('p2').style.background='#FFC31E';document.getElementById('p3').style.background='#FFC31E'" OnMouseOut="javascript:document.getElementById('p1').style.background='orange';document.getElementById('p2').style.background='orange';document.getElementById('p3').style.background='orange'">
                                 <img src="running31.png" style="padding-top:20px; padding-left:20px; padding-bottom:20px; width:50px; vertical-align:middle" alt="Run"> Run
-                                <object><p style="color: #666666; padding-left: 20px; padding-right: 20px">Launches SilverDecisions in your browser (a new JavaScript based version of the software, currently in beta)</p></object>
+                               <object><p style="color: #666666; padding-left: 20px; padding-right: 20px">Launches SilverDecisions in your browser 
+								</p></object>
                             </a>
+							<center id="p2">
+							<p style="font-weight:normal">							
+							Choose your language 
+							 <select id="p3" name="lang" style="background-color: orange;border:solid 1px;border-color: #DD5C00" ><option value="en">english</option><option value="pl">polish</option></select>
+							</p>
+							</center>
                         </td>
+						
                         <td>
-                            <a href="https://github.com/bkamins/SilverDecisions/wiki" target="_blank">
+                            <a href="https://github.com/bkamins/SilverDecisions/wiki" target="_blank"  style="height:105%">
                                 <img src="book119.png" style="padding-top:20px; padding-left:20px; padding-bottom:20px; width:50px; vertical-align:middle" alt="Manual" > Manual
                                 <object><p style="color: #666666; padding-left: 20px; padding-right: 20px">Read the documentation and browse example decision trees</p></object>
                             </a>
+						
                         </td>
                     </tr>
                     <tr>
@@ -51,12 +64,13 @@
                         </td>
                     </tr>
                 </table>
+				</form>
   			    <table class="taboldsoft">
                     <tr>			    
                         <td>
                             <a href="SilverDecisionsSL.html"  target="_blank" style="color:#999999">
-                                <img src="running31gray.png" style="padding-top:10px; padding-left:10px; padding-bottom:10px; width:20px; vertical-align:middle"/> Run old version (uses Microsoft Silverlight)
-                                <object><p style="color:#888888;padding-left: 10px; padding-right: 10px;font-size:10px">Old version of SilverDevisions was developed by M. Myślak  is no longer maintained but is available</p></object>
+                                <p><img alt="Run Old Version" src="running31gray.png" style="padding-left:10px; width:20px; vertical-align:middle"/> Run old version (uses Microsoft Silverlight)</p>
+                                <p style="color:#888888;padding-left: 10px; padding-right: 10px;font-size:10px">Old version of SilverDevisions developed by M. Myślak is no longer maintained but is available</p>
                             </a>
                         </td>
 					</tr>
@@ -64,13 +78,12 @@
 
                 <!--Icons made by Freepik, Dave Gandy, Icons8 from www.flaticon.com-->
                 <div id="footer">
-                    
-                    <p>Project team: B. Kamiński, P. Szufel, M. Wasiluk, M. Jakubczyk, M. Czupryna</p>
+                    <p style="padding-left: 170px; padding-right:170px">Project team: Bogumił Kamiński, Przemysław Szufel, Michał Wasiluk, Michał Jakubczyk, Marcin Czupryna, Anna Wiertlewska</p>
                     <p>Contact: <code style="color:#4863A0">silverdecisions [@] sgh.waw.pl</code></p>
                     <p>SilverDecisions is developed at <a style="text-decoration:underline; color:#4863A0" target="_blank" href="http://kolegia.sgh.waw.pl/pl/kae/struktura/ie/struktura/zwiad/Strony/default.aspx">Decision Support Analysis Division</a>, <a style="text-decoration:underline; color:#4863A0" target="_blank" href="http://www.sgh.waw.pl/en/Pages/default.aspx">Warsaw School of Economics</a>.</p>
                     <p>All the source files are licensed under the terms of the GNU Lesser General Public License version 3.</p>
                     <p> <!--style="margin:0px 100px 0px 100px">-->
-					  <table style="width:700px"><tr><td><img src="eu_flag_24.png"/></td><td>This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Development of SilverDecisions was made within the H2020 <a style="text-decoration:underline; color:#4863A0" href="http://routetopa.eu/" target="_blank">ROUTE-TO-PA</a> within decision process visualisation for the  <a style="text-decoration:underline; color:#4863A0" href="http://spod.routetopa.eu/" target="_blank">SPOD platform</a>.</td></tr></table>
+					  <table style="width:700px"><tr><td><img alt="EU flag" src="eu_flag_24.png"/></td><td>This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 645860. Development of SilverDecisions was made within the H2020 <a style="text-decoration:underline; color:#4863A0" href="http://routetopa.eu/" target="_blank">ROUTE-TO-PA</a> within decision process visualisation for the  <a style="text-decoration:underline; color:#4863A0" href="http://spod.routetopa.eu/" target="_blank">SPOD platform</a>.</td></tr></table>
 					</p>
 					
 			 
