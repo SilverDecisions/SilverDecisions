@@ -15,6 +15,7 @@ import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
 import {EdgeContextMenu} from "./edge-context-menu";
 import * as Hammer from "hammerjs"
+import {i18n} from "../i18n/i18n";
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -805,16 +806,15 @@ export class TreeDesigner {
 
     disableBrush(){
         if(!this.brushDisabled){
-            Utils.growl('Brush disabled')
+            Utils.growl(i18n.t('growl.brushDisabled'))
         }
         this.brushDisabled = true;
-        this.brushContainer.selectAll('*').remove();
-
+        this.brushContainer.remove();
     }
 
     enableBrush(){
         if(this.brushDisabled){
-            Utils.growl('Brush enabled')
+            Utils.growl(i18n.t('growl.brushEnabled'))
             this.initBrush();
             this.brushDisabled = false;
         }

@@ -254,6 +254,10 @@
     "incompletePath": "Path not ending with terminal node",
     "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1"
   },
+  "growl":{
+    "brushDisabled": "Selection brush disabled",
+    "brushEnabled": "Selection brush enabled"
+  },
   "confirm":{
     "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
     "openDiagram": "Are you sure? All unsaved diagram data will be lost.",

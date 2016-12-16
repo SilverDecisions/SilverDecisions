@@ -3,7 +3,7 @@ var lng = getParameterByName('lang');
 var readOnly = getParameterByName('readonly');
 readOnly = readOnly ? readOnly.toLowerCase() === 'true' : false;
 
-if(!lng || ['en', 'pl'].indexOf(lng.toLowerCase())<0){
+if(!lng || ['en', 'pl', 'it'].indexOf(lng.toLowerCase())<0){
     lng = 'en'
 }
 var app;

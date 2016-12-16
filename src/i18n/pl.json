@@ -254,6 +254,10 @@
     "incompletePath": "Ostatnim węzłem w ścieżce powinien być Węzeł Końcowy",
     "probabilityDoNotSumUpTo1": "Prawdopodobieństwa nie sumują sie do 1"
   },
+  "growl":{
+    "brushDisabled": "Zaznaczanie wyłączone",
+    "brushEnabled": "Zaznaczanie włączone"
+  },
   "confirm":{
     "newDiagram": "Czy jesteś pewien, że chcesz porzucić obecny diagram? Wszystkie niezapisane zmiany zostaną utracone.",
     "openDiagram": "Czy jesteś pewien? Wszystkie niezapisane zmiany zostaną utracone.",
