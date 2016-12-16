@@ -392,8 +392,15 @@ export class App {
             texts: self.dataModel.texts
         };
 
-
+        var cache = [];
         return JSON.stringify(obj, function (k, v) {
+            if (typeof v === 'object' && v !== null) {
+                if (cache.indexOf(v) !== -1) {
+                    // Circular reference found, discard key
+                    return;
+                }
+                cache.push(v);
+            }
             if (_.startsWith(k, '$') || k == 'parentNode') {
                 return undefined;
             }
