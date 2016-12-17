@@ -189,6 +189,11 @@
         "color": "Kolor",
         "marginTop": "Margines górny"
       }
+    },
+    "other":{
+      "title": "Inne",
+      "disableAnimations": "Wyłącz animacje",
+      "forceFullEdgeRedraw": "Wymuś pełne przerysowywanie krawędzi"
     }
   },
   "aboutDialog":{

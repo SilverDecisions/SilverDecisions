@@ -134,6 +134,8 @@ export class TreeDesignerConfig {
     };
 
     $readOnly= false;
+    disableAnimations=false;
+    forceFullEdgeRedraw=false;
 
     payoffNumberFormatter = (v)=> v;
     probabilityNumberFormatter  = (v)=> v;
@@ -216,7 +218,9 @@ export class TreeDesigner {
     }
 
     redraw(withTransitions){
+
         var self = this;
+        withTransitions = !self.config.disableAnimations && withTransitions;
         this.redrawDiagramTitle();
         this.redrawDiagramDescription();
         this.updateMargin(withTransitions);
@@ -501,6 +505,10 @@ export class TreeDesigner {
     redrawEdges() {
         var self = this;
         var edgesContainer = this.mainGroup.selectOrAppend('g.edges');
+        if(self.config.forceFullEdgeRedraw){
+            edgesContainer.selectAll("*").remove();
+        }
+
         var edges = edgesContainer.selectAll('.edge').data(this.data.edges, (d,i)=> d.$id);
         edges.exit().remove();
         var edgesEnter = edges.enter().append('g')

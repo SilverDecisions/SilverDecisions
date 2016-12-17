@@ -189,6 +189,11 @@
         "color": "Color",
         "marginTop": "Margin top"
       }
+    },
+    "other":{
+      "title": "Other",
+      "disableAnimations": "Disable animations",
+      "forceFullEdgeRedraw": "Force full redraw of edges"
     }
   },
   "aboutDialog":{
