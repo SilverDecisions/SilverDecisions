@@ -6,6 +6,26 @@ readOnly = readOnly ? readOnly.toLowerCase() === 'true' : false;
 if(!lng || ['en', 'pl', 'it'].indexOf(lng.toLowerCase())<0){
     lng = 'en'
 }
+
+var config = {
+    lng:lng,
+    readOnly:!!readOnly,
+    treeDesigner:{
+    }
+};
+
+if(SilverDecisions.utils.detectIE()=='11'){ // IE 11
+    if(platform.os.family.toLowerCase().indexOf('windows') !== -1){ // on Windows
+        var osVersion = platform.os.version.toLowerCase();
+        if(osVersion == '7' || osVersion.indexOf('windows server 2008') !== -1){
+            alert('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)');
+            config.treeDesigner.disableAnimations=true;
+            config.treeDesigner.forceFullEdgeRedraw=true;
+        }
+
+    }
+}
+
 var app;
 if(jsonUrl){
     getJSON(jsonUrl, function(err, data) {
@@ -15,7 +35,8 @@ if(jsonUrl){
         }
         console.log(data);
         try{
-            app = new SilverDecisions('app-container', {lng:lng, readOnly:!!readOnly}, data);
+
+            app = new SilverDecisions('app-container', config, data);
         }catch (e){
             console.log(e);
             app=null;
@@ -24,7 +45,8 @@ if(jsonUrl){
 }
 
 if(!app){
-    app = new SilverDecisions('app-container', {lng:lng});
+    config.readOnly=false;
+    app = new SilverDecisions('app-container', config);
 }
 
 document.addEventListener('SilverDecisionsSaveEvent', function(data){
