@@ -11,6 +11,10 @@ export class ProbabilityValidator{
             return false;
         }
         var evaluatedVal = this.expressionEngine.eval(value);
+        if(isNaN(evaluatedVal)){
+            return false;
+        }
+        evaluatedVal = ExpressionEngine.toNumber(evaluatedVal);
         return evaluatedVal.compare(0) >= 0 && evaluatedVal.compare(1) <= 0;
     }
 

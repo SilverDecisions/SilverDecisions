@@ -1,5 +1,6 @@
 import * as d3 from './d3'
 import * as autosize from 'autosize'
+import {Templates} from './templates'
 
 export class Utils {
     static SQRT_2 = 1.41421356237;
@@ -259,6 +260,8 @@ export class Utils {
             clearTimeout (Utils.timers[uniqueId]);
         }
         Utils.timers[uniqueId] = setTimeout(callback, ms);
+
+        return () => clearTimeout (Utils.timers[uniqueId]);
     };
 
     static updateInputClass(selection){
@@ -359,5 +362,14 @@ export class Utils {
 
         // other browser
         return false;
+    }
+
+    static growl(message, type='info', position='right', time = 2000){
+        var html = Templates.get('growl', {message:message, type:type})
+
+        var g = d3.select('body').selectOrAppend('div.sd-growl-list.'+position).append('div').html(html);
+        setTimeout(function(){
+            g.remove();
+        }, time)
     }
 }

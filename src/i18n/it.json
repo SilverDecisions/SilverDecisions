@@ -1,0 +1,42 @@
+{
+  "toolbar": {
+    "newDiagram": "New diagram",
+    "openDiagram": "Open existing diagram",
+    "saveDiagram": "Save current diagram",
+    "export":{
+      "label": "Export to",
+      "png": "Png",
+      "svg": "Svg"
+    },
+    "layout":{
+      "label": "Layout",
+      "manual": "Manual",
+      "tree": "Tree",
+      "cluster": "Cluster"
+    },
+    "objectiveRule":{
+      "label": "Rule",
+      "options": {
+        "expected-value-maximization":"classic",
+        "maxi-min":"maxi-min",
+        "maxi-max":"maxi-max"
+      }
+    },
+    "undo": "Undo",
+    "redo": "Redo",
+    "settings": "Settings",
+    "about": "About"
+  },
+  "node":{
+    "name": "Etichetta"
+  },
+  "edge":{
+    "name": "Etichetta",
+    "payoff": "Saldare",
+    "probability": "Probabilità"
+
+  },
+  "text":{
+    "value": "Testo"
+  }
+}

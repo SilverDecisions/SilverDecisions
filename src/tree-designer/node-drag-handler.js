@@ -44,6 +44,13 @@ export class NodeDragHandler{
 
 
     dragStarted(d,self) {
+        if(self.ignoreDrag){
+            self.ignoreDrag=false;
+            self.ignoredDrag=true;
+            return;
+        }
+        self.ignoredDrag=false;
+
         // self.treeDesigner.layout.disableAutoLayout();
         ContextMenu.hide();
         var node = d3.select(this);
@@ -59,7 +66,10 @@ export class NodeDragHandler{
     }
 
     onDrag(draggedNode, self){
-        // console.log('drag');
+        if(self.ignoredDrag){
+            return;
+        }
+
         if(self.dragEventCount==2){
             self.data.saveState();
         }
@@ -80,7 +90,14 @@ export class NodeDragHandler{
 
     dragEnded(draggedNode, self){
         var node = d3.select(this).classed("dragging", false);
+        if(self.ignoredDrag){
+            return;
+        }
         self.treeDesigner.layout.update(draggedNode)
+    }
+
+    cancelDrag(){
+        this.ignoreDrag = true;
     }
 
 }

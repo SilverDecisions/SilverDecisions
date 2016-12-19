@@ -1,0 +1,10 @@
+<div id="silver-decisions" tabindex="0">
+    <%= include('toolbar', variables) %>
+    <div id="main-region">
+        <%= include('sidebar', variables) %>
+        <div id="tree-designer-container"></div>
+    </div>
+    <input type="file" style="display:none" id="sd-file-input" accept=".json"/>
+    <%= include('settingsDialog', variables) %>
+    <%= include('aboutDialog', variables) %>
+</div>

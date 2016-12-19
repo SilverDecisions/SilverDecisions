@@ -67,6 +67,7 @@ export class AppConfig {
 
 export class App {
     static version = ''; // version is set from package.json
+    static utils  = Utils;
 
     config;
     container;
@@ -123,8 +124,8 @@ export class App {
         }else{
             this.container = d3.select(containerIdOrElem);
         }
-
-        this.container.html(Templates.get('main', {version: App.version}));
+        var self = this;
+        this.container.html(Templates.get('main', {version: App.version, 'lng': self.config.lng}));
         this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
 
@@ -145,9 +146,11 @@ export class App {
 
     initExpressionEngine() {
         this.expressionEngine =  new ExpressionEngine(this.dataModel.expressionScope);
+        this.dataModel.setExpressionEngine(this.expressionEngine);
     }
     initTreeValidator(){
         this.treeValidator = new TreeValidator(this.expressionEngine);
+        this.dataModel.setTreeValidator(this.treeValidator);
     }
 
     initObjectiveRulesManager(){
@@ -262,7 +265,6 @@ export class App {
     }
 
     onNodeAddedOrRemoved() {
-        console.log('onNodeAddedOrRemoved');
         this.checkValidityAndRecomputeObjective();
         this.updateView();
     }
@@ -391,8 +393,15 @@ export class App {
             texts: self.dataModel.texts
         };
 
-
+        var cache = [];
         return JSON.stringify(obj, function (k, v) {
+            if (typeof v === 'object' && v !== null) {
+                if (cache.indexOf(v) !== -1) {
+                    // Circular reference found, discard key
+                    return;
+                }
+                cache.push(v);
+            }
             if (_.startsWith(k, '$') || k == 'parentNode') {
                 return undefined;
             }
@@ -487,26 +496,37 @@ export class App {
                 this.treeDesigner.removeSelectedTexts();
                 return;
             }
-            if(!d3.event.ctrlKey){
+
+            if(!d3.event.ctrlKey && !d3.event.metaKey){
                 return;
             }
 
-            var selectedNodes = this.treeDesigner.getSelectedNodes();
 
-            if(d3.event.altKey && selectedNodes.length==1){
-                let selectedNode = selectedNodes[0];
-                if(selectedNode instanceof model.TerminalNode){
+
+            if(d3.event.altKey){
+                if(this.selectedObject instanceof model.Node){
+                    let selectedNode = this.selectedObject;
+                    if(selectedNode instanceof model.TerminalNode){
+                        return;
+                    }
+                    if(key==68){ // ctrl + alt + d
+                        this.treeDesigner.addDecisionNode(selectedNode);
+                    }else if(key==67){ // ctrl + alt + c
+                        this.treeDesigner.addChanceNode(selectedNode);
+                    } else if(key==84){ // ctrl + alt + t
+                        this.treeDesigner.addTerminalNode(selectedNode);
+                    }
                     return;
+                }else if(this.selectedObject instanceof model.Edge) {
+                    if(key==68){ // ctrl + alt + d
+                        this.treeDesigner.injectDecisionNode(this.selectedObject);
+                    }else if(key==67){ // ctrl + alt + c
+                        this.treeDesigner.injectChanceNode(this.selectedObject);
+                    }
                 }
-                if(key==68){ // ctrl + alt + d
-                    this.treeDesigner.addDecisionNode(selectedNode);
-                }else if(key==67){ // ctrl + alt + c
-                    this.treeDesigner.addChanceNode(selectedNode);
-                } else if(key==84){ // ctrl + alt + t
-                    this.treeDesigner.addTerminalNode(selectedNode);
-                }
-                return;
+
             }
+
 
             if(key==90){//ctrl + z
                 this.undo();
@@ -526,7 +546,7 @@ export class App {
                 // d3.event.preventDefault()
                 return;
             }*/
-
+            var selectedNodes = this.treeDesigner.getSelectedNodes();
             if(key==86){//ctrl + v
                 if(selectedNodes.length==1){
                     let selectedNode = selectedNodes[0];

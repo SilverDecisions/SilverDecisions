@@ -4,25 +4,7 @@ Software for creating and analyzing decision trees.
 
 If you are a SilverDecisions user please visit project [website](http://www.silverdecisions.pl) or [Wiki](https://github.com/bkamins/SilverDecisions/wiki).
 
-## Developer quick start guide
-
-1. Clone the repository
-2. Make sure `nodejs` and 'npm' is installed in your system (nodejs.org). 
-3. Install `gulp-cli` (gulpjs.com) and `bower` (bower.io) globally:  `npm install --global gulp-cli bower` 
-4. Run `npm install` to install project's required modules
-
-> Build project with `gulp` 
-
-> Watch changes and rebuild project automatically with `gulp watch`
-
-### Project structure
-
-* `docs` - website of SilverDecisions
-* `demo` - demo usage of SilverDecisions
-* `dist` - distribution folder generated with gulp 
-* `src` - source files directory
-  * `styles` - css styles source directory (sass-lang.com) 
-* `test` 
+Basic technical information about SilverDecisions is provided in [Developer's Guide](https://github.com/bkamins/SilverDecisions/wiki/Developer%27s-guide)
 
 ## User testing guide
 
@@ -34,7 +16,7 @@ If you are a SilverDecisions user please visit project [website](http://www.silv
 | --- | --- |
 | `bug` | application does not work correctly |
 | `needs doc` | aplication feature may be nonintuitive should be documented |
-| `enchancement` | standard requests for new features |
-| `future enchancement` | requests for new features that are important but not urgent |
-| `minor enchancement` | requests for new features that are cosmetic changes (low development priority) |
+| `enchancement` | requests for new features |
 | `question` | topics not directly related to development requests |
+
+[Bogumił Kamiński](https://github.com/bkamins) approves requests for enchancements and assigns them to develpment milestones.

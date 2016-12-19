@@ -2,6 +2,7 @@ import {ContextMenu} from '../context-menu'
 import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'
+import {i18n} from "../i18n/i18n";
 
 export class MainContextMenu extends ContextMenu {
     treeDesigner;
@@ -12,14 +13,14 @@ export class MainContextMenu extends ContextMenu {
 
             var menu = [];
             menu.push({
-                title: 'Add Decision Node',
+                title: i18n.t('contextMenu.main.addDecisionNode'),
                 action: function (elm, d, i) {
                     var newNode = new model.DecisionNode(mousePosition);
                     treeDesigner.addNode(newNode)
                 }
             });
             menu.push({
-                title: 'Add Chance Node',
+                title: i18n.t('contextMenu.main.addChanceNode'),
                 action: function (elm, d, i) {
                     var newNode = new model.ChanceNode(mousePosition);
                     treeDesigner.addNode(newNode)
@@ -27,7 +28,7 @@ export class MainContextMenu extends ContextMenu {
             });
             menu.push({divider: true});
             menu.push({
-                title: 'Add Text',
+                title: i18n.t('contextMenu.main.addText'),
                 action: function (elm, d, i) {
                     var newText = new model.Text(mousePosition);
                     treeDesigner.addText(newText);
@@ -36,7 +37,7 @@ export class MainContextMenu extends ContextMenu {
             });
             menu.push({divider: true});
             menu.push({
-                title: 'Paste',
+                title: i18n.t('contextMenu.main.paste'),
                 action: function (elm, d, i) {
                     treeDesigner.pasteToNewLocation(mousePosition);
                 },
@@ -46,7 +47,7 @@ export class MainContextMenu extends ContextMenu {
             menu.push({divider: true});
 
             menu.push({
-                title: 'Select all nodes',
+                title: i18n.t('contextMenu.main.selectAllNodes'),
                 action: function (elm, d, i) {
                     treeDesigner.selectAllNodes();
                 }

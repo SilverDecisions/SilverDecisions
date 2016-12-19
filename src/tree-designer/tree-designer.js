@@ -13,6 +13,9 @@ import * as _ from "lodash";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
+import {EdgeContextMenu} from "./edge-context-menu";
+import * as Hammer from "hammerjs"
+import {i18n} from "../i18n/i18n";
 
 export class TreeDesignerConfig {
     width = undefined;
@@ -131,6 +134,8 @@ export class TreeDesignerConfig {
     };
 
     $readOnly= false;
+    disableAnimations=false;
+    forceFullEdgeRedraw=false;
 
     payoffNumberFormatter = (v)=> v;
     probabilityNumberFormatter  = (v)=> v;
@@ -187,6 +192,7 @@ export class TreeDesigner {
         if(!this.config.$readOnly){
             this.initMainContextMenu();
             this.initNodeContextMenu();
+            this.initEdgeContextMenu();
             this.initNodeDragHandler();
             this.initTextDragHandler();
             this.initTextContextMenu();
@@ -212,7 +218,9 @@ export class TreeDesigner {
     }
 
     redraw(withTransitions){
+
         var self = this;
+        withTransitions = !self.config.disableAnimations && withTransitions;
         this.redrawDiagramTitle();
         this.redrawDiagramDescription();
         this.updateMargin(withTransitions);
@@ -241,6 +249,7 @@ export class TreeDesigner {
 
 
     initSvg() {
+        var c = this;
         var self = this;
         this.computeAvailableSpace();
         this.svg = this.container.selectOrAppend('svg.tree-designer');
@@ -257,6 +266,23 @@ export class TreeDesigner {
                     self.redrawDiagramTitle();
                 });
         }
+
+        var mc = new Hammer.Manager(this.svg.node(), {touchAction : 'auto'});
+        mc.add(new Hammer.Press({
+            pointerType: 'touch'
+        }));
+
+        mc.add(new Hammer.Pinch({
+            pointerType: 'touch'
+        }));
+
+        var cancel;
+        mc.on('pinchstart', function(){
+            self.disableBrush();
+        })
+        mc.on('pinch', function(){
+            cancel = Utils.waitForFinalEvent(()=>self.enableBrush(), 'pinchend', 5000)
+        })
     }
 
     updateMargin(withTransitions){
@@ -325,6 +351,8 @@ export class TreeDesigner {
         if(changed){
             this.updateBrushExtent()
         }
+
+
     }
 
     redrawNodes() {
@@ -441,7 +469,19 @@ export class TreeDesigner {
         }
 
         nodesMerge.on('contextmenu', this.nodeContextMenu);
-        nodesMerge.on('dblclick', d=>self.selectSubTree(d, true))
+        nodesMerge.on('dblclick', this.nodeContextMenu)
+        nodesMerge.each(function(d, i){
+            var nodeElem = this;
+            var mc = new Hammer.Manager(nodeElem);
+            mc.add(new Hammer.Press({
+                pointerType: 'touch'
+            }));
+            mc.on('press', function(e){
+                if(e.pointerType=='touch'){
+                    self.nodeDragHandler.cancelDrag();
+                }
+            })
+        })
     }
 
     updateTextLines(d){ //helper method for splitting text to tspans
@@ -465,6 +505,10 @@ export class TreeDesigner {
     redrawEdges() {
         var self = this;
         var edgesContainer = this.mainGroup.selectOrAppend('g.edges');
+        if(self.config.forceFullEdgeRedraw){
+            edgesContainer.selectAll("*").remove();
+        }
+
         var edges = edgesContainer.selectAll('.edge').data(this.data.edges, (d,i)=> d.$id);
         edges.exit().remove();
         var edgesEnter = edges.enter().append('g')
@@ -495,7 +539,10 @@ export class TreeDesigner {
             // .attr("stroke", "black")
             // .attr("stroke-width", 2)
             .attr("fill", "none")
-            .attr("marker-end", d => "url(#arrow"+(self.isOptimal(d)?'-optimal':'')+")")
+            .attr("marker-end", function(d) {
+                var suffix = d3.select(this.parentNode).classed('selected') ? '-selected' : (self.isOptimal(d)?'-optimal':'');
+                return "url(#arrow"+ suffix+")"
+            })
             .attr("shape-rendering", "optimizeQuality")
 
 
@@ -526,13 +573,33 @@ export class TreeDesigner {
             .attr('text-anchor', 'end')
             .text(d=>{
                 var val = d.computedValue(ruleName, '$probability');
-                return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): d.probability
+                if(val!==null && !isNaN(val))
+                    return self.config.probabilityNumberFormatter(val);
+
+                val = d.computed['$probability'];
+                if(val!==null && !isNaN(val))
+                    return self.config.probabilityNumberFormatter(val);
+
+                if(d.probability!==null && !isNaN(d.probability))
+                    return self.config.probabilityNumberFormatter(d.probability);
+
+                return d.probability;
             });
 
         this.layout.edgeProbabilityPosition(probabilityMerge);
         this.layout.edgeProbabilityPosition(probabilityEnter);
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();
+
+        edgesMerge.on('contextmenu', this.edgeContextMenu);
+        edgesMerge.on('dblclick', this.edgeContextMenu)
+        edgesMerge.each(function(d, i){
+            var elem = this;
+            var mc = new Hammer.Manager(elem);
+            mc.add(new Hammer.Press({
+                pointerType: Hammer.POINTER_TOUCH
+            }));
+        })
     }
 
     redrawFloatingTexts() {
@@ -589,6 +656,15 @@ export class TreeDesigner {
             textsMerge.call(this.textDragHandler.drag);
         }
         textsMerge.on('contextmenu', this.textContextMenu);
+        textsMerge.on('dblclick', this.textContextMenu);
+        textsMerge.each(function(d, i){
+            var elem = this;
+            var mc = new Hammer.Manager(elem);
+            mc.add(new Hammer.Press({
+                pointerType: 'touch'
+            }));
+        })
+
     }
 
     updateValidationMessages(validationResults) {
@@ -624,7 +700,6 @@ export class TreeDesigner {
 
 
     initEdgeMarkers() {
-        console.log(this.svg);
         var defs = this.svg.append("svg:defs");
 
         this.initArrowMarker("arrow");
@@ -654,7 +729,8 @@ export class TreeDesigner {
     }
     initBrush() {
         var self = this;
-        var brushContainer = this.brushContainer= this.svg.selectOrInsert("g.brush", ":first-child")
+
+        var brushContainer = self.brushContainer = this.brushContainer= this.svg.selectOrInsert("g.brush", ":first-child")
             .attr("class", "brush");
 
         var brush = this.brush = d3.brush()
@@ -728,8 +804,30 @@ export class TreeDesigner {
             if (!d3.event.selection) return;
             brush.move(brushContainer, null);
 
+            var selectedNodes = self.getSelectedNodes();
+            if(selectedNodes && selectedNodes.length === 1){
+                self.selectNode(selectedNodes[0]);
+            }
             // if (!d3.event.selection) self.mainGroup.selectAll(".selected").classed('selected', false);
         }
+    }
+
+    disableBrush(){
+        if(!this.brushDisabled){
+            Utils.growl(i18n.t('growl.brushDisabled'), 'info', 'left')
+        }
+        this.brushDisabled = true;
+        this.brushContainer.remove();
+    }
+
+    enableBrush(){
+        if(this.brushDisabled){
+            Utils.growl(i18n.t('growl.brushEnabled'), 'info', 'left')
+            this.initBrush();
+            this.brushDisabled = false;
+        }
+
+
     }
 
     getMainGroupTranslation(invert) {
@@ -745,6 +843,10 @@ export class TreeDesigner {
         this.nodeContextMenu = new NodeContextMenu(this);
     }
 
+    initEdgeContextMenu() {
+        this.edgeContextMenu = new EdgeContextMenu(this);
+    }
+
     initTextContextMenu() {
         this.textContextMenu = new TextContextMenu(this);
     }
@@ -754,6 +856,7 @@ export class TreeDesigner {
     initMainContextMenu() {
         this.mainContextMenu = new MainContextMenu(this);
         this.svg.on('contextmenu',this.mainContextMenu);
+        this.svg.on('dblclick',this.mainContextMenu);
     }
 
     addText(text){
@@ -783,6 +886,25 @@ export class TreeDesigner {
     addTerminalNode(parent){
         var newNode = new model.TerminalNode(this.layout.getNewChildLocation(parent));
         this.addNode(newNode, parent)
+    }
+
+    injectNode(node, edge){
+        this.data.saveState();
+        this.data.injectNode(node, edge);
+        this.redraw();
+        this.layout.update(node);
+        return node;
+    }
+
+    injectDecisionNode(edge){
+        var newNode = new model.DecisionNode(this.layout.getInjectedNodeLocation(edge));
+        this.injectNode(newNode, edge);
+
+    }
+
+    injectChanceNode(edge){
+        var newNode = new model.ChanceNode(this.layout.getInjectedNodeLocation(edge));
+        this.injectNode(newNode, edge);
     }
 
     removeNode(node) {
@@ -872,7 +994,7 @@ export class TreeDesigner {
         var nodesToAttach = this.copiedNodes;
         self.copyNodes(this.copiedNodes);
         nodesToAttach.forEach(toAttach=>{
-            var attached = this.data.attachSubtree(toAttach, node);
+            var attached = this.data.attachSubtree(toAttach, node).childNode;
             var location = self.layout.getNewChildLocation(node);
             attached.moveTo(location.x, location.y, true);
             self.layout.moveNodeToEmptyPlace(attached);
@@ -905,6 +1027,19 @@ export class TreeDesigner {
             self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
     }
+
+    canFlipSubTree(node){
+        return this.data.canFlipSubTree(node);
+    }
+
+    flipSubTree(node){
+        this.data.saveState();
+        this.data.flipSubTree(node);
+        this.redraw();
+        this.layout.update();
+    }
+
+
 
     moveNodeTo(x,y){
 
@@ -950,7 +1085,6 @@ export class TreeDesigner {
         if(clearSelectionBeforeSelect){
             this.clearSelection();
         }
-
         this.config.onEdgeSelected(edge);
         this.mainGroup.select('#edge-'+edge.$id)
             .classed('selected', true)

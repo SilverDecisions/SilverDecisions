@@ -39,6 +39,33 @@
   "text":{
     "value": "Text"
   },
+  "contextMenu":{
+    "main":{
+      "addDecisionNode": "Add Decision Node",
+      "addChanceNode": "Add Chance Node",
+      "addText": "Add Text",
+      "paste": "Paste",
+      "selectAllNodes": "Select all nodes"
+    },
+    "node":{
+      "copy": "Copy",
+      "cut": "Cut",
+      "paste": "Paste",
+      "delete": "Delete",
+      "addDecisionNode": "Add Decision Node",
+      "addChanceNode": "Add Chance Node",
+      "addTerminalNode": "Add Terminal Node",
+      "selectSubtree": "Select subtree",
+      "flipSubtree": "Flip subtree"
+    },
+    "edge":{
+      "injectDecisionNode": "Inject Decision Node",
+      "injectChanceNode": "Inject Chance Node"
+    },
+    "text":{
+      "delete": "Delete"
+    }
+  },
   "settingsDialog":{
     "title": "Settings",
     "general":{
@@ -162,10 +189,38 @@
         "color": "Color",
         "marginTop": "Margin top"
       }
+    },
+    "other":{
+      "title": "Other",
+      "disableAnimations": "Disable animations",
+      "forceFullEdgeRedraw": "Force full redraw of edges"
     }
   },
   "aboutDialog":{
     "title": "About"
+  },
+  "help":{
+    "header": "Help",
+    "mouse": {
+      "header":"Mouse actions:",
+      "list":{
+        "1": "left mouse button: node/edge selection",
+        "2": "right mouse button: context menu (adding/manipulating nodes)",
+        "3": "left mouse dbclick: context menu"
+      }
+    },
+    "keyboard": {
+      "header":"Keyboard:",
+      "list":{
+        "1": "Del: delete selected nodes",
+        "2": "Ctrl-C/X: copy/cut selected nodes",
+        "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
+        "4": "Ctrl-Y/Z: undo/redo",
+        "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
+        "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
+      }
+    },
+    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
   },
   "layoutOptions":{
     "header": "Layout",
@@ -181,9 +236,32 @@
     "title" : "Title",
     "description" : "Description"
   },
+  "objectProperties":{
+    "header":{
+      "node":{
+        "decision":"Decision Node",
+        "chance":"Chance Node",
+        "terminal":"Terminal Node"
+      },
+      "edge": "Edge",
+      "text": "Floating text"
+    },
+    "childrenProperties":{
+      "node":{
+        "header": "Connections",
+        "child": {
+          "header": "Edge #{{number}}"
+        }
+      }
+    }
+  },
   "validation":{
     "incompletePath": "Path not ending with terminal node",
     "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1"
+  },
+  "growl":{
+    "brushDisabled": "Selection brush disabled",
+    "brushEnabled": "Selection brush enabled"
   },
   "confirm":{
     "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
