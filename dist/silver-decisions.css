@@ -625,8 +625,11 @@
 
 .sd-growl-list {
   position: fixed;
-  top: 50px;
-  right: 20px; }
+  top: 55px; }
+  .sd-growl-list.right {
+    right: 20px; }
+  .sd-growl-list.left {
+    left: 215px; }
 
 .sd-growl-message {
   font-family: Roboto, Helvetica, Arial, sans-serif;
@@ -637,3 +640,19 @@
   padding: 5px 10px;
   margin-bottom: 7px;
   font-size: 14px; }
+  .sd-growl-message.warning {
+    color: #8a6d3b;
+    background-color: #fcf8e3;
+    border-color: #faebcc; }
+  .sd-growl-message.info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1; }
+  .sd-growl-message.success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6; }
+  .sd-growl-message.danger {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1; }

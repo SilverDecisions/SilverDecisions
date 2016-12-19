@@ -364,10 +364,10 @@ export class Utils {
         return false;
     }
 
-    static growl(message, type, time = 2000){
+    static growl(message, type='info', position='right', time = 2000){
         var html = Templates.get('growl', {message:message, type:type})
 
-        var g = d3.select('body').selectOrAppend('div.sd-growl-list').append('div').html(html);
+        var g = d3.select('body').selectOrAppend('div.sd-growl-list.'+position).append('div').html(html);
         setTimeout(function(){
             g.remove();
         }, time)

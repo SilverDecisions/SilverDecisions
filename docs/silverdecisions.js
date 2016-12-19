@@ -18,7 +18,7 @@ if(SilverDecisions.utils.detectIE()=='11'){ // IE 11
     if(platform.os.family.toLowerCase().indexOf('windows') !== -1){ // on Windows
         var osVersion = platform.os.version.toLowerCase();
         if(osVersion == '7' || osVersion.indexOf('windows server 2008') !== -1){
-            alert('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)');
+            SilverDecisions.utils.growl('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)', 'warning', 'right', 5000);
             config.treeDesigner.disableAnimations=true;
             config.treeDesigner.forceFullEdgeRedraw=true;
         }

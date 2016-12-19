@@ -814,7 +814,7 @@ export class TreeDesigner {
 
     disableBrush(){
         if(!this.brushDisabled){
-            Utils.growl(i18n.t('growl.brushDisabled'))
+            Utils.growl(i18n.t('growl.brushDisabled'), 'info', 'left')
         }
         this.brushDisabled = true;
         this.brushContainer.remove();
@@ -822,7 +822,7 @@ export class TreeDesigner {
 
     enableBrush(){
         if(this.brushDisabled){
-            Utils.growl(i18n.t('growl.brushEnabled'))
+            Utils.growl(i18n.t('growl.brushEnabled'), 'info', 'left')
             this.initBrush();
             this.brushDisabled = false;
         }
