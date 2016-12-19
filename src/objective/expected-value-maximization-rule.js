@@ -20,7 +20,7 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
             if(node instanceof model.DecisionNode) {
                 var bestchild = -99999999999;
                 node.childEdges.forEach(e=>{
-                    var childPayoff = this.computePayoff(e.childNode, e.payoff, this.add(e.payoff, aggregatedPayoff));
+                    var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
                     bestchild = Math.max(bestchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
@@ -29,9 +29,9 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
                 });
             }else{
                 node.childEdges.forEach(e=>{
-                    this.computePayoff(e.childNode, e.payoff, this.add(e.payoff, aggregatedPayoff));
+                    this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.eval(e.probability));
+                    this.cValue(e, 'probability', this.baseProbability(e));
                 });
             }
 
@@ -47,9 +47,6 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
             });
 
         }
-
-
-
 
         payoff=this.add(payoff, childrenPayoff);
         this.clearComputedValues(node);
@@ -74,7 +71,7 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
         node.childEdges.forEach(e=>{
             if ( this.subtract(this.cValue(node,'payoff'),payoff).equals(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
                 this.cValue(e, 'optimal', true);
-                this.computeOptimal(e.childNode, e.payoff, this.multiply(probabilityToEnter, this.cValue(e,'probability')));
+                this.computeOptimal(e.childNode, this.basePayoff(e), this.multiply(probabilityToEnter, this.cValue(e,'probability')));
             }else{
                 this.cValue(e, 'optimal', false);
             }

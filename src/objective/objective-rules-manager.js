@@ -10,6 +10,8 @@ export class ObjectiveRulesManager{
     currentRule;
     ruleByName={};
 
+    $debug = false;
+
     constructor(currentRuleName, data, expressionEngine){
         this.data = data;
         this.expressionEngine=expressionEngine;
@@ -33,15 +35,34 @@ export class ObjectiveRulesManager{
 
     recompute(allRules){
 
-        console.log('recompute');
+        var startTime = new Date().getTime();
+        if(this.$debug){
+            console.log('recomputing rules ...')
+        }
+
+
+        this.evalExpressions();
         this.data.getRoots().forEach(n=>{
             this.recomputeTree(n, allRules);
         });
+
+        if(this.$debug){
+            var time  = new Date().getTime() - startTime;
+            time = time/1000
+            console.log('recomputation took '+time+'s');
+        }
 
         return this;
     }
 
     recomputeTree(root, allRules){
+        if(this.$debug) {
+            console.log('recomputing rules for tree ...', root)
+        }
+        var startTime = new Date().getTime();
+
+        this.evalExpressions();
+
         var rules  = [this.currentRule];
         if(allRules){
             rules = this.rules;
@@ -52,7 +73,11 @@ export class ObjectiveRulesManager{
             rule.computeOptimal(root);
             this.setProbabilitiesToDisplay(rule);
         });
-
+        if(this.$debug){
+            var time  = new Date().getTime() - startTime;
+            time = time/1000;
+            console.log('recomputation took '+time+'s');
+        }
         return this;
     }
 
@@ -70,8 +95,18 @@ export class ObjectiveRulesManager{
             if(e.parentNode instanceof model.DecisionNode){
                 rule.cValue(e, '$probability', rule.cValue(e, 'probability'));
             }else if(e.parentNode instanceof model.ChanceNode){
-                rule.cValue(e, '$probability', rule.eval(e.probability));
+                rule.cValue(e, '$probability', e.computedValue(null ,'probability'));
             }
+        })
+    }
+
+    evalExpressions() {
+        this.data.edges.forEach(e=>{
+            var probability;
+            if(e.parentNode instanceof model.ChanceNode){
+                e.computedValue(null, 'probability', this.expressionEngine.evalProbability(e));
+            }
+            e.computedValue(null, 'payoff', this.expressionEngine.eval(e.payoff))
         })
     }
 }

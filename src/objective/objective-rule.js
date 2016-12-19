@@ -25,6 +25,14 @@ export class ObjectiveRule{
         return  object.computedValue(this.name, fieldName, value);
     }
 
+    baseProbability(edge){
+        return edge.computedValue(null, 'probability');
+    }
+
+    basePayoff(edge){
+        return edge.computedValue(null, 'payoff');
+    }
+
     clearComputedValues(object){
         object.clearComputedValues(this.name);
     }

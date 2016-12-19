@@ -21,7 +21,7 @@ export class MaxiMaxRule extends ObjectiveRule{
 
             var bestchild = -99999999999;
             node.childEdges.forEach(e=> {
-                var childPayoff = this.computePayoff(e.childNode, e.payoff, this.add(e.payoff, aggregatedPayoff));
+                var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
                 bestchild = Math.max(bestchild, childPayoff);
             });
             node.childEdges.forEach(e=> {
@@ -76,7 +76,7 @@ export class MaxiMaxRule extends ObjectiveRule{
 
             if (isOptimal) {
                 this.cValue(e, 'optimal', true);
-                this.computeOptimal(e.childNode, e.payoff, this.multiply(probabilityToEnter, this.cValue(e, 'probability')));
+                this.computeOptimal(e.childNode, this.basePayoff(e), this.multiply(probabilityToEnter, this.cValue(e, 'probability')));
             } else {
                 this.cValue(e, 'optimal', false);
             }

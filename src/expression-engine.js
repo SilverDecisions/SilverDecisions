@@ -17,6 +17,35 @@ export class ExpressionEngine{
         return this.parser.eval(expr+"");
     }
 
+    computeHash(edges){
+        var hashCount=0;
+        var probabilitySum=0;
+        edges.forEach(e=>{
+            if(ExpressionEngine.isHash(e.probability)){
+                hashCount++;
+                return;
+            }
+
+            probabilitySum = ExpressionEngine.add(probabilitySum, this.eval(e.probability));
+        });
+        if(!hashCount){
+            return 0;
+        }
+        var hash = ExpressionEngine.divide(ExpressionEngine.subtract(1, probabilitySum), hashCount);
+        return hash;
+    }
+
+    static isHash(expr){
+        return expr && Utils.isString(expr) && expr.trim()==='#'
+    }
+
+    evalProbability(edge){
+        if(!ExpressionEngine.isHash(edge.probability)){
+            return this.eval(edge.probability);
+        }
+        return this.computeHash(edge.parentNode.childEdges);
+    }
+
     static add(a, b){
         return math.add(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }

@@ -11,10 +11,15 @@ export class ObjectWithIdAndComputedValues {
 
     /*get or set computed value*/
     computedValue(ruleName, fieldName, value){
-        if(value===undefined){
-            return  _.get(this, 'computed.'+ruleName+'.'+fieldName, null);
+        var path = 'computed.';
+        if(ruleName){
+            path+=ruleName+'.';
         }
-        _.set(this, 'computed.'+ruleName+'.'+fieldName, value);
+        path+=fieldName;
+        if(value===undefined){
+            return  _.get(this, path, null);
+        }
+        _.set(this, path, value);
         return value;
     }
 

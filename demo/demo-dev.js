@@ -80,7 +80,7 @@ var data = {
                                     }
                                 },
                                 "name": "lose",
-                                "probability": "0.99",
+                                "probability": "#",
                                 "payoff": 0,
                                 "childNode": {
                                     "computed": {

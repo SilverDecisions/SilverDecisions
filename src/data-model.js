@@ -30,11 +30,6 @@ export class DataModel {
 
     constructor() {
 
-        // var n1 = this.addNode(new model.DecisionNode(new model.Point(100,150))).setName('dilemma');
-        // var n2 = this.addNode(new model.ChanceNode(new model.Point(250,100)), n1).setName('play').setPayoff(-1).childNode;
-        // var n3 = this.addNode(new model.TerminalNode(new model.Point(250,200)), n1).setName('leave game').setPayoff(0).childNode;
-        // var n4 = this.addNode(new model.TerminalNode(new model.Point(400,50)), n2).setName('win').setPayoff(20).setProbability(0.1).childNode;
-        // var n5 = this.addNode(new model.TerminalNode(new model.Point(400,150)), n2).setName('lose').setPayoff(0).setProbability(0.9).childNode;
     }
 
     setTreeValidator(treeValidator){
@@ -120,11 +115,7 @@ export class DataModel {
 
     _setEdgeInitialProbability(edge){
         if(edge.parentNode instanceof model.ChanceNode){
-            if(edge.parentNode.childEdges.length==0){ //if node is first child set edge probability to 1
-                edge.probability=1.0;
-            }else{
-                edge.probability=0.0;
-            }
+            edge.probability='#';
         }else{
             edge.probability=undefined;
         }
@@ -166,16 +157,23 @@ export class DataModel {
     }
 
     /*creates detached clone of given node*/
-    cloneSubtree(nodeToCopy){
+    cloneSubtree(nodeToCopy, cloneComputedValues){
         var self = this;
         var clone = this.cloneNode(nodeToCopy);
 
         nodeToCopy.childEdges.forEach(e=>{
-            var childClone = self.cloneSubtree(e.childNode);
+            var childClone = self.cloneSubtree(e.childNode, cloneComputedValues);
             childClone.$parent = clone;
             var edge = new model.Edge(clone, childClone, e.name, e.payoff, e.probability);
+            if(cloneComputedValues){
+                edge.computed=_.cloneDeep(e.computed)
+                childClone.computed=_.cloneDeep(e.childNode.computed)
+            }
             clone.childEdges.push(edge);
         });
+        if(cloneComputedValues){
+            clone.computed=_.cloneDeep(nodeToCopy.computed)
+        }
         return clone;
     }
 
@@ -449,7 +447,7 @@ export class DataModel {
 
     flipSubTree(root){
 
-        var rootClone = this.cloneSubtree(root);
+        var rootClone = this.cloneSubtree(root, true);
         var oldChildrenNumber = root.childEdges.length;
         var oldGrandChildrenNumber = root.childEdges[0].childNode.childEdges.length;
 
@@ -476,7 +474,6 @@ export class DataModel {
             edge.name = rootClone.childEdges[0].childNode.childEdges[i].name;
 
             edge.probability =0;
-
             // console.log(child);
 
             for(var j=0; j< grandChildrenNumber; j++){
@@ -487,7 +484,7 @@ export class DataModel {
                 grandChildEdge.name = rootClone.childEdges[j].name;
                 grandChildEdge.payoff = this.expressionEngine.evalAndAdd(rootClone.childEdges[j].payoff, rootClone.childEdges[j].childNode.childEdges[i].payoff);
 
-                grandChildEdge.probability = this.expressionEngine.evalAndMultiply(rootClone.childEdges[j].probability, rootClone.childEdges[j].childNode.childEdges[i].probability);
+                grandChildEdge.probability = this.expressionEngine.evalAndMultiply(rootClone.childEdges[j].computedValue(null, 'probability'), rootClone.childEdges[j].childNode.childEdges[i].computedValue(null, 'probability'));
                 edge.probability = this.expressionEngine.evalAndAdd(edge.probability,grandChildEdge.probability);
             }
 

@@ -7,6 +7,10 @@ export class ProbabilityValidator{
     }
 
     validate(value){
+        if(ExpressionEngine.isHash(value)){
+            return true;
+        }
+
         if(!this.expressionEngine.validate(value)){
             return false;
         }

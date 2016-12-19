@@ -235,8 +235,19 @@ export class App {
         // console.log();
     }
 
-    updateView(){
+    /*updateView(notDefer=false){
+        console.log('updateView');
+        if(notDefer) {
+            this._updateView();
+            return;
+        }
+        Utils.waitForFinalEvent(()=>this._updateView(), '_updateView', 50)
 
+
+    }*/
+
+    updateView(){
+        // console.log('_updateView');
         this.treeDesigner.redraw(true);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
         this.toolbar.update();
@@ -287,7 +298,7 @@ export class App {
         this.treeDesigner.setRuleName(ruleName);
         this.objectiveRulesManager.setCurrentRuleByName(ruleName);
         this.checkValidityAndRecomputeObjective();
-        this.updateView();
+        this.updateView(true);
     }
 
     checkValidityAndRecomputeObjective(allRules){

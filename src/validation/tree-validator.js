@@ -30,12 +30,18 @@ export class TreeValidator{
                 validationResult.addError('incompletePath', node)
             }
             if(node instanceof model.ChanceNode){
-                var probabilitySum = 0;
+                var probabilitySum = ExpressionEngine.toNumber(0);
+                var withHash = false;
                 node.childEdges.forEach(e=>{
-                    probabilitySum = ExpressionEngine.add(probabilitySum, this.expressionEngine.eval(e.probability));
+                    if(ExpressionEngine.isHash(e.probability)){
+                        withHash=true;
+                    }else{
+                        probabilitySum = ExpressionEngine.add(probabilitySum, this.expressionEngine.eval(e.probability));
+                    }
+
                 });
 
-                if(!probabilitySum || !probabilitySum.equals(1)){
+                if(isNaN(probabilitySum) || !(probabilitySum.equals(1) || withHash && ExpressionEngine.compare(probabilitySum, 1)<=0)){
                     validationResult.addError('probabilityDoNotSumUpTo1', node);
                 }
             }
