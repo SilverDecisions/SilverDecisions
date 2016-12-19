@@ -96,4 +96,8 @@ export class ExpressionEngine{
     serialize(v){
         return ExpressionEngine.toNumber(v).toFraction(true);
     }
+
+    static format(val){
+        return math.format(val);
+    }
 }

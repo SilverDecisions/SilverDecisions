@@ -5,6 +5,8 @@ import {Utils} from './utils'
 import * as model from './model/index'
 import {PayoffValidator} from './validation/payoff-validator'
 import {ProbabilityValidator} from './validation/probability-validator'
+import {ExpressionEngine} from './expression-engine'
+
 
 export class Sidebar{
 

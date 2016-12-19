@@ -263,6 +263,17 @@
     "brushDisabled": "Selection brush disabled",
     "brushEnabled": "Selection brush enabled"
   },
+  "tooltip":{
+    "node":{
+      "payoff": "Payoff",
+      "aggregatedPayoff": "Aggregated Payoff",
+      "probabilityToEnter": "Probability to enter"
+    },
+    "edge":{
+      "payoff": "Payoff: {{value}}",
+      "probability": "Probability: {{value}}"
+    }
+  },
   "confirm":{
     "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
     "openDiagram": "Are you sure? All unsaved diagram data will be lost.",

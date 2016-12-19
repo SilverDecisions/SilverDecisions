@@ -21,7 +21,7 @@ math.import(require('mathjs/lib/type/fraction'));
 //
 // To load all functions of a specific category:
 //
-    math.import(require('mathjs/lib/function/arithmetic'));
+math.import(require('mathjs/lib/function/arithmetic'));
 math.import(require('mathjs/lib/function/relational'));
 //
 // math.import(require('mathjs/lib/function/arithmetic/add'));
@@ -32,6 +32,6 @@ math.import(require('mathjs/lib/function/relational'));
 
 // Expressions:
 math.import(require('mathjs/lib/expression'));
-
+math.import(require('mathjs/lib/utils/string'));
 
 module.exports = math;

@@ -498,6 +498,7 @@ export class DataModel {
             child.childEdges.forEach(grandChildEdge=> {
                 grandChildEdge.probability = divideGrandChildEdgeProbability(grandChildEdge.probability);
                 probabilitySum = ExpressionEngine.add(probabilitySum, grandChildEdge.probability);
+                grandChildEdge.probability = this.expressionEngine.serialize(grandChildEdge.probability)
             });
 
             if(!probabilitySum.equals(1)){
@@ -509,6 +510,7 @@ export class DataModel {
                 console.log("Probabilities normalized with normalizationFactor: "+normalizationFactor);
             }
 
+            edge.probability = this.expressionEngine.serialize(edge.probability)
         }
 
         this.callbacksDisabled =callbacksDisabled;

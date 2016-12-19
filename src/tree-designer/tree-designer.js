@@ -418,6 +418,12 @@ export class TreeDesigner {
             .text(d=> {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
                 return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
+            })
+            .on('mouseover', function (d) {
+                var html = i18n.t('tooltip.node.payoff',{value: d.payoff});
+                Tooltip.show(html);
+            }).on("mouseout", function (d) {
+                Tooltip.hide();
             });
 
         var payoffT = payoff;
@@ -436,6 +442,12 @@ export class TreeDesigner {
             .text(d=> {
                 var val = d.computedValue(ruleName, 'aggregatedPayoff');
                 return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
+            })
+            .on('mouseover', function (d) {
+                var html = i18n.t('tooltip.node.aggregatedPayoff');
+                Tooltip.show(html);
+            }).on("mouseout", function (d) {
+                Tooltip.hide();
             });
 
         var aggregatedPayoffT = aggregatedPayoff;
@@ -450,6 +462,12 @@ export class TreeDesigner {
             .text(d=>{
                 var val = d.computedValue(ruleName, 'probabilityToEnter');
                 return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): ''
+            })
+            .on('mouseover', function (d) {
+                var html = i18n.t('tooltip.node.probabilityToEnter');
+                Tooltip.show(html);
+            }).on("mouseout", function (d) {
+                Tooltip.hide();
             });
 
         var probabilityToEnterT = probabilityToEnter;
@@ -558,7 +576,23 @@ export class TreeDesigner {
         var payoffText = edgesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=>d.payoff<0)
-            .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff));
+            .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff))
+            .text(d=>{
+                var val = d.computedValue('', 'payoff');
+                if(val!==null && !isNaN(val))
+                    return self.config.payoffNumberFormatter(val);
+
+                if(d.payoff!==null && !isNaN(d.payoff))
+                    return self.config.probabilityNumberFormatter(d.payoff);
+
+                return d.payoff;
+            })
+            .on('mouseover', function (d) {
+                var html = i18n.t('tooltip.edge.payoff',{value: d.payoff});
+                    Tooltip.show(html);
+            }).on("mouseout", function (d) {
+                Tooltip.hide();
+            });
 
         var payoffTextT = payoffText;
         if(this.transition){
@@ -568,9 +602,16 @@ export class TreeDesigner {
         this.layout.edgePayoffPosition(payoffTextT);
         var ruleName = this.config.$rule;
 
+        edgesMerge.select('text.probability').on('mouseover', function (d) {
+            var html = i18n.t('tooltip.edge.probability',{value: d.probability=== undefined ? d.computedValue(ruleName, '$probability') : d.probability});
+            Tooltip.show(html);
+        }).on("mouseout", function (d) {
+            Tooltip.hide();
+        })
         var probabilityMerge = edgesMergeT.select('text.probability');
         probabilityMerge
             .attr('text-anchor', 'end')
+
             .text(d=>{
                 var val = d.computedValue(ruleName, '$probability');
                 if(val!==null && !isNaN(val))
@@ -585,6 +626,7 @@ export class TreeDesigner {
 
                 return d.probability;
             });
+
 
         this.layout.edgeProbabilityPosition(probabilityMerge);
         this.layout.edgeProbabilityPosition(probabilityEnter);
