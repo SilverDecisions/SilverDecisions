@@ -91,6 +91,9 @@ export class ObjectiveRulesManager{
     }
 
     setProbabilitiesToDisplay(rule) {
+        if(!rule){
+            rule = this.currentRule
+        }
         this.data.edges.forEach(e=>{
             if(e.parentNode instanceof model.DecisionNode){
                 rule.cValue(e, '$probability', rule.cValue(e, 'probability'));
@@ -102,11 +105,15 @@ export class ObjectiveRulesManager{
 
     evalExpressions() {
         this.data.edges.forEach(e=>{
-            var probability;
-            if(e.parentNode instanceof model.ChanceNode){
-                e.computedValue(null, 'probability', this.expressionEngine.evalProbability(e));
+            try{
+                var probability;
+                if(e.parentNode instanceof model.ChanceNode){
+                    e.computedValue(null, 'probability', this.expressionEngine.evalProbability(e));
+                }
+                e.computedValue(null, 'payoff', this.expressionEngine.eval(e.payoff))
+            }catch (e){
+                console.log(e);
             }
-            e.computedValue(null, 'payoff', this.expressionEngine.eval(e.payoff))
         })
     }
 }

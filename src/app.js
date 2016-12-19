@@ -310,6 +310,8 @@ export class App {
                 this.objectiveRulesManager.recomputeTree(root, allRules);
             }else{
                 this.objectiveRulesManager.clearTree(root);
+                this.objectiveRulesManager.evalExpressions();
+                this.objectiveRulesManager.setProbabilitiesToDisplay();
             }
         });
         this.updateValidationMessages();

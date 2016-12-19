@@ -28,6 +28,12 @@ export class ObjectWithIdAndComputedValues {
             this.computed={};
             return;
         }
+        if(Utils.isArray(ruleName)){
+            ruleName.forEach(n=>{
+                this.computed[n]={};
+            });
+            return;
+        }
         this.computed[ruleName]={};
     }
 }
