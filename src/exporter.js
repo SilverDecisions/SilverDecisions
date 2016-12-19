@@ -7,6 +7,8 @@ import {Utils} from "./utils";
 export class Exporter {
     static saveAs = saveAs;
     static dataURLtoBlob = dataURLtoBlob;
+    static exportedStyles = ['stroke', 'fill', 'font', 'color', 'display', 'text', 'opacity'];
+
 // Below are the function that handle actual exporting:
 // getSVGString (svgNode ) and svgString2Image( svgString, width, height, format, callback )
     static getSVGString(svgNode) {
@@ -18,7 +20,7 @@ export class Exporter {
         function appendInlineStyles(source, target){
             if(!source){
                 console.log('Exporter.appendInlineStyles - undefined source!');
-                return;
+                return false;
             }
             var children = source.children;
             var targetChildren = target.children;
@@ -30,19 +32,32 @@ export class Exporter {
             var cssStyleText = '';
             var cs = getComputedStyle(source);
             if(!cs){
-                return;
+                return true;
             }
-            for (let i= 0; i<cs.length; i++){
-                cssStyleText+='; '+cs.item(i)+': '+ cs.getPropertyValue(cs.item(i));
+            if(cs.display === 'none'){
+                return false;
             }
 
+
+            for (let i= 0; i<cs.length; i++){
+                var styleName = cs.item(i);
+                if(Exporter.exportedStyles.some(s=>styleName.indexOf(s)>-1)){
+                    cssStyleText+='; '+styleName+': '+ cs.getPropertyValue(styleName);
+                }
+            }
 
             target.setAttribute("style", cssStyleText);
-
+            var toRemove = [];
             for (let i = 0; i < children.length; i++) {
                 var node = children[i];
-                appendInlineStyles(node, targetChildren[i]);
+                if(!appendInlineStyles(node, targetChildren[i])){
+                    toRemove.push(targetChildren[i]);
+                }
             }
+            toRemove.forEach(n=>{
+                target.removeChild(n)
+            });
+            return true;
         }
 
         svgClone.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
