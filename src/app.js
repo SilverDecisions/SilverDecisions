@@ -17,6 +17,7 @@ import {SettingsDialog} from './settings-dialog'
 import {ExpectedValueMaximizationRule} from './objective/expected-value-maximization-rule'
 import {AboutDialog} from "./about-dialog";
 import * as _ from "lodash";
+import {Exporter} from "./exporter";
 
 export class AppConfig {
     readOnly = false;
@@ -26,6 +27,7 @@ export class AppConfig {
         open: true,
         exportToPng: true,
         exportToSvg: true,
+        exportToPdf: Exporter.isPdfExportAvailable()
     };
     showExport = true;
     showDetails = true;

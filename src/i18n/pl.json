@@ -6,7 +6,8 @@
     "export":{
       "label": "Eksport",
       "png": "Png",
-      "svg": "Svg"
+      "svg": "Svg",
+      "pdf": "Pdf"
     },
     "layout":{
       "label": "Układ",
@@ -277,6 +278,7 @@
     "pngExportNotSupported": "Eksport do obrazu PNG nie jest wspierany w Twojej przeglądarce.",
     "pngExportNotSupportedIE": "Eksport do obrazu PNG nie jest wspierany w przeglądarce Internet Explorer.",
     "svgExportNotSupported": "Eksport do obrazu SVG nie jest wspierany w Twojej przeglądarce.",
+    "pdfExportNotSupported": "Eksport do PDF nie jest wspierany w Twojej przeglądarce.",
     "incorrectPayoffNumberFormatOptions": "Niewłaściwe ustawienia dla formatu wypłaty.",
     "incorrectProbabilityNumberFormatOptions": "Niewłaściwe ustawienia dla formatu prawdopodobieństw.",
     "incorrectNumberFormatOptions": "Niewłaściwe ustawiono formatowanie liczb. Przyjęto ustawienia domyślne."

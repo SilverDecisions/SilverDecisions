@@ -50,6 +50,7 @@
     "merge-stream": "^1.0.0",
     "phantomjs": "^2.1.7",
     "stringify": "^5.1.0",
+    "svg2pdf.js": "^0.11.4",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "yargs": "^6.0.0"

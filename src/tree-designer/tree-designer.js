@@ -561,7 +561,7 @@ export class TreeDesigner {
                 var suffix = d3.select(this.parentNode).classed('selected') ? '-selected' : (self.isOptimal(d)?'-optimal':'');
                 return "url(#arrow"+ suffix+")"
             })
-            .attr("shape-rendering", "optimizeQuality")
+            // .attr("shape-rendering", "optimizeQuality")
 
 
         edgesMerge.on('click', d=>{

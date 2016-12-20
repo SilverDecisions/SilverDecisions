@@ -2,6 +2,8 @@ import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'
 import * as _ from "lodash";
+import circleSymbol from './symbols/circle'
+import triangleSymbol from './symbols/triangle'
 
 /*Tree layout manager*/
 export class Layout{
@@ -9,6 +11,12 @@ export class Layout{
     treeDesigner;
     data;
     config;
+
+    nodeTypeToSymbol = {
+        'decision': d3.symbolSquare,
+        'chance': circleSymbol,
+        "terminal": triangleSymbol
+    };
 
     static MANUAL_LAYOUT_NAME = 'manual';
 
@@ -121,10 +129,10 @@ export class Layout{
     drawNodeSymbol(path, transition){
         var self = this;
         var nodeSize = this.config.nodeSize;
-        this.nodeSymbol = d3.symbol().type(d=> d.$symbol)
+        this.nodeSymbol = d3.symbol().type(d=> self.nodeTypeToSymbol[d.type])
             .size(d=>d.$symolSize ? _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", 64) : 64);
 
-        path.attr('transform', 'rotate(-90)')
+        path
             .each(function (d) {
                 var path = d3.select(this);
                 var prev = path.attr("d");

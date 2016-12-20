@@ -8,16 +8,13 @@ export class Node extends ObjectWithIdAndComputedValues{
     name='';
     location; //Point
 
-    $symbol;
-
-    constructor(type, symbol, location){
+    constructor(type, location){
         super();
         this.location=location;
         if(!location){
             this.location = new Point(0,0);
         }
         this.type=type;
-        this.$symbol=symbol;
     }
 
     setName(name){

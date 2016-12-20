@@ -151,6 +151,7 @@ export class Toolbar{
         }
         this.initExportToPngButton();
         this.initExportSvgButton();
+        this.initExportPdfButton();
 
     }
     initExportToPngButton() {
@@ -165,6 +166,13 @@ export class Toolbar{
         this.container.select('#saveButtonSvg')
             .on('click', () => Exporter.saveAsSvg(svg))
             .classed(this.hiddenClass, !this.app.config.buttons.exportToSvg)
+    }
+
+    initExportPdfButton() {
+        var svg = this.app.treeDesigner.svg;
+        this.container.select('#saveButtonPdf')
+            .on('click', () => Exporter.saveAsPdf(svg))
+            .classed(this.hiddenClass, !this.app.config.buttons.exportToPdf)
     }
 
     initObjectiveRuleToolbarGroup() {
