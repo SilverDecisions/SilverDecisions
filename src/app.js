@@ -27,9 +27,18 @@ export class AppConfig {
         open: true,
         exportToPng: true,
         exportToSvg: true,
-        exportToPdf: Exporter.isPdfExportAvailable()
+        exportToPdf: true
     };
-    showExport = true;
+    exports={
+        show: true,
+        serverUrl: 'http://export.highcharts.com', //url of the export server
+        pdf:{
+            mode: 'server', // available options: 'client', 'server', 'fallback',
+        },
+        png:{
+            mode: 'fallback', // available options: 'client', 'server', 'fallback',
+        }
+    };
     showDetails = true;
     jsonFileDownload= true;
     width = undefined;

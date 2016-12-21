@@ -3,7 +3,7 @@ var data = {
     "lng": "en",
     "rule": "expected-value-maximization",
     "title": 'Diagram title',
-    "description": 'Diagram description',
+    "description": 'Diagram description zażółć gęślą jaźń',
     "format": {
         "locales": "en",
         "payoff": {

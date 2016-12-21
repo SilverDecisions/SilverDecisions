@@ -246,8 +246,6 @@ export class TreeDesigner {
         this.availableWidth = Utils.sanitizeWidth(this.config.width, this.container, this.config.margin);
     }
 
-
-
     initSvg() {
         var c = this;
         var self = this;
@@ -655,7 +653,6 @@ export class TreeDesigner {
             .attr('id', d=>'text-'+d.$id);
 
 
-
         var rectWidth = 40;
         var rectHeight = 20;
 
@@ -748,6 +745,7 @@ export class TreeDesigner {
         this.initArrowMarker("arrow-optimal");
         this.initArrowMarker("arrow-selected");
     }
+
     initArrowMarker(id) {
 
         var defs = this.svg.select("defs");

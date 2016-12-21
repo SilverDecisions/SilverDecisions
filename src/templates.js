@@ -17,6 +17,7 @@ export class Templates{
     static help = require('./templates/help.html');
     static aboutDialog = require('./templates/about_dialog.html');
     static growl = require('./templates/growl_message.html');
+    static loadingIndicator = require('./templates/loading_indicator.html');
     static main = require('./templates/main.html');
 
     static get(templateName, variables){

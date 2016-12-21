@@ -372,4 +372,57 @@ export class Utils {
             g.remove();
         }, time)
     }
+
+    static postByForm(url, data) {
+        var name,
+            form;
+
+        // create the form
+        form = Utils.createElement('form', Utils.mergeDeep({
+            method: 'post',
+            action: url,
+            enctype: 'multipart/form-data'
+        }), document.body);
+
+        for (name in data) {
+            if(data.hasOwnProperty(name)){
+                Utils.createElement('input', {
+                    type: 'hidden',
+                    name: name,
+                    value: data[name]
+                }, form);
+            }
+        }
+
+        form.submit();
+
+        Utils.removeElement(form);
+    };
+
+    static createElement(tag, attribs, parent) {
+        var el = document.createElement(tag);
+
+        if (attribs) {
+            Utils.deepExtend(el, attribs);
+        }
+        if (parent) {
+            parent.appendChild(el);
+        }
+        return el;
+    };
+
+    static extend (a, b) {
+        var n;
+        if (!a) {
+            a = {};
+        }
+        for (n in b) {
+            a[n] = b[n];
+        }
+        return a;
+    };
+
+    static removeElement(element) {
+        element.parentNode.removeChild(element);
+    }
 }

@@ -4,6 +4,7 @@ import * as d3 from './d3'
 import {i18n} from "./i18n/i18n";
 import {Utils} from "./utils";
 import * as _ from "lodash";
+import {LoadingIndicator} from "./loading-indicator";
 
 export class Exporter {
     static saveAs = saveAs;
@@ -13,9 +14,7 @@ export class Exporter {
 
 // Below are the function that handle actual exporting:
 // getSVGString (svgNode ) and svgString2Image( svgString, width, height, format, callback )
-    static getSVGString(svgNode) {
-        // svgNode = svgNode.cloneNode(true);
-
+    static getSvgCloneWithInlineStyles(svgNode){
         var svgClone = svgNode.cloneNode(true);
         appendInlineStyles(svgNode, svgClone);
 
@@ -30,6 +29,14 @@ export class Exporter {
                 children = source.childNodes;
                 targetChildren = target.childNodes;
             }
+
+            if(source.tagName==='text'){
+/*
+                var bBox = source.getBBox();
+                console.log(source, bBox);
+                target.setAttribute('y', bBox.y)*/
+            }
+
 
             var cssStyleText = '';
             var cs = getComputedStyle(source);
@@ -69,8 +76,30 @@ export class Exporter {
             return true;
         }
 
+        /*var textElements = svgNode.getElementsByTagName('text')
+        _.each(textElements, function (el) {
+
+
+            var textBBox = el.getBBox();
+            console.log(el,textBBox, el.getBoundingClientRect());
+            _.each(el.getElementsByTagName('tspan'), tspan=>{
+                var tspanBBox = tspan.getBBox();
+                console.log(tspan,tspanBBox, tspan.getBoundingClientRect());
+            })
+
+            // el.style['font-family'] = el.style['font-family'] && el.style['font-family'].split(' ').splice(-1);
+        });*/
+
 
         svgClone.setAttribute('xlink', 'http://www.w3.org/1999/xlink');
+        return svgClone;
+    }
+
+
+    static getSVGString(svgNode) {
+        // svgNode = svgNode.cloneNode(true);
+        var svgClone = Exporter.getSvgCloneWithInlineStyles(svgNode);
+
         var serializer = new XMLSerializer();
 
         var svgString = serializer.serializeToString(svgClone);
@@ -118,14 +147,31 @@ export class Exporter {
         var name = 'decisiontree';
         var format = d3.timeFormat("%Y.%m.%d_%H.%M.%S");
         var date = new Date();
-        return name+'@'+format(date)+'.'+ext;
+        name +=  '@'+format(date);
+        if(ext){
+            name += '.'+ext
+        }
+        return name;
     }
 
-    static saveAsPng(svg) {
+    static saveAsPng(svg, options) {
+
+        var clientSide = options.png.mode === 'client';
+        var fallback = options.png.mode === 'fallback';
+        var serverSide = options.png.mode === 'server';
         if(Utils.detectIE()){
-            alert(i18n.t('error.pngExportNotSupportedIE'));
-            return;
+            if(clientSide){
+                alert(i18n.t('error.pngExportNotSupportedIE'));
+                return;
+            }
+
+            if(fallback){
+                fallback=false;
+                serverSide = true;
+            }
         }
+        LoadingIndicator.show();
+
         try{
             var svgString = Exporter.getSVGString(svg.node());
             var svgWidth = svg.attr('width');
@@ -133,21 +179,37 @@ export class Exporter {
 
             var pngWidth = 4*svgWidth;
             var pngHeight = 4*svgHeight;
-            Exporter.svgString2Image(svgString,  pngWidth, pngHeight, 'png', save); // passes Blob and filesize String to the callback
+            if(clientSide || fallback){
+                Exporter.svgString2Image(svgString,  pngWidth, pngHeight, 'png', save); // passes Blob and filesize String to the callback
 
-            function save(dataBlob, filesize) {
-                try{
-                    Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
-                }catch (e){
-                    alert(i18n.t('error.pngExportNotSupported'));
-                    console.log(e);
+                function save(dataBlob, filesize) {
+                    try{
+                        Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
+                        LoadingIndicator.hide();
+                    }catch (e){
+                        console.log('client side png rendering failed!');
+                        if(fallback){
+                            console.log('performing server side fallback.');
+                            Exporter.exportPngServerSide(svgString, options.serverUrl, pngWidth, pngHeight);
+                        }else{
+                            throw e;
+                        }
+                    }
+
                 }
+            } else if(serverSide){
+                Exporter.exportPngServerSide(svgString, options.serverUrl, pngWidth, pngHeight);
             }
+
+
+
         }catch (e){
             alert(i18n.t('error.pngExportNotSupported'));
+            LoadingIndicator.hide();
             console.log(e);
         }
     }
+
 
     static saveAsSvg(svg) {
         try{
@@ -161,50 +223,133 @@ export class Exporter {
         }
     }
 
-    static saveAsPdf(svg){
-        if (!Exporter.isPdfExportAvailable()) {
-            alert(i18n.t('error.jsPDFisNotIncluded'));
-            return;
+    static exportPdfClientSide(svgString, width, height){
+        var doc = new jsPDF('l', 'pt', [width, height]);
+        var dummy = document.createElement('svg');
+        dummy.innerHTML = svgString;
+        svg2pdf(dummy.firstChild, doc, {
+            xOffset: 0,
+            yOffset: 0,
+            scale: 1
+        });
+        doc.save(Exporter.getExportFileName('pdf'));
+        LoadingIndicator.hide();
+
+    }
+
+    static postAndSave(url, data, filename, successCallback, failCallback){
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', url, true);
+        xhr.setRequestHeader("Content-type", "application/json");
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = function() {
+            var status = xhr.status;
+            console.log(status);
+            var type = xhr.getResponseHeader('Content-Type');
+            if (status == 200) {
+                var blob = new Blob([this.response], {type: type});
+                Exporter.saveAs(blob, filename);
+                if(successCallback){
+                    successCallback();
+                }
+            } else {
+                if(failCallback){
+                    failCallback();
+                }
+            }
+        };
+        xhr.onreadystatechange = function (oEvent) {
+            if (xhr.readyState === 4) {
+                if (xhr.status !== 200) {
+                    failCallback();
+                }
+            }
+        };
+
+
+        xhr.send(JSON.stringify(data));
+    }
+
+    static exportPdfServerSide(svgString, url){
+        var filename = Exporter.getExportFileName('pdf');
+        var data = {svg: svgString, type: 'pdf', noDownload:true};
+        Exporter.postAndSave(url, data, filename, LoadingIndicator.hide, ()=>{
+            LoadingIndicator.hide();
+            alert(i18n.t('error.serverSideExportRequestFailure'));
+            throw new Error('Server side export failure');
+        });
+
+        // Utils.postByForm(url, {
+        //     filename: filename,
+        //     type: 'pdf',
+        //     // width: options.width || 0, // IE8 fails to post undefined correctly, so use 0
+        //     // scale: options.scale,
+        //     svg: svgString
+        // });
+
+    }
+
+    static exportPngServerSide(svgString, url, pngWidth, pngHeight){
+        var filename = Exporter.getExportFileName('png');
+        var data = {svg: svgString, type: 'png', noDownload:true, width:pngWidth};
+        Exporter.postAndSave(url, data, filename, LoadingIndicator.hide, ()=>{
+            LoadingIndicator.hide();
+            alert(i18n.t('error.serverSideExportRequestFailure'));
+            throw new Error('Server side export failure');
+        });
+
+        /*Utils.postByForm(url, {
+         filename: filename,
+         type: 'pdf',
+         // width: options.width || 0, // IE8 fails to post undefined correctly, so use 0
+         // scale: options.scale,
+         svg: svgString
+         });*/
+
+    }
+
+    static saveAsPdf(svg, options){
+        var clientSidePdfExportAvailable = Exporter.isClientSidePdfExportAvailable();
+        if(options.pdf.mode === 'client'){
+            if (!clientSidePdfExportAvailable) {
+                alert(i18n.t('error.jsPDFisNotIncluded'));
+                return;
+            }
         }
+        LoadingIndicator.show();
         var margin= 20;
         var svgElement = svg.node();
         var width = svgElement.width.baseVal.value + 2 * margin,
             height = svgElement.height.baseVal.value + 2 * margin;
         try{
-            var doc = new jsPDF('l', 'pt', [width, height]);
-            // svgString = '<svg width="200" height="200"><rect height="100" width="100" fill="black" x="20" y="20"></rect></svg>'
-            var svgString = Exporter.getSVGString(svg.node());
-            var dummy = document.createElement('svg');
-            dummy.innerHTML = svgString;
-            var textElements = dummy.getElementsByTagName('text'),
-                titleElements,
-                svgData,
-                svgElementStyle = dummy.getElementsByTagName('svg')[0].style;
-            console.log(textElements)
+            var svgString = Exporter.getSVGString(svgElement);
 
-            _.each(textElements, function (el) {
-                // Workaround for the text styling. making sure it does pick up the root element
-                _.each(['font-family', 'font-size'], function (property) {
-                    if (!el.style[property] && svgElementStyle[property]) {
-                        el.style[property] = svgElementStyle[property];
+            var fallback = options.pdf.mode === 'fallback';
+            if(options.pdf.mode === 'client' || fallback){
+                try{
+                    Exporter.exportPdfClientSide(svgString, width, height);
+                }catch (e){
+                    console.log('client side pdf rendering failed!');
+                    if(fallback){
+                        console.log('performing server side fallback.');
+                        Exporter.exportPdfServerSide(svgString, options.serverUrl);
+                    }else{
+                        throw e;
                     }
-                });
-                el.style['font-family'] = el.style['font-family'] && el.style['font-family'].split(' ').splice(-1);
-            });
-            svg2pdf(dummy.firstChild, doc, {
-                xOffset: 0,
-                yOffset: 0,
-                scale: 1
-            });
-            doc.save(Exporter.getExportFileName('pdf'));
+                }
+            }else if(options.pdf.mode === 'server'){
+                Exporter.exportPdfServerSide(svgString, options.serverUrl);
+            }
         }catch (e){
             console.log(e);
+            LoadingIndicator.hide();
             alert(i18n.t('error.pdfExportNotSupported'));
+
         }
 
     }
 
-    static isPdfExportAvailable(){
+    static isClientSidePdfExportAvailable(){
         return typeof jsPDF !== 'undefined' && typeof svg2pdf !== 'undefined'
     }
 

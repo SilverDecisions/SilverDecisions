@@ -145,8 +145,8 @@ export class Toolbar{
     }
 
     initExportToolbarGroup() {
-        this.container.select('#export-toolbar-group').classed(this.hiddenClass, !this.app.config.showExport);
-        if(!this.app.config.showExport){
+        this.container.select('#export-toolbar-group').classed(this.hiddenClass, !this.app.config.exports.show);
+        if(!this.app.config.exports.show){
             return;
         }
         this.initExportToPngButton();
@@ -157,7 +157,7 @@ export class Toolbar{
     initExportToPngButton() {
         var svg = this.app.treeDesigner.svg;
         this.container.select('#saveButton')
-            .on('click', () => Exporter.saveAsPng(svg))
+            .on('click', () => Exporter.saveAsPng(svg, this.app.config.exports))
             .classed(this.hiddenClass, !this.app.config.buttons.exportToPng)
     }
 
@@ -171,7 +171,7 @@ export class Toolbar{
     initExportPdfButton() {
         var svg = this.app.treeDesigner.svg;
         this.container.select('#saveButtonPdf')
-            .on('click', () => Exporter.saveAsPdf(svg))
+            .on('click', () => Exporter.saveAsPdf(svg, this.app.config.exports))
             .classed(this.hiddenClass, !this.app.config.buttons.exportToPdf)
     }
 

@@ -293,6 +293,7 @@
     "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
     "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
     "incorrectNumberFormatOptions": "Incorrect number format options, using default.",
-    "jsPDFisNotIncluded": "jsPDF is not included!"
+    "jsPDFisNotIncluded": "jsPDF is not included!",
+    "serverSideExportRequestFailure": "Export Server request failed!"
   }
 }

@@ -53,7 +53,7 @@ gulp.task('build-js', function () {
     }).transform(stringify, {
         appliesTo: { includeExtensions: ['.html'] }
     })
-        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties"]})
+        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign"]})
         .bundle()
         .on('error', map_error)
         .pipe(plugins.plumber({ errorHandler: onError }))
