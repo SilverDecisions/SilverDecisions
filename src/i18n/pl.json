@@ -264,6 +264,17 @@
     "brushDisabled": "Zaznaczanie wyłączone",
     "brushEnabled": "Zaznaczanie włączone"
   },
+  "tooltip":{
+    "node":{
+      "payoff": "Wypłata",
+      "aggregatedPayoff": "Zagregowana Wypłata",
+      "probabilityToEnter": "Prawdopodobieństwo wejścia"
+    },
+    "edge":{
+      "payoff": "Wypłata: {{value}}",
+      "probability": "Prawdopodobieństwo: {{value}}"
+    }
+  },
   "confirm":{
     "newDiagram": "Czy jesteś pewien, że chcesz porzucić obecny diagram? Wszystkie niezapisane zmiany zostaną utracone.",
     "openDiagram": "Czy jesteś pewien? Wszystkie niezapisane zmiany zostaną utracone.",

@@ -585,7 +585,8 @@
   border-radius: 8px;
   box-shadow: 1px 3px 3px #b7b7b7;
   text-align: center;
-  z-index: 1000; }
+  z-index: 1000;
+  font-family: sans-serif; }
 
 #sd-settings-dialog .sd-form-group {
   margin: 10px 0;
