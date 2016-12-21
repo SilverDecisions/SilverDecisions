@@ -9,8 +9,8 @@ import {LoadingIndicator} from "./loading-indicator";
 export class Exporter {
     static saveAs = saveAs;
     static dataURLtoBlob = dataURLtoBlob;
-    static exportedStyles = ['font', 'color', 'display', 'opacity'];
-    static svgProperties = ['stroke', 'fill', 'text'];
+    static exportedStyles = [/^font/, /^color/, /^opacity$/];
+    static svgProperties = [/^stroke/, /^fill/, /^text/];
 
 // Below are the function that handle actual exporting:
 // getSVGString (svgNode ) and svgString2Image( svgString, width, height, format, callback )
@@ -18,7 +18,7 @@ export class Exporter {
         var svgClone = svgNode.cloneNode(true);
         appendInlineStyles(svgNode, svgClone);
 
-        function appendInlineStyles(source, target){
+        function appendInlineStyles(source, target, parentCs){
             if(!source){
                 console.log('Exporter.appendInlineStyles - undefined source!');
                 return false;
@@ -54,19 +54,32 @@ export class Exporter {
                     continue;
                 }
 
-                if(Exporter.exportedStyles.some(s=>styleName.indexOf(s)>-1)){
-                    cssStyleText+='; '+styleName+': '+ cs.getPropertyValue(styleName);
-                }else if(Exporter.svgProperties.some(s=>styleName.indexOf(s)>-1)){
-                    target.setAttribute(styleName, cs.getPropertyValue(styleName));
+                var propertyValue = cs.getPropertyValue(styleName);
+                if(parentCs){
+                    if(propertyValue===parentCs.getPropertyValue(styleName)){
+                        continue;
+                    }
+                }
+
+                if(Exporter.exportedStyles.some(s=>s.test(styleName))){
+                    cssStyleText+='; '+styleName+': '+ propertyValue;
+                }else if(Exporter.svgProperties.some(s=>s.test(styleName))){
+                    target.setAttribute(styleName, propertyValue);
                 }
 
             }
+            if(cssStyleText.length){
+                target.setAttribute("style", cssStyleText);
+            }else{
+                target.removeAttribute("style")
+            }
 
-            target.setAttribute("style", cssStyleText);
+
+
             var toRemove = [];
             for (let i = 0; i < children.length; i++) {
                 var node = children[i];
-                if(!appendInlineStyles(node, targetChildren[i])){
+                if(!appendInlineStyles(node, targetChildren[i], cs)){
                     toRemove.push(targetChildren[i]);
                 }
             }
