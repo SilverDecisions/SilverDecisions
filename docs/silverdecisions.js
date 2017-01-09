@@ -39,13 +39,10 @@ if(jsonUrl){
             app = new SilverDecisions('app-container', config, data);
         }catch (e){
             console.log(e);
-            app=null;
+            app = new SilverDecisions('app-container', config);
         }
     });
-}
-
-if(!app){
-    config.readOnly=false;
+}else{
     app = new SilverDecisions('app-container', config);
 }
 
