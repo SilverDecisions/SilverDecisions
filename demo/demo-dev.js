@@ -1,3 +1,5 @@
+var lng = getParameterByName('lang') || 'en';
+
 var data = {
     "SilverDecisions": "0.2.0",
     "lng": "en",
@@ -146,7 +148,7 @@ var data = {
     ]
 };
 var app = new SilverDecisions('app-container', {
-    lng: 'en',
+    lng: lng,
     readOnly: false,
     buttons:{
         new: true,
@@ -168,3 +170,16 @@ var app = new SilverDecisions('app-container', {
 document.addEventListener('SilverDecisionsSaveEvent', function(data){
     console.log(data);
 });
+
+
+function getParameterByName(name, url) {
+    if (!url) {
+        url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}

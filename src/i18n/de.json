@@ -29,16 +29,16 @@
     "about": "About"
   },
   "node":{
-    "name": "Etichetta"
+    "name": "Label"
   },
   "edge":{
-    "name": "Etichetta",
-    "payoff": "Saldare",
-    "probability": "Probabilità"
+    "name": "Label",
+    "payoff": "Payoff",
+    "probability": "Probability"
 
   },
   "text":{
-    "value": "Testo"
+    "value": "Text"
   },
   "contextMenu":{
     "main":{

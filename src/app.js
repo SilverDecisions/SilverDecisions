@@ -79,6 +79,7 @@ export class AppConfig {
 export class App {
     static version = ''; // version is set from package.json
     static utils  = Utils;
+    static d3 = d3;
 
     config;
     container;
