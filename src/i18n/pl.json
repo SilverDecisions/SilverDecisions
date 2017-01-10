@@ -292,6 +292,8 @@
     "pdfExportNotSupported": "Eksport do PDF nie jest wspierany w Twojej przeglądarce.",
     "incorrectPayoffNumberFormatOptions": "Niewłaściwe ustawienia dla formatu wypłaty.",
     "incorrectProbabilityNumberFormatOptions": "Niewłaściwe ustawienia dla formatu prawdopodobieństw.",
-    "incorrectNumberFormatOptions": "Niewłaściwe ustawiono formatowanie liczb. Przyjęto ustawienia domyślne."
+    "incorrectNumberFormatOptions": "Niewłaściwe ustawiono formatowanie liczb. Przyjęto ustawienia domyślne.",
+    "jsPDFisNotIncluded": "Nie włączono jsPDF!",
+    "serverSideExportRequestFailure": "Nieudane zapytanie do serwera exportu!"
   }
 }
