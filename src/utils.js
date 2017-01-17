@@ -425,4 +425,21 @@ export class Utils {
     static removeElement(element) {
         element.parentNode.removeChild(element);
     }
+
+    static replaceUrls(text){
+        if(!text){
+            return text;
+        }
+        var urlRegexp = /((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/
+
+        return text.replace(urlRegexp, '<a href="$1">$1</a>');
+    }
+
+    static escapeHtml(html)
+    {
+        var text = document.createTextNode(html);
+        var div = document.createElement('div');
+        div.appendChild(text);
+        return div.innerHTML;
+    }
 }
