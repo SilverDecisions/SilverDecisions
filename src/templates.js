@@ -3,8 +3,14 @@ import {i18n} from './i18n/i18n'
 
 export class Templates{
 
-    static about_en = require('./templates/about_en.html');
-    static about_pl = require('./templates/about_pl.html');
+    static about_de = require('./templates/about/de.html');
+    static about_en = require('./templates/about/en.html');
+    static about_fr = require('./templates/about/fr.html');
+    static about_ga = require('./templates/about/ga.html');
+    static about_it = require('./templates/about/it.html');
+    static about_nl = require('./templates/about/nl.html');
+    static about_pl = require('./templates/about/pl.html');
+
     static toolbar = require('./templates/toolbar.html');
     static layoutOptions = require('./templates/layout_options.html');
     static objectProperties = require('./templates/object_properties.html');

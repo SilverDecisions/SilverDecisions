@@ -5,8 +5,8 @@
             <h2><%= i18n.t("aboutDialog.title")%></h2>
         </div>
         <div class="sd-modal-body">
-            <% if (lng == "pl") { %>
-                <%= include('about_pl', variables) %>
+            <% if ( ["de", "en", "fr", "ga", "it", "nl", "pl"].indexOf(lng) !== -1) { %>
+                <%= include('about_'+lng, variables) %>
             <% } else { %>
                 <%= include('about_en', variables) %>
             <% } %>
