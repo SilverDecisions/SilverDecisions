@@ -671,7 +671,7 @@ export class TreeDesigner {
 
         tspans.enter().append('tspan')
             .merge(tspans)
-            .text(l=>l)
+            .html(l=>Utils.replaceUrls(Utils.escapeHtml(l)))
             .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
             .attr('x', '0');
 
@@ -684,7 +684,6 @@ export class TreeDesigner {
                 return;
             }
             var bb = d3.select(this).select('text').node().getBBox();
-            console.log(bb);
            d3.select(this).select('rect')
                .attr('y', bb.y-5)
                .attr('width', Math.max(bb.width+10, rectWidth))
@@ -1214,7 +1213,7 @@ export class TreeDesigner {
         var tspans = desc.selectAll('tspan').data(lines);
         tspans.enter().append('tspan')
             .merge(tspans)
-            .text(l=>l)
+            .html(l=>Utils.replaceUrls(Utils.escapeHtml(l)))
             .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
             .attr('x', '0');
 
