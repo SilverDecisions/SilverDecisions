@@ -432,7 +432,7 @@ export class Utils {
         }
         var urlRegexp = /((ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?)/
 
-        return text.replace(urlRegexp, '<a href="$1">$1</a>');
+        return text.replace(urlRegexp, '<a href="$1" target="_blank">$1</a>');
     }
 
     static escapeHtml(html)
