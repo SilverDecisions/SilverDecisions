@@ -10,11 +10,12 @@ export class ExpressionEngine{
     }
 
     eval(expr){
+        expr+="";
+        expr = expr.trim();
         if(!isNaN(expr)){
             return ExpressionEngine.toNumber(expr);
         }
-
-        return this.parser.eval(expr+"");
+        return this.parser.eval(expr);
     }
 
     computeHash(edges){
@@ -85,6 +86,8 @@ export class ExpressionEngine{
         }
 
         try{
+            expr+="";
+            expr = expr.trim();
             var c = math.compile(expr);
             var e = c.eval(this.parser.scope);
             return Utils.isNumeric(e);
