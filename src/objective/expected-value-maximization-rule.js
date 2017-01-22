@@ -18,7 +18,7 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
-                var bestchild = -99999999999;
+                var bestchild = -Infinity;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
                     bestchild = Math.max(bestchild, childPayoff);

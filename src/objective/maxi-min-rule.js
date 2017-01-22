@@ -19,7 +19,7 @@ export class MaxiMinRule extends ObjectiveRule{
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
-                var bestchild = -99999999999;
+                var bestchild = -Infinity;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
                     bestchild = Math.max(bestchild, childPayoff);
@@ -29,7 +29,7 @@ export class MaxiMinRule extends ObjectiveRule{
                     this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') < bestchild ? 0.0 : 1.0);
                 });
             }else{
-                var worstchild = 999999999999;
+                var worstchild = Infinity;
                 var worstCount = 1;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
