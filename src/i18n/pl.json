@@ -26,7 +26,8 @@
     "undo": "Cofnij",
     "redo": "Ponów",
     "settings": "Ustawienia",
-    "about": "Informacje"
+    "about": "Informacje",
+    "definitions": "Definicje zmiennych"
   },
   "node":{
     "name": "Etykieta"

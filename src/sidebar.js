@@ -6,50 +6,53 @@ import * as model from './model/index'
 import {PayoffValidator} from './validation/payoff-validator'
 import {ProbabilityValidator} from './validation/probability-validator'
 import {ExpressionEngine} from './expression-engine'
+import {Templates} from "./templates";
+import {Tooltip} from "./tooltip";
 
 
-export class Sidebar{
+export class Sidebar {
 
     app;
     container;
 
-    constructor(container, app){
+    constructor(container, app) {
         this.app = app;
         this.container = container;
 
         this.initLayoutOptions();
         this.initDiagramDetails();
+        this.initDefinitions();
     }
 
-    initLayoutOptions(){
+    initLayoutOptions() {
         var self = this;
         this.layoutOptionsContainer = this.container.select('#layout-options');
         this.autoLayoutOptionsGroup = this.layoutOptionsContainer.select('#auto-layout-options');
-        this.gridWidth = this.layoutOptionsContainer.select('input#grid-width').on('change', function(){
+        this.gridWidth = this.layoutOptionsContainer.select('input#grid-width').on('change', function () {
             self.app.treeDesigner.layout.setGridWidth(parseInt(this.value));
 
         });
 
-        this.gridHeight = this.layoutOptionsContainer.select('input#grid-height').on('change', function(){
+        this.gridHeight = this.layoutOptionsContainer.select('input#grid-height').on('change', function () {
             self.app.treeDesigner.layout.setGridHeight(parseInt(this.value));
         });
 
-        this.nodeSize = this.layoutOptionsContainer.select('input#node-size').on('change', function(){
+        this.nodeSize = this.layoutOptionsContainer.select('input#node-size').on('change', function () {
             self.app.treeDesigner.layout.setNodeSize(parseInt(this.value));
         });
 
-        this.edgeSlantWidthMax = this.layoutOptionsContainer.select('input#edge-slant-width-max').on('change', function(){
+        this.edgeSlantWidthMax = this.layoutOptionsContainer.select('input#edge-slant-width-max').on('change', function () {
             self.app.treeDesigner.layout.setEdgeSlantWidthMax(parseInt(this.value));
         });
 
-        this.marginHorizontal = this.layoutOptionsContainer.select('input#margin-horizontal').on('change', function(){
+        this.marginHorizontal = this.layoutOptionsContainer.select('input#margin-horizontal').on('change', function () {
             var m = {};
-            m.left=m.right = parseInt(this.value);
+            m.left = m.right = parseInt(this.value);
             self.app.treeDesigner.setMargin(m);
         });
-        this.marginVertical = this.layoutOptionsContainer.select('input#margin-vertical').on('change', function(){
+        this.marginVertical = this.layoutOptionsContainer.select('input#margin-vertical').on('change', function () {
             var m = {};
-            m.top=m.bottom = parseInt(this.value);
+            m.top = m.bottom = parseInt(this.value);
             self.app.treeDesigner.setMargin(m);
         });
 
@@ -62,7 +65,7 @@ export class Sidebar{
         this.updateLayoutOptions();
     }
 
-    updateLayoutOptions(){
+    updateLayoutOptions() {
         this.nodeSize.node().value = this.app.treeDesigner.config.layout.nodeSize;
         this.edgeSlantWidthMax.node().value = this.app.treeDesigner.config.layout.edgeSlantWidthMax;
         this.marginHorizontal.node().value = this.app.treeDesigner.config.margin.left;
@@ -82,12 +85,12 @@ export class Sidebar{
             this.updateDiagramDetails();
         });
 
-        this.diagramTitle = this.diagramDetailsContainer.select('input#diagram-title').on('change', function(){
+        this.diagramTitle = this.diagramDetailsContainer.select('input#diagram-title').on('change', function () {
             self.app.setDiagramTitle(this.value);
             Utils.updateInputClass(d3.select(this));
         });
 
-        this.diagramDescription = this.diagramDetailsContainer.select('textarea#diagram-description').on('change', function(){
+        this.diagramDescription = this.diagramDetailsContainer.select('textarea#diagram-description').on('change', function () {
             self.app.setDiagramDescription(this.value);
             Utils.updateInputClass(d3.select(this));
         });
@@ -96,7 +99,52 @@ export class Sidebar{
         this.updateDiagramDetails();
     }
 
-    updateDiagramDetails(){
+    initDefinitions() {
+        var self = this;
+        this.definitionsContainer = this.container.select('#sd-sidebar-definitions');
+        this.definitionsContainer.classed('sd-hidden', !this.app.config.showDefinitions);
+        this.onDefinitionsCodeChanged = null;
+        this.definitionsContainer.select('.toggle-button').on('click', () => {
+            this.definitionsContainer.classed('sd-extended', !this.definitionsContainer.classed('sd-extended'));
+        });
+
+        this.definitionsCode = this.definitionsContainer.select('textarea#sd-sidebar-definitions-code').on('change', function () {
+            if (self.onDefinitionsCodeChanged) {
+                self.onDefinitionsCodeChanged(this.value)
+            }
+            Utils.updateInputClass(d3.select(this));
+        });
+        Tooltip.attach(this.definitionsCode, (d)=>{
+            return self.definitionsCode.attr('data-error-msg');
+
+        }, 15, 50);
+
+
+        this.definitionsEvaluatedValuesContainer = this.container.select("#sd-sidebar-definitions-evaluated-values");
+
+        this.definitionsContainer.select('#sd-sidebar-definitions-open-dialog-button').on('click', () => {
+            this.app.openDefinitionsDialog();
+        });
+
+        this.definitionsContainer.select('#sd-sidebar-definitions-recalculate-button').on('click', () => {
+            this.app.recompute();
+        });
+
+        Utils.elasticTextarea(this.definitionsCode);
+    }
+
+    updateDefinitions(code, scope, codeError, changeCallback) {
+        this.onDefinitionsCodeChanged = changeCallback;
+        this.definitionsCode.node().value = code;
+        this.definitionsCode.classed('invalid', !!codeError);
+        this.definitionsCode.attr('data-error-msg', codeError);
+        var html = Templates.get('evaluatedVariables', {scopeVariables: Utils.getVariablesAsList(scope)});
+        this.definitionsEvaluatedValuesContainer.html(html);
+        Utils.updateInputClass(this.definitionsCode);
+        Utils.autoResizeTextarea(this.definitionsCode.node())
+    }
+
+    updateDiagramDetails() {
         this.diagramTitle.node().value = this.app.config.title;
         Utils.updateInputClass(this.diagramTitle);
         this.diagramDescription.node().value = this.app.config.description;
@@ -104,23 +152,24 @@ export class Sidebar{
         Utils.autoResizeTextarea(this.diagramDescription.node())
     }
 
-    displayObjectProperties(object){
+    displayObjectProperties(object) {
         this.updateObjectPropertiesView(object);
     }
-    hideObjectProperties(){
+
+    hideObjectProperties() {
 
         this.container.select('#object-properties').classed('visible', false);
         this.container.selectAll('div.child-object').remove();
 
     }
 
-    updateObjectPropertiesView(object){
-        if(!object){
+    updateObjectPropertiesView(object) {
+        if (!object) {
             this.hideObjectProperties();
             return;
         }
 
-        var objectProps= this.objectProps = this.container.select('#object-properties').classed('visible', true);
+        var objectProps = this.objectProps = this.container.select('#object-properties').classed('visible', true);
         var headerText = Sidebar.getHeaderTextForObject(object);
         objectProps.select('.header').html(headerText);
 
@@ -132,7 +181,7 @@ export class Sidebar{
 
     }
 
-    updateObjectChildrenProperties(object){
+    updateObjectChildrenProperties(object) {
         var self = this;
         var childObjects = this.getChildObjectList(object);
         var objectType = Sidebar.getObjectType(object);
@@ -141,9 +190,9 @@ export class Sidebar{
 
         childPropsSelector.classed('visible', childObjects.length);
 
-        childPropsSelector.select('.children-properties-header').text(i18n.t('objectProperties.childrenProperties.'+ objectType+'.header'));
+        childPropsSelector.select('.children-properties-header').text(i18n.t('objectProperties.childrenProperties.' + objectType + '.header'));
         var childrenContent = childPropsSelector.select('.children-properties-content');
-        var children = childrenContent.selectAll('div.child-object').data(childObjects, (d,i)=> d.$id || i);
+        var children = childrenContent.selectAll('div.child-object').data(childObjects, (d, i)=> d.$id || i);
         var childrenEnter = children.enter().appendSelector('div.child-object');
         var childrenMerge = childrenEnter.merge(children);
 
@@ -151,46 +200,46 @@ export class Sidebar{
 
         children.exit().remove();
 
-        function updateChildObjectProperties(child, i){
+        function updateChildObjectProperties(child, i) {
             var container = d3.select(this);
-            container.selectOrAppend('div.child-header').text(i18n.t('objectProperties.childrenProperties.'+ objectType+'.child.header', {number: i+1}));
+            container.selectOrAppend('div.child-header').text(i18n.t('objectProperties.childrenProperties.' + objectType + '.child.header', {number: i + 1}));
 
             var fieldList = self.getFieldListForObject(child);
             self.updateObjectFields(child, fieldList, container.selectOrAppend('div.field-list'))
         }
     }
 
-    static getObjectType(object){
-        if(object instanceof model.Node){
+    static getObjectType(object) {
+        if (object instanceof model.Node) {
             return 'node';
         }
-        if(object instanceof model.Edge){
+        if (object instanceof model.Edge) {
             return 'edge';
         }
-        if(object instanceof model.Text){
+        if (object instanceof model.Text) {
             return 'text';
         }
         return '';
     }
 
     static getHeaderTextForObject(object) {
-        if(object instanceof model.Node){
-            return i18n.t('objectProperties.header.node.'+object.type);
+        if (object instanceof model.Node) {
+            return i18n.t('objectProperties.header.node.' + object.type);
         }
-        if(object instanceof model.Edge){
+        if (object instanceof model.Edge) {
             return i18n.t('objectProperties.header.edge');
         }
-        if(object instanceof model.Text){
+        if (object instanceof model.Text) {
             return i18n.t('objectProperties.header.text');
         }
         return '';
     }
 
     getChildObjectList(object) {
-        if(object instanceof model.Node){
-            return object.childEdges.sort((a,b)=>a.childNode.location.y - b.childNode.location.y);
+        if (object instanceof model.Node) {
+            return object.childEdges.sort((a, b)=>a.childNode.location.y - b.childNode.location.y);
         }
-        if(object instanceof model.Edge){
+        if (object instanceof model.Edge) {
             return [];
         }
         return [];
@@ -199,13 +248,20 @@ export class Sidebar{
 
     getFieldListForObject(object) {
         var self = this;
-        if(object instanceof model.Node){
+        if (object instanceof model.Node) {
             return [{
                 name: 'name',
                 type: 'textarea'
-            }]
+            },
+                /* {
+                 name: 'code',
+                 type: 'textarea',
+                 onChange: (object, newVal, oldVal)=> object.$codeDirty = true,
+                 customOnInput: (object, newVal, oldVal)=> object.code = newVal
+                 }*/
+            ]
         }
-        if(object instanceof model.Edge){
+        if (object instanceof model.Edge) {
             var list = [
                 {
                     name: 'name',
@@ -217,8 +273,8 @@ export class Sidebar{
                     validator: new PayoffValidator(self.app.expressionEngine)
                 }
             ];
-            if(object.parentNode instanceof model.ChanceNode){
-                list.push( {
+            if (object.parentNode instanceof model.ChanceNode) {
+                list.push({
                     name: 'probability',
                     type: 'text',
                     validator: new ProbabilityValidator(self.app.expressionEngine)
@@ -227,7 +283,7 @@ export class Sidebar{
             return list;
 
         }
-        if(object instanceof model.Text){
+        if (object instanceof model.Text) {
             return [{
                 name: 'value',
                 type: 'textarea'
@@ -241,22 +297,22 @@ export class Sidebar{
         var self = this;
 
 
-        var objectType = object instanceof model.Node ? 'node' :  object instanceof model.Edge ? 'edge' : 'text';
-        var getFieldId = d=>'object-'+object.$id+'-field-'+d.name;
+        var objectType = object instanceof model.Node ? 'node' : object instanceof model.Edge ? 'edge' : 'text';
+        var getFieldId = d=>'object-' + object.$id + '-field-' + d.name;
 
         var fields = container.selectAll('div.object-field').data(fieldList);
-        var temp={};
+        var temp = {};
         var fieldsEnter = fields.enter().appendSelector('div.object-field');
         var fieldsMerge = fieldsEnter.merge(fields);
 
-        fieldsMerge.each(function(d, i){
+        fieldsMerge.each(function (d, i) {
             var fieldSelection = d3.select(this);
             fieldSelection.html("");
 
             var input;
-            if(d.type == 'textarea'){
+            if (d.type == 'textarea') {
                 input = fieldSelection.append('textarea').attr('rows', 1);
-            }else{
+            } else {
                 input = fieldSelection.append('input');
             }
             input.classed('sd-input', true);
@@ -268,35 +324,43 @@ export class Sidebar{
 
         fieldsMerge.select('label')
             .attr('for', getFieldId)
-            .html(d=>i18n.t(objectType+'.'+d.name));
+            .html(d=>i18n.t(objectType + '.' + d.name));
         fieldsMerge.select('.sd-input')
-            .attr('type', d=>d.type == 'textarea'? undefined : d.type)
+            .attr('type', d=>d.type == 'textarea' ? undefined : d.type)
             .attr('name', d=>d.name)
             .attr('id', getFieldId)
-            .on('change keyup', function(d, i){
-                if(d.validator && !d.validator.validate(this.value)){
-                    d3.select(this).classed('invalid', true);
-                    return;
-                }
-                d3.select(this).classed('invalid', false);
-                if(d3.event.type=='change' && temp[i].pristineVal!=this.value){
+            .on('change keyup', function (d, i) {
+                var isValid = !d.validator || d.validator.validate(this.value, object, d.name);
+                // console.log(d.name, this.value, isValid);
+                d3.select(this).classed('invalid', !isValid);
+
+                if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
                     object[d.name] = temp[i].pristineVal;
                     self.app.dataModel.saveState();
+                    if (d.onChange) {
+                        d.onChange(object, this.value, temp[i].pristineVal);
+                    }
                 }
-                object[d.name] = this.value;
+
                 Utils.updateInputClass(d3.select(this));
-                self.app.onObjectUpdated(object)
+                if (d.customOnInput) {
+                    d.customOnInput(object, this.value, temp[i].pristineVal)
+                } else {
+                    object[d.name] = this.value;
+                    self.app.onObjectUpdated(object)
+                }
+
 
             })
-            .each(function(d, i){
+            .each(function (d, i) {
                 this.value = object[d.name];
-                temp[i]={};
+                temp[i] = {};
                 temp[i].pristineVal = this.value;
-                if(d.validator && !d.validator.validate(this.value)){
+                if (d.validator && !d.validator.validate(this.value, object, d.name)) {
                     d3.select(this).classed('invalid', true);
                 }
                 Utils.updateInputClass(d3.select(this));
-                if(d.type == 'textarea'){
+                if (d.type == 'textarea') {
                     Utils.elasticTextarea(d3.select(this));
                     Utils.autoResizeTextarea(d3.select(this).node())
                 }

@@ -18,10 +18,11 @@ import {ExpectedValueMaximizationRule} from './objective/expected-value-maximiza
 import {AboutDialog} from "./about-dialog";
 import * as _ from "lodash";
 import {Exporter} from "./exporter";
+import {DefinitionsDialog} from "./definitions-dialog";
 
 export class AppConfig {
     readOnly = false;
-    buttons={
+    buttons = {
         new: true,
         save: true,
         open: true,
@@ -29,25 +30,26 @@ export class AppConfig {
         exportToSvg: true,
         exportToPdf: true
     };
-    exports={
+    exports = {
         show: true,
         serverUrl: 'http://export.highcharts.com', //url of the export server
-        pdf:{
+        pdf: {
             mode: 'server', // available options: 'client', 'server', 'fallback',
         },
-        png:{
+        png: {
             mode: 'fallback', // available options: 'client', 'server', 'fallback',
         }
     };
     showDetails = true;
-    jsonFileDownload= true;
+    showDefinitions = true;
+    jsonFileDownload = true;
     width = undefined;
     height = undefined;
     rule = ExpectedValueMaximizationRule.NAME;
     lng = 'en';
-    format={// NumberFormat  options
+    format = {// NumberFormat  options
         locales: 'en',
-        payoff:{
+        payoff: {
             style: 'currency',
             currency: 'USD',
             currencyDisplay: 'symbol',
@@ -56,16 +58,16 @@ export class AppConfig {
             // minimumSignificantDigits: 1,
             useGrouping: true
         },
-        probability:{ // NumberFormat  options
+        probability: { // NumberFormat  options
             style: 'decimal',
             minimumFractionDigits: 2,
             maximumFractionDigits: 3,
             useGrouping: true
         }
     };
-    title='';
-    description='';
-    treeDesigner={};
+    title = '';
+    description = '';
+    treeDesigner = {};
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
 
@@ -78,7 +80,7 @@ export class AppConfig {
 
 export class App {
     static version = ''; // version is set from package.json
-    static utils  = Utils;
+    static utils = Utils;
     static d3 = d3;
 
     config;
@@ -105,11 +107,12 @@ export class App {
         this.initSidebar();
         this.initSettingsDialog();
         this.initAboutDialog();
+        this.initDefinitionsDialog();
         this.initToolbar();
         this.initOnBeforeUnload();
         this.initKeyCodes();
 
-        if(diagramData){
+        if (diagramData) {
             this.openDiagram(diagramData);
         }
 
@@ -126,14 +129,14 @@ export class App {
 
     initContainer(containerIdOrElem) {
 
-        if(Utils.isString(containerIdOrElem)){
+        if (Utils.isString(containerIdOrElem)) {
             var selector = containerIdOrElem.trim();
 
-            if(!_.startsWith(selector, '#') && !_.startsWith(selector, '.')){
-                selector='#'+selector;
+            if (!_.startsWith(selector, '#') && !_.startsWith(selector, '.')) {
+                selector = '#' + selector;
             }
             this.container = d3.select(selector);
-        }else{
+        } else {
             this.container = d3.select(containerIdOrElem);
         }
         var self = this;
@@ -157,50 +160,56 @@ export class App {
 
 
     initExpressionEngine() {
-        this.expressionEngine =  new ExpressionEngine(this.dataModel.expressionScope);
+        this.expressionEngine = new ExpressionEngine(this.dataModel.expressionScope);
         this.dataModel.setExpressionEngine(this.expressionEngine);
     }
-    initTreeValidator(){
+
+    initTreeValidator() {
         this.treeValidator = new TreeValidator(this.expressionEngine);
         this.dataModel.setTreeValidator(this.treeValidator);
     }
 
-    initObjectiveRulesManager(){
+    initObjectiveRulesManager() {
         this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel, this.expressionEngine);
         this.checkValidityAndRecomputeObjective();
 
     }
 
-    initSidebar(){
-        this.sidebar = new Sidebar(this.container.select('#sidebar'), this);
+    initSidebar() {
+        this.sidebar = new Sidebar(this.container.select('#sd-sidebar'), this);
 
     }
 
-    initSettingsDialog(){
+    initSettingsDialog() {
         this.settingsDialog = new SettingsDialog(this);
     }
 
-    initAboutDialog(){
+    initAboutDialog() {
         this.aboutDialog = new AboutDialog(this);
     }
 
-    initToolbar(){
-        this.toolbar = new Toolbar(this.container.select('#toolbar'), this);
+    initDefinitionsDialog() {
+        this.definitionsDialog = new DefinitionsDialog(this);
+    }
+
+    initToolbar() {
+        this.toolbar = new Toolbar(this.container.select('#sd-toolbar'), this);
 
     }
 
-    initPayoffNumberFormat(){
+    initPayoffNumberFormat() {
 
-        this.payoffNumberFormat = new Intl.NumberFormat(this.config.format.locales,this.config.format.payoff);
+        this.payoffNumberFormat = new Intl.NumberFormat(this.config.format.locales, this.config.format.payoff);
     }
-    initProbabilityNumberFormat(){
-        this.probabilityNumberFormat = new Intl.NumberFormat(this.config.format.locales,this.config.format.probability);
+
+    initProbabilityNumberFormat() {
+        this.probabilityNumberFormat = new Intl.NumberFormat(this.config.format.locales, this.config.format.probability);
     }
 
     initTreeDesigner() {
-        var self=this;
+        var self = this;
         var config = this.getTreeDesignerInitialConfig();
-        this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel,config);
+        this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel, config);
     }
 
     getTreeDesignerInitialConfig() {
@@ -214,7 +223,7 @@ export class App {
             onEdgeSelected: function (edge) {
                 self.onObjectSelected(edge);
             },
-            onTextSelected: function (text){
+            onTextSelected: function (text) {
                 self.onObjectSelected(text);
             },
             onSelectionCleared: function () {
@@ -225,62 +234,82 @@ export class App {
         }, self.config.treeDesigner);
     }
 
-    onObjectSelected(object){
+    onObjectSelected(object) {
         var self = this;
-        if(this.selectedObject===object){
+        if (this.selectedObject === object) {
             return;
         }
         this.selectedObject = object;
-        setTimeout(function(){
+        setTimeout(function () {
             self.sidebar.updateObjectPropertiesView(self.selectedObject);
+            self.updateVariableDefinitions();
             self.treeDesigner.updatePlottingRegionSize();
-        },10)
+        }, 10)
     }
 
-    onSelectionCleared(){
-        var self=this;
-        this.selectedObject=null;
+    onSelectionCleared() {
+        var self = this;
+        this.selectedObject = null;
         this.sidebar.hideObjectProperties();
-        setTimeout(function(){
+        setTimeout(function () {
+            self.updateVariableDefinitions();
             self.treeDesigner.updatePlottingRegionSize();
-        },10);
+        }, 10);
         // console.log();
     }
 
-    /*updateView(notDefer=false){
-        console.log('updateView');
-        if(notDefer) {
-            this._updateView();
-            return;
+    getCurrentVariableDefinitionsSourceObject() {
+        if (this.selectedObject) {
+            if (this.selectedObject instanceof model.Edge) {
+                return this.selectedObject.parentNode;
+            }
+            return this.selectedObject;
         }
-        Utils.waitForFinalEvent(()=>this._updateView(), '_updateView', 50)
+        return this.dataModel;
+    }
 
+    updateVariableDefinitions() {
+        var self = this;
+        var definitionsSourceObject = self.getCurrentVariableDefinitionsSourceObject();
+        self.sidebar.updateDefinitions(definitionsSourceObject.code, definitionsSourceObject.expressionScope, definitionsSourceObject.$codeError, (code)=> {
+            self.dataModel.saveState();
+            definitionsSourceObject.code = code;
+        });
 
-    }*/
+    }
 
-    updateView(){
+    openDefinitionsDialog() {
+        var definitionsSourceObject = this.getCurrentVariableDefinitionsSourceObject();
+        this.definitionsDialog.open(definitionsSourceObject, (code)=> {
+            this.dataModel.saveState();
+            definitionsSourceObject.code = code;
+        });
+    }
+
+    updateView() {
         // console.log('_updateView');
         this.treeDesigner.redraw(true);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
+        this.updateVariableDefinitions();
         this.toolbar.update();
         this.sidebar.updateLayoutOptions();
         this.sidebar.updateDiagramDetails();
     }
 
-    undo(){
+    undo() {
         var self = this;
         self.dataModel.undo();
-        if(self.selectedObject){
+        if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
         this.checkValidityAndRecomputeObjective();
         self.updateView();
     }
 
-    redo(){
+    redo() {
         var self = this;
         self.dataModel.redo();
-        if(self.selectedObject){
+        if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
         this.checkValidityAndRecomputeObjective();
@@ -292,56 +321,80 @@ export class App {
         this.updateView();
     }
 
-    onTextAdded(text){
+    onTextAdded(text) {
         console.log('onTextAdded');
         this.onObjectSelected(text);
     }
-    onTextRemoved(text){
+
+    onTextRemoved(text) {
         console.log('onTextRemoved');
         this.updateView();
     }
 
-    onObjectUpdated(object){
+    onObjectUpdated(object) {
         this.checkValidityAndRecomputeObjective();
         this.treeDesigner.redraw(true);
     }
 
-    setObjectiveRule(ruleName){
+    setObjectiveRule(ruleName) {
         this.treeDesigner.setRuleName(ruleName);
         this.objectiveRulesManager.setCurrentRuleByName(ruleName);
         this.checkValidityAndRecomputeObjective();
         this.updateView(true);
     }
 
-    checkValidityAndRecomputeObjective(allRules){
+    recompute(updateView = true) {
+        this.evalCodeExpressions();
+        this.checkValidityAndRecomputeObjective();
+        Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this)
+        if (updateView) {
+            this.updateView();
+        }
+
+    }
+
+    checkValidityAndRecomputeObjective(allRules) {
         this.validationResults = [];
+        this.objectiveRulesManager.evalNumericExpressions();
         this.dataModel.getRoots().forEach(root=> {
             var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
             this.validationResults.push(vr);
-            if(vr.isValid()){
+            if (vr.isValid()) {
                 this.objectiveRulesManager.recomputeTree(root, allRules);
-            }else{
-                this.objectiveRulesManager.clearTree(root);
-                this.objectiveRulesManager.evalExpressions();
+            } else {
                 this.objectiveRulesManager.setProbabilitiesToDisplay();
             }
         });
         this.updateValidationMessages();
     }
 
-    updateValidationMessages() {
-        var self = this;
-        setTimeout(function(){
-            self.treeDesigner.updateValidationMessages(self.validationResults);
-        },1);
+    /*Evaluates probability and payoff expressions*/
+    evalNumericExpressions() {
+        this.objectiveRulesManager.evalNumericExpressions();
     }
 
-    newDiagram(){
+    evalCodeExpressions() {
+        this.objectiveRulesManager.evalCodeExpressions();
+    }
+
+    evalAllExpressions() {
+        this.objectiveRulesManager.evalCodeExpressions();
+        this.objectiveRulesManager.evalNumericExpressions();
+    }
+
+    updateValidationMessages() {
+        var self = this;
+        setTimeout(function () {
+            self.treeDesigner.updateValidationMessages(self.validationResults);
+        }, 1);
+    }
+
+    newDiagram() {
         this.clear();
         this.updateView();
     }
 
-    clear(){
+    clear() {
         this.dataModel.clear();
         this.setDiagramTitle('', true);
         this.setDiagramDescription('', true);
@@ -349,46 +402,47 @@ export class App {
         this.onSelectionCleared();
     }
 
-    openDiagram(diagramData){
+    openDiagram(diagramData) {
         var self = this;
         this.clear();
-        if(!diagramData.SilverDecisions){
+        if (!diagramData.SilverDecisions) {
             alert(i18n.t('error.notSilverDecisionsFile'));
             return;
         }
-        try{
-            if(diagramData.lng){
+        try {
+            if (diagramData.lng) {
                 this.config.lng = diagramData.lng;
             }
-            if(diagramData.rule){
-                if(this.objectiveRulesManager.isRuleName(diagramData.rule)){
+            if (diagramData.rule) {
+                if (this.objectiveRulesManager.isRuleName(diagramData.rule)) {
                     this.config.rule = diagramData.rule;
-                }else{
+                } else {
                     delete this.config.rule;
                 }
             }
-            if(diagramData.format){
+            if (diagramData.format) {
                 this.config.format = diagramData.format;
             }
+
             this.setConfig(this.config);
 
-            this.dataModel.load(diagramData.trees, diagramData.texts);
+            this.dataModel.load(diagramData.trees, diagramData.texts, diagramData.code, diagramData.expressionScope);
 
-            if(diagramData.treeDesigner){
+            if (diagramData.treeDesigner) {
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
             }
 
             this.setDiagramTitle(diagramData.title || '', true);
             this.setDiagramDescription(diagramData.description || '', true);
 
-        }catch (e){
+        } catch (e) {
             alert(i18n.t('error.malformedData'));
 
             console.log(e);
         }
-        try{
+        try {
             this.updateNumberFormats();
-        }catch (e){
+        } catch (e) {
             console.log(e);
             alert(i18n.t('error.incorrectNumberFormatOptions'));
             delete this.config.format;
@@ -402,11 +456,11 @@ export class App {
 
     }
 
-    serialize(filterLocation, filterComputed){
+    serialize(filterLocation, filterComputed) {
         var self = this;
         self.checkValidityAndRecomputeObjective(true);
 
-        var obj={
+        var obj = {
             SilverDecisions: App.version,
             lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,
@@ -415,7 +469,9 @@ export class App {
             format: self.config.format,
             treeDesigner: self.treeDesigner.config,
             trees: self.dataModel.getRoots(),
-            texts: self.dataModel.texts
+            texts: self.dataModel.texts,
+            expressionScope: self.dataModel.expressionScope,
+            code: self.dataModel.code
         };
 
         var cache = [];
@@ -444,18 +500,18 @@ export class App {
         }, 2);
     }
 
-    updateNumberFormats(){
+    updateNumberFormats() {
         this.initPayoffNumberFormat();
         this.initProbabilityNumberFormat();
         this.updateView();
     }
 
-    updatePayoffNumberFormat(){
+    updatePayoffNumberFormat() {
         this.initPayoffNumberFormat();
         this.updateView();
     }
 
-    updateProbabilityNumberFormat(){
+    updateProbabilityNumberFormat() {
         this.initProbabilityNumberFormat();
         this.updateView();
     }
@@ -463,7 +519,7 @@ export class App {
     initOnBeforeUnload() {
         var self = this;
         window.addEventListener("beforeunload", function (e) {
-            if(!(self.dataModel.isUndoAvailable()||self.dataModel.isRedoAvailable())){
+            if (!(self.dataModel.isUndoAvailable() || self.dataModel.isRedoAvailable())) {
                 return;
             }
 
@@ -473,16 +529,16 @@ export class App {
         });
     }
 
-    setConfigParam(path, value, withoutStateSaving, callback){
-        var self=this;
+    setConfigParam(path, value, withoutStateSaving, callback) {
+        var self = this;
         var prevValue = _.get(this.config, path);
 
-        if(prevValue==value){
+        if (prevValue == value) {
             return;
         }
-        if(!withoutStateSaving){
+        if (!withoutStateSaving) {
             this.dataModel.saveState({
-                data:{
+                data: {
                     prevValue: prevValue
                 },
                 onUndo: (data)=> {
@@ -494,57 +550,56 @@ export class App {
             });
         }
         _.set(this.config, path, value);
-        if(callback){
+        if (callback) {
             callback(value);
         }
     }
 
 
-    setDiagramTitle(title, withoutStateSaving){
+    setDiagramTitle(title, withoutStateSaving) {
         this.setConfigParam('title', title, withoutStateSaving, (v) => this.treeDesigner.updateDiagramTitle(v));
     }
 
-    setDiagramDescription(description, withoutStateSaving){
+    setDiagramDescription(description, withoutStateSaving) {
         this.setConfigParam('description', description, withoutStateSaving, (v) => this.treeDesigner.updateDiagramDescription(v));
     }
 
     initKeyCodes() {
 
-        this.container.on("keyup", (d)=>{
-            if(d3.event.srcElement && ['INPUT', 'TEXTAREA'].indexOf(d3.event.srcElement.nodeName.toUpperCase())>-1){ //ignore events from input and textarea elements
+        this.container.on("keyup", (d)=> {
+            if (d3.event.srcElement && ['INPUT', 'TEXTAREA'].indexOf(d3.event.srcElement.nodeName.toUpperCase()) > -1) { //ignore events from input and textarea elements
                 return;
             }
 
             var key = d3.event.keyCode;
-            if(key==46){//delete
+            if (key == 46) {//delete
                 this.treeDesigner.removeSelectedNodes();
                 this.treeDesigner.removeSelectedTexts();
                 return;
             }
-            if(!d3.event.ctrlKey){
+            if (!d3.event.ctrlKey) {
                 return;
             }
 
 
-
-            if(d3.event.altKey){
-                if(this.selectedObject instanceof model.Node){
+            if (d3.event.altKey) {
+                if (this.selectedObject instanceof model.Node) {
                     let selectedNode = this.selectedObject;
-                    if(selectedNode instanceof model.TerminalNode){
+                    if (selectedNode instanceof model.TerminalNode) {
                         return;
                     }
-                    if(key==68){ // ctrl + alt + d
+                    if (key == 68) { // ctrl + alt + d
                         this.treeDesigner.addDecisionNode(selectedNode);
-                    }else if(key==67){ // ctrl + alt + c
+                    } else if (key == 67) { // ctrl + alt + c
                         this.treeDesigner.addChanceNode(selectedNode);
-                    } else if(key==84){ // ctrl + alt + t
+                    } else if (key == 84) { // ctrl + alt + t
                         this.treeDesigner.addTerminalNode(selectedNode);
                     }
                     return;
-                }else if(this.selectedObject instanceof model.Edge) {
-                    if(key==68){ // ctrl + alt + d
+                } else if (this.selectedObject instanceof model.Edge) {
+                    if (key == 68) { // ctrl + alt + d
                         this.treeDesigner.injectDecisionNode(this.selectedObject);
-                    }else if(key==67){ // ctrl + alt + c
+                    } else if (key == 67) { // ctrl + alt + c
                         this.treeDesigner.injectChanceNode(this.selectedObject);
                     }
                 }
@@ -552,46 +607,46 @@ export class App {
             }
 
 
-            if(key==90){//ctrl + z
+            if (key == 90) {//ctrl + z
                 this.undo();
                 return;
             }
-            if(key==89){//ctrl + y
+            if (key == 89) {//ctrl + y
                 this.redo();
                 return;
             }
 
             /*if(key==65){//ctrl + a
-                if(selectedNodes.length==1){
-                    this.treeDesigner.selectSubTree(selectedNodes[0])
-                }else{
-                    this.treeDesigner.selectAllNodes();
-                }
-                // d3.event.preventDefault()
-                return;
-            }*/
+             if(selectedNodes.length==1){
+             this.treeDesigner.selectSubTree(selectedNodes[0])
+             }else{
+             this.treeDesigner.selectAllNodes();
+             }
+             // d3.event.preventDefault()
+             return;
+             }*/
             var selectedNodes = this.treeDesigner.getSelectedNodes();
-            if(key==86){//ctrl + v
-                if(selectedNodes.length==1){
+            if (key == 86) {//ctrl + v
+                if (selectedNodes.length == 1) {
                     let selectedNode = selectedNodes[0];
-                    if(selectedNode instanceof model.TerminalNode){
+                    if (selectedNode instanceof model.TerminalNode) {
                         return;
                     }
                     this.treeDesigner.pasteToNode(selectedNode)
-                }else if(selectedNodes.length==0){
+                } else if (selectedNodes.length == 0) {
 
                 }
                 return;
             }
 
-            if(!selectedNodes.length){
+            if (!selectedNodes.length) {
                 return;
             }
 
-            if(key==88){//ctrl + x
+            if (key == 88) {//ctrl + x
                 this.treeDesigner.cutSelectedNodes();
 
-            }else if(key==67){//ctrl + c
+            } else if (key == 67) {//ctrl + c
                 this.treeDesigner.copySelectedNodes();
 
             }

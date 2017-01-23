@@ -46,7 +46,7 @@ export class TreeDesignerConfig {
         },
         label: {
             fontSize: '1em',
-            color: 'back'
+            color: 'black'
         },
         payoff: {
             fontSize: '1em',
@@ -416,13 +416,9 @@ export class TreeDesigner {
             .text(d=> {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
                 return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
-            })
-            .on('mouseover', function (d) {
-                var html = i18n.t('tooltip.node.payoff',{value: d.payoff});
-                Tooltip.show(html);
-            }).on("mouseout", function (d) {
-                Tooltip.hide();
             });
+
+        Tooltip.attach(payoff, d=>i18n.t('tooltip.node.payoff',{value: d.payoff}));
 
         var payoffT = payoff;
         if(this.transition){
@@ -440,13 +436,9 @@ export class TreeDesigner {
             .text(d=> {
                 var val = d.computedValue(ruleName, 'aggregatedPayoff');
                 return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
-            })
-            .on('mouseover', function (d) {
-                var html = i18n.t('tooltip.node.aggregatedPayoff');
-                Tooltip.show(html);
-            }).on("mouseout", function (d) {
-                Tooltip.hide();
             });
+        Tooltip.attach(aggregatedPayoff, i18n.t('tooltip.node.aggregatedPayoff'));
+
 
         var aggregatedPayoffT = aggregatedPayoff;
         if(this.transition){
@@ -460,13 +452,9 @@ export class TreeDesigner {
             .text(d=>{
                 var val = d.computedValue(ruleName, 'probabilityToEnter');
                 return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): ''
-            })
-            .on('mouseover', function (d) {
-                var html = i18n.t('tooltip.node.probabilityToEnter');
-                Tooltip.show(html);
-            }).on("mouseout", function (d) {
-                Tooltip.hide();
             });
+        Tooltip.attach(probabilityToEnter, i18n.t('tooltip.node.probabilityToEnter'));
+
 
         var probabilityToEnterT = probabilityToEnter;
         if(this.transition){
@@ -574,7 +562,7 @@ export class TreeDesigner {
         var payoffText = edgesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=>d.payoff<0)
-            .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff))
+            // .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff))
             .text(d=>{
                 var val = d.computedValue('', 'payoff');
                 if(val!==null && !isNaN(val))
@@ -584,13 +572,8 @@ export class TreeDesigner {
                     return self.config.probabilityNumberFormatter(d.payoff);
 
                 return d.payoff;
-            })
-            .on('mouseover', function (d) {
-                var html = i18n.t('tooltip.edge.payoff',{value: d.payoff});
-                    Tooltip.show(html);
-            }).on("mouseout", function (d) {
-                Tooltip.hide();
             });
+        Tooltip.attach(payoffText, d=>i18n.t('tooltip.edge.payoff',{value: d.payoff}));
 
         var payoffTextT = payoffText;
         if(this.transition){
@@ -600,12 +583,8 @@ export class TreeDesigner {
         this.layout.edgePayoffPosition(payoffTextT);
         var ruleName = this.config.$rule;
 
-        edgesMerge.select('text.probability').on('mouseover', function (d) {
-            var html = i18n.t('tooltip.edge.probability',{value: d.probability=== undefined ? d.computedValue(ruleName, '$probability') : d.probability});
-            Tooltip.show(html);
-        }).on("mouseout", function (d) {
-            Tooltip.hide();
-        })
+        Tooltip.attach(edgesMerge.select('text.probability'), d=>i18n.t('tooltip.edge.probability',{value: d.probability=== undefined ? d.computedValue(ruleName, '$probability') : d.probability}));
+
         var probabilityMerge = edgesMergeT.select('text.probability');
         probabilityMerge
             .attr('text-anchor', 'end')
@@ -726,11 +705,8 @@ export class TreeDesigner {
                     tooltipHtml+=ValidationResult.getMessage(e);
                 });
 
-                nodeSelection.select('.error-indicator').on('mouseover', function (d) {
-                    Tooltip.show(tooltipHtml);
-                }).on("mouseout", function (d) {
-                    Tooltip.hide();
-                });
+                Tooltip.attach(nodeSelection.select('.error-indicator'), tooltipHtml);
+
 
             })
         });
@@ -1072,10 +1048,14 @@ export class TreeDesigner {
     }
 
     flipSubTree(node){
+        var self = this;
         this.data.saveState();
         this.data.flipSubTree(node);
-        this.redraw();
-        this.layout.update();
+        setTimeout(function(){
+            self.redraw();
+            self.layout.update();
+        },10)
+
     }
 
 

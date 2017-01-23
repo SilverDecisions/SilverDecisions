@@ -1,0 +1,26 @@
+<div id="sd-sidebar-definitions">
+    <div class="header">
+        <%= i18n.t("sidebarDefinitions.header")%>
+        <span class="toggle-button">
+            <i class="material-icons icon-arrow-up">keyboard_arrow_up</i>
+            <i class="material-icons icon-arrow-down">keyboard_arrow_down</i>
+        </span>
+    </div>
+    <div class="content">
+        <div class="input-group">
+            <textarea rows="1" id="sd-sidebar-definitions-code" type="text" name="sidebar-definitions-code"></textarea>
+            <span class="bar"></span>
+            <label for="sd-sidebar-definitions-code"><%= i18n.t("sidebarDefinitions.code") %></label>
+        </div>
+        <div class="evaluated-variables-preview">
+            <div class="evaluated-variables-preview-header">
+                <%= i18n.t('sidebarDefinitions.evaluatedVariables')%>
+            </div>
+            <div id="sd-sidebar-definitions-evaluated-values"></div>
+        </div>
+        <div class="sd-action-buttons">
+            <button id="sd-sidebar-definitions-open-dialog-button" class="icon-button"  title="<%= i18n.t('sidebarDefinitions.buttons.openDialog')%>"><i class="material-icons">open_in_new</i></button>
+            <button id="sd-sidebar-definitions-recalculate-button" class="icon-button"  title="<%= i18n.t('sidebarDefinitions.buttons.recalculate')%>"><i class="material-icons">refresh</i></button>
+        </div>
+    </div>
+</div>

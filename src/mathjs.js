@@ -4,14 +4,14 @@ var core = require('mathjs/core');
 // It will only contain methods `import` and `config`
 var math = core.create();
 math.config({
-    number: 'Fraction'
+    number: 'number'
 });
 // load the data types you need.
 // To load all data types:
 //
-//     math.import(require('mathjs/lib/type'));
+    math.import(require('mathjs/lib/type'));
 //
-math.import(require('mathjs/lib/type/fraction'));
+// math.import(require('mathjs/lib/type/fraction'));
 
 // Load the functions you need.
 //
@@ -21,8 +21,10 @@ math.import(require('mathjs/lib/type/fraction'));
 //
 // To load all functions of a specific category:
 //
-math.import(require('mathjs/lib/function/arithmetic'));
-math.import(require('mathjs/lib/function/relational'));
+// math.import(require('mathjs/lib/function/arithmetic'));
+// math.import(require('mathjs/lib/function/relational'));
+// math.import(require('mathjs/lib/function/probability'));
+math.import(require('mathjs/lib/function'));
 //
 // math.import(require('mathjs/lib/function/arithmetic/add'));
 // math.import(require('mathjs/lib/function/arithmetic/subtract'));
@@ -32,6 +34,6 @@ math.import(require('mathjs/lib/function/relational'));
 
 // Expressions:
 math.import(require('mathjs/lib/expression'));
-math.import(require('mathjs/lib/utils/string'));
+// math.import(require('mathjs/lib/utils/string'));
 
 module.exports = math;

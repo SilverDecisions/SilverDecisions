@@ -1,5 +1,6 @@
 import {Utils} from './utils'
 import * as math from './mathjs'
+import * as _ from "lodash";
 
 export class ExpressionEngine{
 
@@ -9,50 +10,51 @@ export class ExpressionEngine{
 
     }
 
-    eval(expr){
-        expr+="";
-        expr = expr.trim();
-        if(!isNaN(expr)){
-            return ExpressionEngine.toNumber(expr);
-        }
-        return this.parser.eval(expr);
+    setScope(scope){
+        this.parser.scope = scope;
     }
 
-    computeHash(edges){
-        var hashCount=0;
-        var probabilitySum=0;
-        edges.forEach(e=>{
-            if(ExpressionEngine.isHash(e.probability)){
-                hashCount++;
-                return;
+    eval(expr, asNumber=true, scope){
+        expr+="";
+        expr = expr.trim();
+        if(asNumber){
+            try{
+                return ExpressionEngine.toNumber(expr);
+            }catch(e){
+                //   Left empty intentionally
             }
-
-            probabilitySum = ExpressionEngine.add(probabilitySum, this.eval(e.probability));
-        });
-        if(!hashCount){
-            return 0;
         }
-        var hash = ExpressionEngine.divide(ExpressionEngine.subtract(1, probabilitySum), hashCount);
-        return hash;
+
+        var prevScope = this.parser.scope;
+        if(scope){
+            this.setScope(scope);
+        }
+        var ev = this.parser.eval(expr+"");
+        this.setScope(prevScope);
+        if(!asNumber) {
+            return ev;
+        }
+        return ExpressionEngine.toNumber(ev);
     }
 
     static isHash(expr){
         return expr && Utils.isString(expr) && expr.trim()==='#'
     }
 
-    evalProbability(edge){
-        if(!ExpressionEngine.isHash(edge.probability)){
-            return this.eval(edge.probability);
+    static hasAssignmentExpression(expr){
+        return Utils.isString(expr)&&expr.indexOf('=')!==-1
+    }
+
+
+    evalPayoff(edge){
+        if(ExpressionEngine.hasAssignmentExpression(edge.payoff)){
+            return null;
         }
-        return this.computeHash(edge.parentNode.childEdges);
+        return this.eval(edge.payoff, true, edge.parentNode.expressionScope);
     }
 
     static add(a, b){
         return math.add(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
-    }
-
-    evalAndAdd(a,b){
-        return ExpressionEngine.add(this.eval(a),this.eval(b));
     }
 
     static subtract(a, b){
@@ -67,10 +69,6 @@ export class ExpressionEngine{
         return math.multiply(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }
 
-    evalAndMultiply(a,b){
-        return ExpressionEngine.multiply(this.eval(a),this.eval(b));
-    }
-
     static toNumber(a){
         return math.fraction(a);
     }
@@ -80,7 +78,7 @@ export class ExpressionEngine{
     }
 
 
-    validate(expr){
+    validate(expr, scope){
         if(expr===null || expr===undefined){
             return false;
         }
@@ -89,7 +87,12 @@ export class ExpressionEngine{
             expr+="";
             expr = expr.trim();
             var c = math.compile(expr);
-            var e = c.eval(this.parser.scope);
+
+            if(!scope){
+                scope =this.parser.scope;
+            }
+
+            var e = c.eval(scope);
             return Utils.isNumeric(e);
         }catch (e){
             return false;

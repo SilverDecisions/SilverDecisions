@@ -12,10 +12,12 @@ export class Templates{
     static about_pl = require('./templates/about/pl.html');
 
     static toolbar = require('./templates/toolbar.html');
-    static layoutOptions = require('./templates/layout_options.html');
-    static objectProperties = require('./templates/object_properties.html');
-    static diagramDetailsBox = require('./templates/diagram_details_box.html');
-    static sidebar = require('./templates/sidebar.html');
+    static layoutOptions = require('./templates/sidebar/layout_options.html');
+    static objectProperties = require('./templates/sidebar/object_properties.html');
+    static diagramDetailsBox = require('./templates/sidebar/diagram_details_box.html');
+    static evaluatedVariables = require('./templates/evaluated_variables.html');
+    static definitions = require('./templates/sidebar/definitions.html');
+    static sidebar = require('./templates/sidebar/sidebar.html');
     static settingsDialog = require('./templates/settings_dialog.html');
     static settingsDialogFormGroup = require('./templates/settings_dialog_form_group.html');
     static inputGroup = require('./templates/input_group.html');
@@ -23,6 +25,7 @@ export class Templates{
     static help = require('./templates/help.html');
     static aboutDialog = require('./templates/about_dialog.html');
     static growl = require('./templates/growl_message.html');
+    static definitionsDialog = require('./templates/definitions_dialog.html');
     static loadingIndicator = require('./templates/loading_indicator.html');
     static main = require('./templates/main.html');
 

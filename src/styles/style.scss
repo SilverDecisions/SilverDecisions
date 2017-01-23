@@ -8,7 +8,7 @@
   box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 }
 
-#silver-decisions{
+#silver-decisions {
   font-family: Roboto, Helvetica, Arial, sans-serif;
   /*@import "../../node_modules/material-design-lite/src/material-design-lite";*/
   display: flex;
@@ -23,33 +23,33 @@
     text-decoration: none;
   }
 
-  &.sd-read-only{
-    #toolbar{
+  &.sd-read-only {
+    #sd-toolbar {
       display: none;
     }
-    #sidebar{
+    #sd-sidebar {
       display: none;
     }
   }
 
-  #toolbar{
+  #sd-toolbar {
 
     @include card-mixin();
     flex: 0 1 auto;
     padding: 7px 5px;
 
-    button{
+    button {
       margin-right: 4px;
       &:last-child {
         margin-right: 0;
       }
     }
 
-    .toolbar-group{
+    .toolbar-group {
       display: inline-block;
       $toolbar-border-color: #d8d8d8;
 
-      label{
+      label {
         display: inline-block;
         font-size: 10px;
         text-transform: uppercase;
@@ -57,7 +57,7 @@
       }
 
       &:first-child {
-        padding-right:7px;
+        padding-right: 7px;
       }
       &*:not(:first-child):not(:last-child) {
         padding: 0 7px;
@@ -65,16 +65,16 @@
 
       }
       &:last-child {
-        padding-left:7px;
+        padding-left: 7px;
         border-left: 2px solid $toolbar-border-color;
       }
     }
 
-    #objective-rule-toolbar-group{
-      .input-group{
+    #objective-rule-toolbar-group {
+      .input-group {
         margin-top: 0;
         margin-bottom: 0;
-        select{
+        select {
           font-size: .9em;
           padding: 2px;
         }
@@ -82,11 +82,11 @@
     }
   }
 
-  #main-region{
+  #main-region {
     display: flex;
     flex: 1;
     overflow: hidden;
-    #sidebar{
+    #sd-sidebar {
 
       font-family: Roboto, Helvetica, Arial, sans-serif;
       $sidebar-width: 200px;
@@ -95,79 +95,77 @@
       overflow: hidden;
       padding: 5px 0;
 
-      #sidebar-inner{
+      #sd-sidebar-inner {
         height: 100%;
         overflow: auto;
         @include scrollbar-mixin();
         padding: 0 5px;
       }
 
-      $border: 1px solid rgba(0,0,0,.3);
+      $border: 1px solid rgba(0, 0, 0, .3);
 
-
-      @mixin extendable-card-mixin(){
+      @mixin extendable-card-mixin() {
         @include card-mixin();
 
         margin: 0 0 5px 0;
         padding: 0 7px 0;
 
-        &.sd-extended{
+        &.sd-extended {
           padding: 0 7px 7px;
-          .header{
+          .header {
             border-bottom: $border;
-            .toggle-button{
-              .icon-arrow-up{
+            .toggle-button {
+              .icon-arrow-up {
                 display: block;
               }
-              .icon-arrow-down{
+              .icon-arrow-down {
                 display: none;
               }
             }
           }
-          .content{
+          .content {
             display: block;
           }
         }
 
-        .header{
+        .header {
           font-weight: bold;
           padding: 7px 0;
 
-          .toggle-button{
+          .toggle-button {
             cursor: pointer;
             float: right;
-            .icon-arrow-up{
+            .icon-arrow-up {
               display: none;
             }
-            .icon-arrow-down{
+            .icon-arrow-down {
               display: block;
             }
           }
         }
-        .content{
+        .content {
           display: none;
         }
       }
 
-      #layout-options{
+      #layout-options {
 
         @include extendable-card-mixin();
 
-
-        .content{
-          .input-group{
+        .content {
+          .input-group {
             font-size: 12px;
             margin-top: 1.1em;
             margin-bottom: 0;
           }
-          input{
+          input {
             border: none;
             display: inline-block;
             width: 100%;
           }
-          #auto-layout-options{
-            display:none;
-            &.visible{
+          #auto-layout-options {
+            display: none;
+            &.visible {
               display: block;
               opacity: 1;
             }
@@ -175,15 +173,77 @@
         }
       }
 
-      #diagram-details-box{
+      #diagram-details-box {
         @include extendable-card-mixin();
-        .content{
+        .content {
           font-size: 12px;
         }
       }
 
+      #sd-sidebar-definitions {
+        @include extendable-card-mixin();
+        .content {
+          font-size: 12px;
+          overflow: hidden;
 
-      #object-properties{
+          input, textarea {
+            &.invalid {
+              border-color: red;
+              outline-color: red;
+            }
+          }
+        }
+
+        .evaluated-variables-preview {
+          margin-top: 7px;
+          border-top: $border;
+          border-bottom: $border;
+          padding-bottom: 6px;
+
+          .evaluated-variables-preview-header {
+            border-bottom: $border;
+            font-size: 14px;
+            text-align: center;
+            padding: 5px 0;
+            margin-bottom: 7px;
+          }
+        }
+
+        .sd-action-buttons {
+          margin-top: 7px;
+          button {
+            margin: 2px;
+
+            height: 1em;
+            width: 1em;
+            line-height: 1em;
+            padding: 0;
+
+          }
+          #sd-sidebar-definitions-open-dialog-button {
+            float: left;
+            $font-size: 24px;
+            font-size: $font-size;
+            i {
+              font-size: $font-size;
+            }
+          }
+          #sd-sidebar-definitions-recalculate-button {
+            float: right;
+            $font-size: 28px;
+            font-size: $font-size;
+            i {
+              font-size: $font-size;
+            }
+            border-radius: $font-size;
+            //float: right;
+
+          }
+        }
+
+      }
+
+      #object-properties {
         opacity: 0;
         @include card-mixin();
         margin: 0 0 5px 0;
@@ -192,32 +252,32 @@
         padding: 0 7px 7px;
         -webkit-transition: opacity 0.3s; /* Safari */
         transition: opacity 0.3s;
-        &.visible{
+        &.visible {
           display: block;
           opacity: 1;
         }
 
-        .header{
+        .header {
           font-weight: bold;
           padding: 7px 0;
           border-bottom: $border;
         }
 
-        .content{
-          .object-field{
+        .content {
+          .object-field {
             font-size: 12px;
             //margin-top: 7px;
             //padding: 7px 0;
-            label{
+            label {
               //display: block;
               //font-size: 12px;
             }
-            input{
-           /*   padding: 4px;
-              border-radius: 2px;
-              border: 1px solid #ccc;*/
+            input, textarea {
+              /*   padding: 4px;
+                 border-radius: 2px;
+                 border: 1px solid #ccc;*/
 
-              &.invalid{
+              &.invalid {
 
                 border-color: red;
                 outline-color: red;
@@ -226,32 +286,31 @@
             }
           }
 
-          .children-properties{
+          .children-properties {
             //padding-top: 7px;
             margin-top: 7px;
             border-top: $border;
             display: none;
 
-            .children-properties-header{
+            .children-properties-header {
               border-bottom: $border;
               font-size: 14px;
               text-align: center;
               padding: 5px 0;
             }
 
-            &.visible{
+            &.visible {
               display: block;
             }
 
-            .child-object{
+            .child-object {
               margin-top: 12px;
-              .child-header{
+              .child-header {
                 font-size: 13px;
                 text-align: center;
 
               }
             }
-
 
           }
         }
@@ -259,7 +318,7 @@
     }
   }
 
-  #tree-designer-container{
+  #tree-designer-container {
     @include card-mixin();
     @include scrollbar-mixin();
     position: relative;
@@ -267,17 +326,16 @@
 
     margin: 5px;
 
-    &.with-overflow-y{
+    &.with-overflow-y {
       overflow-y: auto;
     }
-    &.with-overflow-x{
+    &.with-overflow-x {
       overflow-x: auto;
     }
 
-
   }
 
-  svg.tree-designer{
+  svg.tree-designer {
     font-family: "Times New Roman", Times, serif;
     $edge-optimal-color: #006f00;
     $edge-selected-color: #045ad1;
@@ -289,60 +347,59 @@
     //top: 0;
     //left: 0;
 
-    .sd-title{
+    .sd-title {
       text-anchor: middle;
       font-size: 16px;
       //dominant-baseline: hanging;
     }
-    .sd-description{
+    .sd-description {
       text-anchor: middle;
       font-size: 12px;
       //dominant-baseline: hanging;
     }
 
-    .node{
+    .node {
       cursor: move;
 
-      .payoff{
+      .payoff {
         fill: #0000d7;
-        &.negative{
+        &.negative {
           //fill: #0000d7;
         }
       }
 
-      .aggregated-payoff{
+      .aggregated-payoff {
         fill: #006f00;
-        &.negative{
+        &.negative {
           fill: #b60000;
         }
       }
 
-      .probability-to-enter{
+      .probability-to-enter {
         fill: $probabilityColor;
       }
 
-      path{
+      path {
         -webkit-transition: fill 0.25s; /* Safari */
         transition: fill 0.25s;
       }
 
-
-      &.optimal{
-        path{
+      &.optimal {
+        path {
           stroke: darken($edge-optimal-color, 2%);
           stroke-width: 1.5px;
         }
       }
 
-      &.selected{
+      &.selected {
 
       }
 
-      &.dragging path, &.selected path{
+      &.dragging path, &.selected path {
         stroke-dasharray: 3;
       }
 
-      .error-indicator{
+      .error-indicator {
         display: none;
         fill: red;
         font-weight: bold;
@@ -350,8 +407,8 @@
 
       }
 
-      &.error{
-        .error-indicator{
+      &.error {
+        .error-indicator {
           display: block;
           animation: pulse 1.3s ease-in;
           -webkit-animation: pulse 1.3s ease-in;
@@ -360,132 +417,130 @@
       }
     }
 
-    .decision-node{
+    .decision-node {
       $fill-color: #ff7777;
       $fill-highlighted-color: #aa3333;
       $stroke-color: #660000;
 
-      path{
+      path {
         fill: $fill-color;
         stroke-width: 1px;
         stroke: $stroke-color;
       }
-      &.dragging, &.selected{
-        path{
+      &.dragging, &.selected {
+        path {
           fill: $fill-highlighted-color
         }
       }
     }
-    .chance-node{
+    .chance-node {
       $fill-color: #ffff44;
       $fill-highlighted-color: #aaaa00;
       $stroke-color: #666600;
 
-      path{
+      path {
         fill: $fill-color;
         stroke-width: 1px;
         stroke: $stroke-color;
       }
-      &.dragging, &.selected{
-        path{
+      &.dragging, &.selected {
+        path {
           fill: $fill-highlighted-color;
         }
       }
     }
 
-    .terminal-node{
+    .terminal-node {
       $fill-color: #44ff44;
       $fill-highlighted-color: #00aa00;
       $stroke-color: black;
 
-      path{
+      path {
         fill: $fill-color;
         stroke-width: 1px;
         stroke: $stroke-color;
       }
-      &.dragging, &.selected{
-        path{
+      &.dragging, &.selected {
+        path {
           fill: $fill-highlighted-color;
         }
       }
     }
 
-
-
-    marker#arrow-optimal{
-      path{
+    marker#arrow-optimal {
+      path {
         fill: $edge-optimal-color;
       }
     }
-    marker#arrow-selected{
-      path{
+    marker#arrow-selected {
+      path {
         fill: $edge-selected-color;
       }
     }
-    .edge{
+    .edge {
       $stroke-width: 1.5;
       $stroke-width-selected: $stroke-width + 2;
       cursor: pointer;
 
-      path{
+      path {
         stroke: #424242;
         stroke-width: $stroke-width;
         -webkit-transition: stroke-width 0.3s; /* Safari */
         transition: stroke-width 0.3s;
       }
 
-      .label{
-        font-size:1em;
+      .label {
+        font-size: 1em;
       }
 
-      .payoff{
+      .payoff {
         fill: #006f00;
-        &.negative{
+        &.negative {
           fill: #b60000;
         }
       }
 
-      .probability{
+      .probability {
         fill: $probabilityColor;
       }
 
-      &.optimal{
-        path{
+      &.optimal {
+        path {
           stroke-width: $stroke-width-selected - 1.1;
           stroke: $edge-optimal-color;
         }
-        &:hover, &.sd-hover{
-          path{
+        &:hover, &.sd-hover {
+          path {
             stroke-width: $stroke-width-selected - 0.5;
           }
         }
 
       }
 
-      &:hover, &.sd-hover{
+      &:hover, &.sd-hover {
 
-        path{
+        path {
           stroke-width: $stroke-width-selected - 1;
         }
 
-        .label{
+        .label {
           //font-weight: bold;
         }
 
       }
 
-      &.selected{
-        path{
+      &.selected {
+        path {
           stroke-width: $stroke-width-selected;
           stroke: $edge-selected-color;
         }
-        &:hover, &.sd-hover{
-          path{
+        &:hover, &.sd-hover {
+          path {
             stroke-width: $stroke-width-selected;
           }
         }
 
-        .label{
+        .label {
           font-weight: bold;
         }
 
@@ -508,38 +563,34 @@
       }
     }
 
-    .floating-text{
+    .floating-text {
       cursor: move;
 
-      &.sd-empty{
-        rect{
+      &.sd-empty {
+        rect {
           stroke-dasharray: 3;
           stroke: gray;
           stroke-width: 1px;
         }
       }
-      &.selected{
-        rect{
+      &.selected {
+        rect {
           stroke-dasharray: 3;
           stroke: black;
           stroke-width: 2px;
         }
       }
 
-
     }
 
-    tspan{
-      a{
+    tspan {
+      a {
         cursor: pointer;
         text-decoration: underline;
       }
     }
 
-
-
   }
-
 
   button{
     background: rgba(158,158,158,.2);
@@ -553,14 +604,14 @@
     //min-width: 64px;
     //padding: 0 16px;
     display: inline-block;
-    font-family: "Roboto","Helvetica","Arial",sans-serif;
+    font-family: "Roboto", "Helvetica", "Arial", sans-serif;
     font-size: 12px;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0;
     overflow: hidden;
     will-change: box-shadow;
-    transition: box-shadow .2s cubic-bezier(.4,0,1,1),background-color .2s cubic-bezier(.4,0,.2,1),color .2s cubic-bezier(.4,0,.2,1);
+    transition: box-shadow .2s cubic-bezier(.4, 0, 1, 1), background-color .2s cubic-bezier(.4, 0, .2, 1), color .2s cubic-bezier(.4, 0, .2, 1);
     outline: none;
     cursor: pointer;
     text-decoration: none;
@@ -568,34 +619,35 @@
     line-height: 2em;
     vertical-align: middle;
     -webkit-tap-highlight-color: transparent;
-    -webkit-tap-highlight-color: rgba(255,255,255,0);
-    &:hover{
-      background: rgba(158,158,158,.3);
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+    &:hover {
+      background: rgba(158, 158, 158, .3);
     }
 
-    &[disabled]{
-      background-color: rgba(0,0,0,.12);
-      color: rgba(0,0,0,.26);
+    &[disabled] {
+      background-color: rgba(0, 0, 0, .12);
+      color: rgba(0, 0, 0, .26);
       box-shadow: none;
     }
 
-    &.active{
+    &.active {
       background: #3f51b5;
       color: #fff;
     }
 
-    &.icon-button{
+    &.icon-button {
       padding: 0;
       background: none;
       box-shadow: none;
-      &:hover:not([disabled]){
-        background: rgba(158,158,158,.1);
-        box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+      &:hover:not([disabled]) {
+        background: rgba(158, 158, 158, .1);
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 3px 1px -2px rgba(0, 0, 0, .2), 0 1px 5px 0 rgba(0, 0, 0, .12);
       }
     }
   }
 
 }
+
 .sd-tooltip {
   position: absolute;
   pointer-events: none;
@@ -610,105 +662,130 @@
   //border: 1px solid #ccc;
 }
 
-#sd-settings-dialog{
+#sd-settings-dialog {
 
-
-
-
-  .sd-form-group{
+  .sd-form-group {
 
     margin: 10px 0;
     width: 250px;
 
-    &.sd-extended{
-      > .header{
-        .toggle-button{
-          .icon-arrow-up{
+    &.sd-extended {
+      > .header {
+        .toggle-button {
+          .icon-arrow-up {
             display: block;
           }
-          .icon-arrow-down{
+          .icon-arrow-down {
             display: none;
           }
         }
       }
-      > .sd-form-group-content{
+      > .sd-form-group-content {
         display: block;
       }
     }
-    .header{
-      .toggle-button{
+    .header {
+      .toggle-button {
         display: inline-block;
         vertical-align: middle;
         cursor: pointer;
 
-        .icon-arrow-up{
+        .icon-arrow-up {
           display: none;
         }
-        .icon-arrow-down{
+        .icon-arrow-down {
           display: block;
         }
       }
     }
-    .sd-form-group-content{
+    .sd-form-group-content {
       display: none;
     }
 
-    label{
+    label {
       margin-right: 10px;
     }
 
-    input{
+    input {
       //padding: 4px;
       //border-radius: 2px;
       //border: 1px solid #ccc;
 
-
-      &.invalid{
+      &.invalid {
 
         border-color: red;
         outline-color: red;
 
       }
     }
-    .sd-form-group{
+    .sd-form-group {
       margin-left: 15px;
 
-      h4{
+      h4 {
         font-size: 0.9em;
       }
 
-      .sd-form-group{
+      .sd-form-group {
         margin-left: 15px;
-        h4{
+        h4 {
           font-size: 0.85em;
         }
       }
     }
   }
 
+}
+
+#sd-about-dialog {
 
 }
 
-#sd-about-dialog{
+#sd-definitions-dialog {
+  input, textarea {
+    &.invalid {
+      border-color: red;
+      outline-color: red;
+    }
+  }
+  .action-buttons {
+    float: right;
 
+    button#sd-definitions-dialog-recalculate-button {
+      $font-size: 36px;
+      line-height: 1em;
+      height: 1em;
+      width: 1em;
+      padding: 0;
+      border-radius: $font-size;
+      //float: right;
+      font-size: $font-size;
+      i {
+        font-size: $font-size;
+      }
+
+    }
+
+  }
 }
 
-.sd-hidden{
-  display: none!important;
+.sd-hidden {
+  display: none !important;
 }
-.sd-growl-list{
+
+.sd-growl-list {
   position: fixed;
   top: 55px;
 
-  &.right{
+  &.right {
     right: 20px;
   }
-  &.left{
+  &.left {
     left: 215px;
   }
 
 }
-.sd-growl-message{
+
+.sd-growl-message {
   font-family: Roboto, Helvetica, Arial, sans-serif;
   background: white;
   border: 1px solid #3a3a3a;
@@ -730,7 +807,7 @@
     border-color: #bce8f1;
   }
 
-  &.success  {
+  &.success {
     color: #3c763d;
     background-color: #dff0d8;
     border-color: #d6e9c6;
@@ -743,17 +820,16 @@
   }
 }
 
-.sd-loading-indicator{
+.sd-loading-indicator {
   position: fixed;
   top: 10vh;
   left: 50vw;
   opacity: 0;
   -webkit-transition: opacity 0.6s; /* Safari */
   transition: opacity 0.6s;
-  &.visible{
+  &.visible {
     opacity: 1;
   }
-
 
   /* https://github.com/tobiasahlin/SpinKit */
   .sd-spinner {
@@ -776,12 +852,14 @@
     0% {
       transform: perspective(120px) rotateX(0deg) rotateY(0deg);
       -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
-    } 50% {
-        transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-        -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
-      } 100% {
-          transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-          -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-        }
+    }
+    50% {
+      transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
+      -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
+    }
+    100% {
+      transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+      -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
+    }
   }
 }

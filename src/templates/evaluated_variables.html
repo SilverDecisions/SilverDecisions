@@ -1,0 +1,9 @@
+<table class="sd-evaluated-variables">
+    <% for(i=0; i<scopeVariables.length; ++i) { %>
+    <tr>
+        <td><%= scopeVariables[i].key %></td>
+        <td>=</td>
+        <td><%= scopeVariables[i].value %></td>
+    </tr>
+    <% } %>
+</table>

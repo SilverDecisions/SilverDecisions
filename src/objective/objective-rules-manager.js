@@ -3,6 +3,7 @@ import {MaxiMinRule} from "./maxi-min-rule";
 import * as model from '../model/index'
 import * as _ from "lodash";
 import {MaxiMaxRule} from "./maxi-max-rule";
+import {ExpressionEngine} from "../expression-engine";
 
 
 export class ObjectiveRulesManager{
@@ -33,7 +34,7 @@ export class ObjectiveRulesManager{
         this.currentRule = this.ruleByName[ruleName];
     }
 
-    recompute(allRules){
+    recompute(allRules, reevaluateExpressions=false){
 
         var startTime = new Date().getTime();
         if(this.$debug){
@@ -41,7 +42,10 @@ export class ObjectiveRulesManager{
         }
 
 
-        this.evalExpressions();
+        if(reevaluateExpressions){
+            this.evalNumericExpressions();
+        }
+
         this.data.getRoots().forEach(n=>{
             this.recomputeTree(n, allRules);
         });
@@ -55,13 +59,15 @@ export class ObjectiveRulesManager{
         return this;
     }
 
-    recomputeTree(root, allRules){
+    recomputeTree(root, allRules, reevaluateExpressions=false){
         if(this.$debug) {
             console.log('recomputing rules for tree ...', root)
         }
         var startTime = new Date().getTime();
 
-        this.evalExpressions();
+        if(reevaluateExpressions){
+            this.evalNumericExpressions();
+        }
 
         var rules  = [this.currentRule];
         if(allRules){
@@ -103,17 +109,105 @@ export class ObjectiveRulesManager{
         })
     }
 
-    evalExpressions() {
-        this.data.edges.forEach(e=>{
+    /*Evaluates probability and payoff expressions*/
+    evalNumericExpressions(initScopes=false) {
+        // console.log("evalNumericExpressions");
+        this.data.getRoots().forEach(n=>{
+            this.clearTree(n);
+            this.evalNumericExpressionsForNode(n, initScopes);
+        });
+    }
+
+    /*Evaluates code expressions*/
+    evalCodeExpressions() {
+        this.data.clearExpressionScope();
+        this.data.$codeDirty = false;
+        try{
+            this.data.$codeError = null;
+            this.expressionEngine.eval(this.data.code, false, this.data.expressionScope);
+        }catch (e){
+            this.data.$codeError = e;
+            // console.log(e);
+        }
+        this.data.getRoots().forEach(n=>{
+            this.evalCodeExpressionsForNode(n);
+        });
+
+    }
+
+    evalCodeExpressionsForNode(node) {
+        this.initScopeForNode(node);
+        node.$codeDirty = false;
+        if(node.code){
             try{
-                var probability;
-                if(e.parentNode instanceof model.ChanceNode){
-                    e.computedValue(null, 'probability', this.expressionEngine.evalProbability(e));
-                }
-                e.computedValue(null, 'payoff', this.expressionEngine.eval(e.payoff))
+                node.$codeError = null;
+                this.expressionEngine.eval(node.code, false, node.expressionScope);
             }catch (e){
+                node.$codeError = e;
                 console.log(e);
             }
+        }
+
+        node.childEdges.forEach(e=>{
+            this.evalCodeExpressionsForNode(e.childNode);
+        })
+    }
+
+    initScopeForNode(node){
+        var parent = node.$parent;
+        var parentScope = parent?parent.expressionScope : this.data.expressionScope;
+        node.expressionScope = _.cloneDeep(parentScope);
+    }
+
+    evalNumericExpressionsForNode(node, initScope=false) {
+        if(!node.expressionScope || initScope){
+            this.initScopeForNode(node);
+        }
+        var scope = node.expressionScope;
+        if(node instanceof model.ChanceNode){
+
+            var probabilitySum=ExpressionEngine.toNumber(0);
+            var hashEdges= [];
+            var invalid = false;
+            node.childEdges.forEach(e=>{
+                if(ExpressionEngine.isHash(e.probability)){
+                    hashEdges.push(e);
+                    return;
+                }
+
+                if(ExpressionEngine.hasAssignmentExpression(e.probability)){ //It should not occur here!
+                    console.log("hasAssignmentExpression!!!!");
+                    return null;
+                }
+
+                try{
+                    var prob = this.expressionEngine.eval(e.probability, true, scope);
+                    e.computedValue(null, 'probability', prob);
+                    probabilitySum = ExpressionEngine.add(probabilitySum, prob);
+                }catch (e){
+                    invalid = true;
+                }
+
+            });
+
+            if(!invalid && hashEdges.length) {
+                var hash = ExpressionEngine.divide(ExpressionEngine.subtract(1, probabilitySum), hashEdges.length);
+                // console.log(probabilitySum.toString(), hash.toString());
+                hashEdges.forEach(e=> {
+                    e.computedValue(null, 'probability', hash);
+                });
+            }
+
+        }
+
+        node.childEdges.forEach(e=>{
+            try{
+                e.computedValue(null, 'payoff', this.expressionEngine.evalPayoff(e))
+            }catch (e){
+                // console.log("evalNumericExpressionsForNode payoff",e);
+            }
+
+            this.evalNumericExpressionsForNode(e.childNode, initScope);
         })
     }
 }

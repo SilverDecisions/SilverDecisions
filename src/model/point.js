@@ -22,7 +22,7 @@ export class Point {
         this.y=y;
         return this;
     }
-    
+
     move(dx,dy){ //move by vector
         if(Array.isArray(dx)){
             dy=dx[1];

@@ -1,5 +1,6 @@
 import *  as _ from 'lodash'
 import {i18n} from '../i18n/i18n'
+import {Utils} from "../utils";
 export class ValidationResult{
 
 
@@ -7,19 +8,23 @@ export class ValidationResult{
     warnings = {};
     objectIdToError={};
 
-    addError(name, obj){
-        var e = this.errors[name];
-        if(!e){
-            e=[];
-            this.errors[name]=e;
+    addError(error, obj){
+        if(Utils.isString(error)){
+            error = {name: error};
+        }
+        var name = error.name;
+        var errorsByName = this.errors[name];
+        if(!errorsByName){
+            errorsByName=[];
+            this.errors[name]=errorsByName;
         }
         var objE = this.objectIdToError[obj.$id];
         if(!objE){
             objE=[];
             this.objectIdToError[obj.$id]= objE;
         }
-        e.push(obj);
-        objE.push(name);
+        errorsByName.push(obj);
+        objE.push(error);
     }
 
     addWarning(name, obj){
@@ -35,9 +40,12 @@ export class ValidationResult{
         return Object.getOwnPropertyNames(this.errors).length === 0
     }
 
-    static getMessage(name){
-        var key = 'validation.' + name;
-        return i18n.t(key);
+    static getMessage(error){
+        if(Utils.isString(error)){
+            error = {name: error};
+        }
+        var key = 'validation.' + error.name;
+        return i18n.t(key, error.data);
     }
 
 }

@@ -26,7 +26,8 @@
     "undo": "Undo",
     "redo": "Redo",
     "settings": "Settings",
-    "about": "About"
+    "about": "About",
+    "recompute": "Recompute"
   },
   "node":{
     "name": "Label"
@@ -223,6 +224,22 @@
     },
     "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
   },
+  "definitionsDialog":{
+    "title": "Variable definitions",
+    "buttons":{
+      "recalculate": "Recalculate"
+    },
+    "evaluatedVariables": "Evaluated variables"
+  },
+  "sidebarDefinitions":{
+    "header": "Variables",
+    "code": "Code",
+    "buttons":{
+      "openDialog" : "Open dialog",
+      "recalculate": "Recalculate"
+    },
+    "evaluatedVariables": "Evaluated variables"
+  },
   "layoutOptions":{
     "header": "Layout",
     "marginHorizontal": "Horizontal Margin",
@@ -258,7 +275,9 @@
   },
   "validation":{
     "incompletePath": "Path not ending with terminal node",
-    "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1"
+    "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
+    "invalidProbability": "Invalid probability in edge #{{number}}",
+    "invalidPayoff": "Invalid payoff in edge #{{number}}"
   },
   "growl":{
     "brushDisabled": "Selection brush disabled",

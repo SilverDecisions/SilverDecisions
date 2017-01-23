@@ -19,6 +19,7 @@ export class Toolbar{
         this.initUndoRedoButtons();
         this.initSettingsButton();
         this.initAboutButton();
+        this.initRecomputeButton();
         this.initObjectiveRuleToolbarGroup();
     }
 
@@ -46,15 +47,8 @@ export class Toolbar{
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
             var json = this.app.serialize();
 
-            var event;
-            try{
-                event = new  CustomEvent('SilverDecisionsSaveEvent',{ 'detail': json });
-            }catch (e){ //IE
-                event = document.createEvent('CustomEvent');
-                event.initCustomEvent('SilverDecisionsSaveEvent', false, false, json);
-            }
+            Utils.dispatchEvent('SilverDecisionsSaveEvent', json);
 
-            document.dispatchEvent(event);
 
             if(this.app.config.jsonFileDownload){
                 var blob = new Blob([json], {type: "application/json"});
@@ -106,6 +100,12 @@ export class Toolbar{
     initAboutButton(){
         this.aboutButton = this.container.select('#about-button').on('click', ()=>{
             this.app.aboutDialog.open();
+        });
+    }
+
+    initRecomputeButton(){
+        this.recomputeButton = this.container.select('#recompute-button').on('click', ()=>{
+            this.app.recompute();
         });
     }
 

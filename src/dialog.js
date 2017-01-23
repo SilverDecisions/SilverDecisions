@@ -21,6 +21,15 @@ export class Dialog{
     }
     close(){
         this.container.classed('open', false);
+        this.onClosed();
+    }
+
+    isVisible(){
+        return this.container.classed('open');
+    }
+
+    onClosed(){
+
     }
 
     onOpen(){

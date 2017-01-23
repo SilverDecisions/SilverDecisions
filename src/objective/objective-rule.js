@@ -26,33 +26,29 @@ export class ObjectiveRule{
     }
 
     baseProbability(edge){
-        return edge.computedValue(null, 'probability');
+        return edge.computedBaseProbability();
     }
 
     basePayoff(edge){
-        return edge.computedValue(null, 'payoff');
+        return edge.computedBasePayoff();
     }
 
     clearComputedValues(object){
         object.clearComputedValues(this.name);
     }
 
-    eval(expression){
-        return this.expressionEngine.eval(expression)
-    }
-
     add(a,b){
-        return ExpressionEngine.add(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
+        return ExpressionEngine.add(a,b)
     }
     subtract(a,b){
-        return ExpressionEngine.subtract(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
+        return ExpressionEngine.subtract(a,b)
     }
     divide(a,b){
-        return ExpressionEngine.divide(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
+        return ExpressionEngine.divide(a,b)
     }
 
     multiply(a,b){
-        return ExpressionEngine.multiply(this.expressionEngine.eval(a),this.expressionEngine.eval(b))
+        return ExpressionEngine.multiply(a,b)
     }
 
 

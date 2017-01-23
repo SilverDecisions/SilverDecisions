@@ -1,6 +1,7 @@
 import * as d3 from './d3'
 import * as autosize from 'autosize'
 import {Templates} from './templates'
+import * as _ from "lodash";
 
 export class Utils {
     static SQRT_2 = 1.41421356237;
@@ -441,5 +442,33 @@ export class Utils {
         var div = document.createElement('div');
         div.appendChild(text);
         return div.innerHTML;
+    }
+
+    static getVariablesAsList(scope){
+        var result = [];
+        _.forOwn(scope, function(value, key) {
+            if(Utils.isFunction(value)){
+                return;
+                // value = value.syntax;
+            }
+            result.push({
+                key: key,
+                value: value
+            })
+
+        });
+
+        return result;
+    }
+
+    static dispatchEvent(name, data){
+        var event;
+        try{
+            event = new  CustomEvent(name,{ 'detail': data });
+        }catch (e){ //IE
+            event = document.createEvent('CustomEvent');
+            event.initCustomEvent(name, false, false, data);
+        }
+        document.dispatchEvent(event);
     }
 }

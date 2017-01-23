@@ -13,8 +13,6 @@ export class ExpectedValueMaximizationRule extends ObjectiveRule{
 
     // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
     computePayoff(node, payoff=0, aggregatedPayoff=0){
-        payoff=this.eval(payoff);
-
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {

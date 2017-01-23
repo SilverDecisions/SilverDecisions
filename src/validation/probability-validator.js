@@ -1,4 +1,5 @@
 import {ExpressionEngine} from '../expression-engine'
+import {Utils} from "../utils";
 
 export class ProbabilityValidator{
     expressionEngine;
@@ -6,19 +7,22 @@ export class ProbabilityValidator{
         this.expressionEngine=expressionEngine;
     }
 
-    validate(value){
+    validate(value, edge){
+        if(value===null || value === undefined){
+            return false;
+        }
         if(ExpressionEngine.isHash(value)){
             return true;
         }
 
-        if(!this.expressionEngine.validate(value)){
+        if(ExpressionEngine.hasAssignmentExpression(value)) {
             return false;
         }
-        var evaluatedVal = this.expressionEngine.eval(value);
-        if(isNaN(evaluatedVal)){
+        var scope = edge.parentNode.expressionScope;
+        if(!this.expressionEngine.validate(value, scope)){
             return false;
         }
-        evaluatedVal = ExpressionEngine.toNumber(evaluatedVal);
+        var evaluatedVal = this.expressionEngine.eval(value, true, scope);
         return evaluatedVal.compare(0) >= 0 && evaluatedVal.compare(1) <= 0;
     }
 

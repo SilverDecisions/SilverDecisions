@@ -1,0 +1,24 @@
+<div id="sd-definitions-dialog" class="sd-modal">
+    <div class="sd-modal-content">
+        <div class="sd-modal-header">
+            <span class="sd-close-modal"><i class="material-icons">close</i></span>
+            <h2><%= i18n.t("definitionsDialog.title")%></h2>
+        </div>
+        <div class="sd-modal-body">
+            <div class="definitions-form">
+                <div class="input-group">
+                    <textarea id="sd-definitions-dialog-definitions-code" name="sd-definitions-code"></textarea>
+                    <span class="bar"></span>
+                </div>
+            </div>
+
+            <div class="evaluated-variables-preview">
+                <h3><%= i18n.t('definitionsDialog.evaluatedVariables')%>:</h3>
+                <div id="sd-definitions-dialog-variable-values"></div>
+            </div>
+            <div class="action-buttons">
+                <button id="sd-definitions-dialog-recalculate-button" class="icon-button"  title="<%= i18n.t('definitionsDialog.buttons.recalculate')%>"><i class="material-icons">refresh</i></button>
+            </div>
+        </div>
+    </div>
+</div>

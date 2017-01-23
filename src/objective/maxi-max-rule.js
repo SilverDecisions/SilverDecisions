@@ -4,18 +4,16 @@ import {ObjectiveRule} from './objective-rule'
 import * as _ from "lodash";
 
 /*expected value maximization rule*/
-export class MaxiMaxRule extends ObjectiveRule{
+export class MaxiMaxRule extends ObjectiveRule {
 
     static NAME = 'maxi-max';
 
-    constructor(expressionEngine){
+    constructor(expressionEngine) {
         super(MaxiMaxRule.NAME, expressionEngine);
     }
 
     // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
-    computePayoff(node, payoff=0, aggregatedPayoff=0){
-        payoff=this.eval(payoff);
-
+    computePayoff(node, payoff = 0, aggregatedPayoff = 0) {
         var childrenPayoff = 0;
         if (node.childEdges.length) {
 
@@ -30,26 +28,26 @@ export class MaxiMaxRule extends ObjectiveRule{
             });
 
 
-            var sumweight = 0 ;
-            node.childEdges.forEach(e=>{
-                sumweight=this.add(sumweight, this.cValue(e, 'probability'));
+            var sumweight = 0;
+            node.childEdges.forEach(e=> {
+                sumweight = this.add(sumweight, this.cValue(e, 'probability'));
             });
 
             // console.log(payoff,node.childEdges,'sumweight',sumweight);
 
-            node.childEdges.forEach(e=>{
-                childrenPayoff= this.add(childrenPayoff, this.multiply(this.cValue(e, 'probability'),this.cValue(e.childNode, 'payoff')).div(sumweight));
+            node.childEdges.forEach(e=> {
+                childrenPayoff = this.add(childrenPayoff, this.multiply(this.cValue(e, 'probability'), this.cValue(e.childNode, 'payoff')).div(sumweight));
             });
 
         }
 
-        payoff=this.add(payoff, childrenPayoff);
+        payoff = this.add(payoff, childrenPayoff);
         this.clearComputedValues(node);
 
-        if(node instanceof model.TerminalNode){
+        if (node instanceof model.TerminalNode) {
             this.cValue(node, 'aggregatedPayoff', aggregatedPayoff);
             this.cValue(node, 'probabilityToEnter', 0); //initial value
-        }else{
+        } else {
             this.cValue(node, 'childrenPayoff', childrenPayoff);
         }
 

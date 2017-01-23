@@ -92,7 +92,7 @@ gulp.task('build', ['build-css', 'build-js'], function () {
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.html', './src/styles/*.*css', 'src/**/*.js'], ['default']);
+    gulp.watch(['./src/**/*.html', './src/styles/*.*css', 'src/**/*.js', './src/i18n/*.*json'], ['default']);
 });
 
 gulp.task('default', ['build-clean'],  function() {

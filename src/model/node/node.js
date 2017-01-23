@@ -6,7 +6,14 @@ export class Node extends ObjectWithIdAndComputedValues{
     type;
     childEdges=[];
     name='';
+
     location; //Point
+
+    code='';
+    $codeDirty = false; // is code changed without reevaluation?
+    $codeError = null; //code evaluation errors
+
+    expressionScope=null;
 
     constructor(type, location){
         super();
