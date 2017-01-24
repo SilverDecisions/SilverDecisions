@@ -475,6 +475,7 @@ export class App {
 
         var obj = {
             SilverDecisions: App.version,
+            savetime: d3.isoFormat(new Date()),
             lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,
             title: self.config.title,
