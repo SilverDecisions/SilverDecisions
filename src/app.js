@@ -271,7 +271,8 @@ export class App {
     updateVariableDefinitions() {
         var self = this;
         var definitionsSourceObject = self.getCurrentVariableDefinitionsSourceObject();
-        self.sidebar.updateDefinitions(definitionsSourceObject.code, definitionsSourceObject.expressionScope, definitionsSourceObject.$codeError, (code)=> {
+        var readOnly = (this.selectedObject instanceof model.Edge) || (this.selectedObject instanceof model.TerminalNode);
+        self.sidebar.updateDefinitions(definitionsSourceObject, readOnly, (code)=> {
             self.dataModel.saveState();
             definitionsSourceObject.code = code;
         });

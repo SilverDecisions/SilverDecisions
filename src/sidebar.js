@@ -133,12 +133,13 @@ export class Sidebar {
         Utils.elasticTextarea(this.definitionsCode);
     }
 
-    updateDefinitions(code, scope, codeError, changeCallback) {
+    updateDefinitions(definitionsSourceObject, readOnly, changeCallback) {
+        this.definitionsContainer.classed('sd-read-only', readOnly);
         this.onDefinitionsCodeChanged = changeCallback;
-        this.definitionsCode.node().value = code;
-        this.definitionsCode.classed('invalid', !!codeError);
-        this.definitionsCode.attr('data-error-msg', codeError);
-        var html = Templates.get('evaluatedVariables', {scopeVariables: Utils.getVariablesAsList(scope)});
+        this.definitionsCode.node().value = definitionsSourceObject.code;
+        this.definitionsCode.classed('invalid', !!definitionsSourceObject.$codeError);
+        this.definitionsCode.attr('data-error-msg', definitionsSourceObject.$codeError);
+        var html = Templates.get('evaluatedVariables', {scopeVariables: Utils.getVariablesAsList(definitionsSourceObject.expressionScope)});
         this.definitionsEvaluatedValuesContainer.html(html);
         Utils.updateInputClass(this.definitionsCode);
         Utils.autoResizeTextarea(this.definitionsCode.node())

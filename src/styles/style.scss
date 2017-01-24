@@ -182,9 +182,22 @@
 
       #sd-sidebar-definitions {
         @include extendable-card-mixin();
+
+        &.sd-read-only{
+          .input-group{
+            display: none;
+          }
+
+          #sd-sidebar-definitions-open-dialog-button{
+            display: none;
+          }
+        }
+
         .content {
           font-size: 12px;
           overflow: hidden;
+
+
 
           input, textarea {
             &.invalid {

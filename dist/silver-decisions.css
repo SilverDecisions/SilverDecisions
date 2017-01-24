@@ -380,6 +380,10 @@
               display: block; }
         #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .content {
           display: none; }
+        #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions.sd-read-only .input-group {
+          display: none; }
+        #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions.sd-read-only #sd-sidebar-definitions-open-dialog-button {
+          display: none; }
         #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .content {
           font-size: 12px;
           overflow: hidden; }
