@@ -58,10 +58,6 @@ export class DefinitionsDialog extends Dialog {
 
     }
 
-    onClosed() {
-
-    }
-
     printError(error) {
         var html = error;
         this.variableValuesContainer.html(html);

@@ -191,6 +191,8 @@ export class ObjectiveRulesManager{
 
             });
 
+            invalid = invalid || !(probabilitySum.compare(0) >= 0 && probabilitySum.compare(1) <= 0);
+
             if(!invalid && hashEdges.length) {
                 var hash = ExpressionEngine.divide(ExpressionEngine.subtract(1, probabilitySum), hashEdges.length);
                 // console.log(probabilitySum.toString(), hash.toString());

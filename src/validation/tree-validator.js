@@ -44,9 +44,12 @@ export class TreeValidator {
             if (node instanceof model.ChanceNode) {
                 var probability = e.computedBaseProbability();
                 if (!this.probabilityValidator.validate(probability)) {
-                    validationResult.addError({name: 'invalidProbability', data: {'number': i + 1}}, node);
-                    // console.log('invalidProbability', e);
-                    e.markAsInvalid('probability');
+                    if(!ExpressionEngine.isHash(e.probability)){
+                        validationResult.addError({name: 'invalidProbability', data: {'number': i + 1}}, node);
+                        // console.log('invalidProbability', e);
+                        e.markAsInvalid('probability');
+                    }
+
                 } else {
                     probabilitySum = ExpressionEngine.add(probabilitySum, probability);
                 }

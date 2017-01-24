@@ -190,6 +190,8 @@ export class App {
 
     initDefinitionsDialog() {
         this.definitionsDialog = new DefinitionsDialog(this);
+        this.definitionsDialog.onClosed = ()=> this.recompute();
+
     }
 
     initToolbar() {
@@ -275,15 +277,18 @@ export class App {
         self.sidebar.updateDefinitions(definitionsSourceObject, readOnly, (code)=> {
             self.dataModel.saveState();
             definitionsSourceObject.code = code;
+            self.recompute()
         });
 
     }
 
     openDefinitionsDialog() {
+        // this.recompute();
         var definitionsSourceObject = this.getCurrentVariableDefinitionsSourceObject();
         this.definitionsDialog.open(definitionsSourceObject, (code)=> {
             this.dataModel.saveState();
             definitionsSourceObject.code = code;
+            this.recompute();
         });
     }
 
