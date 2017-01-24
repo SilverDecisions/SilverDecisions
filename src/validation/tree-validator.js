@@ -2,8 +2,8 @@ import {Utils} from '../utils'
 import * as model from '../model/index'
 import {ValidationResult} from './validation-result'
 import {ExpressionEngine} from '../expression-engine'
-import {ProbabilityValidator} from "./probability-validator";
-import {PayoffValidator} from "./payoff-validator";
+import {ProbabilityValueValidator} from "./probability-value-validator";
+import {PayoffValueValidator} from "./payoff-value-validator";
 
 export class TreeValidator {
 
@@ -11,7 +11,8 @@ export class TreeValidator {
 
     constructor(expressionEngine) {
         this.expressionEngine = expressionEngine;
-        this.probabilityValidator = new ProbabilityValidator(expressionEngine);
+        this.probabilityValidator = new ProbabilityValueValidator(expressionEngine);
+        this.payoffValidator = new PayoffValueValidator(expressionEngine);
     }
 
     validate(nodes) {
@@ -37,32 +38,30 @@ export class TreeValidator {
         var probabilitySum = ExpressionEngine.toNumber(0);
         var withHash = false;
         node.childEdges.forEach((e, i)=> {
+            e.markAsValid('probability');
+            e.markAsValid('payoff');
 
             if (node instanceof model.ChanceNode) {
-                var valid = true;
-                var probability = e.computedValue(null, 'probability');
-
-                if (probability === null && !ExpressionEngine.isHash(e.probability)) {
+                var probability = e.computedBaseProbability();
+                if (!this.probabilityValidator.validate(probability)) {
                     validationResult.addError({name: 'invalidProbability', data: {'number': i + 1}}, node);
-                    console.log('invalidProbability', e);
+                    // console.log('invalidProbability', e);
+                    e.markAsInvalid('probability');
                 } else {
-                    if (ExpressionEngine.isHash(e.probability)) {
-                        withHash = true;
-                    } else {
-                        probabilitySum = ExpressionEngine.add(probabilitySum, probability);
-                    }
+                    probabilitySum = ExpressionEngine.add(probabilitySum, probability);
                 }
             }
-            var payoff = e.computedValue(null, 'payoff');
-            if (payoff === null || payoff == undefined) {
+            var payoff = e.computedBasePayoff();
+            if (!this.payoffValidator.validate(payoff)) {
                 validationResult.addError({name: 'invalidPayoff', data: {'number': i + 1}}, node);
-                console.log('invalidPayoff', e);
+                // console.log('invalidPayoff', e);
+                e.markAsInvalid('payoff');
             }
 
 
         });
         if (node instanceof model.ChanceNode) {
-            if (isNaN(probabilitySum) || !(probabilitySum.equals(1) || withHash && ExpressionEngine.compare(probabilitySum, 1) <= 0)) {
+            if (isNaN(probabilitySum) || !probabilitySum.equals(1)) {
                 validationResult.addError('probabilityDoNotSumUpTo1', node);
             }
         }

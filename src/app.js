@@ -171,7 +171,7 @@ export class App {
 
     initObjectiveRulesManager() {
         this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel, this.expressionEngine);
-        this.checkValidityAndRecomputeObjective();
+        this.checkValidityAndRecomputeObjective(false, false, false);
 
     }
 
@@ -303,7 +303,7 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.checkValidityAndRecomputeObjective();
+        this.checkValidityAndRecomputeObjective(false, false, false);
         self.updateView();
     }
 
@@ -313,7 +313,7 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.checkValidityAndRecomputeObjective();
+        this.checkValidityAndRecomputeObjective(false, false, false);
         self.updateView();
     }
 
@@ -332,31 +332,41 @@ export class App {
         this.updateView();
     }
 
-    onObjectUpdated(object) {
+    onObjectUpdated() {
+        var self = this;
         this.checkValidityAndRecomputeObjective();
-        this.treeDesigner.redraw(true);
+        // this.sidebar.updateObjectPropertiesView(this.selectedObject);
+        setTimeout(function () {
+            self.treeDesigner.redraw(true);
+        },1);
+
+
     }
 
     setObjectiveRule(ruleName) {
         this.treeDesigner.setRuleName(ruleName);
         this.objectiveRulesManager.setCurrentRuleByName(ruleName);
-        this.checkValidityAndRecomputeObjective();
+        this.checkValidityAndRecomputeObjective(false, false, false);
         this.updateView(true);
     }
 
     recompute(updateView = true) {
-        this.evalCodeExpressions();
-        this.checkValidityAndRecomputeObjective();
-        Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this)
+
+        this.checkValidityAndRecomputeObjective(false, true);
         if (updateView) {
             this.updateView();
         }
-
     }
 
-    checkValidityAndRecomputeObjective(allRules) {
+    checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
         this.validationResults = [];
-        this.objectiveRulesManager.evalNumericExpressions();
+        if(evalCode) {
+            this.evalCodeExpressions();
+        }
+        if(evalNumeric) {
+            this.objectiveRulesManager.evalNumericExpressions();
+        }
+
         this.dataModel.getRoots().forEach(root=> {
             var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
             this.validationResults.push(vr);
@@ -367,6 +377,7 @@ export class App {
             }
         });
         this.updateValidationMessages();
+        Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
     }
 
     /*Evaluates probability and payoff expressions*/
@@ -459,7 +470,7 @@ export class App {
 
     serialize(filterLocation, filterComputed) {
         var self = this;
-        self.checkValidityAndRecomputeObjective(true);
+        self.checkValidityAndRecomputeObjective(true, false, false);
 
         var obj = {
             SilverDecisions: App.version,

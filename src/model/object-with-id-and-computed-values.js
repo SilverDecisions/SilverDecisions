@@ -8,6 +8,7 @@ export class ObjectWithIdAndComputedValues {
 
     $id = Utils.guid(); //internal id
 
+    $fieldStatus={};
 
     /*get or set computed value*/
     computedValue(ruleName, fieldName, value){
@@ -35,5 +36,26 @@ export class ObjectWithIdAndComputedValues {
             return;
         }
         this.computed[ruleName]={};
+    }
+
+    getFieldStatus(fieldName){
+        if(!this.$fieldStatus[fieldName]){
+            this.$fieldStatus[fieldName] = {
+                valid: true
+            }
+        }
+        return this.$fieldStatus[fieldName];
+    }
+
+    markAsInvalid(fieldName){
+        this.getFieldStatus(fieldName).valid = false;
+    }
+
+    markAsValid(fieldName){
+        this.getFieldStatus(fieldName).valid = true;
+    }
+
+    isFieldValid(fieldName){
+        return this.getFieldStatus(fieldName).valid;
     }
 }

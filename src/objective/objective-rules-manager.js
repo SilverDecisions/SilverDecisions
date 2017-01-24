@@ -111,7 +111,7 @@ export class ObjectiveRulesManager{
 
     /*Evaluates probability and payoff expressions*/
     evalNumericExpressions(initScopes=false) {
-        // console.log("evalNumericExpressions");
+        console.log("evalNumericExpressions");
         this.data.getRoots().forEach(n=>{
             this.clearTree(n);
             this.evalNumericExpressionsForNode(n, initScopes);
@@ -120,6 +120,7 @@ export class ObjectiveRulesManager{
 
     /*Evaluates code expressions*/
     evalCodeExpressions() {
+        console.log("evalCodeExpressions");
         this.data.clearExpressionScope();
         this.data.$codeDirty = false;
         try{

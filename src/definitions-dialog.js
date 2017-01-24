@@ -47,6 +47,8 @@ export class DefinitionsDialog extends Dialog {
             return;
         }
         this.definitionsCode.node().value = this.definitionsSourceObject.code;
+        Utils.updateInputClass(this.definitionsCode);
+        Utils.autoResizeTextarea(this.definitionsCode.node());
         this.definitionsCode.classed('invalid', !!this.definitionsSourceObject.$codeError);
         if(this.definitionsSourceObject.$codeError){
             this.printError(this.definitionsSourceObject.$codeError);

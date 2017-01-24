@@ -15,6 +15,7 @@ export class ExpressionEngine{
     }
 
     eval(expr, asNumber=true, scope){
+        console.log('eval: '+expr);
         expr+="";
         expr = expr.trim();
         if(asNumber){
@@ -78,7 +79,7 @@ export class ExpressionEngine{
     }
 
 
-    validate(expr, scope){
+    validate(expr, scope, compileOnly=true){
         if(expr===null || expr===undefined){
             return false;
         }
@@ -88,6 +89,9 @@ export class ExpressionEngine{
             expr = expr.trim();
             var c = math.compile(expr);
 
+            if(compileOnly){
+                return true;
+            }
             if(!scope){
                 scope =this.parser.scope;
             }

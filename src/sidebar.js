@@ -3,17 +3,20 @@ import {i18n} from './i18n/i18n'
 
 import {Utils} from './utils'
 import * as model from './model/index'
-import {PayoffValidator} from './validation/payoff-validator'
-import {ProbabilityValidator} from './validation/probability-validator'
+import {PayoffInputValidator} from './validation/payoff-input-validator'
+import {ProbabilityInputValidator} from './validation/probability-input-validator'
 import {ExpressionEngine} from './expression-engine'
 import {Templates} from "./templates";
 import {Tooltip} from "./tooltip";
+import * as _ from "lodash";
 
 
 export class Sidebar {
 
     app;
     container;
+    dispatch = d3.dispatch("recomputed", "object-updated");
+
 
     constructor(container, app) {
         this.app = app;
@@ -22,6 +25,16 @@ export class Sidebar {
         this.initLayoutOptions();
         this.initDiagramDetails();
         this.initDefinitions();
+        var self = this;
+
+        document.addEventListener('SilverDecisionsRecomputedEvent', function (data) {
+            if (data.detail === app) {
+                self.dispatch.call("recomputed");
+            }
+        });
+
+        self.dispatch.on("object-updated", _.debounce(()=> self.app.onObjectUpdated(), 300));
+
     }
 
     initLayoutOptions() {
@@ -165,6 +178,7 @@ export class Sidebar {
     }
 
     updateObjectPropertiesView(object) {
+        this.dispatch.on(".recomputed", null); //remove all callbacks for recomputed event
         if (!object) {
             this.hideObjectProperties();
             return;
@@ -271,14 +285,14 @@ export class Sidebar {
                 {
                     name: 'payoff',
                     type: 'text',
-                    validator: new PayoffValidator(self.app.expressionEngine)
+                    validator: new PayoffInputValidator(self.app.expressionEngine)
                 }
             ];
             if (object.parentNode instanceof model.ChanceNode) {
                 list.push({
                     name: 'probability',
                     type: 'text',
-                    validator: new ProbabilityValidator(self.app.expressionEngine)
+                    validator: new ProbabilityInputValidator(self.app.expressionEngine)
                 })
             }
             return list;
@@ -331,9 +345,14 @@ export class Sidebar {
             .attr('name', d=>d.name)
             .attr('id', getFieldId)
             .on('change keyup', function (d, i) {
+                var prevValue = object[d.name];
                 var isValid = !d.validator || d.validator.validate(this.value, object, d.name);
                 // console.log(d.name, this.value, isValid);
                 d3.select(this).classed('invalid', !isValid);
+
+                if((prevValue+"")==this.value){
+                    return;
+                }
 
                 if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
                     object[d.name] = temp[i].pristineVal;
@@ -348,10 +367,8 @@ export class Sidebar {
                     d.customOnInput(object, this.value, temp[i].pristineVal)
                 } else {
                     object[d.name] = this.value;
-                    self.app.onObjectUpdated(object)
+                    self.dispatch.call("object-updated");
                 }
-
-
             })
             .each(function (d, i) {
                 this.value = object[d.name];
@@ -360,6 +377,16 @@ export class Sidebar {
                 if (d.validator && !d.validator.validate(this.value, object, d.name)) {
                     d3.select(this).classed('invalid', true);
                 }
+                var _this = this;
+                var checkFieldStatus = () => {
+                    if(!object.isFieldValid(d.name)){
+                        d3.select(_this).classed('invalid', true);
+                    }
+                };
+                checkFieldStatus();
+
+                self.dispatch.on("recomputed."+object.$id+"."+d.name, checkFieldStatus);
+
                 Utils.updateInputClass(d3.select(this));
                 if (d.type == 'textarea') {
                     Utils.elasticTextarea(d3.select(this));
