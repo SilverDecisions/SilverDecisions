@@ -494,7 +494,12 @@ export class App {
             }
 
             if (v !== null && v !== undefined && v.mathjs) {
-                return self.expressionEngine.serialize(v);
+                try{
+                    return self.expressionEngine.serialize(v);
+                }catch (e){
+                    return v;
+                }
+
             }
             return v;
         }, 2);

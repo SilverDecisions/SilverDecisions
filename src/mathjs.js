@@ -34,6 +34,7 @@ math.import(require('mathjs/lib/function'));
 
 // Expressions:
 math.import(require('mathjs/lib/expression'));
+math.import(require('mathjs/lib/json'));
 // math.import(require('mathjs/lib/utils/string'));
 
 module.exports = math;
