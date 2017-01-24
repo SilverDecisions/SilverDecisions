@@ -383,6 +383,10 @@ export class DataModel {
         this.undoStack.length = 0;
         this.redoStack.length = 0;
         this.texts.length = 0;
+        this.clearExpressionScope();
+        this.code = '';
+        this.$codeError = null;
+        this.$codeDirty = false;
     }
 
     addText(text) {

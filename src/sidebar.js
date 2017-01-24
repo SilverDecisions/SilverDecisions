@@ -33,7 +33,7 @@ export class Sidebar {
             }
         });
 
-        self.dispatch.on("object-updated", _.debounce(()=> self.app.onObjectUpdated(), 300));
+        self.dispatch.on("object-updated", _.debounce(()=> self.app.onObjectUpdated(), 350));
 
     }
 
