@@ -116,6 +116,8 @@ export class App {
             this.openDiagram(diagramData);
         }
 
+        this.updateView();
+
     }
 
     setConfig(config) {
@@ -190,7 +192,7 @@ export class App {
 
     initDefinitionsDialog() {
         this.definitionsDialog = new DefinitionsDialog(this);
-        this.definitionsDialog.onClosed = ()=> this.recompute();
+        this.definitionsDialog.onClosed = ()=> this.recompute(true, true);
 
     }
 
@@ -277,18 +279,18 @@ export class App {
         self.sidebar.updateDefinitions(definitionsSourceObject, readOnly, (code)=> {
             self.dataModel.saveState();
             definitionsSourceObject.code = code;
-            self.recompute()
+            self.recompute(true, true)
         });
 
     }
 
     openDefinitionsDialog() {
-        // this.recompute();
+        // this.recompute(true, true);
         var definitionsSourceObject = this.getCurrentVariableDefinitionsSourceObject();
         this.definitionsDialog.open(definitionsSourceObject, (code)=> {
             this.dataModel.saveState();
             definitionsSourceObject.code = code;
-            this.recompute();
+            this.recompute(true, true);
         });
     }
 
@@ -355,7 +357,16 @@ export class App {
         this.updateView(true);
     }
 
-    recompute(updateView = true) {
+
+
+    recompute(updateView = true, debounce = false) {
+        if(debounce){
+            if(!this.debouncedRecompute){
+                this.debouncedRecompute = _.debounce((updateView)=>this.recompute(updateView, false), 100);
+            }
+            this.debouncedRecompute(updateView);
+            return;
+        }
 
         this.checkValidityAndRecomputeObjective(false, true);
         if (updateView) {

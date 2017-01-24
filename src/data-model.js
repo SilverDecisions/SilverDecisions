@@ -323,7 +323,6 @@ export class DataModel {
 
 
     saveStateFromSnapshot(state){
-        console.log('saveStateFromSnapshot');
         this.redoStack.length = 0;
 
         this._pushToStack(this.undoStack, state);

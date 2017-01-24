@@ -111,7 +111,7 @@ export class ObjectiveRulesManager{
 
 
     evalExpressions(evalCode=true, evalNumeric=true, initScopes=false){
-
+        console.log('evalExpressions evalCode:'+evalCode+' evalNumeric:'+evalNumeric);
         if(evalCode){
             this.data.clearExpressionScope();
             this.data.$codeDirty = false;
@@ -136,7 +136,6 @@ export class ObjectiveRulesManager{
             this.initScopeForNode(node);
         }
         if(evalCode){
-            console.log('evalCode');
             node.$codeDirty = false;
             if(node.code){
                 try{
@@ -181,8 +180,6 @@ export class ObjectiveRulesManager{
                         invalidProb = true;
                     }
                 }
-
-                this.evalExpressionsForNode(e.childNode, evalCode, evalNumeric, initScope);
 
             });
 
