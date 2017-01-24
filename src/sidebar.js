@@ -350,16 +350,16 @@ export class Sidebar {
                 // console.log(d.name, this.value, isValid);
                 d3.select(this).classed('invalid', !isValid);
 
-                if((prevValue+"")==this.value){
-                    return;
-                }
-
                 if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
-                    object[d.name] = temp[i].pristineVal;
-                    self.app.dataModel.saveState();
+                    // object[d.name] = temp[i].pristineVal;
+                    self.app.dataModel.saveStateFromSnapshot(temp[i].pristineStateSnapshot);
                     if (d.onChange) {
                         d.onChange(object, this.value, temp[i].pristineVal);
                     }
+                }
+
+                if((prevValue+"")==this.value){
+                    return;
                 }
 
                 Utils.updateInputClass(d3.select(this));
@@ -370,10 +370,13 @@ export class Sidebar {
                     self.dispatch.call("object-updated");
                 }
             })
+            .on('focus', function(d,i){
+                temp[i].pristineVal = this.value;
+                temp[i].pristineStateSnapshot = self.app.dataModel.createStateSnapshot();
+            })
             .each(function (d, i) {
                 this.value = object[d.name];
                 temp[i] = {};
-                temp[i].pristineVal = this.value;
                 if (d.validator && !d.validator.validate(this.value, object, d.name)) {
                     d3.select(this).classed('invalid', true);
                 }

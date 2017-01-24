@@ -309,11 +309,8 @@ export class DataModel {
         return !!this.redoStack.length
     }
 
-
-    saveState(revertConf) {
-        this.redoStack.length = 0;
-
-        this._pushToStack(this.undoStack, {
+    createStateSnapshot(revertConf){
+        return {
             revertConf: revertConf,
             nodes: _.cloneDeep(this.nodes),
             edges: _.cloneDeep(this.edges),
@@ -321,10 +318,23 @@ export class DataModel {
             expressionScope: _.cloneDeep(this.expressionScope),
             code: this.code,
             $codeError: this.$codeError
-        });
+        }
+    }
+
+
+    saveStateFromSnapshot(state){
+        console.log('saveStateFromSnapshot');
+        this.redoStack.length = 0;
+
+        this._pushToStack(this.undoStack, state);
 
         this._fireUndoRedoCallback();
 
+        return this;
+    }
+
+    saveState(revertConf) {
+        this.saveStateFromSnapshot(this.createStateSnapshot(revertConf));
         return this;
     }
 
