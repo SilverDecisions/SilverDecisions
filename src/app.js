@@ -365,12 +365,11 @@ export class App {
 
     checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
         this.validationResults = [];
-        if(evalCode) {
-            this.evalCodeExpressions();
+
+        if(evalCode||evalNumeric){
+            this.objectiveRulesManager.evalExpressions(evalCode, evalNumeric);
         }
-        if(evalNumeric) {
-            this.objectiveRulesManager.evalNumericExpressions();
-        }
+
 
         this.dataModel.getRoots().forEach(root=> {
             var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
@@ -383,20 +382,6 @@ export class App {
         });
         this.updateValidationMessages();
         Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
-    }
-
-    /*Evaluates probability and payoff expressions*/
-    evalNumericExpressions() {
-        this.objectiveRulesManager.evalNumericExpressions();
-    }
-
-    evalCodeExpressions() {
-        this.objectiveRulesManager.evalCodeExpressions();
-    }
-
-    evalAllExpressions() {
-        this.objectiveRulesManager.evalCodeExpressions();
-        this.objectiveRulesManager.evalNumericExpressions();
     }
 
     updateValidationMessages() {
