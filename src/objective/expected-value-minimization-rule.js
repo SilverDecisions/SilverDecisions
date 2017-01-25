@@ -16,14 +16,14 @@ export class ExpectedValueMinimizationRule extends ObjectiveRule{
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
-                var bestchild = Infinity;
+                var worstchild = Infinity;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                    bestchild = Math.min(bestchild, childPayoff);
+                    worstchild = Math.min(worstchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') > bestchild ? 0.0 : 1.0);
+                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') > worstchild ? 0.0 : 1.0);
                 });
             }else{
                 node.childEdges.forEach(e=>{
