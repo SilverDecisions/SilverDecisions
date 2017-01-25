@@ -362,7 +362,7 @@ export class App {
     recompute(updateView = true, debounce = false) {
         if(debounce){
             if(!this.debouncedRecompute){
-                this.debouncedRecompute = _.debounce((updateView)=>this.recompute(updateView, false), 100);
+                this.debouncedRecompute = _.debounce((updateView)=>this.recompute(updateView, false), 200);
             }
             this.debouncedRecompute(updateView);
             return;

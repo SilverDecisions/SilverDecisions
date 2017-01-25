@@ -4,8 +4,12 @@ import {i18n} from './i18n/i18n'
 import {Utils} from './utils'
 
 export class Tooltip {
+    static getContainer(){
+        return d3.select("body").selectOrAppend('div.sd-tooltip');
+    }
+
     static show(html, xOffset = 5, yOffset = 28) {
-        var container = d3.select("body").selectOrAppend('div.sd-tooltip')
+        var container = Tooltip.getContainer()
             .style("opacity", 0);
         container.transition()
             .duration(200)
@@ -15,15 +19,17 @@ export class Tooltip {
     }
 
     static updatePosition(xOffset = 5, yOffset = 28) {
-        d3.select("body").selectOrAppend('div.sd-tooltip')
+        Tooltip.getContainer()
             .style("left", (d3.event.pageX + xOffset) + "px")
             .style("top", (d3.event.pageY - yOffset) + "px");
     }
 
-    static hide() {
-        d3.select('div.sd-tooltip').transition()
-            .duration(500)
-            .style("opacity", 0);
+    static hide(duration = 500) {
+        var t = Tooltip.getContainer();
+        if(duration){
+            t = t.transition().duration(duration)
+        }
+        t.style("opacity", 0);
     }
 
     static attach(target, htmlOrFn, xOffset, yOffset) {
@@ -34,8 +40,11 @@ export class Tooltip {
             } else {
                 html = htmlOrFn;
             }
-            if (html !== null && html !== undefined) {
+
+            if (html !== null && html !== undefined && html !== '') {
                 Tooltip.show(html, xOffset, yOffset);
+            }else{
+                Tooltip.hide(0);
             }
 
         }).on('mousemove', function (d) {
