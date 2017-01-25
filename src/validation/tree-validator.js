@@ -11,8 +11,8 @@ export class TreeValidator {
 
     constructor(expressionEngine) {
         this.expressionEngine = expressionEngine;
-        this.probabilityValidator = new ProbabilityValueValidator(expressionEngine);
-        this.payoffValidator = new PayoffValueValidator(expressionEngine);
+        this.probabilityValueValidator = new ProbabilityValueValidator(expressionEngine);
+        this.payoffValueValidator = new PayoffValueValidator(expressionEngine);
     }
 
     validate(nodes) {
@@ -38,16 +38,16 @@ export class TreeValidator {
         var probabilitySum = ExpressionEngine.toNumber(0);
         var withHash = false;
         node.childEdges.forEach((e, i)=> {
-            e.markAsValid('probability');
-            e.markAsValid('payoff');
+            e.setValueValidity('probability', true);
+            e.setValueValidity('payoff', true);
 
             if (node instanceof model.ChanceNode) {
                 var probability = e.computedBaseProbability();
-                if (!this.probabilityValidator.validate(probability)) {
+                if (!this.probabilityValueValidator.validate(probability)) {
                     if(!ExpressionEngine.isHash(e.probability)){
                         validationResult.addError({name: 'invalidProbability', data: {'number': i + 1}}, node);
                         // console.log('invalidProbability', e);
-                        e.markAsInvalid('probability');
+                        e.setValueValidity('probability', false);
                     }
 
                 } else {
@@ -55,10 +55,10 @@ export class TreeValidator {
                 }
             }
             var payoff = e.computedBasePayoff();
-            if (!this.payoffValidator.validate(payoff)) {
+            if (!this.payoffValueValidator.validate(payoff)) {
                 validationResult.addError({name: 'invalidPayoff', data: {'number': i + 1}}, node);
                 // console.log('invalidPayoff', e);
-                e.markAsInvalid('payoff');
+                e.setValueValidity('payoff', false);
             }
 
 

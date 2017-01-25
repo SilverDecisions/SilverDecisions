@@ -348,6 +348,8 @@ export class Sidebar {
                 var prevValue = object[d.name];
                 var isValid = !d.validator || d.validator.validate(this.value, object, d.name);
                 // console.log(d.name, this.value, isValid);
+                object.setSyntaxValidity(d.name, isValid);
+
                 d3.select(this).classed('invalid', !isValid);
 
                 if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
@@ -379,7 +381,11 @@ export class Sidebar {
                 temp[i] = {};
                 if (d.validator && !d.validator.validate(this.value, object, d.name)) {
                     d3.select(this).classed('invalid', true);
+                    object.setSyntaxValidity(d.name, false);
+                }else{
+                    object.setSyntaxValidity(d.name, true);
                 }
+
                 var _this = this;
                 var checkFieldStatus = () => {
                     if(!object.isFieldValid(d.name)){

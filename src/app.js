@@ -462,7 +462,7 @@ export class App {
             this.setConfig(this.config);
             this.updateNumberFormats();
         }
-
+        this.objectiveRulesManager.evalExpressions(false, true, false);
         this.setObjectiveRule(this.config.rule);
         // this.checkValidityAndRecomputeObjective();
         // this.updateView();

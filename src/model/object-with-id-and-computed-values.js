@@ -41,21 +41,33 @@ export class ObjectWithIdAndComputedValues {
     getFieldStatus(fieldName){
         if(!this.$fieldStatus[fieldName]){
             this.$fieldStatus[fieldName] = {
-                valid: true
+                valid: {
+                    syntax: true,
+                    value: true
+                }
             }
         }
         return this.$fieldStatus[fieldName];
     }
 
-    markAsInvalid(fieldName){
-        this.getFieldStatus(fieldName).valid = false;
+    setSyntaxValidity(fieldName, valid){
+        var fieldStatus = this.getFieldStatus(fieldName);
+        fieldStatus.valid.syntax = valid;
     }
 
-    markAsValid(fieldName){
-        this.getFieldStatus(fieldName).valid = true;
+    setValueValidity(fieldName, valid){
+        var fieldStatus = this.getFieldStatus(fieldName);
+        fieldStatus.valid.value = valid;
     }
 
-    isFieldValid(fieldName){
-        return this.getFieldStatus(fieldName).valid;
+    isFieldValid(fieldName, syntax=true, value=true){
+        var fieldStatus = this.getFieldStatus(fieldName);
+        if(syntax && value) {
+            return fieldStatus.valid.syntax && fieldStatus.valid.value;
+        }
+        if(syntax) {
+            return fieldStatus.valid.syntax
+        }
+        return fieldStatus.valid.value;
     }
 }

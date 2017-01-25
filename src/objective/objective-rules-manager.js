@@ -164,10 +164,12 @@ export class ObjectiveRulesManager{
             var invalidProb = false;
 
             node.childEdges.forEach(e=>{
-                try{
-                    e.computedValue(null, 'payoff', this.expressionEngine.evalPayoff(e))
-                }catch (e){
-
+                if(e.isFieldValid('payoff', true, false)){
+                    try{
+                        e.computedValue(null, 'payoff', this.expressionEngine.evalPayoff(e))
+                    }catch (err){
+                        // console.log('evalExpressionsForNode invalid payoff: ', err)
+                    }
                 }
 
                 if(node instanceof model.ChanceNode){
@@ -181,11 +183,16 @@ export class ObjectiveRulesManager{
                         return null;
                     }
 
-                    try{
-                        var prob = this.expressionEngine.eval(e.probability, true, scope);
-                        e.computedValue(null, 'probability', prob);
-                        probabilitySum = ExpressionEngine.add(probabilitySum, prob);
-                    }catch (e){
+                    if(e.isFieldValid('probability', true, false)){
+                        try{
+                            var prob = this.expressionEngine.eval(e.probability, true, scope);
+                            e.computedValue(null, 'probability', prob);
+                            probabilitySum = ExpressionEngine.add(probabilitySum, prob);
+                        }catch (err){
+                            invalidProb = true;
+                            // console.log('evalExpressionsForNode invalid probability: ', err)
+                        }
+                    }else{
                         invalidProb = true;
                     }
                 }
