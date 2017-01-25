@@ -22,7 +22,7 @@ export class ObjectiveRulesManager{
         var max = new ExpectedValueMaximizationRule(expressionEngine);
         var maxiMin = new MaxiMinRule(expressionEngine);
         var maxiMax = new MaxiMaxRule(expressionEngine);
-        var min = new ExpectedValueMaximizationRule(expressionEngine);
+        var min = new ExpectedValueMinimizationRule(expressionEngine);
         var miniMin = new MiniMinRule(expressionEngine);
         var miniMax = new MiniMaxRule(expressionEngine);
         this.ruleByName[max.name]=max;

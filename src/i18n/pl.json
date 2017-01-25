@@ -22,8 +22,8 @@
         "expected-value-minimization":"minimum",
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max",
-        "maxi-min":"mini-min",
-        "maxi-max":"mini-max"
+        "mini-min":"mini-min",
+        "mini-max":"mini-max"
       }
     },
     "undo": "Cofnij",
