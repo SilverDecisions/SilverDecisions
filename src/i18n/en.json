@@ -18,7 +18,7 @@
     "objectiveRule":{
       "label": "Rule",
       "options": {
-        "expected-value-maximization":"classic",
+        "expected-value-maximization":"max",
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max"
       }
