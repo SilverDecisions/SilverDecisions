@@ -3,13 +3,13 @@ import * as model from '../model/index'
 import {ObjectiveRule} from './objective-rule'
 import * as _ from "lodash";
 
-/*maxi-max rule*/
-export class MaxiMaxRule extends ObjectiveRule {
+/*mini-max rule*/
+export class MiniMaxRule extends ObjectiveRule {
 
-    static NAME = 'maxi-max';
+    static NAME = 'mini-max';
 
     constructor(expressionEngine) {
-        super(MaxiMaxRule.NAME, expressionEngine);
+        super(MiniMaxRule.NAME, expressionEngine);
     }
 
     // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
@@ -17,14 +17,14 @@ export class MaxiMaxRule extends ObjectiveRule {
         var childrenPayoff = 0;
         if (node.childEdges.length) {
 
-            var bestchild = -Infinity;
+            var bestchild = Infinity;
             node.childEdges.forEach(e=> {
                 var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                bestchild = Math.max(bestchild, childPayoff);
+                bestchild = Math.min(bestchild, childPayoff);
             });
             node.childEdges.forEach(e=> {
                 this.clearComputedValues(e);
-                this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') < bestchild ? 0.0 : 1.0);
+                this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') > bestchild ? 0.0 : 1.0);
             });
 
 

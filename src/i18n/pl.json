@@ -19,8 +19,11 @@
       "label": "Reguła",
       "options": {
         "expected-value-maximization":"maksimum",
+        "expected-value-minimization":"minimum",
         "maxi-min":"maxi-min",
-        "maxi-max":"maxi-max"
+        "maxi-max":"maxi-max",
+        "maxi-min":"mini-min",
+        "maxi-max":"mini-max"
       }
     },
     "undo": "Cofnij",

@@ -1,8 +1,11 @@
 import {ExpectedValueMaximizationRule} from './expected-value-maximization-rule'
 import {MaxiMinRule} from "./maxi-min-rule";
+import {MaxiMaxRule} from "./maxi-max-rule";
+import {ExpectedValueMinimizationRule} from './expected-value-minimization-rule'
+import {MiniMinRule} from "./mini-min-rule";
+import {MiniMaxRule} from "./mini-max-rule";
 import * as model from '../model/index'
 import * as _ from "lodash";
-import {MaxiMaxRule} from "./maxi-max-rule";
 import {ExpressionEngine} from "../expression-engine";
 
 
@@ -19,10 +22,16 @@ export class ObjectiveRulesManager{
         var max = new ExpectedValueMaximizationRule(expressionEngine);
         var maxiMin = new MaxiMinRule(expressionEngine);
         var maxiMax = new MaxiMaxRule(expressionEngine);
+        var min = new ExpectedValueMaximizationRule(expressionEngine);
+        var miniMin = new MiniMinRule(expressionEngine);
+        var miniMax = new MiniMaxRule(expressionEngine);
         this.ruleByName[max.name]=max;
         this.ruleByName[maxiMin.name]=maxiMin;
         this.ruleByName[maxiMax.name]=maxiMax;
-        this.rules = [max, maxiMin, maxiMax];
+        this.ruleByName[min.name]=min;
+        this.ruleByName[miniMin.name]=miniMin;
+        this.ruleByName[miniMax.name]=miniMax;
+        this.rules = [max, min, maxiMin, maxiMax, miniMin, miniMax];
         this.currentRule = this.ruleByName[currentRuleName];
     }
 

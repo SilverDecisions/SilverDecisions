@@ -19,8 +19,11 @@
       "label": "Rule",
       "options": {
         "expected-value-maximization":"max",
+        "expected-value-minimization":"min",
         "maxi-min":"maxi-min",
-        "maxi-max":"maxi-max"
+        "maxi-max":"maxi-max",
+        "maxi-min":"mini-min",
+        "maxi-max":"mini-max"
       }
     },
     "undo": "Undo",
