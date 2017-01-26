@@ -1,14 +1,14 @@
 import {Point} from "./point";
 import {Utils} from "../utils";
+import {ObjectWithIdAndEditableFields} from "./object-with-id-and-editable-fields";
 
-export class Text{
+export class Text extends ObjectWithIdAndEditableFields{
 
     value='';
     location; //Point
-    $id = Utils.guid(); //internal id
 
     constructor(location, value){
-
+        super();
         this.location=location;
         if(!location){
             this.location = new Point(0,0);

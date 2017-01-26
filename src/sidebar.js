@@ -33,7 +33,7 @@ export class Sidebar {
             }
         });
 
-        self.dispatch.on("object-updated", _.debounce(()=> self.app.onObjectUpdated(), 350));
+        self.dispatch.on("object-updated", _.debounce((object, fieldName)=> self.app.onObjectUpdated(object, fieldName), 350));
 
     }
 
@@ -369,7 +369,7 @@ export class Sidebar {
                     d.customOnInput(object, this.value, temp[i].pristineVal)
                 } else {
                     object[d.name] = this.value;
-                    self.dispatch.call("object-updated");
+                    self.dispatch.call("object-updated", self, object, d.name);
                 }
             })
             .on('focus', function(d,i){

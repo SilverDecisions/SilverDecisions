@@ -264,10 +264,12 @@ export class App {
 
     getCurrentVariableDefinitionsSourceObject() {
         if (this.selectedObject) {
+            if (this.selectedObject instanceof model.Node) {
+                return this.selectedObject;
+            }
             if (this.selectedObject instanceof model.Edge) {
                 return this.selectedObject.parentNode;
             }
-            return this.selectedObject;
         }
         return this.dataModel;
     }
@@ -339,15 +341,16 @@ export class App {
         this.updateView();
     }
 
-    onObjectUpdated() {
+    onObjectUpdated(object, fieldName) {
+
         var self = this;
-        this.checkValidityAndRecomputeObjective();
+        if(!(object instanceof model.Text) && fieldName!=='name'){
+            this.checkValidityAndRecomputeObjective();
+        }
         // this.sidebar.updateObjectPropertiesView(this.selectedObject);
         setTimeout(function () {
             self.treeDesigner.redraw(true);
         },1);
-
-
     }
 
     setObjectiveRule(ruleName) {

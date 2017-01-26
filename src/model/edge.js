@@ -1,6 +1,6 @@
-import {ObjectWithIdAndComputedValues} from './object-with-id-and-computed-values'
+import {ObjectWithComputedValues} from './object-with-computed-values'
 
-export class Edge extends ObjectWithIdAndComputedValues{
+export class Edge extends ObjectWithComputedValues{
     parentNode;
     childNode;
 

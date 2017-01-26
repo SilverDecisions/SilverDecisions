@@ -1,7 +1,7 @@
 import {Point} from '../point'
-import {ObjectWithIdAndComputedValues} from '../object-with-id-and-computed-values'
+import {ObjectWithComputedValues} from '../object-with-computed-values'
 
-export class Node extends ObjectWithIdAndComputedValues{
+export class Node extends ObjectWithComputedValues{
 
     type;
     childEdges=[];
