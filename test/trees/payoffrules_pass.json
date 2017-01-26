@@ -1,8 +1,8 @@
 {
   "SilverDecisions": "0.5.2",
-  "savetime": "2017-01-25T15:28:16.582Z",
+  "savetime": "2017-01-26T13:46:07.020Z",
   "lng": "en",
-  "rule": "mini-max",
+  "rule": "expected-value-maximization",
   "title": "",
   "description": "",
   "format": {
@@ -3601,7 +3601,15 @@
       "type": "decision"
     }
   ],
-  "texts": [],
+  "texts": [
+    {
+      "value": "Name of the optimization rule\nshould be the same as branch name\nthat is indicated as optimal",
+      "location": {
+        "x": 413.33331298828125,
+        "y": 46
+      }
+    }
+  ],
   "expressionScope": {},
   "code": ""
 }
