@@ -1,4 +1,5 @@
 import json
+import sys
 import glob
 
 def list_differences(a, b, path=""):
@@ -14,6 +15,11 @@ def list_differences(a, b, path=""):
                 if isinstance(val_a, dict):
                     if not list_differences(val_a, val_b, path + "/" + key):
                         allok = False
+                else:
+                    if strict:
+                        if val_a == val_b:
+                            print("\tmissing translation: " + path + "/" + key)
+                            allok = False
         else:
             print("\tmissing key: " + path + "/" + key)
             allok = False
@@ -25,6 +31,11 @@ def list_differences(a, b, path=""):
 
     return allok
 
+strict = False
+if len(sys.argv) > 1:
+    if sys.argv[1] == "-s":
+        strict = True
+        print("Strict checking of translations mode\n")
 
 with open("en.json") as data_file:  
     ref = json.load(data_file)

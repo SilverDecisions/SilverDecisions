@@ -241,7 +241,7 @@
       "openDialog" : "Otwórz okno dialogowe",
       "recalculate": "Przelicz"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Wartości zmiennych"
   },
   "layoutOptions":{
     "header": "Układ",
