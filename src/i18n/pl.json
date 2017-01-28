@@ -30,7 +30,7 @@
     "redo": "Ponów",
     "settings": "Ustawienia",
     "about": "Informacje",
-    "definitions": "Definicje zmiennych"
+    "recompute": "Przelicz"
   },
   "node":{
     "name": "Etykieta"
@@ -227,6 +227,22 @@
     },
     "docs": "Dokumentacja SilverDecisions jest dostępna <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">tutaj</a>"
   },
+  "definitionsDialog":{
+    "title": "Definicje zmiennych",
+    "buttons":{
+      "recalculate": "Przelicz"
+    },
+    "evaluatedVariables": "Wartości zmiennych"
+  },
+  "sidebarDefinitions":{
+    "header": "Zmienne",
+    "code": "Kod",
+    "buttons":{
+      "openDialog" : "Otwórz okno dialogowe",
+      "recalculate": "Przelicz"
+    },
+    "evaluatedVariables": "Evaluated variables"
+  },
   "layoutOptions":{
     "header": "Układ",
     "marginHorizontal": "Margines w poziomie",
@@ -262,7 +278,9 @@
   },
   "validation":{
     "incompletePath": "Ostatnim węzłem w ścieżce powinien być Węzeł Końcowy",
-    "probabilityDoNotSumUpTo1": "Prawdopodobieństwa nie sumują sie do 1"
+    "probabilityDoNotSumUpTo1": "Prawdopodobieństwa nie sumują sie do 1",
+    "invalidProbability": "Niepoprawne prawdopodobieństwo na krawędzi #{{number}}",
+    "invalidPayoff": "Niepoprawna wypłata na krawędzi #{{number}}"
   },
   "growl":{
     "brushDisabled": "Zaznaczanie wyłączone",
