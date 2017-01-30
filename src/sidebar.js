@@ -350,7 +350,7 @@ export class Sidebar {
                 // console.log(d.name, this.value, isValid);
                 object.setSyntaxValidity(d.name, isValid);
 
-                d3.select(this).classed('invalid', !isValid);
+                d3.select(this).classed('invalid', !object.isFieldValid(d.name));
 
                 if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
                     // object[d.name] = temp[i].pristineVal;
@@ -388,9 +388,7 @@ export class Sidebar {
 
                 var _this = this;
                 var checkFieldStatus = () => {
-                    if(!object.isFieldValid(d.name)){
-                        d3.select(_this).classed('invalid', true);
-                    }
+                    d3.select(_this).classed('invalid', !object.isFieldValid(d.name));
                 };
                 checkFieldStatus();
 
