@@ -1,15 +1,14 @@
-import {Utils} from '../utils'
-import * as model from '../model/index'
+import * as model from '../../model/index'
 import {ObjectiveRule} from './objective-rule'
 import * as _ from "lodash";
 
-/*maxi-max rule*/
-export class MaxiMaxRule extends ObjectiveRule{
+/*mini-min rule*/
+export class MiniMinRule extends ObjectiveRule{
 
-    static NAME = 'maxi-max';
+    static NAME = 'mini-min';
 
     constructor(expressionEngine){
-        super(MaxiMaxRule.NAME, expressionEngine);
+        super(MiniMinRule.NAME, expressionEngine);
     }
 
     // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
@@ -17,31 +16,31 @@ export class MaxiMaxRule extends ObjectiveRule{
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
-                var bestchild = -Infinity;
+                var worstchild = Infinity;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                    bestchild = Math.max(bestchild, childPayoff);
+                    worstchild = Math.min(worstchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') < bestchild ? 0.0 : 1.0);
+                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') > worstchild ? 0.0 : 1.0);
                 });
             }else{
-                var bestchild = -Infinity;
-                var bestCount = 1;
+                var worstchild = Infinity;
+                var worstCount = 1;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                    if(childPayoff > bestchild){
-                        bestchild = childPayoff;
-                        bestCount=1;
-                    }else if(childPayoff.equals(bestchild)){
-                        bestCount++
+                    if(childPayoff < worstchild){
+                        worstchild = childPayoff;
+                        worstCount=1;
+                    }else if(childPayoff.equals(worstchild)){
+                        worstCount++
                     }
                 });
 
                 node.childEdges.forEach(e=>{
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff')<bestchild ? 0.0 : (1.0/bestCount));
+                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff')>worstchild ? 0.0 : (1.0/worstCount));
                 });
             }
 
@@ -80,7 +79,7 @@ export class MaxiMaxRule extends ObjectiveRule{
 
         var optimalEdge = null;
         if (node instanceof model.ChanceNode) {
-            optimalEdge = _.maxBy(node.childEdges, e=>this.cValue(e.childNode, 'payoff'));
+            optimalEdge = _.minBy(node.childEdges, e=>this.cValue(e.childNode, 'payoff'));
         }
 
         node.childEdges.forEach(e=> {

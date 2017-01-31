@@ -1,6 +1,6 @@
-import *  as _ from 'lodash'
-import {ExpressionEngine} from '../expression-engine'
+import {ExpressionEngine} from '../../expression-engine'
 
+/*Base class for objective rules*/
 export class ObjectiveRule{
     name;
     expressionEngine;

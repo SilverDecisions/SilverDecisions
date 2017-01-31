@@ -14,7 +14,7 @@ import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
 import {ExpressionEngine} from './expression-engine'
 import {SettingsDialog} from './settings-dialog'
-import {ExpectedValueMaximizationRule} from './objective/expected-value-maximization-rule'
+import {ExpectedValueMaximizationRule} from './objective/rules/expected-value-maximization-rule'
 import {AboutDialog} from "./about-dialog";
 import * as _ from "lodash";
 import {Exporter} from "./exporter";
@@ -287,7 +287,6 @@ export class App {
     }
 
     openDefinitionsDialog() {
-        // this.recompute(true, true);
         var definitionsSourceObject = this.getCurrentVariableDefinitionsSourceObject();
         this.definitionsDialog.open(definitionsSourceObject, (code)=> {
             this.dataModel.saveState();
@@ -465,11 +464,8 @@ export class App {
             this.setConfig(this.config);
             this.updateNumberFormats();
         }
-        this.objectiveRulesManager.evalExpressions(false, true, false);
-        this.setObjectiveRule(this.config.rule);
-        // this.checkValidityAndRecomputeObjective();
-        // this.updateView();
 
+        this.setObjectiveRule(this.config.rule);
     }
 
     serialize(filterLocation, filterComputed) {

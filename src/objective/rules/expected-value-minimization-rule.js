@@ -1,5 +1,4 @@
-import {Utils} from '../utils'
-import * as model from '../model/index'
+import * as model from '../../model/index'
 import {ObjectiveRule} from './objective-rule'
 
 /*expected value minimization rule*/

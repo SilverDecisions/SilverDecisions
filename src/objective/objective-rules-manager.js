@@ -1,12 +1,12 @@
-import {ExpectedValueMaximizationRule} from './expected-value-maximization-rule'
-import {MaxiMinRule} from "./maxi-min-rule";
-import {MaxiMaxRule} from "./maxi-max-rule";
-import {ExpectedValueMinimizationRule} from './expected-value-minimization-rule'
-import {MiniMinRule} from "./mini-min-rule";
-import {MiniMaxRule} from "./mini-max-rule";
+import {ExpectedValueMaximizationRule} from './rules/expected-value-maximization-rule'
+import {MaxiMinRule} from "./rules/maxi-min-rule";
+import {MaxiMaxRule} from "./rules/maxi-max-rule";
+import {ExpectedValueMinimizationRule} from './rules/expected-value-minimization-rule'
+import {MiniMinRule} from "./rules/mini-min-rule";
+import {MiniMaxRule} from "./rules/mini-max-rule";
 import * as model from '../model/index'
-import * as _ from "lodash";
 import {ExpressionEngine} from "../expression-engine";
+import * as _ from "lodash";
 
 
 export class ObjectiveRulesManager{
@@ -129,7 +129,6 @@ export class ObjectiveRulesManager{
                 this.expressionEngine.eval(this.data.code, false, this.data.expressionScope);
             }catch (e){
                 this.data.$codeError = e;
-                // console.log(e);
             }
         }
 
@@ -168,7 +167,7 @@ export class ObjectiveRulesManager{
                     try{
                         e.computedValue(null, 'payoff', this.expressionEngine.evalPayoff(e))
                     }catch (err){
-                        // console.log('evalExpressionsForNode invalid payoff: ', err)
+                        //   Left empty intentionally
                     }
                 }
 
@@ -179,7 +178,7 @@ export class ObjectiveRulesManager{
                     }
 
                     if(ExpressionEngine.hasAssignmentExpression(e.probability)){ //It should not occur here!
-                        console.log("hasAssignmentExpression!!!!");
+                        console.log("evalExpressionsForNode hasAssignmentExpression!", e);
                         return null;
                     }
 
@@ -190,7 +189,6 @@ export class ObjectiveRulesManager{
                             probabilitySum = ExpressionEngine.add(probabilitySum, prob);
                         }catch (err){
                             invalidProb = true;
-                            // console.log('evalExpressionsForNode invalid probability: ', err)
                         }
                     }else{
                         invalidProb = true;
@@ -205,7 +203,6 @@ export class ObjectiveRulesManager{
 
                 if(computeHash) {
                     var hash = ExpressionEngine.divide(ExpressionEngine.subtract(1, probabilitySum), hashEdges.length);
-                    // console.log(probabilitySum.toString(), hash.toString());
                     hashEdges.forEach(e=> {
                         e.computedValue(null, 'probability', hash);
                     });

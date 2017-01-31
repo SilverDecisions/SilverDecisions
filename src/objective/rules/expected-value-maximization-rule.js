@@ -1,15 +1,13 @@
-import {Utils} from '../utils'
-import * as model from '../model/index'
+import * as model from '../../model/index'
 import {ObjectiveRule} from './objective-rule'
-import * as _ from "lodash";
 
-/*mini-min rule*/
-export class MiniMinRule extends ObjectiveRule{
+/*expected value maximization rule*/
+export class ExpectedValueMaximizationRule extends ObjectiveRule{
 
-    static NAME = 'mini-min';
+    static NAME = 'expected-value-maximization';
 
     constructor(expressionEngine){
-        super(MiniMinRule.NAME, expressionEngine);
+        super(ExpectedValueMaximizationRule.NAME, expressionEngine);
     }
 
     // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
@@ -17,31 +15,20 @@ export class MiniMinRule extends ObjectiveRule{
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
-                var worstchild = Infinity;
+                var bestchild = -Infinity;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                    worstchild = Math.min(worstchild, childPayoff);
+                    bestchild = Math.max(bestchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') > worstchild ? 0.0 : 1.0);
+                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') < bestchild ? 0.0 : 1.0);
                 });
             }else{
-                var worstchild = Infinity;
-                var worstCount = 1;
                 node.childEdges.forEach(e=>{
-                    var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                    if(childPayoff < worstchild){
-                        worstchild = childPayoff;
-                        worstCount=1;
-                    }else if(childPayoff.equals(worstchild)){
-                        worstCount++
-                    }
-                });
-
-                node.childEdges.forEach(e=>{
+                    this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff')>worstchild ? 0.0 : (1.0/worstCount));
+                    this.cValue(e, 'probability', this.baseProbability(e));
                 });
             }
 
@@ -72,27 +59,17 @@ export class MiniMinRule extends ObjectiveRule{
     }
 
     //  payoff - parent edge payoff
-    computeOptimal(node, payoff = 0, probabilityToEnter = 1) {
+    computeOptimal(node, payoff=0, probabilityToEnter=1){
         this.cValue(node, 'optimal', true);
-        if (node instanceof model.TerminalNode) {
+        if(node instanceof model.TerminalNode){
             this.cValue(node, 'probabilityToEnter', probabilityToEnter);
         }
 
-        var optimalEdge = null;
-        if (node instanceof model.ChanceNode) {
-            optimalEdge = _.minBy(node.childEdges, e=>this.cValue(e.childNode, 'payoff'));
-        }
-
-        node.childEdges.forEach(e=> {
-            var isOptimal = false;
-            if (optimalEdge) {
-                isOptimal = this.cValue(optimalEdge.childNode, 'payoff').equals(this.cValue(e.childNode, 'payoff'));
-            } else isOptimal = !!(this.subtract(this.cValue(node, 'payoff'), payoff).equals(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode));
-
-            if (isOptimal) {
+        node.childEdges.forEach(e=>{
+            if ( this.subtract(this.cValue(node,'payoff'),payoff).equals(this.cValue(e.childNode, 'payoff')) || !(node instanceof model.DecisionNode) ) {
                 this.cValue(e, 'optimal', true);
-                this.computeOptimal(e.childNode, this.basePayoff(e), this.multiply(probabilityToEnter, this.cValue(e, 'probability')));
-            } else {
+                this.computeOptimal(e.childNode, this.basePayoff(e), this.multiply(probabilityToEnter, this.cValue(e,'probability')));
+            }else{
                 this.cValue(e, 'optimal', false);
             }
         })

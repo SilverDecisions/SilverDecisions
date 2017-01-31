@@ -1,15 +1,14 @@
-import {Utils} from '../utils'
-import * as model from '../model/index'
+import * as model from '../../model/index'
 import {ObjectiveRule} from './objective-rule'
 import * as _ from "lodash";
 
-/*mini-max rule*/
-export class MiniMaxRule extends ObjectiveRule{
+/*maxi-max rule*/
+export class MaxiMaxRule extends ObjectiveRule{
 
-    static NAME = 'mini-max';
+    static NAME = 'maxi-max';
 
     constructor(expressionEngine){
-        super(MiniMaxRule.NAME, expressionEngine);
+        super(MaxiMaxRule.NAME, expressionEngine);
     }
 
     // payoff - parent edge payoff, aggregatedPayoff - aggregated payoff along path
@@ -17,14 +16,14 @@ export class MiniMaxRule extends ObjectiveRule{
         var childrenPayoff = 0;
         if (node.childEdges.length) {
             if(node instanceof model.DecisionNode) {
-                var worstchild = Infinity;
+                var bestchild = -Infinity;
                 node.childEdges.forEach(e=>{
                     var childPayoff = this.computePayoff(e.childNode, this.basePayoff(e), this.add(this.basePayoff(e), aggregatedPayoff));
-                    worstchild = Math.min(worstchild, childPayoff);
+                    bestchild = Math.max(bestchild, childPayoff);
                 });
                 node.childEdges.forEach(e=>{
                     this.clearComputedValues(e);
-                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') > worstchild ? 0.0 : 1.0);
+                    this.cValue(e, 'probability', this.cValue(e.childNode, 'payoff') < bestchild ? 0.0 : 1.0);
                 });
             }else{
                 var bestchild = -Infinity;
@@ -97,4 +96,5 @@ export class MiniMaxRule extends ObjectiveRule{
             }
         })
     }
+
 }

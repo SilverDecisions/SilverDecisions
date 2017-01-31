@@ -15,7 +15,7 @@ export class ExpressionEngine{
     }
 
     eval(expr, asNumber=true, scope){
-        console.log('eval: '+expr);
+        // console.log('eval: '+expr);
         expr+="";
         expr = expr.trim();
         if(asNumber){
