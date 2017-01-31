@@ -1,0 +1,96 @@
+{
+  "lng": "en",
+  "rule": "expected-value-maximization",
+  "title": "",
+  "description": "",
+  "trees": [
+    {
+      "computed": {},
+      "childEdges": [
+        {
+          "computed": {
+            "payoff": "0",
+            "expected-value-maximization": {}
+          },
+          "name": "",
+          "payoff": 0,
+          "childNode": {
+            "computed": {},
+            "childEdges": [
+              {
+                "computed": {
+                  "probability": "3/10",
+                  "payoff": "3",
+                  "expected-value-maximization": {}
+                },
+                "name": "",
+                "probability": "0.3",
+                "payoff": "1+2",
+                "childNode": {
+                  "computed": {},
+                  "childEdges": [],
+                  "name": "",
+                  "location": {
+                    "x": 320,
+                    "y": 20
+                  },
+                  "type": "terminal"
+                }
+              },
+              {
+                "computed": {
+                  "probability": "999/1000",
+                  "payoff": "0",
+                  "expected-value-maximization": {}
+                },
+                "name": "",
+                "probability": "0.999",
+                "payoff": 0,
+                "childNode": {
+                  "computed": {},
+                  "childEdges": [],
+                  "name": "",
+                  "location": {
+                    "x": 320,
+                    "y": 95
+                  },
+                  "type": "terminal"
+                }
+              }
+            ],
+            "name": "",
+            "location": {
+              "x": 170,
+              "y": 57.5
+            },
+            "type": "chance"
+          }
+        },
+        {
+          "computed": {
+            "payoff": "0",
+            "expected-value-maximization": {}
+          },
+          "name": "",
+          "payoff": 0,
+          "childNode": {
+            "computed": {},
+            "childEdges": [],
+            "name": "",
+            "location": {
+              "x": 170,
+              "y": 132.5
+            },
+            "type": "chance"
+          }
+        }
+      ],
+      "name": "",
+      "location": {
+        "x": 20,
+        "y": 95
+      },
+      "type": "decision"
+    }
+  ]
+}

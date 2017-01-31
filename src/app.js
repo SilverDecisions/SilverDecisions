@@ -419,10 +419,12 @@ export class App {
 
     openDiagram(diagramData) {
         var self = this;
+        var errors = [];
         this.clear();
         if (!diagramData.SilverDecisions) {
+            errors.push('error.notSilverDecisionsFile');
             alert(i18n.t('error.notSilverDecisionsFile'));
-            return;
+            return errors;
         }
         try {
             if (diagramData.lng) {
@@ -451,6 +453,7 @@ export class App {
             this.setDiagramDescription(diagramData.description || '', true);
 
         } catch (e) {
+            errors.push('error.malformedData');
             alert(i18n.t('error.malformedData'));
 
             console.log(e);
@@ -459,6 +462,7 @@ export class App {
             this.updateNumberFormats();
         } catch (e) {
             console.log(e);
+            errors.push('error.incorrectNumberFormatOptions');
             alert(i18n.t('error.incorrectNumberFormatOptions'));
             delete this.config.format;
             this.setConfig(this.config);
@@ -466,6 +470,7 @@ export class App {
         }
 
         this.setObjectiveRule(this.config.rule);
+        return errors
     }
 
     serialize(filterLocation, filterComputed) {

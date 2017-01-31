@@ -142,7 +142,14 @@ var onError = function (err) {
 };
 
 
-gulp.task('test', function (done) {
+gulp.task('prepare-test', function(){
+    return gulp
+        .src('test/trees/*.json')
+        .pipe(require('gulp-filelist')('tree-json-filelist.json', { flatten: true }))
+        .pipe(gulp.dest('test'))
+})
+
+gulp.task('test', ['prepare-test'], function (done) {
     new Server({
         configFile: __dirname + '/karma.conf.js',
         singleRun: true

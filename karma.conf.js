@@ -7,8 +7,19 @@ module.exports = function (config) {
             'karma-jasmine'
         ],
         files:[
+            'node_modules/jquery/dist/jquery.js',
+            'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
             'dist/silver-decisions.js',
-            'test/*.js'
+            'test/*.js',
+            // JSON fixture
+            { pattern:  'test/tree-json-filelist.json',
+                watched:  true,
+                served:   true,
+                included: false },
+            { pattern:  'test/trees/*.json',
+                watched:  true,
+                served:   true,
+                included: false }
         ],
         // start these browsers
         browsers: ['Chrome'],
