@@ -77,6 +77,14 @@ export class DataModel {
             node = new model.TerminalNode(location);
         }
         node.name = data.name;
+
+        if(data.code){
+            node.code = data.code;
+        }
+        if (data.expressionScope) {
+            node.expressionScope = data.expressionScope
+        }
+
         var edgeOrNode = this.addNode(node, parent);
         data.childEdges.forEach(ed=> {
             var edge = this.createNodeFromData(ed.childNode, node);
@@ -85,9 +93,6 @@ export class DataModel {
             edge.name = ed.name;
         });
 
-        if (data.expressionScope) {
-            node.expressionScope = data.expressionScope
-        }
         return edgeOrNode;
     }
 
