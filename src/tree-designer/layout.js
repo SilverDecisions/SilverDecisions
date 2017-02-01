@@ -127,6 +127,7 @@ export class Layout{
 
 
     drawNodeSymbol(path, transition){
+
         var self = this;
         var nodeSize = this.config.nodeSize;
         this.nodeSymbol = d3.symbol().type(d=> self.nodeTypeToSymbol[d.type])
@@ -148,11 +149,14 @@ export class Layout{
                 }
                 if(transition){
                     path =  path.transition();
+
+                }else{
+                    d.$symolSize = size;
                 }
                 path.attr("d", self.nodeSymbol);
-
-                d.$symolSize = size;
-
+                if(transition){
+                    d.$symolSize = size;
+                }
             });
     }
 

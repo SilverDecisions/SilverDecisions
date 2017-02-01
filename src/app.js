@@ -1,5 +1,6 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
+import * as math from './mathjs'
 
 import {Utils} from './utils'
 import * as model from './model/index'
@@ -114,10 +115,9 @@ export class App {
 
         if (diagramData) {
             this.openDiagram(diagramData);
+        }else{
+            this.updateView();
         }
-
-        this.updateView();
-
     }
 
     setConfig(config) {
@@ -295,9 +295,9 @@ export class App {
         });
     }
 
-    updateView() {
+    updateView(withTransitions=true) {
         // console.log('_updateView');
-        this.treeDesigner.redraw(true);
+        this.treeDesigner.redraw(withTransitions);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
         this.updateVariableDefinitions();
         this.toolbar.update();
@@ -352,11 +352,14 @@ export class App {
         },1);
     }
 
-    setObjectiveRule(ruleName) {
+    setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
         this.treeDesigner.setRuleName(ruleName);
         this.objectiveRulesManager.setCurrentRuleByName(ruleName);
-        this.checkValidityAndRecomputeObjective(false, false, false);
-        this.updateView(true);
+        this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric);
+        if(updateView){
+            this.updateView(true);
+        }
+
     }
 
 
@@ -420,12 +423,50 @@ export class App {
     openDiagram(diagramData) {
         var self = this;
         var errors = [];
+
+        if(Utils.isString(diagramData)){
+            try{
+                diagramData = JSON.parse(diagramData, math.json.reviver);
+            }catch (e){
+                errors.push('error.jsonParse');
+                alert(i18n.t('error.jsonParse'));
+                console.log(e);
+                return errors;
+            }
+        }
+
         this.clear();
         if (!diagramData.SilverDecisions) {
             errors.push('error.notSilverDecisionsFile');
             alert(i18n.t('error.notSilverDecisionsFile'));
             return errors;
         }
+
+        //Check if version in file is newer than version of application
+        var incorrectVersionFormat = !Utils.isString(diagramData.SilverDecisions);
+        var versionInFileMatch;
+        //Major.Minor.Patch
+        var versionRegexp = /^([0-9]+)\.([0-9]+)\.([0-9]+)$/g;
+        if(!incorrectVersionFormat){
+            versionInFileMatch = versionRegexp.exec(diagramData.SilverDecisions)
+            incorrectVersionFormat = !versionInFileMatch;
+        }
+
+        if(incorrectVersionFormat){
+            errors.push('error.incorrectVersionFormat');
+            alert(i18n.t('error.incorrectVersionFormat'));
+        }else{
+            //compare only major and minor
+            versionRegexp.lastIndex=0;
+            var versionMatch = versionRegexp.exec(App.version);
+            if(versionMatch &&
+                (versionInFileMatch[1] > versionMatch[1] ||
+                 versionInFileMatch[1] == versionMatch[1] && versionInFileMatch[2] > versionMatch[2])){
+                errors.push('error.fileVersionNewerThanApplicationVersion');
+                alert(i18n.t('error.fileVersionNewerThanApplicationVersion'));
+            }
+        }
+
         try {
             if (diagramData.lng) {
                 this.config.lng = diagramData.lng;
@@ -455,21 +496,41 @@ export class App {
         } catch (e) {
             errors.push('error.malformedData');
             alert(i18n.t('error.malformedData'));
-
+            this.clear();
             console.log(e);
+            return errors;
+
         }
         try {
-            this.updateNumberFormats();
+            this.updateNumberFormats(false);
         } catch (e) {
             console.log(e);
             errors.push('error.incorrectNumberFormatOptions');
             alert(i18n.t('error.incorrectNumberFormatOptions'));
             delete this.config.format;
             this.setConfig(this.config);
-            this.updateNumberFormats();
+            this.updateNumberFormats(false);
         }
 
-        this.setObjectiveRule(this.config.rule);
+        try{
+            this.setObjectiveRule(this.config.rule, false, true, false);
+        }catch (e) {
+            console.log(e);
+            errors.push('error.objectiveComputationFailure');
+            alert(i18n.t('error.objectiveComputationFailure'));
+            return errors
+        }
+
+        try{
+            this.updateView(false);
+        }catch (e) {
+            console.log(e);
+            errors.push('error.diagramDrawingFailure');
+            alert(i18n.t('error.diagramDrawingFailure'));
+            this.clear();
+            return errors
+        }
+
         return errors
     }
 
@@ -523,20 +584,27 @@ export class App {
         }, 2);
     }
 
-    updateNumberFormats() {
+    updateNumberFormats(updateView=true) {
         this.initPayoffNumberFormat();
         this.initProbabilityNumberFormat();
-        this.updateView();
+        if(updateView){
+            this.updateView();
+        }
     }
 
-    updatePayoffNumberFormat() {
+    updatePayoffNumberFormat(updateView=true) {
         this.initPayoffNumberFormat();
-        this.updateView();
+        if(updateView){
+            this.updateView();
+        }
+
     }
 
-    updateProbabilityNumberFormat() {
+    updateProbabilityNumberFormat(updateView=true) {
         this.initProbabilityNumberFormat();
-        this.updateView();
+        if(updateView){
+            this.updateView();
+        }
     }
 
     initOnBeforeUnload() {

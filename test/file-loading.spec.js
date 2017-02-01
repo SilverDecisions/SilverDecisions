@@ -16,13 +16,13 @@ describe("JSON file", function() {
     });
 
     fileList.forEach(function (fileName) {
-        var json = JSON.parse(readFixtures(fileName));
+        var rawJsonString = readFixtures(fileName);
 
         describe(fileName, function(){
             var errors;
             beforeEach(function(){
                 spyOn(window, 'alert');
-                errors = app.openDiagram(json);
+                errors = app.openDiagram(rawJsonString);
             });
 
 

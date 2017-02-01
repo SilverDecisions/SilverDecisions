@@ -113,14 +113,24 @@ export class Exporter {
         // svgNode = svgNode.cloneNode(true);
         var svgClone = Exporter.getSvgCloneWithInlineStyles(svgNode);
 
-        var serializer = new XMLSerializer();
-
-        var svgString = serializer.serializeToString(svgClone);
+        var svgString = Exporter.serializeSvgNode(svgClone);
         // svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink=') // Fix root xlink without namespace
         // svgString = svgString.replace(/NS\d+:href/g, 'xlink:href') // Safari NS namespace fix
         svgString = Exporter.sanitizeSVG(svgString);
 
         return svgString;
+    }
+
+    static serializeSvgNode(svgNode){
+        var serializer = new XMLSerializer();
+        return serializer.serializeToString(svgNode);
+    }
+
+    static validateSvgNode(svgNode){
+        var svgString = Exporter.serializeSvgNode(svgNode);
+        var oParser = new DOMParser();
+        var doc = oParser.parseFromString(svgString, 'image/svg+xml');
+        return doc.documentElement.nodeName.indexOf('parsererror')===-1;
     }
 
     static svgString2Image(svgString, width, height, format, callback) {

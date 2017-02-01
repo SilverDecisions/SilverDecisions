@@ -1,5 +1,4 @@
 import {i18n} from './i18n/i18n'
-import * as math from './mathjs'
 
 export class FileLoader{
 
@@ -35,14 +34,7 @@ export class FileLoader{
 
 
             function receivedText(e) {
-                try{
-                    var fileContent = JSON.parse(e.target.result, math.json.reviver);
-                    callback(fileContent);
-                }catch (e){
-                    alert(i18n.t('error.jsonParse'));
-                    console.log(e);
-                }
-
+                callback(e.target.result);
                 input.value = null;
             }
         }

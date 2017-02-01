@@ -217,7 +217,7 @@ export class TreeDesigner {
         this.textDragHandler = new TextDragHandler(this, this.data);
     }
 
-    redraw(withTransitions){
+    redraw(withTransitions=false){
 
         var self = this;
         withTransitions = !self.config.disableAnimations && withTransitions;
@@ -881,11 +881,10 @@ export class TreeDesigner {
         this.selectText(text);
     }
 
-    addNode(node, parent){
+    addNode(node, parent, redraw=false){
         this.data.saveState();
         this.data.addNode(node, parent);
-
-        this.redraw();
+        this.redraw(true);
         this.layout.update(node);
         return node;
     }

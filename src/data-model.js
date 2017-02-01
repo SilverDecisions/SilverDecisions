@@ -45,6 +45,9 @@ export class DataModel {
 
     /*Loads serialized data*/
     load(roots, texts, code, expressionScope) {
+        var callbacksDisabled = this.callbacksDisabled;
+        this.callbacksDisabled = true;
+
         roots.forEach(nodeData=> {
             var node = this.createNodeFromData(nodeData);
         });
@@ -63,6 +66,7 @@ export class DataModel {
         if (expressionScope) {
             Utils.extend(this.expressionScope, expressionScope);
         }
+        this.callbacksDisabled = callbacksDisabled;
     }
 
     /*create node from serialized data*/
