@@ -60,6 +60,11 @@
       "addDecisionNode": "Dodaj Węzeł Decyzyjny",
       "addChanceNode": "Dodaj Węzeł Losowy",
       "addTerminalNode": "Dodaj Węzeł Końcowy",
+      "convert":{
+        "decision": "Jako Węzeł Decyzyjny",
+        "chance": "Jako Węzeł Losowy",
+        "terminal": "Jako Węzeł Końcowy"
+      },
       "selectSubtree": "Zaznacz poddrzewo",
       "flipSubtree": "Przewróć poddrzewo"
     },
@@ -198,7 +203,11 @@
     "other":{
       "title": "Inne",
       "disableAnimations": "Wyłącz animacje",
-      "forceFullEdgeRedraw": "Wymuś pełne przerysowywanie krawędzi"
+      "forceFullEdgeRedraw": "Wymuś pełne przerysowywanie krawędzi",
+      "hideLabels": "Ukryj etykiety",
+      "hidePayoffs": "Ukryj wypłaty",
+      "hideProbabilities": "Ukryj prawdopodobieństwa",
+      "raw": "Surowy"
     }
   },
   "aboutDialog":{
@@ -307,6 +316,10 @@
     "fileApiNotSupported":"Funckja 'file API' nie jest wspierana w tej przeglądarce internetowej.",
     "inputFilesProperty":"Twoje przeglądarka nie wspiera opcji `pliki` przy otwieraniu pliku.",
     "notSilverDecisionsFile":"Plik niezgodny z formatem SilverDecisions!",
+    "incorrectVersionFormat": "Niepoprawny format ciągu z numerem wersji!",
+    "fileVersionNewerThanApplicationVersion": "Wersja pliku jest nowasza niż wersja aplikacji. Niektóre funkcjonalności mogą być niedostępne.",
+    "objectiveComputationFailure": "Błąd podczas wyliczania celu!",
+    "diagramDrawingFailure": "Błąd podczas rysowania diagramu!",
     "malformedData":"Błąd odczytu danych drzewa!",
     "pngExportNotSupported": "Eksport do obrazu PNG nie jest wspierany w Twojej przeglądarce.",
     "pngExportNotSupportedIE": "Eksport do obrazu PNG nie jest wspierany w przeglądarce Internet Explorer.",
