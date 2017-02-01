@@ -501,7 +501,7 @@
         "alamakota": 1
       },
       "location": {
-        "x": "badx",
+        "x": "10,
         "y": 95
       },
       "type": "decision"
