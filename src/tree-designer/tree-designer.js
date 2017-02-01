@@ -1065,6 +1065,15 @@ export class TreeDesigner {
         });
     }
 
+    convertNode(node, typeToConvertTo){
+        var self = this;
+        this.data.saveState();
+        this.data.convertNode(node, typeToConvertTo);
+        setTimeout(function(){
+            self.redraw();
+        },10)
+    }
+
     canFlipSubTree(node){
         return this.data.canFlipSubTree(node);
     }

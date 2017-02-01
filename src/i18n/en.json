@@ -60,6 +60,12 @@
       "addDecisionNode": "Add Decision Node",
       "addChanceNode": "Add Chance Node",
       "addTerminalNode": "Add Terminal Node",
+      "convert":{
+        "decision": "As Decision Node",
+        "chance": "As Chance Node",
+        "terminal": "As Terminal Node"
+
+      },
       "selectSubtree": "Select subtree",
       "flipSubtree": "Flip subtree"
     },

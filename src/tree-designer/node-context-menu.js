@@ -42,8 +42,10 @@ export class NodeContextMenu extends ContextMenu {
                 }
             };
             var menu = [];
-            if (d.type == 'terminal') {
-                return [copyMenuItem, cutMenuItem, deleteMenuItem];
+            if (d.type == model.TerminalNode.$TYPE) {
+                menu = [copyMenuItem, cutMenuItem, deleteMenuItem];
+                NodeContextMenu.addNodeConversionOptions(d, menu, treeDesigner);
+                return menu;
             }
             menu.push({
                 title: i18n.t('contextMenu.node.addDecisionNode'),
@@ -68,6 +70,8 @@ export class NodeContextMenu extends ContextMenu {
             menu.push(cutMenuItem);
             menu.push(pasteMenuItem);
             menu.push(deleteMenuItem);
+
+            NodeContextMenu.addNodeConversionOptions(d, menu, treeDesigner);
             menu.push({divider: true});
             menu.push({
                 title: i18n.t('contextMenu.node.selectSubtree'),
@@ -92,5 +96,41 @@ export class NodeContextMenu extends ContextMenu {
 
         super(menu);
         this.treeDesigner = treeDesigner;
+    }
+
+    static addNodeConversionOptions(d, menu, treeDesigner){
+        var conversionOptions = NodeContextMenu.getNodeConversionOptions(d, treeDesigner);
+        if(conversionOptions.length){
+            menu.push({divider: true});
+            conversionOptions.forEach(o=>menu.push(o));
+
+        }
+    }
+
+    static getNodeConversionOptions(d, treeDesigner){
+        var options = [];
+        var allAllowedTypes = [model.DecisionNode.$TYPE, model.ChanceNode.$TYPE, model.TerminalNode.$TYPE];
+
+        if(!d.childEdges.length){
+            allAllowedTypes.filter(t=>t!==d.type).forEach(type=>{
+                options.push(NodeContextMenu.getNodeConversionOption(type, treeDesigner))
+            })
+        }else{
+            if(d instanceof model.DecisionNode){
+                options.push(NodeContextMenu.getNodeConversionOption(model.ChanceNode.$TYPE, treeDesigner))
+            }else{
+                options.push(NodeContextMenu.getNodeConversionOption(model.DecisionNode.$TYPE, treeDesigner))
+            }
+        }
+        return options;
+    }
+
+    static getNodeConversionOption(typeToConvertTo, treeDesigner){
+        return {
+            title: i18n.t('contextMenu.node.convert.'+typeToConvertTo),
+            action: function (elm, d, i) {
+                treeDesigner.convertNode(d, typeToConvertTo);
+            },
+        }
     }
 }

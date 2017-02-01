@@ -171,6 +171,50 @@ export class DataModel {
         roots.forEach(n=>this.removeNode(n, 0), this);
     }
 
+    convertNode(node, typeToConvertTo){
+        var newNode;
+        if(!node.childEdges.length){
+            newNode = this.createNodeByType(typeToConvertTo, node.location);
+        }else{
+            if(node instanceof model.DecisionNode && typeToConvertTo==model.ChanceNode.$TYPE){
+                newNode = this.createNodeByType(typeToConvertTo, node.location);
+            }else if(typeToConvertTo==model.DecisionNode.$TYPE){
+                newNode = this.createNodeByType(typeToConvertTo, node.location);
+            }
+        }
+
+        if(newNode){
+            this.replaceNode(newNode, node);
+            newNode.childEdges.forEach(e=>this._setEdgeInitialProbability(e));
+            this._fireNodeAddedCallback(newNode);
+        }
+
+    }
+
+    createNodeByType(type, location){
+        if(type==model.DecisionNode.$TYPE){
+            return new model.DecisionNode(location)
+        }else if(type==model.ChanceNode.$TYPE){
+            return new model.ChanceNode(location)
+        }else if(type==model.TerminalNode.$TYPE){
+            return new model.TerminalNode(location)
+        }
+    }
+
+    replaceNode(newNode, oldNode){
+        newNode.$parent = oldNode.$parent;
+        var parentEdge = _.find(newNode.$parent.childEdges, e=>e.childNode===oldNode);
+        parentEdge.childNode = newNode;
+
+        newNode.childEdges = oldNode.childEdges;
+        newNode.childEdges.forEach(e=>e.parentNode=newNode);
+
+        var index = this.nodes.indexOf(oldNode);
+        if(~index){
+            this.nodes[index]=newNode;
+        }
+    }
+
     getRoots() {
         return this.nodes.filter(n=>!n.$parent);
     }
