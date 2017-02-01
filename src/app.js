@@ -21,6 +21,8 @@ import * as _ from "lodash";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
 
+var buildConfig = require('../tmp/build-config.js');
+
 export class AppConfig {
     readOnly = false;
     buttons = {
@@ -81,6 +83,7 @@ export class AppConfig {
 
 export class App {
     static version = ''; // version is set from package.json
+    static buildTimestamp = buildConfig.buildTimestamp;
     static utils = Utils;
     static d3 = d3;
 
@@ -142,7 +145,7 @@ export class App {
             this.container = d3.select(containerIdOrElem);
         }
         var self = this;
-        this.container.html(Templates.get('main', {version: App.version, 'lng': self.config.lng}));
+        this.container.html(Templates.get('main', {version: App.version, buildTimestamp: App.buildTimestamp, 'lng': self.config.lng}));
         this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
 
@@ -540,6 +543,7 @@ export class App {
 
         var obj = {
             SilverDecisions: App.version,
+            buildTimestamp: App.buildTimestamp,
             savetime: d3.isoFormat(new Date()),
             lng: self.config.lng,
             rule: self.objectiveRulesManager.currentRule.name,

@@ -25,6 +25,15 @@ gulp.task('clean', function (cb) {
     return del(['tmp', 'dist'], cb);
 });
 
+gulp.task('build-config', function() {
+    return gulp.src('./build-config.tmpl.js')
+        .pipe(plugins.template({config: JSON.stringify({
+            buildTimestamp: + new Date()
+        })}))
+        .pipe(plugins.rename('build-config.js'))
+        .pipe(gulp.dest('tmp/'));
+});
+
 
 gulp.task('build-css', function () {
     var fileName = projectName;
@@ -41,7 +50,7 @@ gulp.task('build-css', function () {
 });
 
 
-gulp.task('build-js', function () {
+gulp.task('build-js', ['build-config'], function () {
     var jsFileName =  projectName;
     var pipe = browserify({
         basedir: '.',
