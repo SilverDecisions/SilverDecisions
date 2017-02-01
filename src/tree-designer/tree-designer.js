@@ -136,6 +136,10 @@ export class TreeDesignerConfig {
     $readOnly= false;
     disableAnimations=false;
     forceFullEdgeRedraw=false;
+    hideLabels=false;
+    hidePayoffs=false;
+    hideProbabilities=false;
+    raw=false;
 
     payoffNumberFormatter = (v)=> v;
     probabilityNumberFormatter  = (v)=> v;
@@ -402,8 +406,11 @@ export class TreeDesigner {
             });
         */
         this.layout.nodeLabelPosition(labelEnter);
-        nodesMergeT.select('text.label').each(this.updateTextLines);
-        this.layout.nodeLabelPosition(nodesMergeT.select('text.label'))
+        var labelMerge = nodesMerge.select('text.label');
+        labelMerge.classed('sd-hidden', this.config.hideLabels);
+        var labelMergeT = nodesMergeT.select('text.label');
+        labelMergeT.each(this.updateTextLines);
+        this.layout.nodeLabelPosition(labelMergeT)
             .attr('text-anchor', 'middle')
 
         var ruleName = this.config.$rule;
@@ -413,6 +420,7 @@ export class TreeDesigner {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
                 return val!==null && val<0;
             })
+            .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
                 var val = d.computedValue(ruleName, 'childrenPayoff');
                 return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
@@ -433,6 +441,7 @@ export class TreeDesigner {
                 var val = d.computedValue(ruleName, 'aggregatedPayoff');
                 return val!==null && val<0;
             })
+            .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
                 var val = d.computedValue(ruleName, 'aggregatedPayoff');
                 return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
@@ -452,7 +461,8 @@ export class TreeDesigner {
             .text(d=>{
                 var val = d.computedValue(ruleName, 'probabilityToEnter');
                 return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): ''
-            });
+            })
+            .classed('sd-hidden', this.config.hideProbabilities || this.config.raw);
         Tooltip.attach(probabilityToEnter, i18n.t('tooltip.node.probabilityToEnter'));
 
 
@@ -465,6 +475,7 @@ export class TreeDesigner {
 
 
         var indicator = nodesMerge.select('text.error-indicator');
+        indicator.classed('sd-hidden', this.config.raw)
         this.layout.nodeIndicatorPosition(indicatorEnter);
         this.layout.nodeIndicatorPosition(indicator);
 
@@ -556,14 +567,22 @@ export class TreeDesigner {
 
         this.layout.edgeLabelPosition(labelEnter);
         edgesMergeT.select('text.label').each(this.updateTextLines);
-        this.layout.edgeLabelPosition(edgesMergeT.select('g.label-group'));
+        var labelMerge = edgesMerge.select('g.label-group');
+        labelMerge.classed('sd-hidden', this.config.hideLabels);
+        var labelMergeT = edgesMergeT.select('g.label-group');
+        this.layout.edgeLabelPosition(labelMergeT);
             // .text(d=>d.name);
 
         var payoffText = edgesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=>d.payoff<0)
+            .classed('sd-hidden', this.config.hidePayoffs)
             // .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff))
             .text(d=>{
+                if(this.config.raw){
+                    return d.payoff;
+                }
+
                 var val = d.computedValue('', 'payoff');
                 if(val!==null && !isNaN(val))
                     return self.config.payoffNumberFormatter(val);
@@ -585,11 +604,15 @@ export class TreeDesigner {
 
         Tooltip.attach(edgesMerge.select('text.probability'), d=>i18n.t('tooltip.edge.probability',{value: d.probability=== undefined ? d.computedValue(ruleName, '$probability') : d.probability}));
 
-        var probabilityMerge = edgesMergeT.select('text.probability');
-        probabilityMerge
+        edgesMerge.select('text.probability')
+            .classed('sd-hidden', this.config.hideProbabilities)
+        var probabilityMergeT = edgesMergeT.select('text.probability');
+        probabilityMergeT
             .attr('text-anchor', 'end')
-
             .text(d=>{
+                if(this.config.raw){
+                    return d.probability;
+                }
                 var val = d.computedValue(ruleName, '$probability');
                 if(val!==null && !isNaN(val))
                     return self.config.probabilityNumberFormatter(val);
@@ -605,7 +628,7 @@ export class TreeDesigner {
             });
 
 
-        this.layout.edgeProbabilityPosition(probabilityMerge);
+        this.layout.edgeProbabilityPosition(probabilityMergeT);
         this.layout.edgeProbabilityPosition(probabilityEnter);
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();

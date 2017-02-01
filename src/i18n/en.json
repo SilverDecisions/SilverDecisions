@@ -198,7 +198,11 @@
     "other":{
       "title": "Other",
       "disableAnimations": "Disable animations",
-      "forceFullEdgeRedraw": "Force full redraw of edges"
+      "forceFullEdgeRedraw": "Force full redraw of edges",
+      "hideLabels": "Hide labels",
+      "hidePayoffs": "Hide payoffs",
+      "hideProbabilities": "Hide probabilities",
+      "raw": "Raw"
     }
   },
   "aboutDialog":{

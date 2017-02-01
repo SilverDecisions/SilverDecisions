@@ -141,7 +141,11 @@ export class SettingsDialog extends Dialog{
         var otherGroup = new FormGroup('other', ()=>app.treeDesigner.redraw());
         otherGroup
             .addField('disableAnimations', 'checkbox', app.treeDesigner, 'config.disableAnimations')
-            .addField('forceFullEdgeRedraw', 'checkbox', app.treeDesigner, 'config.forceFullEdgeRedraw');
+            .addField('forceFullEdgeRedraw', 'checkbox', app.treeDesigner, 'config.forceFullEdgeRedraw')
+            .addField('hideLabels', 'checkbox', app.treeDesigner, 'config.hideLabels')
+            .addField('hidePayoffs', 'checkbox', app.treeDesigner, 'config.hidePayoffs')
+            .addField('hideProbabilities', 'checkbox', app.treeDesigner, 'config.hideProbabilities')
+            .addField('raw', 'checkbox', app.treeDesigner, 'config.raw');
 
         this.formGroups.push(otherGroup);
 
