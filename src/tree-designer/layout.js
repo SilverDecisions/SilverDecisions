@@ -73,7 +73,7 @@ export class Layout{
         return new model.Point(p[0], p[1])
     }
 
-    moveNodeToEmptyPlace(node){
+    moveNodeToEmptyPlace(node, redrawIfChanged=true){
         var positionMap = {};
         var self = this;
         node.location.x = Math.max(this.getNodeMinX(node), node.location.x);
@@ -116,7 +116,9 @@ export class Layout{
         }
         if(changed){
             node.moveTo(newLocation.x,newLocation.y, true);
-            this.treeDesigner.redraw(true);
+            if(redrawIfChanged){
+                this.treeDesigner.redraw(true);
+            }
         }
     }
 

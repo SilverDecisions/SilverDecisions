@@ -627,9 +627,9 @@ export class TreeDesigner {
                 return d.probability;
             });
 
-
-        this.layout.edgeProbabilityPosition(probabilityMergeT);
         this.layout.edgeProbabilityPosition(probabilityEnter);
+        this.layout.edgeProbabilityPosition(probabilityMergeT);
+
 
         edgesContainer.selectAll('.edge.'+optimalClassName).raise();
 
@@ -1034,14 +1034,15 @@ export class TreeDesigner {
             var attached = this.data.attachSubtree(toAttach, node).childNode;
             var location = self.layout.getNewChildLocation(node);
             attached.moveTo(location.x, location.y, true);
-            self.layout.moveNodeToEmptyPlace(attached);
+            self.layout.moveNodeToEmptyPlace(attached, false);
             self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
-
-            this.redraw();
-            self.layout.update();
 
             self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
+        setTimeout(function(){
+            self.redraw();
+            self.layout.update();
+        },10)
 
     }
 
@@ -1055,14 +1056,17 @@ export class TreeDesigner {
             var attached = this.data.attachSubtree(toAttach);
 
             attached.moveTo(point.x, point.y, true);
-            self.layout.moveNodeToEmptyPlace(attached);
+            self.layout.moveNodeToEmptyPlace(attached, false);
             self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
-
-            this.redraw();
-            self.layout.update();
 
             self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
+
+        setTimeout(function(){
+            self.redraw();
+            self.layout.update();
+        },10)
+
     }
 
     convertNode(node, typeToConvertTo){
