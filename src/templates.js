@@ -6,9 +6,7 @@ export class Templates{
     static about_de = require('./templates/about/de.html');
     static about_en = require('./templates/about/en.html');
     static about_fr = require('./templates/about/fr.html');
-    static about_ga = require('./templates/about/ga.html');
     static about_it = require('./templates/about/it.html');
-    static about_nl = require('./templates/about/nl.html');
     static about_pl = require('./templates/about/pl.html');
 
     static toolbar = require('./templates/toolbar.html');
