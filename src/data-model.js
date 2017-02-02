@@ -173,7 +173,7 @@ export class DataModel {
 
     convertNode(node, typeToConvertTo){
         var newNode;
-        if(!node.childEdges.length){
+        if(!node.childEdges.length && node.$parent){
             newNode = this.createNodeByType(typeToConvertTo, node.location);
         }else{
             if(node instanceof model.DecisionNode && typeToConvertTo==model.ChanceNode.$TYPE){
@@ -202,9 +202,13 @@ export class DataModel {
     }
 
     replaceNode(newNode, oldNode){
-        newNode.$parent = oldNode.$parent;
-        var parentEdge = _.find(newNode.$parent.childEdges, e=>e.childNode===oldNode);
-        parentEdge.childNode = newNode;
+        var parent = oldNode.$parent;
+        newNode.$parent = parent;
+
+        if(parent){
+            var parentEdge = _.find(newNode.$parent.childEdges, e=>e.childNode===oldNode);
+            parentEdge.childNode = newNode;
+        }
 
         newNode.childEdges = oldNode.childEdges;
         newNode.childEdges.forEach(e=>e.parentNode=newNode);

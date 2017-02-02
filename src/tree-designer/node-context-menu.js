@@ -111,7 +111,7 @@ export class NodeContextMenu extends ContextMenu {
         var options = [];
         var allAllowedTypes = [model.DecisionNode.$TYPE, model.ChanceNode.$TYPE, model.TerminalNode.$TYPE];
 
-        if(!d.childEdges.length){
+        if(!d.childEdges.length && d.$parent){
             allAllowedTypes.filter(t=>t!==d.type).forEach(type=>{
                 options.push(NodeContextMenu.getNodeConversionOption(type, treeDesigner))
             })
