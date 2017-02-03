@@ -1074,7 +1074,7 @@ export class TreeDesigner {
         this.data.saveState();
         this.data.convertNode(node, typeToConvertTo);
         setTimeout(function(){
-            self.redraw();
+            self.redraw(true);
         },10)
     }
 

@@ -184,6 +184,7 @@ export class DataModel {
         }
 
         if(newNode){
+            newNode.name=node.name;
             this.replaceNode(newNode, node);
             newNode.childEdges.forEach(e=>this._setEdgeInitialProbability(e));
             this._fireNodeAddedCallback(newNode);
