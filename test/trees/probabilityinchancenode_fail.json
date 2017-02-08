@@ -1,0 +1,295 @@
+{
+  "SilverDecisions": "0.6.0",
+  "savetime": "2017-02-08T20:14:08.548Z",
+  "lng": "en",
+  "rule": "expected-value-maximization",
+  "title": "",
+  "description": "",
+  "format": {
+    "locales": "en",
+    "payoff": {
+      "style": "currency",
+      "currency": "USD",
+      "currencyDisplay": "symbol",
+      "minimumFractionDigits": 0,
+      "maximumFractionDigits": 2,
+      "useGrouping": true
+    },
+    "probability": {
+      "style": "decimal",
+      "minimumFractionDigits": 2,
+      "maximumFractionDigits": 3,
+      "useGrouping": true
+    }
+  },
+  "treeDesigner": {
+    "margin": {
+      "left": 25,
+      "right": 25,
+      "top": 25,
+      "bottom": 25
+    },
+    "layout": {
+      "type": "tree",
+      "nodeSize": 40,
+      "limitNodePositioning": true,
+      "gridHeight": 75,
+      "gridWidth": 150,
+      "edgeSlantWidthMax": 20
+    },
+    "fontFamily": "sans-serif",
+    "fontSize": "12px",
+    "fontWeight": "normal",
+    "fontStyle": "normal",
+    "node": {
+      "strokeWidth": "1px",
+      "optimal": {
+        "stroke": "#006f00",
+        "strokeWidth": "1.5px"
+      },
+      "label": {
+        "fontSize": "1em",
+        "color": "black"
+      },
+      "payoff": {
+        "fontSize": "1em",
+        "color": "black",
+        "negativeColor": "#b60000"
+      },
+      "decision": {
+        "fill": "#ff7777",
+        "stroke": "#660000",
+        "selected": {
+          "fill": "#aa3333"
+        }
+      },
+      "chance": {
+        "fill": "#ffff44",
+        "stroke": "#666600",
+        "selected": {
+          "fill": "#aaaa00"
+        }
+      },
+      "terminal": {
+        "fill": "#44ff44",
+        "stroke": "black",
+        "selected": {
+          "fill": "#00aa00"
+        },
+        "payoff": {
+          "fontSize": "1em",
+          "color": "black",
+          "negativeColor": "#b60000"
+        }
+      }
+    },
+    "edge": {
+      "stroke": "#424242",
+      "strokeWidth": "1.5",
+      "optimal": {
+        "stroke": "#006f00",
+        "strokeWidth": "2.4"
+      },
+      "selected": {
+        "stroke": "#045ad1",
+        "strokeWidth": "3.5"
+      },
+      "label": {
+        "fontSize": "1em",
+        "color": "back"
+      },
+      "payoff": {
+        "fontSize": "1em",
+        "color": "black",
+        "negativeColor": "#b60000"
+      }
+    },
+    "probability": {
+      "fontSize": "1em",
+      "color": "#0000d7"
+    },
+    "title": {
+      "fontSize": "16px",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "color": "#000000",
+      "margin": {
+        "top": 15,
+        "bottom": 10
+      }
+    },
+    "description": {
+      "show": true,
+      "fontSize": "12px",
+      "fontWeight": "bold",
+      "fontStyle": "normal",
+      "color": "#000000",
+      "margin": {
+        "top": 5,
+        "bottom": 10
+      }
+    },
+    "disableAnimations": false,
+    "forceFullEdgeRedraw": false
+  },
+  "trees": [
+    {
+      "computed": {},
+      "childEdges": [
+        {
+          "computed": {
+            "payoff": "0",
+            "expected-value-maximization": {}
+          },
+          "name": "",
+          "payoff": 0,
+          "childNode": {
+            "computed": {},
+            "childEdges": [
+              {
+                "computed": {
+                  "payoff": "1",
+                  "probability": "3294105/5604247",
+                  "expected-value-maximization": {}
+                },
+                "name": "",
+                "probability": "x",
+                "payoff": "up",
+                "childNode": {
+                  "computed": {},
+                  "childEdges": [],
+                  "name": "",
+                  "code": "",
+                  "expressionScope": {
+                    "x": 0.5877872620532316,
+                    "up": 1,
+                    "down": 0
+                  },
+                  "location": {
+                    "x": 320,
+                    "y": 20
+                  },
+                  "type": "terminal"
+                }
+              },
+              {
+                "computed": {
+                  "payoff": "0",
+                  "probability": "2310142/5604247",
+                  "expected-value-maximization": {}
+                },
+                "name": "",
+                "probability": "1-x",
+                "payoff": "down",
+                "childNode": {
+                  "computed": {},
+                  "childEdges": [],
+                  "name": "",
+                  "code": "",
+                  "expressionScope": {
+                    "x": 0.5877872620532316,
+                    "up": 1,
+                    "down": 0
+                  },
+                  "location": {
+                    "x": 320,
+                    "y": 95
+                  },
+                  "type": "terminal"
+                }
+              }
+            ],
+            "name": "",
+            "code": "",
+            "expressionScope": {
+              "x": 0.5877872620532316,
+              "up": 1,
+              "down": 0
+            },
+            "location": {
+              "x": 170,
+              "y": 57.49999999999999
+            },
+            "type": "chance"
+          }
+        },
+        {
+          "computed": {
+            "payoff": "0",
+            "expected-value-maximization": {}
+          },
+          "name": "",
+          "payoff": 0,
+          "childNode": {
+            "computed": {},
+            "childEdges": [
+              {
+                "computed": {
+                  "payoff": "1",
+                  "probability": "3294105/5604247",
+                  "expected-value-maximization": {}
+                },
+                "name": "",
+                "probability": "x",
+                "payoff": "up",
+                "childNode": {
+                  "computed": {},
+                  "childEdges": [],
+                  "name": "",
+                  "code": "",
+                  "expressionScope": {
+                    "x": 0.5877872620532316,
+                    "up": 1,
+                    "down": 0
+                  },
+                  "location": {
+                    "x": 320,
+                    "y": 185
+                  },
+                  "type": "terminal"
+                }
+              }
+            ],
+            "name": "",
+            "code": "",
+            "expressionScope": {
+              "x": 0.5877872620532316,
+              "up": 1,
+              "down": 0
+            },
+            "location": {
+              "x": 170,
+              "y": 185
+            },
+            "type": "chance"
+          }
+        }
+      ],
+      "name": "",
+      "code": "up = 1\ndown = 0",
+      "expressionScope": {
+        "x": 0.5877872620532316,
+        "up": 1,
+        "down": 0
+      },
+      "location": {
+        "x": 20,
+        "y": 121.25
+      },
+      "type": "decision"
+    }
+  ],
+  "texts": [
+    {
+      "value": "Bottom chance node should produce an !! error",
+      "location": {
+        "x": 361.3333435058594,
+        "y": 191
+      }
+    }
+  ],
+  "expressionScope": {
+    "x": 0.5877872620532316
+  },
+  "code": "x=random()"
+}
