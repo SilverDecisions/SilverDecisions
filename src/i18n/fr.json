@@ -1,321 +1,335 @@
 {
   "toolbar": {
-    "newDiagram": "New diagram",
-    "openDiagram": "Open existing diagram",
-    "saveDiagram": "Save current diagram",
+    "newDiagram": "Nouveau diagramme",
+    "openDiagram": "Ouvrir le diagramme existant",
+    "saveDiagram": "Enregistrer le diagramme actuel",
     "export":{
-      "label": "Export to",
+      "label": "Exporter vers",
       "png": "Png",
       "svg": "Svg",
       "pdf": "Pdf"
     },
     "layout":{
-      "label": "Layout",
-      "manual": "Manual",
-      "tree": "Tree",
-      "cluster": "Cluster"
+      "label": "Disposition",
+      "manual": "Manuel",
+      "tree": "Arbre",
+      "cluster": "Grappe"
     },
     "objectiveRule":{
-      "label": "Rule",
+      "label": "Regle",
       "options": {
         "expected-value-maximization":"max",
-        "expected-value-minimization":"min",
+	"expected-value-minimization":"min",
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max",
-        "mini-min":"mini-min",
+	"mini-min":"mini-min",
         "mini-max":"mini-max"
       }
     },
-    "undo": "Undo",
-    "redo": "Redo",
-    "settings": "Settings",
-    "about": "About",
-    "recompute": "Recompute"
+    "undo": "Annuler",
+    "redo": "Refaire",
+    "settings": "Parametres",
+    "about": "A propos",
+    "recompute": "Recalculer"	
   },
   "node":{
-    "name": "Label"
+    "name": "Étiquette"
   },
   "edge":{
-    "name": "Label",
-    "payoff": "Payoff",
-    "probability": "Probability"
+    "name": "Étiquette",
+    "payoff": "Avantage",
+    "probability": "Probabilité"
 
   },
   "text":{
-    "value": "Text"
+    "value": "Texte"
   },
   "contextMenu":{
     "main":{
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addText": "Add Text",
-      "paste": "Paste",
-      "selectAllNodes": "Select all nodes"
+      "addDecisionNode": "Ajouter noud de décision",
+      "addChanceNode": "Ajouter noud aléatoire",
+      "addText": "Ajouter du texte",
+      "paste": "Coller",
+      "selectAllNodes": "Sélectionner tous les nouds"
     },
     "node":{
-      "copy": "Copy",
-      "cut": "Cut",
-      "paste": "Paste",
-      "delete": "Delete",
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addTerminalNode": "Add Terminal Node",
-      "selectSubtree": "Select subtree",
-      "flipSubtree": "Flip subtree"
+      "copy": "Copie",
+      "cut": "Couper",
+      "paste": "Coller",
+      "delete": "Effacer",
+      "addDecisionNode": "Ajouter noud de décision",
+      "addChanceNode": "Ajouter noud aléatoire",
+      "addTerminalNode": "Ajouter un noeud terminal",
+      "convert":{
+        "decision": "Comme noud de décision",
+        "chance": "Comme noud aléatoire",
+        "terminal": "Comme un noeud terminal"
+
+      },
+      "selectSubtree": "Sélectionner une sous-arborescence",
+      "flipSubtree": "Basculer sous-arbre"
     },
     "edge":{
-      "injectDecisionNode": "Inject Decision Node",
-      "injectChanceNode": "Inject Chance Node"
+      "injectDecisionNode": "Injecter un noeud de décision",
+      "injectChanceNode": "Injecter un noeud de chance"
     },
     "text":{
-      "delete": "Delete"
+      "delete": "Effacer"
     }
   },
   "settingsDialog":{
-    "title": "Settings",
+    "title": "Parametres",
     "general":{
-      "title": "General",
-      "fontSize": "Font size",
-      "fontFamily": "Font family",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "numberFormatLocale": "Number format locale"
+      "title": "Général",
+      "fontSize": "Taille de la police",
+      "fontFamily": "Famille de police",
+      "fontWeight": "Poid de la police",
+      "fontStyle": "Style de police",
+      "numberFormatLocale": "format local de numérotation"
     },
     "payoff":{
-      "title": "Payoff number format",
-      "currency": "Currency",
-      "currencyDisplay": "Currency display",
+      "title": "Format de la numérotation des avantages",
+      "currency": "Devise",
+      "currencyDisplay": "Affichage de la devise",
       "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "useGrouping": "Use grouping separators"
+      "minimumFractionDigits": "Nombre minimum de fractions",
+      "maximumFractionDigits": "Nombre maximum de fractions",
+      "useGrouping": "Utiliser des séparateurs de regroupement"
     },
     "probability":{
-      "title": "Probability number format",
+      "title": "Format de la numérotatio des probabilités",
       "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "fontSize": "Font size",
-      "color": "Color"
+      "minimumFractionDigits": "Nombre minimum de fractions",
+      "maximumFractionDigits": "Nombre maximum de fractions",
+      "fontSize": "Taille de police",
+      "color": "Couleur"
     },
     "node":{
-      "title": "Node",
-      "strokeWidth": "Stroke width",
+      "title": "Noud",
+      "strokeWidth": "Largeur de trait",
       "optimal":{
         "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "stroke": "Couleur",
+        "strokeWidth": "Largeur de trait"
       },
       "label": {
-        "title": "Label",
-        "fontSize": "Label font size",
-        "color": "Label color"
+        "title": "Étiquette",
+        "fontSize": "Taille de la police de l'étiquette",
+        "color": "Couleur de l'étiquette"
       },
       "payoff": {
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
+        "title": "Avantage",
+        "fontSize": "Taille de la police",
+        "color": "Couleur",
+        "negativeColor": "Négatif couleur"
       },
       "decision": {
-        "title": "Decision Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Noeud décisionnel",
+        "fill": "La couleur de remplissage",
+        "stroke": "Couleur de trait",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Couleur de remplissage sélectionnée"
         }
       },
       "chance": {
-        "title": "Chance Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Noud aléatoire",
+        "fill": "La couleur de remplissage",
+        "stroke": "Couleur de course",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Couleur de remplissage sélectionné"
         }
       },
       "terminal":{
-        "title": "Terminal Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Noeud terminal",
+        "fill": "Couleur de remplissage",
+        "stroke": "Couleur de course",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Couleur de remplissage sélectionné"
         },
         "payoff": {
-          "title": "Payoff",
-          "fontSize": "Font size",
-          "color": "Color",
-          "negativeColor": "Negative color"
+          "title": "Avantage",
+          "fontSize": "Taille de la police",
+          "color": "Couleur",
+          "negativeColor": "Négatif couleur"
         }
       }
     },
     "edge":{
-      "title": "Edge",
-      "stroke": "Color",
-      "strokeWidth": "Stroke width",
+      "title": "Bord",
+      "stroke": "Couleur",
+      "strokeWidth": "Largeur de trait",
       "optimal":{
         "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "stroke": "Couleur",
+        "strokeWidth": "Largeur de trait"
       },
       "selected":{
-        "title": "Selected",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "title": "Choisi",
+        "stroke": "Couleur",
+        "strokeWidth": "Largeur de trait"
       },
       "label": {
-        "title": "Label",
-        "fontSize": "Font size",
-        "color": "Color"
+        "title": "Étiquette",
+        "fontSize": "Taille de la police",
+        "color": "Couleur"
       },
       "payoff":{
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
+        "title": "Avantage",
+        "fontSize": "Taille de la police",
+        "color": "Couleur",
+        "negativeColor": "Négatif couleur"
       }
     },
     "diagramTitle":{
-      "title": "Diagram title",
-      "fontSize": "Font size",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "color": "Color",
+      "title": "Titre du diagramme",
+      "fontSize": "Taille de la police",
+      "fontWeight": "Poids de la police",
+      "fontStyle": "Style de la police",
+      "color": "Couleur",
       "margin":{
-        "title": "Margin",
-        "top": "Top",
-        "bottom": "Bottom"
+        "title": "Marge",
+        "top": "Haut du diagramme",
+        "bottom": "Bas du diagramme"
       },
       "description":{
-        "title": "Subtitle (diagram description)",
-        "show": "Show",
-        "fontSize": "Font size",
-        "fontWeight": "Font weight",
-        "fontStyle": "Font style",
-        "color": "Color",
-        "marginTop": "Margin top"
+        "title": "Sous-titre (description du diagramme)",
+        "show": "Afficher",
+        "fontSize": "Taille de la police",
+        "fontWeight": "Poids de la police",
+        "fontStyle": "Style de police",
+        "color": "Couleur",
+        "marginTop": "Haut du marge"
       }
     },
     "other":{
-      "title": "Other",
-      "disableAnimations": "Disable animations",
-      "forceFullEdgeRedraw": "Force full redraw of edges"
+      "title": "Autre",
+      "disableAnimations": "Désactiver les animations",
+      "forceFullEdgeRedraw": "Forcer le redessinage complet des bords",
+      "hideLabels": "Masquer les étiquettes",
+      "hidePayoffs": "Masquer les paiements",
+      "hideProbabilities": "Masquer les probabilités",
+      "raw": "Brut"
     }
   },
   "aboutDialog":{
-    "title": "About"
+    "title": "A propos"
   },
   "help":{
-    "header": "Help",
+    "header": "Aide",
     "mouse": {
-      "header":"Mouse actions:",
+      "header":"Actions de la souris:",
       "list":{
-        "1": "left mouse button: node/edge selection",
-        "2": "right mouse button: context menu (adding/manipulating nodes)",
-        "3": "left mouse dbclick: context menu"
+        "1": "Bouton gauche de la souris: sélection du noud/bord",
+        "2": "Bouton droit de la souris: menu contextuel (ajout/manipulation des nouds)",
+        "3": "Double clic gauche de la souris: menu contextuel"
       }
     },
     "keyboard": {
-      "header":"Keyboard:",
+      "header":"Raccourcis clavier:",
       "list":{
-        "1": "Del: delete selected nodes",
-        "2": "Ctrl-C/X: copy/cut selected nodes",
-        "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
-        "4": "Ctrl-Y/Z: undo/redo",
-        "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
-        "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
+        "1": "Supprimer: effacer les nouds sélectionnés",
+        "2": "Ctrl-C/X: copier/couper les nouds sélectionnés",
+        "3": "Ctrl-V: coller les nouds copiés comme un sous-arbre d'un noud sélectionné",
+        "4": "Ctrl-Y/Z: annuler/refaire",
+        "5": "Ctrl-Alt-D/C/T: ajouter un nouveau sous-noud de décision/aléatoire/terminal d'un <strong>noud sélectionné</strong>",
+        "6": "Ctrl-Alt-D/C: injecter un nouveau noeud de décision/aléatoire dans un <strong>bord sélectionné</strong>"
       }
     },
-    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
+    "docs": "La documentation de SilverDecisions est disponible  <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">ici</a>"
   },
   "definitionsDialog":{
-    "title": "Variable definitions",
+    "title": "Définitions des variables",
     "buttons":{
-      "recalculate": "Recalculate"
+      "recalculate": "Recalculer"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Variables évaluées"
   },
   "sidebarDefinitions":{
     "header": "Variables",
     "code": "Code",
     "buttons":{
-      "openDialog" : "Open dialog",
-      "recalculate": "Recalculate"
+      "openDialog" : "Ouvrir la boîte de dialogue",
+      "recalculate": "Recalculer"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Variables évaluées"
   },
   "layoutOptions":{
-    "header": "Layout",
-    "marginHorizontal": "Horizontal Margin",
-    "marginVertical": "Vertical Margin",
-    "nodeSize": "Node size",
-    "edgeSlantWidthMax": "Edge slant (max)",
-    "gridWidth": "Width",
-    "gridHeight": "Height"
+    "header": "Disposition",
+    "marginHorizontal": "Marge horizontale",
+    "marginVertical": "Marge verticale",
+    "nodeSize": "Taille du noeud",
+    "edgeSlantWidthMax": "Inclinaison du bord (max.)",
+    "gridWidth": "Largeur",
+    "gridHeight": "Taille"
   },
   "diagramDetails":{
-    "header": "Details",
-    "title" : "Title",
+    "header": "Détails",
+    "title" : "Titre",
     "description" : "Description"
   },
   "objectProperties":{
     "header":{
       "node":{
-        "decision":"Decision Node",
-        "chance":"Chance Node",
-        "terminal":"Terminal Node"
+        "decision":"Noeud de décision",
+        "chance":"Noud aléatoire",
+        "terminal":"Noeud terminal"
       },
-      "edge": "Edge",
-      "text": "Floating text"
+      "edge": "Bord",
+      "text": "Texte flottant"
     },
     "childrenProperties":{
       "node":{
-        "header": "Connections",
+        "header": "Les connexions",
         "child": {
-          "header": "Edge #{{number}}"
+          "header": "Bord #{{number}}"
         }
       }
     }
   },
   "validation":{
-    "incompletePath": "Path not ending with terminal node",
-    "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
-    "invalidProbability": "Invalid probability in edge #{{number}}",
-    "invalidPayoff": "Invalid payoff in edge #{{number}}"
+    "incompletePath": "Parcours non terminé par noeud terminal",
+    "probabilityDoNotSumUpTo1": "La somme des probabilités n'est pas 1 ou plus",
+    "invalidProbability": "Probabilité invalide - le bord #{{number}}",
+    "invalidPayoff": "Avantage invalide - le bord #{{number}}"
   },
   "growl":{
-    "brushDisabled": "Selection brush disabled",
-    "brushEnabled": "Selection brush enabled"
+    "brushDisabled": "Brosse de sélection désactivée",
+    "brushEnabled": "Brosse de sélection activée"
   },
   "tooltip":{
     "node":{
-      "payoff": "Payoff",
-      "aggregatedPayoff": "Aggregated Payoff",
-      "probabilityToEnter": "Probability to enter"
+      "payoff": "Avantage",
+      "aggregatedPayoff": "Avantage agrégé",
+      "probabilityToEnter": "Probabilité d'entrée"
     },
     "edge":{
-      "payoff": "Payoff: {{value}}",
-      "probability": "Probability: {{value}}"
+      "payoff": "Avantage: {{value}}",
+      "probability": "Probabilité: {{value}}"
     }
   },
   "confirm":{
-    "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
-    "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
-    "beforeunload": "Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost."
+    "newDiagram": "Voulez-vous vraiment effacer le diagramme actuel? Toutes les données non enregistrées seront perdues.",
+    "openDiagram": "Etes-vous sur? Toutes les données de diagramme non enregistrées seront perdues.",
+    "beforeunload": "Voulez-vous vraiment fermer Silver Decisions? Toutes les données de diagramme non enregistrées seront perdues."
   },
   "error":{
-    "jsonParse": "Error parsing file!",
-    "fileApiNotSupported":"The file API isn't supported on this browser yet.",
-    "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
-    "notSilverDecisionsFile":"Not a SilverDecisions file!",
-    "malformedData":"Error reading tree data!",
-    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
-    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
-    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
-    "pdfExportNotSupported": "Export to PDF is not supported in your browser.",
-    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
-    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
-    "incorrectNumberFormatOptions": "Incorrect number format options, using default.",
-    "jsPDFisNotIncluded": "jsPDF is not included!",
-    "serverSideExportRequestFailure": "Export Server request failed!"
+    "jsonParse": "Erreur lors de l'analyse du fichier!",
+    "fileApiNotSupported":"L'API du fichier n'est pas encore prise en charge sur ce navigateur.",
+    "inputFilesProperty":"Votre navigateur ne semble pas prendre en charge la propriété `fichiers`.",
+    "notSilverDecisionsFile":"Pas de fichiers SilverDecisions!",
+    "incorrectVersionFormat": "Format incorrect de la chaîne de version!",
+    "fileVersionNewerThanApplicationVersion": "La version dans le fichier est plus récente que la version de l'application. Certaines fonctionnalités peuvent être manquantes.",
+    "objectiveComputationFailure": "Erreur en calculant l'objectif!",
+    "diagramDrawingFailure": "Erreur lors du dessin diagramme!",
+    "malformedData":"Erreur lors de la lecture des données arborescentes!",
+    "pngExportNotSupported": "L'exportation vers PNG n'est pas prise en charge dans votre navigateur.",
+    "pngExportNotSupportedIE": "Exporter vers PNG n'est pas pris en charge dans Internet Explorer.",
+    "svgExportNotSupported": "L'exportation vers SVG n'est pas prise en charge par votre navigateur.",
+    "pdfExportNotSupported": "L'exportation au format PDF n'est pas prise en charge par votre navigateur.",
+    "incorrectPayoffNumberFormatOptions": "L'option de format de numérotation des avantages chiosie est incorrecte.",
+    "incorrectProbabilityNumberFormatOptions": "L'option de format de numérotation des probabilités chiosie est incorrecte.",
+    "incorrectNumberFormatOptions": "L'option de format de numérotation choisie est incorrecte.",
+    "jsPDFisNotIncluded": "JsPDF n'est pas inclus!",
+    "serverSideExportRequestFailure": "La demande de téléchargement au serveur a échoué!"
   }
 }
