@@ -970,7 +970,7 @@ export class TreeDesigner {
 
     removeSelectedTexts(){
         var selectedTexts = this.getSelectedTexts();
-        console.log('selectedTexts',selectedTexts);
+
         if(!selectedTexts.length){
             return;
         }

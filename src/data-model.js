@@ -2,7 +2,7 @@ import {Utils} from './utils'
 import * as model from './model/index'
 import *  as _ from 'lodash'
 import {ExpressionEngine} from './expression-engine'
-
+import * as log from "./log"
 /*
  * Data model manager
  * */
@@ -525,7 +525,6 @@ export class DataModel {
                 if (child.childEdges.length != grandchildrenNumber) {
                     return false;
                 }
-                // console.log(grandchildrenEdgeLabelsSet);
 
                 if (!child.childEdges.every((ge, i)=>grandchildrenEdgeLabels[i] === ge.name.trim())) {
                     return false;
@@ -570,7 +569,6 @@ export class DataModel {
             edge.name = rootClone.childEdges[0].childNode.childEdges[i].name;
 
             edge.probability = 0;
-            // console.log(child);
 
             for (var j = 0; j < grandChildrenNumber; j++) {
                 var grandChild = rootClone.childEdges[j].childNode.childEdges[i].childNode;
@@ -598,12 +596,12 @@ export class DataModel {
             });
 
             if (!probabilitySum.equals(1)) {
-                console.log('Sum of the probabilities is not equal to 1 : ', probabilitySum);
+                log.info('Sum of the probabilities is not equal to 1 : ', probabilitySum);
                 var normalizationFactor = ExpressionEngine.divide(1, probabilitySum);
                 child.childEdges.forEach(grandChildEdge=> {
                     grandChildEdge.probability = ExpressionEngine.multiply(grandChildEdge.probability, normalizationFactor);
                 });
-                console.log("Probabilities normalized with normalizationFactor: " + normalizationFactor);
+                log.info("Probabilities normalized with normalizationFactor: " + normalizationFactor);
             }
 
             edge.probability = this.expressionEngine.serialize(edge.probability)
@@ -642,11 +640,9 @@ export class DataModel {
 
         if (newState.revertConf) {
             if (!redo && newState.revertConf.onUndo) {
-                // console.log('onUndo');
                 newState.revertConf.onUndo(newState.revertConf.data);
             }
             if (redo && newState.revertConf.onRedo) {
-                // console.log('onRedo');
                 newState.revertConf.onRedo(newState.revertConf.data);
             }
 

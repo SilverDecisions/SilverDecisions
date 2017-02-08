@@ -7,14 +7,12 @@ import {MiniMaxRule} from "./rules/mini-max-rule";
 import * as model from '../model/index'
 import {ExpressionEngine} from "../expression-engine";
 import * as _ from "lodash";
-
+import * as log from "../log"
 
 export class ObjectiveRulesManager{
     expressionEngine;
     currentRule;
     ruleByName={};
-
-    $debug = false;
 
     constructor(currentRuleName, data, expressionEngine){
         this.data = data;
@@ -46,10 +44,7 @@ export class ObjectiveRulesManager{
     recompute(allRules, reevaluateExpressions=false){
 
         var startTime = new Date().getTime();
-        if(this.$debug){
-            console.log('recomputing rules ...')
-        }
-
+        log.trace('recomputing rules, all: '+allRules);
 
         if(reevaluateExpressions){
             this.evalExpressions();
@@ -59,19 +54,16 @@ export class ObjectiveRulesManager{
             this.recomputeTree(n, allRules);
         });
 
-        if(this.$debug){
-            var time  = new Date().getTime() - startTime;
-            time = time/1000
-            console.log('recomputation took '+time+'s');
-        }
+
+        var time  = (new Date().getTime() - startTime/1000);
+        log.trace('recomputation took '+time+'s');
 
         return this;
     }
 
     recomputeTree(root, allRules, reevaluateExpressions=false){
-        if(this.$debug) {
-            console.log('recomputing rules for tree ...', root)
-        }
+        log.trace('recomputing rules for tree ...', root);
+
         var startTime = new Date().getTime();
 
         if(reevaluateExpressions){
@@ -88,11 +80,10 @@ export class ObjectiveRulesManager{
             rule.computeOptimal(root);
             this.setProbabilitiesToDisplay(rule);
         });
-        if(this.$debug){
-            var time  = new Date().getTime() - startTime;
-            time = time/1000;
-            console.log('recomputation took '+time+'s');
-        }
+
+        var time  = (new Date().getTime() - startTime)/1000;
+        log.trace('recomputation took '+time+'s');
+
         return this;
     }
 
@@ -120,7 +111,7 @@ export class ObjectiveRulesManager{
 
 
     evalExpressions(evalCode=true, evalNumeric=true, initScopes=false){
-        console.log('evalExpressions evalCode:'+evalCode+' evalNumeric:'+evalNumeric);
+        log.debug('evalExpressions evalCode:'+evalCode+' evalNumeric:'+evalNumeric);
         if(evalCode){
             this.data.clearExpressionScope();
             this.data.$codeDirty = false;
@@ -151,7 +142,7 @@ export class ObjectiveRulesManager{
                     this.expressionEngine.eval(node.code, false, node.expressionScope);
                 }catch (e){
                     node.$codeError = e;
-                    console.log(e);
+                    log.debug(e);
                 }
             }
         }
@@ -178,7 +169,7 @@ export class ObjectiveRulesManager{
                     }
 
                     if(ExpressionEngine.hasAssignmentExpression(e.probability)){ //It should not occur here!
-                        console.log("evalExpressionsForNode hasAssignmentExpression!", e);
+                        log.warn("evalExpressionsForNode hasAssignmentExpression!", e);
                         return null;
                     }
 

@@ -5,6 +5,7 @@ import {i18n} from "./i18n/i18n";
 import {Utils} from "./utils";
 import * as _ from "lodash";
 import {LoadingIndicator} from "./loading-indicator";
+import * as log from "./log";
 
 export class Exporter {
     static saveAs = saveAs;
@@ -20,7 +21,7 @@ export class Exporter {
 
         function appendInlineStyles(source, target, parentCs){
             if(!source){
-                console.log('Exporter.appendInlineStyles - undefined source!');
+                log.error('Exporter.appendInlineStyles - undefined source!');
                 return false;
             }
             var children = source.children;
@@ -210,9 +211,9 @@ export class Exporter {
                         Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
                         LoadingIndicator.hide();
                     }catch (e){
-                        console.log('client side png rendering failed!');
+                        log.warn('client side png rendering failed!');
                         if(fallback){
-                            console.log('performing server side fallback.');
+                            log.info('performing server side fallback.');
                             Exporter.exportPngServerSide(svgString, options.serverUrl, pngWidth, pngHeight);
                         }else{
                             throw e;
@@ -229,7 +230,7 @@ export class Exporter {
         }catch (e){
             alert(i18n.t('error.pngExportNotSupported'));
             LoadingIndicator.hide();
-            console.log(e);
+            log.error('pngExportNotSupported', e);
         }
     }
 
@@ -242,7 +243,7 @@ export class Exporter {
             Exporter.saveAs(blob, Exporter.getExportFileName('svg'));
         }catch (e){
             alert(i18n.t('error.svgExportNotSupported'));
-            console.log(e);
+            log.error('svgExportNotSupported', e);
         }
     }
 
@@ -267,7 +268,7 @@ export class Exporter {
         xhr.responseType = 'arraybuffer';
         xhr.onload = function() {
             var status = xhr.status;
-            console.log(status);
+            log.debug(status);
             var type = xhr.getResponseHeader('Content-Type');
             if (status == 200) {
                 var blob = new Blob([this.response], {type: type});
@@ -352,9 +353,9 @@ export class Exporter {
                 try{
                     Exporter.exportPdfClientSide(svgString, width, height);
                 }catch (e){
-                    console.log('client side pdf rendering failed!');
+                    log.error('client side pdf rendering failed!');
                     if(fallback){
-                        console.log('performing server side fallback.');
+                        log.info('performing server side fallback.');
                         Exporter.exportPdfServerSide(svgString, options.serverUrl);
                     }else{
                         throw e;
@@ -364,7 +365,7 @@ export class Exporter {
                 Exporter.exportPdfServerSide(svgString, options.serverUrl);
             }
         }catch (e){
-            console.log(e);
+            log.error('pdfExportNotSupported', e);
             LoadingIndicator.hide();
             alert(i18n.t('error.pdfExportNotSupported'));
 

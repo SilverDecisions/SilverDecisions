@@ -75,7 +75,7 @@ gulp.task('build-js', ['build-config'], function () {
         // .pipe(plugins.stripDebug())
             .pipe(plugins.uglify({
                 compress: {
-                    drop_console: true
+                    // drop_console: true
                 }
             }))
             .pipe(plugins.rename({ extname: '.min.js' }))

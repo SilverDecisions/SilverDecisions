@@ -1,6 +1,7 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
 import * as math from './mathjs'
+import * as log from "./log"
 
 import {Utils} from './utils'
 import * as model from './model/index'
@@ -25,6 +26,7 @@ var buildConfig = require('../tmp/build-config.js');
 
 export class AppConfig {
     readOnly = false;
+    logLevel = 'warn';
     buttons = {
         new: true,
         save: true,
@@ -129,7 +131,12 @@ export class App {
         } else {
             this.config = new AppConfig(config);
         }
+        this.setLogLevel(this.config.logLevel);
         return this;
+    }
+
+    setLogLevel(level){
+        log.setLevel(level)
     }
 
     initContainer(containerIdOrElem) {
@@ -334,12 +341,10 @@ export class App {
     }
 
     onTextAdded(text) {
-        console.log('onTextAdded');
         this.onObjectSelected(text);
     }
 
     onTextRemoved(text) {
-        console.log('onTextRemoved');
         this.updateView();
     }
 
@@ -433,7 +438,7 @@ export class App {
             }catch (e){
                 errors.push('error.jsonParse');
                 alert(i18n.t('error.jsonParse'));
-                console.log(e);
+                log.error(e);
                 return errors;
             }
         }
@@ -500,14 +505,14 @@ export class App {
             errors.push('error.malformedData');
             alert(i18n.t('error.malformedData'));
             this.clear();
-            console.log(e);
+            log.error('malformedData', e);
             return errors;
 
         }
         try {
             this.updateNumberFormats(false);
         } catch (e) {
-            console.log(e);
+            log.error('incorrectNumberFormatOptions', e);
             errors.push('error.incorrectNumberFormatOptions');
             alert(i18n.t('error.incorrectNumberFormatOptions'));
             delete this.config.format;
@@ -518,7 +523,7 @@ export class App {
         try{
             this.setObjectiveRule(this.config.rule, false, true, false);
         }catch (e) {
-            console.log(e);
+            log.error('objectiveComputationFailure',e);
             errors.push('error.objectiveComputationFailure');
             alert(i18n.t('error.objectiveComputationFailure'));
             return errors
@@ -527,7 +532,7 @@ export class App {
         try{
             this.updateView(false);
         }catch (e) {
-            console.log(e);
+            log.error('diagramDrawingFailure', e);
             errors.push('error.diagramDrawingFailure');
             alert(i18n.t('error.diagramDrawingFailure'));
             this.clear();

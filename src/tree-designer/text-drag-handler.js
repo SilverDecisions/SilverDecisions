@@ -50,7 +50,7 @@ export class TextDragHandler{
         if(!text.classed("selected")){
             self.treeDesigner.clearSelection();
         }
-        // console.log('drag started');
+
         self.treeDesigner.selectText(d);
         text.classed("selected dragging", true);
         self.selectedNodes = self.treeDesigner.getSelectedNodes();
@@ -59,7 +59,6 @@ export class TextDragHandler{
     }
 
     onDrag(draggedText, self){
-        // console.log('drag');
         if(self.dragEventCount==2){
             self.data.saveState();
         }

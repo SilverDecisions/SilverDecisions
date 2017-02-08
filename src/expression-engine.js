@@ -1,6 +1,7 @@
 import {Utils} from './utils'
 import * as math from './mathjs'
 import * as _ from "lodash";
+import * as log from "./log"
 
 export class ExpressionEngine{
 
@@ -15,7 +16,7 @@ export class ExpressionEngine{
     }
 
     eval(expr, asNumber=true, scope){
-        // console.log('eval: '+expr);
+        log.trace('eval: '+expr);
         expr+="";
         expr = expr.trim();
         if(asNumber){

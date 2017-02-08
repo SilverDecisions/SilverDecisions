@@ -57,7 +57,7 @@ export class NodeDragHandler{
         if(!node.classed("selected")){
             self.treeDesigner.clearSelection();
         }
-        // console.log('drag started');
+
         self.treeDesigner.selectNode(d);
         node.classed("selected dragging", true);
         self.selectedNodes = self.treeDesigner.getSelectedNodes();
