@@ -33,12 +33,12 @@
     "recompute": "Recalculer"	
   },
   "node":{
-    "name": "Étiquette"
+    "name": "Ã‰tiquette"
   },
   "edge":{
-    "name": "Étiquette",
+    "name": "Ã‰tiquette",
     "payoff": "Avantage",
-    "probability": "Probabilité"
+    "probability": "ProbabilitÃ©"
 
   },
   "text":{
@@ -46,31 +46,31 @@
   },
   "contextMenu":{
     "main":{
-      "addDecisionNode": "Ajouter noud de décision",
-      "addChanceNode": "Ajouter noud aléatoire",
+      "addDecisionNode": "Ajouter noud de dÃ©cision",
+      "addChanceNode": "Ajouter noud alÃ©atoire",
       "addText": "Ajouter du texte",
       "paste": "Coller",
-      "selectAllNodes": "Sélectionner tous les nouds"
+      "selectAllNodes": "SÃ©lectionner tous les nouds"
     },
     "node":{
       "copy": "Copie",
       "cut": "Couper",
       "paste": "Coller",
       "delete": "Effacer",
-      "addDecisionNode": "Ajouter noud de décision",
-      "addChanceNode": "Ajouter noud aléatoire",
+      "addDecisionNode": "Ajouter noud de dÃ©cision",
+      "addChanceNode": "Ajouter noud alÃ©atoire",
       "addTerminalNode": "Ajouter un noeud terminal",
       "convert":{
-        "decision": "Comme noud de décision",
-        "chance": "Comme noud aléatoire",
+        "decision": "Comme noud de dÃ©cision",
+        "chance": "Comme noud alÃ©atoire",
         "terminal": "Comme un noeud terminal"
 
       },
-      "selectSubtree": "Sélectionner une sous-arborescence",
+      "selectSubtree": "SÃ©lectionner une sous-arborescence",
       "flipSubtree": "Basculer sous-arbre"
     },
     "edge":{
-      "injectDecisionNode": "Injecter un noeud de décision",
+      "injectDecisionNode": "Injecter un noeud de dÃ©cision",
       "injectChanceNode": "Injecter un noeud de chance"
     },
     "text":{
@@ -80,24 +80,24 @@
   "settingsDialog":{
     "title": "Parametres",
     "general":{
-      "title": "Général",
+      "title": "GÃ©nÃ©ral",
       "fontSize": "Taille de la police",
       "fontFamily": "Famille de police",
       "fontWeight": "Poid de la police",
       "fontStyle": "Style de police",
-      "numberFormatLocale": "format local de numérotation"
+      "numberFormatLocale": "format local de numÃ©rotation"
     },
     "payoff":{
-      "title": "Format de la numérotation des avantages",
+      "title": "Format de la numÃ©rotation des avantages",
       "currency": "Devise",
       "currencyDisplay": "Affichage de la devise",
       "style": "Style",
       "minimumFractionDigits": "Nombre minimum de fractions",
       "maximumFractionDigits": "Nombre maximum de fractions",
-      "useGrouping": "Utiliser des séparateurs de regroupement"
+      "useGrouping": "Utiliser des sÃ©parateurs de regroupement"
     },
     "probability":{
-      "title": "Format de la numérotatio des probabilités",
+      "title": "Format de la numÃ©rotatio des probabilitÃ©s",
       "style": "Style",
       "minimumFractionDigits": "Nombre minimum de fractions",
       "maximumFractionDigits": "Nombre maximum de fractions",
@@ -113,30 +113,30 @@
         "strokeWidth": "Largeur de trait"
       },
       "label": {
-        "title": "Étiquette",
-        "fontSize": "Taille de la police de l'étiquette",
-        "color": "Couleur de l'étiquette"
+        "title": "Ã‰tiquette",
+        "fontSize": "Taille de la police de l'Ã©tiquette",
+        "color": "Couleur de l'Ã©tiquette"
       },
       "payoff": {
         "title": "Avantage",
         "fontSize": "Taille de la police",
         "color": "Couleur",
-        "negativeColor": "Négatif couleur"
+        "negativeColor": "NÃ©gatif couleur"
       },
       "decision": {
-        "title": "Noeud décisionnel",
+        "title": "Noeud dÃ©cisionnel",
         "fill": "La couleur de remplissage",
         "stroke": "Couleur de trait",
         "selected": {
-          "fill": "Couleur de remplissage sélectionnée"
+          "fill": "Couleur de remplissage sÃ©lectionnÃ©e"
         }
       },
       "chance": {
-        "title": "Noud aléatoire",
+        "title": "Noud alÃ©atoire",
         "fill": "La couleur de remplissage",
         "stroke": "Couleur de course",
         "selected": {
-          "fill": "Couleur de remplissage sélectionné"
+          "fill": "Couleur de remplissage sÃ©lectionnÃ©"
         }
       },
       "terminal":{
@@ -144,13 +144,13 @@
         "fill": "Couleur de remplissage",
         "stroke": "Couleur de course",
         "selected": {
-          "fill": "Couleur de remplissage sélectionné"
+          "fill": "Couleur de remplissage sÃ©lectionnÃ©"
         },
         "payoff": {
           "title": "Avantage",
           "fontSize": "Taille de la police",
           "color": "Couleur",
-          "negativeColor": "Négatif couleur"
+          "negativeColor": "NÃ©gatif couleur"
         }
       }
     },
@@ -169,7 +169,7 @@
         "strokeWidth": "Largeur de trait"
       },
       "label": {
-        "title": "Étiquette",
+        "title": "Ã‰tiquette",
         "fontSize": "Taille de la police",
         "color": "Couleur"
       },
@@ -177,7 +177,7 @@
         "title": "Avantage",
         "fontSize": "Taille de la police",
         "color": "Couleur",
-        "negativeColor": "Négatif couleur"
+        "negativeColor": "NÃ©gatif couleur"
       }
     },
     "diagramTitle":{
@@ -203,11 +203,11 @@
     },
     "other":{
       "title": "Autre",
-      "disableAnimations": "Désactiver les animations",
+      "disableAnimations": "DÃ©sactiver les animations",
       "forceFullEdgeRedraw": "Forcer le redessinage complet des bords",
-      "hideLabels": "Masquer les étiquettes",
+      "hideLabels": "Masquer les Ã©tiquettes",
       "hidePayoffs": "Masquer les paiements",
-      "hideProbabilities": "Masquer les probabilités",
+      "hideProbabilities": "Masquer les probabilitÃ©s",
       "raw": "Brut"
     }
   },
@@ -219,7 +219,7 @@
     "mouse": {
       "header":"Actions de la souris:",
       "list":{
-        "1": "Bouton gauche de la souris: sélection du noud/bord",
+        "1": "Bouton gauche de la souris: sÃ©lection du noud/bord",
         "2": "Bouton droit de la souris: menu contextuel (ajout/manipulation des nouds)",
         "3": "Double clic gauche de la souris: menu contextuel"
       }
@@ -227,31 +227,31 @@
     "keyboard": {
       "header":"Raccourcis clavier:",
       "list":{
-        "1": "Supprimer: effacer les nouds sélectionnés",
-        "2": "Ctrl-C/X: copier/couper les nouds sélectionnés",
-        "3": "Ctrl-V: coller les nouds copiés comme un sous-arbre d'un noud sélectionné",
+        "1": "Supprimer: effacer les nouds sÃ©lectionnÃ©s",
+        "2": "Ctrl-C/X: copier/couper les nouds sÃ©lectionnÃ©s",
+        "3": "Ctrl-V: coller les nouds copiÃ©s comme un sous-arbre d'un noud sÃ©lectionnÃ©",
         "4": "Ctrl-Y/Z: annuler/refaire",
-        "5": "Ctrl-Alt-D/C/T: ajouter un nouveau sous-noud de décision/aléatoire/terminal d'un <strong>noud sélectionné</strong>",
-        "6": "Ctrl-Alt-D/C: injecter un nouveau noeud de décision/aléatoire dans un <strong>bord sélectionné</strong>"
+        "5": "Ctrl-Alt-D/C/T: ajouter un nouveau sous-noud de dÃ©cision/alÃ©atoire/terminal d'un <strong>noud sÃ©lectionnÃ©</strong>",
+        "6": "Ctrl-Alt-D/C: injecter un nouveau noeud de dÃ©cision/alÃ©atoire dans un <strong>bord sÃ©lectionnÃ©</strong>"
       }
     },
     "docs": "La documentation de SilverDecisions est disponible  <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">ici</a>"
   },
   "definitionsDialog":{
-    "title": "Définitions des variables",
+    "title": "DÃ©finitions des variables",
     "buttons":{
       "recalculate": "Recalculer"
     },
-    "evaluatedVariables": "Variables évaluées"
+    "evaluatedVariables": "Variables Ã©valuÃ©es"
   },
   "sidebarDefinitions":{
     "header": "Variables",
     "code": "Code",
     "buttons":{
-      "openDialog" : "Ouvrir la boîte de dialogue",
+      "openDialog" : "Ouvrir la boÃ®te de dialogue",
       "recalculate": "Recalculer"
     },
-    "evaluatedVariables": "Variables évaluées"
+    "evaluatedVariables": "Variables Ã©valuÃ©es"
   },
   "layoutOptions":{
     "header": "Disposition",
@@ -263,15 +263,15 @@
     "gridHeight": "Taille"
   },
   "diagramDetails":{
-    "header": "Détails",
+    "header": "DÃ©tails",
     "title" : "Titre",
     "description" : "Description"
   },
   "objectProperties":{
     "header":{
       "node":{
-        "decision":"Noeud de décision",
-        "chance":"Noud aléatoire",
+        "decision":"Noeud de dÃ©cision",
+        "chance":"Noud alÃ©atoire",
         "terminal":"Noeud terminal"
       },
       "edge": "Bord",
@@ -287,49 +287,49 @@
     }
   },
   "validation":{
-    "incompletePath": "Parcours non terminé par noeud terminal",
-    "probabilityDoNotSumUpTo1": "La somme des probabilités n'est pas 1 ou plus",
-    "invalidProbability": "Probabilité invalide - le bord #{{number}}",
+    "incompletePath": "Parcours non terminÃ© par noeud terminal",
+    "probabilityDoNotSumUpTo1": "La somme des probabilitÃ©s n'est pas 1 ou plus",
+    "invalidProbability": "ProbabilitÃ© invalide - le bord #{{number}}",
     "invalidPayoff": "Avantage invalide - le bord #{{number}}"
   },
   "growl":{
-    "brushDisabled": "Brosse de sélection désactivée",
-    "brushEnabled": "Brosse de sélection activée"
+    "brushDisabled": "Brosse de sÃ©lection dÃ©sactivÃ©e",
+    "brushEnabled": "Brosse de sÃ©lection activÃ©e"
   },
   "tooltip":{
     "node":{
       "payoff": "Avantage",
-      "aggregatedPayoff": "Avantage agrégé",
-      "probabilityToEnter": "Probabilité d'entrée"
+      "aggregatedPayoff": "Avantage agrÃ©gÃ©",
+      "probabilityToEnter": "ProbabilitÃ© d'entrÃ©e"
     },
     "edge":{
       "payoff": "Avantage: {{value}}",
-      "probability": "Probabilité: {{value}}"
+      "probability": "ProbabilitÃ©: {{value}}"
     }
   },
   "confirm":{
-    "newDiagram": "Voulez-vous vraiment effacer le diagramme actuel? Toutes les données non enregistrées seront perdues.",
-    "openDiagram": "Etes-vous sur? Toutes les données de diagramme non enregistrées seront perdues.",
-    "beforeunload": "Voulez-vous vraiment fermer Silver Decisions? Toutes les données de diagramme non enregistrées seront perdues."
+    "newDiagram": "Voulez-vous vraiment effacer le diagramme actuel? Toutes les donnÃ©es non enregistrÃ©es seront perdues.",
+    "openDiagram": "Etes-vous sur? Toutes les donnÃ©es de diagramme non enregistrÃ©es seront perdues.",
+    "beforeunload": "Voulez-vous vraiment fermer Silver Decisions? Toutes les donnÃ©es de diagramme non enregistrÃ©es seront perdues."
   },
   "error":{
     "jsonParse": "Erreur lors de l'analyse du fichier!",
     "fileApiNotSupported":"L'API du fichier n'est pas encore prise en charge sur ce navigateur.",
-    "inputFilesProperty":"Votre navigateur ne semble pas prendre en charge la propriété `fichiers`.",
+    "inputFilesProperty":"Votre navigateur ne semble pas prendre en charge la propriÃ©tÃ© `fichiers`.",
     "notSilverDecisionsFile":"Pas de fichiers SilverDecisions!",
-    "incorrectVersionFormat": "Format incorrect de la chaîne de version!",
-    "fileVersionNewerThanApplicationVersion": "La version dans le fichier est plus récente que la version de l'application. Certaines fonctionnalités peuvent être manquantes.",
+    "incorrectVersionFormat": "Format incorrect de la chaÃ®ne de version!",
+    "fileVersionNewerThanApplicationVersion": "La version dans le fichier est plus rÃ©cente que la version de l'application. Certaines fonctionnalitÃ©s peuvent Ãªtre manquantes.",
     "objectiveComputationFailure": "Erreur en calculant l'objectif!",
     "diagramDrawingFailure": "Erreur lors du dessin diagramme!",
-    "malformedData":"Erreur lors de la lecture des données arborescentes!",
+    "malformedData":"Erreur lors de la lecture des donnÃ©es arborescentes!",
     "pngExportNotSupported": "L'exportation vers PNG n'est pas prise en charge dans votre navigateur.",
     "pngExportNotSupportedIE": "Exporter vers PNG n'est pas pris en charge dans Internet Explorer.",
     "svgExportNotSupported": "L'exportation vers SVG n'est pas prise en charge par votre navigateur.",
     "pdfExportNotSupported": "L'exportation au format PDF n'est pas prise en charge par votre navigateur.",
-    "incorrectPayoffNumberFormatOptions": "L'option de format de numérotation des avantages chiosie est incorrecte.",
-    "incorrectProbabilityNumberFormatOptions": "L'option de format de numérotation des probabilités chiosie est incorrecte.",
-    "incorrectNumberFormatOptions": "L'option de format de numérotation choisie est incorrecte.",
+    "incorrectPayoffNumberFormatOptions": "L'option de format de numÃ©rotation des avantages chiosie est incorrecte.",
+    "incorrectProbabilityNumberFormatOptions": "L'option de format de numÃ©rotation des probabilitÃ©s chiosie est incorrecte.",
+    "incorrectNumberFormatOptions": "L'option de format de numÃ©rotation choisie est incorrecte.",
     "jsPDFisNotIncluded": "JsPDF n'est pas inclus!",
-    "serverSideExportRequestFailure": "La demande de téléchargement au serveur a échoué!"
+    "serverSideExportRequestFailure": "La demande de tÃ©lÃ©chargement au serveur a Ã©chouÃ©!"
   }
 }
