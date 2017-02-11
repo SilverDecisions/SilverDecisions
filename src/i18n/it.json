@@ -1,321 +1,337 @@
 {
   "toolbar": {
-    "newDiagram": "New diagram",
-    "openDiagram": "Open existing diagram",
-    "saveDiagram": "Save current diagram",
+    "newDiagram": "Nuovo diagramma",
+    "openDiagram": "Apri diagramma esistnte",
+    "saveDiagram": "Salva il diagramma corente",
     "export":{
-      "label": "Export to",
+      "label": "Esporta in",
       "png": "Png",
       "svg": "Svg",
       "pdf": "Pdf"
     },
     "layout":{
-      "label": "Layout",
-      "manual": "Manual",
-      "tree": "Tree",
-      "cluster": "Cluster"
+      "label": "Disposizione",
+      "manual": "Manuale",
+      "tree": "Albero",
+      "cluster": "Grappolo"
     },
     "objectiveRule":{
-      "label": "Rule",
+      "label": "Regola",
       "options": {
         "expected-value-maximization":"max",
         "expected-value-minimization":"min",
-        "maxi-min":"maxi-min",
-        "maxi-max":"maxi-max",
-        "mini-min":"mini-min",
-        "mini-max":"mini-max"
+        "maxi-min":"max-min",
+        "maxi-max":"max-max",
+        "mini-min":"min-min",
+        "mini-max":"min-max"
       }
     },
-    "undo": "Undo",
-    "redo": "Redo",
-    "settings": "Settings",
-    "about": "About",
-    "recompute": "Recompute"
+    "undo": "Ripristina",
+    "redo": "Ripeti",
+    "settings": "Settaggi",
+    "about": "Di",
+    "recompute": "Ricalcola"
   },
   "node":{
-    "name": "Label"
+    "name": "Etichetta"
   },
   "edge":{
-    "name": "Label",
-    "payoff": "Payoff",
-    "probability": "Probability"
+    "name": "Eticehtta",
+    "payoff": "Saldo",
+    "probability": "Probabilità"
 
   },
   "text":{
-    "value": "Text"
+    "value": "Testo"
   },
   "contextMenu":{
     "main":{
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addText": "Add Text",
-      "paste": "Paste",
-      "selectAllNodes": "Select all nodes"
+      "addDecisionNode": "Aggiungi un nodo di decisione",
+      "addChanceNode": "Aggiungi un nodo opportunità",
+      "addText": "Aggiungi testo",
+      "paste": "Incolla",
+      "selectAllNodes": "Seleziona tutti i nodi"
     },
     "node":{
-      "copy": "Copy",
-      "cut": "Cut",
-      "paste": "Paste",
-      "delete": "Delete",
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addTerminalNode": "Add Terminal Node",
-      "selectSubtree": "Select subtree",
-      "flipSubtree": "Flip subtree"
+      "copy": "Copia",
+      "cut": "Taglia",
+      "paste": "Incolla",
+      "delete": "Cancella",
+      "addDecisionNode": "Aggiungi un nodo di decisione",
+      "addChanceNode": "Aggiungi un nodo opportunità",
+      "addTerminalNode": "Aggiungi un nodo terminale",
+      "convert":{
+        "decision": "Come Decision Node",
+        "chance": "Come Chance Node",
+        "terminal": "Come Terminal Node"
+
+      },
+
+      "selectSubtree": "Seleziona Sotto-albero",
+      "flipSubtree": "Ribalta sotto-albero"
     },
     "edge":{
-      "injectDecisionNode": "Inject Decision Node",
-      "injectChanceNode": "Inject Chance Node"
+      "injectDecisionNode": "Inietta nodo di decisione",
+      "injectChanceNode": "Inietta nodo opportunità"
     },
     "text":{
-      "delete": "Delete"
+      "delete": "Cancella"
     }
   },
   "settingsDialog":{
-    "title": "Settings",
+    "title": "Settaggi",
     "general":{
-      "title": "General",
-      "fontSize": "Font size",
-      "fontFamily": "Font family",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "numberFormatLocale": "Number format locale"
+      "title": "Generale",
+      "fontSize": "Dimensione font",
+      "fontFamily": "Famiglia font",
+      "fontWeight": "Peso del font",
+      "fontStyle": "Stile font",
+      "numberFormatLocale": "Formato numero locale"
     },
     "payoff":{
-      "title": "Payoff number format",
-      "currency": "Currency",
-      "currencyDisplay": "Currency display",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "useGrouping": "Use grouping separators"
+      "title": "Formato saldo",
+      "currency": "Valuta",
+      "currencyDisplay": "Visualizzazione valuta",
+      "style": "Stile",
+      "minimumFractionDigits": "Numero minimo cifre frazione",
+      "maximumFractionDigits": "Numero massimo cifre frazione",
+      "useGrouping": "Usa separatori di gruppo"
     },
     "probability":{
-      "title": "Probability number format",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "fontSize": "Font size",
-      "color": "Color"
+      "title": "Formato probabilità",
+      "style": "Stile",
+      "minimumFractionDigits": "Numero minimo cifre frazione",
+      "maximumFractionDigits": "Numero massimo cifre frazione",
+      "fontSize": "Dimensione font",
+      "color": "Colore"
     },
     "node":{
-      "title": "Node",
-      "strokeWidth": "Stroke width",
+      "title": "Nodo",
+      "strokeWidth": "Spessore linea",
       "optimal":{
-        "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "title": "Ottimale",
+        "stroke": "Colore",
+        "strokeWidth": "Spessore linea"
       },
       "label": {
-        "title": "Label",
-        "fontSize": "Label font size",
-        "color": "Label color"
+        "title": "Etichetta",
+        "fontSize": "Dimensione font etichetta",
+        "color": "Colore etichetta"
       },
       "payoff": {
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
+        "title": "Saldo",
+        "fontSize": "Dimensione font",
+        "color": "Colore",
+        "negativeColor": "Colore negativo"
       },
       "decision": {
-        "title": "Decision Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Nodo dicisione",
+        "fill": "Colore riempimento",
+        "stroke": "Colore linea",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Colore riempimento selezionato"
         }
       },
       "chance": {
-        "title": "Chance Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Nodo opportunità",
+        "fill": "Colore riempimento",
+        "stroke": "Colore linea",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Colore riempimento selezionato"
         }
       },
       "terminal":{
-        "title": "Terminal Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Nodo terminale",
+        "fill": "Colore riempimento",
+        "stroke": "Colore linea",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Colore riempimento selezionato"
         },
         "payoff": {
-          "title": "Payoff",
-          "fontSize": "Font size",
-          "color": "Color",
-          "negativeColor": "Negative color"
+          "title": "Saldo",
+          "fontSize": "Dimensione font",
+          "color": "Colore",
+          "negativeColor": "Colore negativo"
         }
       }
     },
     "edge":{
-      "title": "Edge",
-      "stroke": "Color",
-      "strokeWidth": "Stroke width",
+      "title": "Ramo",
+      "stroke": "Colore",
+      "strokeWidth": "Larghezza linea",
       "optimal":{
-        "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "title": "Ottimale",
+        "stroke": "Colore",
+        "strokeWidth": "Larghezza linea"
       },
       "selected":{
-        "title": "Selected",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "title": "Selezionato",
+        "stroke": "Colore",
+        "strokeWidth": "Larghezza linea"
       },
       "label": {
-        "title": "Label",
-        "fontSize": "Font size",
-        "color": "Color"
+        "title": "Etichetta",
+        "fontSize": "Dimensione font",
+        "color": "Colore"
       },
       "payoff":{
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
+        "title": "Saldo",
+        "fontSize": "Dimensione font",
+        "color": "Colore",
+        "negativeColor": "Colore negativo"
       }
     },
     "diagramTitle":{
-      "title": "Diagram title",
-      "fontSize": "Font size",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "color": "Color",
+      "title": "Titolo diagramma",
+      "fontSize": "Dimensione font",
+      "fontWeight": "Peso del font",
+      "fontStyle": "Stile font",
+      "color": "Colore",
       "margin":{
-        "title": "Margin",
-        "top": "Top",
-        "bottom": "Bottom"
+        "title": "Margine",
+        "top": "Superiore",
+        "bottom": "Inferiore"
       },
       "description":{
-        "title": "Subtitle (diagram description)",
-        "show": "Show",
-        "fontSize": "Font size",
-        "fontWeight": "Font weight",
-        "fontStyle": "Font style",
-        "color": "Color",
-        "marginTop": "Margin top"
+        "title": "Sotto-titolo (descrizione diagramma)",
+        "show": "Mostra",
+        "fontSize": "Dimensione font",
+        "fontWeight": "Peso del font",
+        "fontStyle": "Stile font",
+        "color": "Colore",
+        "marginTop": "Margine superiore"
       }
     },
     "other":{
-      "title": "Other",
-      "disableAnimations": "Disable animations",
-      "forceFullEdgeRedraw": "Force full redraw of edges"
+      "title": "Altro",
+      "disableAnimations": "Disabilita animazione",
+      "forceFullEdgeRedraw": "Forza ridisegno dei rami",
+      "hideLabels": "Nascondi le etichette",
+      "hidePayoffs": "Nascondi saldo",
+      "hideProbabilities": "Nascondi le probabilità",
+      "raw": "Non elaborato"
     }
   },
   "aboutDialog":{
-    "title": "About"
+    "title": "Informazioni"
   },
   "help":{
-    "header": "Help",
+    "header": "Aiuto",
     "mouse": {
-      "header":"Mouse actions:",
+      "header":"Azioni mouse:",
       "list":{
-        "1": "left mouse button: node/edge selection",
-        "2": "right mouse button: context menu (adding/manipulating nodes)",
-        "3": "left mouse dbclick: context menu"
+        "1": "Bottone sinistro: selezione nodo/ramo",
+        "2": "Bottone destro: menu di contesto (aggiunta/manipolazione nodi)",
+        "3": "Doppio click bottone sinistro: menu di contesto"
       }
     },
     "keyboard": {
-      "header":"Keyboard:",
+      "header":"Scorciatoie tastiera:",
       "list":{
-        "1": "Del: delete selected nodes",
-        "2": "Ctrl-C/X: copy/cut selected nodes",
-        "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
-        "4": "Ctrl-Y/Z: undo/redo",
-        "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
-        "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
+        "1": "Del: cancella nodi selezionati",
+        "2": "Ctrl-C/X: copia/taglia nodi selezionati",
+        "3": "Ctrl-V: incolla nodi copiati come sotto-albero di un nodo selezionato",
+        "4": "Ctrl-Y/Z: ripristina/ripeti",
+        "5": "Ctrl-Alt-D/C/T: aggiungi nuovo sottonodo Decisione/Opportunità/Terminale di un <strong>nodo selezionato</strong>",
+        "6": "Ctrl-Alt-D/C: inietta un nuovo nodo Decisione/Opportunità in un <strong>ramo selezionato</strong>"
       }
     },
-    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
+    "docs": "La documentazione di SilverDecision e disponibile <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">qui</a>"
   },
   "definitionsDialog":{
-    "title": "Variable definitions",
+    "title": "Definizioni delle variabili",
     "buttons":{
-      "recalculate": "Recalculate"
+      "recalculate": "Ricalcolare"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Variabili valutate"
   },
   "sidebarDefinitions":{
-    "header": "Variables",
-    "code": "Code",
+    "header": "Variabili",
+    "code": "Codice",
     "buttons":{
-      "openDialog" : "Open dialog",
-      "recalculate": "Recalculate"
+      "openDialog" : "Apri il dialogo",
+      "recalculate": "Ricalcolare"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Variabili valutate"
   },
   "layoutOptions":{
-    "header": "Layout",
-    "marginHorizontal": "Horizontal Margin",
-    "marginVertical": "Vertical Margin",
-    "nodeSize": "Node size",
-    "edgeSlantWidthMax": "Edge slant (max)",
-    "gridWidth": "Width",
-    "gridHeight": "Height"
+    "header": "Disposizione",
+    "marginHorizontal": "Margine orizzontale",
+    "marginVertical": "Margine verticale",
+    "nodeSize": "Dimensione nodo",
+    "edgeSlantWidthMax": "Inclinazione nodo",
+    "gridWidth": "Larghezza",
+    "gridHeight": "Altezza"
   },
   "diagramDetails":{
-    "header": "Details",
-    "title" : "Title",
-    "description" : "Description"
+    "header": "Dettagli",
+    "title" : "Titolo",
+    "description" : "Descrizione"
   },
   "objectProperties":{
     "header":{
       "node":{
-        "decision":"Decision Node",
-        "chance":"Chance Node",
-        "terminal":"Terminal Node"
+        "decision":"Nodo decisione",
+        "chance":"Nodo opportunità",
+        "terminal":"Nodo terminale"
       },
-      "edge": "Edge",
-      "text": "Floating text"
+      "edge": "Ramo",
+      "text": "Testo mobile"
     },
     "childrenProperties":{
       "node":{
-        "header": "Connections",
+        "header": "Connessioni",
         "child": {
-          "header": "Edge #{{number}}"
+          "header": "Ramo #{{number}}"
         }
       }
     }
   },
   "validation":{
-    "incompletePath": "Path not ending with terminal node",
-    "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
-    "invalidProbability": "Invalid probability in edge #{{number}}",
-    "invalidPayoff": "Invalid payoff in edge #{{number}}"
+    "incompletePath": "Percorso senza nodo terminale",
+    "probabilityDoNotSumUpTo1": "La somma delle probabilità è diversa da 1",
+    "invalidProbability": "Probabilità non valida - bordo #{{number}}",
+    "invalidPayoff": "Saldo non valido - bordo #{{number}}"
   },
   "growl":{
-    "brushDisabled": "Selection brush disabled",
-    "brushEnabled": "Selection brush enabled"
+    "brushDisabled": "Selezione pennello disabilitata",
+    "brushEnabled": "Selezione pennello abilitata"
   },
   "tooltip":{
     "node":{
-      "payoff": "Payoff",
-      "aggregatedPayoff": "Aggregated Payoff",
-      "probabilityToEnter": "Probability to enter"
+      "payoff": "Saldo",
+      "aggregatedPayoff": "Saldo aggregato",
+      "probabilityToEnter": "Probabilità da inserire"
     },
     "edge":{
-      "payoff": "Payoff: {{value}}",
-      "probability": "Probability: {{value}}"
+      "payoff": "Saldo: {{value}}",
+      "probability": "Probabilità: {{value}}"
     }
   },
   "confirm":{
-    "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
-    "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
-    "beforeunload": "Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost."
+    "newDiagram": "Vuoi davvero cancellare ildiagramma corrente ? Tutti i dati non salvati saranno persi.",
+    "openDiagram": "Sei sicuro? Tutti i dati non salvati saranno persi.",
+    "beforeunload": "Sei sicuro di voler uscire da SilverDecisions ?Tutti i dati non salvati saranno persi."
   },
   "error":{
-    "jsonParse": "Error parsing file!",
-    "fileApiNotSupported":"The file API isn't supported on this browser yet.",
-    "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
-    "notSilverDecisionsFile":"Not a SilverDecisions file!",
-    "malformedData":"Error reading tree data!",
-    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
-    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
-    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
-    "pdfExportNotSupported": "Export to PDF is not supported in your browser.",
-    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
-    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
-    "incorrectNumberFormatOptions": "Incorrect number format options, using default.",
-    "jsPDFisNotIncluded": "jsPDF is not included!",
-    "serverSideExportRequestFailure": "Export Server request failed!"
+    "jsonParse": "Errore analizzando il file !",
+    "fileApiNotSupported":"l'API di questo file non è ancora supportata in questo browser.  ",
+    "inputFilesProperty":"Il tuo browser non sembra supportare la proprieta del file di input.",
+    "notSilverDecisionsFile":"Non è un file SilverDecisions !",
+    "incorrectVersionFormat": "Formato non corretto della serie di versione!",
+    "fileVersionNewerThanApplicationVersion": "La versione in file è più recente rispetto alla versione dell'applicazione. Alcune funzionalità possono essere indisponibili.",
+    "objectiveComputationFailure": "Errore durante il calcolo obiettivo!",
+    "diagramDrawingFailure": "Errore durante il disegno della diagramma!",
+    "malformedData":"Errore durante la lettura dei dati dell'albero !",
+    "pngExportNotSupported": "L'esport in formato PNG non è supportata nel tuo browser.",
+    "pngExportNotSupportedIE": "L'esport in formato PNG non è supportata in Internet Explorer.",
+    "svgExportNotSupported": "L'esport in formato SVG non è supportata nel tuo browser.",
+    "pdfExportNotSupported": "L'esport in formato PDF non è supportata nel tuo browser.",
+    "incorrectPayoffNumberFormatOptions": "Opzioni per il formato dei saldi non corrette.",
+    "incorrectProbabilityNumberFormatOptions": "Opzioni per il formato delle probabilità non corrette.",
+    "incorrectNumberFormatOptions": "Opzioni per il formato dei numeri non corrette, utilizzo del default.",
+    "jsPDFisNotIncluded": "jsPDF non incluso !",
+    "serverSideExportRequestFailure": "Richiesta di export fallita lato server !"
   }
 }
+
