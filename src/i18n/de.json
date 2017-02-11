@@ -1,10 +1,10 @@
 {
   "toolbar": {
-    "newDiagram": "New diagram",
-    "openDiagram": "Open existing diagram",
-    "saveDiagram": "Save current diagram",
+    "newDiagram": "Neues Diagramm",
+    "openDiagram": "Diagramm öffnen",
+    "saveDiagram": "Aktuelles Diagramm speichern",
     "export":{
-      "label": "Export to",
+      "label": "Exportieren nach",
       "png": "Png",
       "svg": "Svg",
       "pdf": "Pdf"
@@ -12,11 +12,11 @@
     "layout":{
       "label": "Layout",
       "manual": "Manual",
-      "tree": "Tree",
+      "tree": "Baum",
       "cluster": "Cluster"
     },
     "objectiveRule":{
-      "label": "Rule",
+      "label": "Regel",
       "options": {
         "expected-value-maximization":"max",
         "expected-value-minimization":"min",
@@ -26,19 +26,19 @@
         "mini-max":"mini-max"
       }
     },
-    "undo": "Undo",
-    "redo": "Redo",
-    "settings": "Settings",
-    "about": "About",
-    "recompute": "Recompute"
+    "undo": "Rückgängig machen",
+    "redo": "Wiederholen",
+    "settings": "Einstellungen",
+    "about": "Über",
+    "recompute": "Neu Berechnen"
   },
   "node":{
-    "name": "Label"
+    "name": "Beschreibung"
   },
   "edge":{
-    "name": "Label",
-    "payoff": "Payoff",
-    "probability": "Probability"
+    "name": "Beschreibung",
+    "payoff": "Auszahlung",
+    "probability": "Wahrscheinlichkeit"
 
   },
   "text":{
@@ -46,276 +46,290 @@
   },
   "contextMenu":{
     "main":{
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addText": "Add Text",
-      "paste": "Paste",
-      "selectAllNodes": "Select all nodes"
+      "addDecisionNode": "Entscheidungsknoten hinzufügen",
+      "addChanceNode": "Zufall Knoten hinzufügen",
+      "addText": "Text hinzufügen ",
+      "paste": "Einfügen",
+      "selectAllNodes": "Alle Knoten auswählen"
     },
     "node":{
-      "copy": "Copy",
-      "cut": "Cut",
-      "paste": "Paste",
-      "delete": "Delete",
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addTerminalNode": "Add Terminal Node",
-      "selectSubtree": "Select subtree",
-      "flipSubtree": "Flip subtree"
+      "copy": "Kopieren",
+      "cut": "Ausschneiden",
+      "paste": "Einfügen",
+      "delete": "Löschen",
+      "addDecisionNode": "Entscheidungsknoten hinzufügen",
+      "addChanceNode": "Zufall Knoten hinzufügen",
+      "addTerminalNode": "Endknotten hinzufügen",
+      "convert":{
+        "decision": "Als Entscheidungsknoten",
+        "chance": "Als Zufall Knoten",
+        "terminal": "Als Endknoten"
+
+      },
+      "selectSubtree": "Teilbaum wählen",
+      "flipSubtree": "Teilbaum umdrehen"
     },
     "edge":{
-      "injectDecisionNode": "Inject Decision Node",
-      "injectChanceNode": "Inject Chance Node"
+      "injectDecisionNode": "Entscheidungsknoten Injizieren",
+      "injectChanceNode": "Zufall Knoten Injizieren"
     },
     "text":{
-      "delete": "Delete"
+      "delete": "Löschen"
     }
   },
   "settingsDialog":{
-    "title": "Settings",
+    "title": "Einstellungen",
     "general":{
-      "title": "General",
-      "fontSize": "Font size",
-      "fontFamily": "Font family",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "numberFormatLocale": "Number format locale"
+      "title": "Allgemein",
+      "fontSize": "Schriftgröße",
+      "fontFamily": "Schriftfamilie",
+      "fontWeight": "Schriftgewicht",
+      "fontStyle": "Schriftstil",
+      "numberFormatLocale": "Zahlenformat Gebietsschema"
     },
     "payoff":{
-      "title": "Payoff number format",
-      "currency": "Currency",
-      "currencyDisplay": "Currency display",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "useGrouping": "Use grouping separators"
+      "title": "Auszahlung Zahlenformat",
+      "currency": "Währung",
+      "currencyDisplay": "Währungsanzeige",
+      "style": "Stil",
+      "minimumFractionDigits": "Minimale Bruchzahlen",
+      "maximumFractionDigits": "Maximale Bruchzahlen",
+      "useGrouping": "Gruppierung Separatoren verwenden"
     },
     "probability":{
-      "title": "Probability number format",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "fontSize": "Font size",
-      "color": "Color"
+      "title": "Wahrscheinlichkeit Zahlenformat",
+      "style": "Stil",
+      "minimumFractionDigits": "Minimale Bruchzahlen",
+      "maximumFractionDigits": "Maximale Bruchzahlen",
+      "fontSize": "Schriftgröße",
+      "color": "Farbe"
     },
     "node":{
-      "title": "Node",
-      "strokeWidth": "Stroke width",
+      "title": "Knoten",
+      "strokeWidth": "Strichbreite",
       "optimal":{
         "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "stroke": "Farbe",
+        "strokeWidth": "Strichbreite"
       },
       "label": {
-        "title": "Label",
-        "fontSize": "Label font size",
-        "color": "Label color"
+        "title": "Beschreibung",
+        "fontSize": "Beschreibung Schriftgröße",
+        "color": "Beschreibungsfarbe"
       },
       "payoff": {
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
+        "title": "Auszahlung",
+        "fontSize": "Schriftgröße",
+        "color": "Farbe",
+        "negativeColor": "Negative Farbe"
       },
       "decision": {
-        "title": "Decision Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Entscheidungsknoten",
+        "fill": "Füllfarbe",
+        "stroke": "Strichfarbe",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Ausgewählte Füllfarbe"
         }
       },
       "chance": {
-        "title": "Chance Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Zufall Knoten",
+        "fill": "Füllfarbe",
+        "stroke": "Strichfarbe",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Ausgewählte Füllfarbe"
         }
       },
       "terminal":{
-        "title": "Terminal Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
+        "title": "Endknoten",
+        "fill": "Füllfarbe",
+        "stroke": "Strichfarbe",
         "selected": {
-          "fill": "Selected fill color"
+          "fill": "Ausgewählte Füllfarbe"
         },
         "payoff": {
-          "title": "Payoff",
-          "fontSize": "Font size",
-          "color": "Color",
-          "negativeColor": "Negative color"
+          "title": "Auszahlung",
+          "fontSize": "Schriftgröße",
+          "color": "Farbe",
+          "negativeColor": "Negative Farbe"
         }
       }
     },
     "edge":{
-      "title": "Edge",
-      "stroke": "Color",
-      "strokeWidth": "Stroke width",
+      "title": " Zweig",
+      "stroke": "Farbe",
+      "strokeWidth": "Strichbreite",
       "optimal":{
         "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "stroke": "Farbe",
+        "strokeWidth": "Strichbreite"
       },
       "selected":{
-        "title": "Selected",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
+        "title": "Ausgewählt",
+        "stroke": "Farbe",
+        "strokeWidth": "Strichbreite"
       },
       "label": {
-        "title": "Label",
-        "fontSize": "Font size",
-        "color": "Color"
+        "title": "Beschreibung",
+        "fontSize": "Schriftgröße",
+        "color": "Farbe"
       },
       "payoff":{
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
+        "title": "Auszahlung",
+        "fontSize": "Schriftgröße",
+        "color": "Farbe",
+        "negativeColor": "Negative Farbe"
       }
     },
     "diagramTitle":{
-      "title": "Diagram title",
-      "fontSize": "Font size",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "color": "Color",
+      "title": "Diagrammtitel",
+      "fontSize": "Schriftgröße",
+      "fontWeight": "Schriftgewicht",
+      "fontStyle": "Schriftstil",
+      "color": "Farbe",
       "margin":{
-        "title": "Margin",
-        "top": "Top",
-        "bottom": "Bottom"
+        "title": "Rand",
+        "top": "Oben",
+        "bottom": "Unten"
       },
       "description":{
-        "title": "Subtitle (diagram description)",
-        "show": "Show",
-        "fontSize": "Font size",
-        "fontWeight": "Font weight",
-        "fontStyle": "Font style",
-        "color": "Color",
-        "marginTop": "Margin top"
+        "title": "Untertitel (Diagrammbeschreibung)",
+        "show": "Anzeigen",
+        "fontSize": "Schriftgröße",
+        "fontWeight": "Schriftgewicht",
+        "fontStyle": "Schriftstil",
+        "color": "Farbe",
+        "marginTop": "Rand Oben"
       }
     },
     "other":{
-      "title": "Other",
-      "disableAnimations": "Disable animations",
-      "forceFullEdgeRedraw": "Force full redraw of edges"
+      "title": "Weitere",
+      "disableAnimations": "Animationen Deaktivieren",
+      "forceFullEdgeRedraw": "Erzwingt vollständige Neuzeichnung der Zweige",
+      "hideLabels": "Verstecke Beschreibung",
+      "hidePayoffs": "Verstecke Auszahlungen",
+      "hideProbabilities": "Verstecke Wahrscheinlichkeiten",
+      "raw": "Rau"
     }
   },
   "aboutDialog":{
-    "title": "About"
+    "title": "Über"
   },
   "help":{
-    "header": "Help",
+    "header": "Hilfe",
     "mouse": {
-      "header":"Mouse actions:",
+      "header":"Mausaktionen:",
       "list":{
-        "1": "left mouse button: node/edge selection",
-        "2": "right mouse button: context menu (adding/manipulating nodes)",
-        "3": "left mouse dbclick: context menu"
+        "1": "Linke Maustaste: Knoten/Zweig Auswahl",
+        "2": "Rechte Maustaste: Kontextmenü (Hinzufügen / Manipulieren von Knoten)",
+        "3": "Linke Maus Doppelklick: Kontextmenü"
       }
     },
     "keyboard": {
-      "header":"Keyboard:",
+      "header":"Tastatur:",
       "list":{
-        "1": "Del: delete selected nodes",
-        "2": "Ctrl-C/X: copy/cut selected nodes",
-        "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
-        "4": "Ctrl-Y/Z: undo/redo",
-        "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
-        "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
+        "1": "Del: ausgewählte Knoten Löschen",
+        "2": "Ctrl-C/X: ausgewählte Knoten Kopieren/Ausschneiden",
+        "3": "Ctrl-V: kopierte Knoten als Teilbaum ausgewähltes Knotens einfügen",
+        "4": "Ctrl-Y/Z: Rückgängig/Wiederholen",
+        "5": "Ctrl-Alt-D/C/T: Neue Entscheidungs/Zufall/Endsknoten als Unterknoten von <strong>ausgewähltem Knoten</strong>",
+        "6": "Ctrl-Alt-D/C: Neue Entscheidungs/Zufall Knoten in <strong>ausgewählten Zweig </strong> Injizieren"
       }
     },
-    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
+    "docs": "Die Dokumentation von SilverDecisions ist unter <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a> verfügbar"
   },
   "definitionsDialog":{
-    "title": "Variable definitions",
+    "title": "Variablendefinitionen",
     "buttons":{
-      "recalculate": "Recalculate"
+      "recalculate": "Neu berechnen"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Ausgewertete Variablen"
   },
   "sidebarDefinitions":{
-    "header": "Variables",
+    "header": "Variablen",
     "code": "Code",
     "buttons":{
-      "openDialog" : "Open dialog",
-      "recalculate": "Recalculate"
+      "openDialog" : "Dialog Öffnen",
+      "recalculate": "Neu berechnen"
     },
-    "evaluatedVariables": "Evaluated variables"
+    "evaluatedVariables": "Ausgewertete Variablen"
   },
   "layoutOptions":{
     "header": "Layout",
-    "marginHorizontal": "Horizontal Margin",
-    "marginVertical": "Vertical Margin",
-    "nodeSize": "Node size",
-    "edgeSlantWidthMax": "Edge slant (max)",
-    "gridWidth": "Width",
-    "gridHeight": "Height"
+    "marginHorizontal": "Horizontaler Rand",
+    "marginVertical": "Vertikaler Rand",
+    "nodeSize": "Knotengröße",
+    "edgeSlantWidthMax": "Kantenschräge (max)",
+    "gridWidth": "Breite",
+    "gridHeight": "Höhe"
   },
   "diagramDetails":{
-    "header": "Details",
-    "title" : "Title",
-    "description" : "Description"
+    "header": "Einzelheiten",
+    "title" : "Titel",
+    "description" : "Beschreibung"
   },
   "objectProperties":{
     "header":{
       "node":{
-        "decision":"Decision Node",
-        "chance":"Chance Node",
-        "terminal":"Terminal Node"
+        "decision":"Entscheidungsknoten",
+        "chance":"Zufall Knoten",
+        "terminal":"Endknoten"
       },
-      "edge": "Edge",
-      "text": "Floating text"
+      "edge": "Zweig",
+      "text": "Schwimmender Text"
     },
     "childrenProperties":{
       "node":{
-        "header": "Connections",
+        "header": "Verbindungen",
         "child": {
-          "header": "Edge #{{number}}"
+          "header": "Zweig #{{number}}"
         }
       }
     }
   },
   "validation":{
-    "incompletePath": "Path not ending with terminal node",
-    "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
-    "invalidProbability": "Invalid probability in edge #{{number}}",
-    "invalidPayoff": "Invalid payoff in edge #{{number}}"
+    "incompletePath": "Pfad, der nicht mit dem Endknoten endet",
+    "probabilityDoNotSumUpTo1": "Die Summe der Wahrscheinlichkeiten ist nicht gleich 1",
+    "invalidProbability": "Ungültige Wahrscheinlichkeit im Zweig #{{number}}",
+    "invalidPayoff": "Ungültige Auszahlung in Zweig #{{number}}"
   },
   "growl":{
-    "brushDisabled": "Selection brush disabled",
-    "brushEnabled": "Selection brush enabled"
+    "brushDisabled": "Auswahlbürste deaktiviert",
+    "brushEnabled": "Auswahlbürste aktiviert"
   },
   "tooltip":{
     "node":{
-      "payoff": "Payoff",
-      "aggregatedPayoff": "Aggregated Payoff",
-      "probabilityToEnter": "Probability to enter"
+      "payoff": "Auszahlung",
+      "aggregatedPayoff": "Aggregierte Auszahlung",
+      "probabilityToEnter": "Wahrscheinlichkeit"
     },
     "edge":{
-      "payoff": "Payoff: {{value}}",
-      "probability": "Probability: {{value}}"
+      "payoff": "Auszahlung: {{value}}",
+      "probability": "Wahrscheinlichkeit: {{value}}"
     }
   },
   "confirm":{
-    "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
-    "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
-    "beforeunload": "Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost."
+    "newDiagram": "Möchten Sie das aktuelle Diagramm wirklich löschen? Alle nicht gespeicherten Daten werden verloren.",
+    "openDiagram": "Sind Sie sicher? Alle nicht gespeicherten Diagrammdaten werden verloren.",
+    "beforeunload": "Sind Sie sicher, dass Sie Silver Decisions schließen möchten? Alle nicht gespeicherten Diagrammdaten werden verloren."
   },
   "error":{
-    "jsonParse": "Error parsing file!",
-    "fileApiNotSupported":"The file API isn't supported on this browser yet.",
-    "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
-    "notSilverDecisionsFile":"Not a SilverDecisions file!",
-    "malformedData":"Error reading tree data!",
-    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
-    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
-    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
-    "pdfExportNotSupported": "Export to PDF is not supported in your browser.",
-    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
-    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
-    "incorrectNumberFormatOptions": "Incorrect number format options, using default.",
-    "jsPDFisNotIncluded": "jsPDF is not included!",
-    "serverSideExportRequestFailure": "Export Server request failed!"
+    "jsonParse": "Fehler beim Analysieren der Datei!",
+    "fileApiNotSupported":"Die Datei-API wird in diesem Browser noch nicht unterstützt.",
+    "inputFilesProperty":"Ihr Browser scheint die `files`-Eigenschaft der Dateieingaben nicht zu unterstützen.",
+    "notSilverDecisionsFile":"Keine SilverDecisions-Datei!",
+    "incorrectVersionFormat": "Falsches Format der Versionszeichenfolge!",
+    "fileVersionNewerThanApplicationVersion": "Version der Datei ist neuer als Version des Softwares. Einige Funktionen möglicherweise fehlen.",
+    "objectiveComputationFailure": "Fehler beim Berechnen von Objektiven!",
+    "diagramDrawingFailure": "Fehler beim Zeichnen des Diagramms!",
+    "malformedData":"Fehler beim Lesen der Baumdaten!",
+    "pngExportNotSupported": "Der Export nach PNG wird in Ihrem Browser nicht unterstützt.",
+    "pngExportNotSupportedIE": "Der Export nach PNG wird in Internet Explorer nicht unterstützt.",
+    "svgExportNotSupported": "Der Export nach SVG wird in Ihrem Browser nicht unterstützt.",
+    "pdfExportNotSupported": "Der Export nach PDF wird in Ihrem Browser nicht unterstützt.",
+    "incorrectPayoffNumberFormatOptions": "Falsche Auszahlungsformat Optionen",
+    "incorrectProbabilityNumberFormatOptions": "Falsche Wahrscheinlichkeitsformat Optionen",
+    "incorrectNumberFormatOptions": "Falsche Zahlenformat, die Standardeinstellungen angewendet.",
+    "jsPDFisNotIncluded": "jsPDF ist nicht enthalten!",
+    "serverSideExportRequestFailure": "Export Server Anfrage fehlgeschlagen!"
   }
 }
