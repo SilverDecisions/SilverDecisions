@@ -575,7 +575,10 @@ export class TreeDesigner {
 
         var payoffText = edgesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')
-            .classed('negative', d=>d.payoff<0)
+            .classed('negative', d=> {
+                var val = d.computedBasePayoff();
+                return val!==null && val<0;
+            })
             .classed('sd-hidden', this.config.hidePayoffs)
             // .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff))
             .text(d=>{
@@ -583,7 +586,7 @@ export class TreeDesigner {
                     return d.payoff;
                 }
 
-                var val = d.computedValue('', 'payoff');
+                var val = d.computedBasePayoff();
                 if(val!==null && !isNaN(val))
                     return self.config.payoffNumberFormatter(val);
 
