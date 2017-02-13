@@ -595,20 +595,40 @@ export class DataModel {
                 grandChildEdge.probability = this.expressionEngine.serialize(grandChildEdge.probability)
             });
 
-            if (!probabilitySum.equals(1)) {
-                log.info('Sum of the probabilities is not equal to 1 : ', probabilitySum);
-                var normalizationFactor = ExpressionEngine.divide(1, probabilitySum);
-                child.childEdges.forEach(grandChildEdge=> {
-                    grandChildEdge.probability = ExpressionEngine.multiply(grandChildEdge.probability, normalizationFactor);
-                });
-                log.info("Probabilities normalized with normalizationFactor: " + normalizationFactor);
-            }
-
+            this._normalizeProbabilitiesAfterFlip(child.childEdges, probabilitySum);
             edge.probability = this.expressionEngine.serialize(edge.probability)
         }
+        this._normalizeProbabilitiesAfterFlip(root.childEdges);
+
 
         this.callbacksDisabled = callbacksDisabled;
         this._fireNodeAddedCallback();
+    }
+
+    _normalizeProbabilitiesAfterFlip(childEdges, probabilitySum){
+        if(!probabilitySum){
+            probabilitySum = 0.0;
+            childEdges.forEach(e=> {
+                probabilitySum = ExpressionEngine.add(probabilitySum, e.probability);
+            });
+        }
+        if (!probabilitySum.equals(1)) {
+            log.info('Sum of the probabilities in child nodes is not equal to 1 : ', probabilitySum);
+            var newProbabilitySum = 0.0;
+            var cf = 1000000000000; //10^12
+            var prec = 12;
+            childEdges.forEach(e=> {
+                e.probability = parseInt(ExpressionEngine.round(e.probability, prec) * cf);
+                newProbabilitySum = newProbabilitySum + e.probability;
+            });
+            var rest = cf - newProbabilitySum;
+            log.info('Normalizing with rounding to precision: ' + prec, rest);
+            childEdges[0].probability = ExpressionEngine.add(rest, childEdges[0].probability);
+            newProbabilitySum = 0.0;
+            childEdges.forEach(e=> {
+                e.probability = this.expressionEngine.serialize(ExpressionEngine.divide(parseInt(e.probability), cf))
+            })
+        }
     }
 
     clearExpressionScope() {

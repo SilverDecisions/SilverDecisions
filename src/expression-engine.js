@@ -71,6 +71,10 @@ export class ExpressionEngine{
         return math.multiply(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }
 
+    static round(a, places){
+        return ExpressionEngine.toNumber(a).round(places)
+    }
+
     static toNumber(a){
         return math.fraction(a);
     }

@@ -471,4 +471,8 @@ export class Utils {
         }
         document.dispatchEvent(event);
     }
+
+    stripNumberToPrec(num, prec=12){
+        return parseFloat(parseFloat(num).toPrecision(prec));
+    }
 }
