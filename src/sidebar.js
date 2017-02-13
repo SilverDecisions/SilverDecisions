@@ -119,6 +119,8 @@ export class Sidebar {
         this.onDefinitionsCodeChanged = null;
         this.definitionsContainer.select('.toggle-button').on('click', () => {
             this.definitionsContainer.classed('sd-extended', !this.definitionsContainer.classed('sd-extended'));
+            Utils.updateInputClass(this.definitionsCode);
+            Utils.autoResizeTextarea(this.definitionsCode.node())
         });
 
         this.definitionsCode = this.definitionsContainer.select('textarea#sd-sidebar-definitions-code').on('change', function () {
