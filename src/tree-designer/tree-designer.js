@@ -180,10 +180,6 @@ export class TreeDesigner {
         return this;
     }
 
-    setRuleName(ruleName){
-        this.config.$rule = ruleName;
-    }
-
     init(){
 
         this.initSvg();
@@ -413,17 +409,16 @@ export class TreeDesigner {
         this.layout.nodeLabelPosition(labelMergeT)
             .attr('text-anchor', 'middle')
 
-        var ruleName = this.config.$rule;
         var payoff = nodesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=> {
-                var val = d.computedValue(ruleName, 'childrenPayoff');
+                var val = d.displayValue('childrenPayoff');
                 return val!==null && val<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
-                var val = d.computedValue(ruleName, 'childrenPayoff');
-                return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
+                var val = d.displayValue('childrenPayoff');
+                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
             });
 
         Tooltip.attach(payoff, d=>i18n.t('tooltip.node.payoff',{value: d.payoff}));
@@ -438,13 +433,13 @@ export class TreeDesigner {
 
         var aggregatedPayoff = nodesMerge.select('text.aggregated-payoff')
             .classed('negative', d=> {
-                var val = d.computedValue(ruleName, 'aggregatedPayoff');
+                var val = d.displayValue('aggregatedPayoff');
                 return val!==null && val<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
-                var val = d.computedValue(ruleName, 'aggregatedPayoff');
-                return val!==null && !isNaN(val) ? self.config.payoffNumberFormatter(val): ''
+                var val = d.displayValue('aggregatedPayoff');
+                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
             });
         Tooltip.attach(aggregatedPayoff, i18n.t('tooltip.node.aggregatedPayoff'));
 
@@ -459,8 +454,8 @@ export class TreeDesigner {
 
         var probabilityToEnter = nodesMerge.select('text.probability-to-enter')
             .text(d=>{
-                var val = d.computedValue(ruleName, 'probabilityToEnter');
-                return val!==null && !isNaN(val) ? self.config.probabilityNumberFormatter(val): ''
+                var val = d.displayValue('probabilityToEnter');
+                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
             })
             .classed('sd-hidden', this.config.hideProbabilities || this.config.raw);
         Tooltip.attach(probabilityToEnter, i18n.t('tooltip.node.probabilityToEnter'));
@@ -513,8 +508,7 @@ export class TreeDesigner {
     }
 
     isOptimal(d){
-        var ruleName = this.config.$rule;
-        return d.computedValue(ruleName, 'optimal');
+        return d.displayValue('optimal');
     }
 
     redrawEdges() {
@@ -576,7 +570,7 @@ export class TreeDesigner {
         var payoffText = edgesMerge.select('text.payoff')
             // .attr('dominant-baseline', 'hanging')
             .classed('negative', d=> {
-                var val = d.computedBasePayoff();
+                var val = d.displayPayoff();
                 return val!==null && val<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs)
@@ -586,9 +580,15 @@ export class TreeDesigner {
                     return d.payoff;
                 }
 
-                var val = d.computedBasePayoff();
-                if(val!==null && !isNaN(val))
-                    return self.config.payoffNumberFormatter(val);
+                var val = d.displayPayoff();
+                if(val!==null){
+                    if(!isNaN(val)){
+                        return self.config.probabilityNumberFormatter(val);
+                    }
+                    if(Utils.isString(val)){
+                        return val;
+                    }
+                }
 
                 if(d.payoff!==null && !isNaN(d.payoff))
                     return self.config.probabilityNumberFormatter(d.payoff);
@@ -603,12 +603,11 @@ export class TreeDesigner {
         }
         this.layout.edgePayoffPosition(payoffEnter);
         this.layout.edgePayoffPosition(payoffTextT);
-        var ruleName = this.config.$rule;
 
-        Tooltip.attach(edgesMerge.select('text.probability'), d=>i18n.t('tooltip.edge.probability',{value: d.probability=== undefined ? d.computedValue(ruleName, '$probability') : d.probability}));
+        Tooltip.attach(edgesMerge.select('text.probability'), d=>i18n.t('tooltip.edge.probability',{value: d.probability=== undefined ? d.displayProbability() : d.probability}));
 
         edgesMerge.select('text.probability')
-            .classed('sd-hidden', this.config.hideProbabilities)
+            .classed('sd-hidden', this.config.hideProbabilities);
         var probabilityMergeT = edgesMergeT.select('text.probability');
         probabilityMergeT
             .attr('text-anchor', 'end')
@@ -616,13 +615,16 @@ export class TreeDesigner {
                 if(this.config.raw){
                     return d.probability;
                 }
-                var val = d.computedValue(ruleName, '$probability');
-                if(val!==null && !isNaN(val))
-                    return self.config.probabilityNumberFormatter(val);
+                var val = d.displayProbability();
 
-                val = d.computed['$probability'];
-                if(val!==null && !isNaN(val))
-                    return self.config.probabilityNumberFormatter(val);
+                if(val!==null){
+                    if(!isNaN(val)){
+                        return self.config.probabilityNumberFormatter(val);
+                    }
+                    if(Utils.isString(val)){
+                        return val;
+                    }
+                }
 
                 if(d.probability!==null && !isNaN(d.probability))
                     return self.config.probabilityNumberFormatter(d.probability);

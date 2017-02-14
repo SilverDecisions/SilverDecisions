@@ -47,4 +47,12 @@ export class Edge extends ObjectWithComputedValues{
     computedBasePayoff(val){
         return this.computedValue(null, 'payoff', val);
     }
+
+    displayProbability(val){
+        return this.displayValue('probability', val);
+    }
+
+    displayPayoff(val){
+        return this.displayValue('payoff', val);
+    }
 }

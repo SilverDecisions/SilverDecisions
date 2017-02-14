@@ -361,13 +361,11 @@ export class App {
     }
 
     setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
-        this.treeDesigner.setRuleName(ruleName);
         this.objectiveRulesManager.setCurrentRuleByName(ruleName);
         this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric);
         if(updateView){
             this.updateView(true);
         }
-
     }
 
 
@@ -401,7 +399,7 @@ export class App {
             if (vr.isValid()) {
                 this.objectiveRulesManager.recomputeTree(root, allRules);
             } else {
-                this.objectiveRulesManager.setProbabilitiesToDisplay();
+                this.objectiveRulesManager.updateDisplayValues();
             }
         });
         this.updateValidationMessages();

@@ -267,7 +267,7 @@ var data = {
 var app = new SilverDecisions('app-container', {
     lng: lng,
     readOnly: false,
-    logLevel: 'debug',
+    logLevel: 'trace',
     buttons:{
         new: true,
         save: true,

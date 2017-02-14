@@ -78,8 +78,9 @@ export class ObjectiveRulesManager{
         rules.forEach(rule=> {
             rule.computePayoff(root);
             rule.computeOptimal(root);
-            this.setProbabilitiesToDisplay(rule);
         });
+
+        this.updateDisplayValues();
 
         var time  = (new Date().getTime() - startTime)/1000;
         log.trace('recomputation took '+time+'s');
@@ -96,17 +97,45 @@ export class ObjectiveRulesManager{
         })
     }
 
-    setProbabilitiesToDisplay(rule) {
-        if(!rule){
-            rule = this.currentRule
-        }
+    updateDisplayValues() {
+        this.data.nodes.forEach(n=>{
+            this.updateNodeDisplayValues(n);
+        });
         this.data.edges.forEach(e=>{
-            if(e.parentNode instanceof model.DecisionNode){
-                rule.cValue(e, '$probability', rule.cValue(e, 'probability'));
-            }else if(e.parentNode instanceof model.ChanceNode){
-                rule.cValue(e, '$probability', e.computedValue(null ,'probability'));
-            }
+            this.updateEdgeDisplayValues(e);
         })
+    }
+
+    updateNodeDisplayValues(node){
+        var displayValueNames = ['childrenPayoff', 'aggregatedPayoff', 'probabilityToEnter', 'optimal'];
+        displayValueNames.forEach(n=>node.displayValue(n,this.getNodeDisplayValue(node, n)));
+    }
+
+    getNodeDisplayValue(node, name) {
+        return node.computedValue(this.currentRule.name, name)
+
+    }
+    updateEdgeDisplayValues(e){
+        var displayValueNames = ['probability', 'payoff', 'optimal'];
+        displayValueNames.forEach(n=>e.displayValue(n,this.getEdgeDisplayValue(e, n)));
+    }
+
+    getEdgeDisplayValue(e, name){
+        if(name==='probability'){
+            if(e.parentNode instanceof model.DecisionNode){
+                return this.currentRule.cValue(e, 'probability');
+            }
+            if(e.parentNode instanceof model.ChanceNode){
+                return e.computedBaseProbability();
+            }
+            return null;
+        }
+        if(name==='payoff'){
+            return e.computedBasePayoff();
+        }
+        if(name==='optimal'){
+            return e.computedValue(this.currentRule.name, 'optimal')
+        }
     }
 
 
