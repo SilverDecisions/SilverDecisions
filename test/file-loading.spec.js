@@ -49,7 +49,7 @@ describe("JSON file", function() {
                 if(endsWith(fileName, "_pass.json")){
                     it("should load without computation/validation errors", function(){
                         app.checkValidityAndRecomputeObjective(true, true, true);
-                        app.validationResults.forEach(function (result) {
+                        app.dataModel.validationResults.forEach(function (result) {
                             expect(result.isValid()).toBeTruthy()
                         });
                     })
@@ -57,7 +57,7 @@ describe("JSON file", function() {
                     it("should load with computation/validation errors", function(){
                         app.checkValidityAndRecomputeObjective(true, true, true);
                         var valid = true;
-                        app.validationResults.forEach(function (result) {
+                        app.dataModel.validationResults.forEach(function (result) {
                             valid = valid && result.isValid();
                         });
                         expect(valid).toBeFalsy()

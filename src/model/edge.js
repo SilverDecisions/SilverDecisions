@@ -8,6 +8,8 @@ export class Edge extends ObjectWithComputedValues{
     probability=undefined;
     payoff=0;
 
+    $DISPLAY_VALUE_NAMES = ['probability', 'payoff', 'optimal'];
+
     constructor(parentNode, childNode, name,payoff, probability, ){
         super();
         this.parentNode = parentNode;

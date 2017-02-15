@@ -1,4 +1,4 @@
-import {ContextMenu} from '../context-menu'
+import {ContextMenu} from './context-menu'
 import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'

@@ -15,6 +15,8 @@ export class Node extends ObjectWithComputedValues{
 
     expressionScope=null;
 
+    $DISPLAY_VALUE_NAMES = ['childrenPayoff', 'aggregatedPayoff', 'probabilityToEnter', 'optimal']
+
     constructor(type, location){
         super();
         this.location=location;

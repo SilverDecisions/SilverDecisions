@@ -2,13 +2,13 @@ import * as d3 from '../d3'
 
 import {Utils} from '../utils'
 import * as model from '../model/index'
-import {ContextMenu} from '../context-menu'
+import {ContextMenu} from './context-menu'
 import {MainContextMenu} from './main-context-menu'
 import {NodeContextMenu} from './node-context-menu'
 import {Layout} from './layout'
 import {NodeDragHandler} from './node-drag-handler'
 import {Tooltip} from '../tooltip'
-import {ValidationResult} from '../validation/validation-result'
+import {ValidationResult} from '../model/validation-result'
 import * as _ from "lodash";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
@@ -141,6 +141,7 @@ export class TreeDesignerConfig {
     hideProbabilities=false;
     raw=false;
 
+
     payoffNumberFormatter = (v)=> v;
     probabilityNumberFormatter  = (v)=> v;
 
@@ -148,6 +149,9 @@ export class TreeDesignerConfig {
     onEdgeSelected = (edge) => {};
     onTextSelected = (text) => {};
     onSelectionCleared = () => {};
+
+    operationsForObject = (o) => [];
+
 
     constructor(custom) {
         if (custom) {
@@ -231,6 +235,7 @@ export class TreeDesigner {
         this.redrawNodes();
         this.redrawEdges();
         this.redrawFloatingTexts();
+        this.updateValidationMessages();
         if(withTransitions){
             self.transition =  self.transitionPrev;
         }
@@ -712,11 +717,11 @@ export class TreeDesigner {
 
     }
 
-    updateValidationMessages(validationResults) {
+    updateValidationMessages() {
         var nodes = this.mainGroup.selectAll('.node');
         nodes.classed('error', false);
 
-        validationResults.forEach(validationResult=>{
+        this.data.validationResults.forEach(validationResult=>{
             if(validationResult.isValid()){
                 return;
             }
@@ -883,7 +888,7 @@ export class TreeDesigner {
     }
 
     initNodeContextMenu() {
-        this.nodeContextMenu = new NodeContextMenu(this);
+        this.nodeContextMenu = new NodeContextMenu(this, this.config.operationsForObject);
     }
 
     initEdgeContextMenu() {
@@ -1083,21 +1088,15 @@ export class TreeDesigner {
         },10)
     }
 
-    canFlipSubTree(node){
-        return this.data.canFlipSubTree(node);
-    }
-
-    flipSubTree(node){
+    performOperation(object, operation){
         var self = this;
         this.data.saveState();
-        this.data.flipSubTree(node);
+        operation.perform(object);
         setTimeout(function(){
             self.redraw();
             self.layout.update();
         },10)
-
     }
-
 
 
     moveNodeTo(x,y){

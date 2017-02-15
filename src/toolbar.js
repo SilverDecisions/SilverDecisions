@@ -178,7 +178,7 @@ export class Toolbar{
     initObjectiveRuleToolbarGroup() {
         var self = this;
         this.objectiveRuleSelect = this.container.select('#objective-rule-select');
-        var rules = this.app.objectiveRulesManager.rules;
+        var rules = this.app.getObjectiveRules();
         var options = this.objectiveRuleSelect.selectAll('option').data(rules);
         options.enter()
             .append('option')
@@ -194,6 +194,6 @@ export class Toolbar{
     }
 
     updateObjectiveRuleValue(){
-        this.objectiveRuleSelect.node().value = this.app.objectiveRulesManager.currentRule.name;
+        this.objectiveRuleSelect.node().value = this.app.getCurrentObjectiveRule().name;
     }
 }

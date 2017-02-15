@@ -1,4 +1,4 @@
-import {ContextMenu} from '../context-menu'
+import {ContextMenu} from './context-menu'
 import {Utils} from '../utils'
 import * as model from '../model/index'
 import * as d3 from '../d3'
@@ -7,7 +7,7 @@ import {i18n} from "../i18n/i18n";
 export class NodeContextMenu extends ContextMenu {
     treeDesigner;
 
-    constructor(treeDesigner) {
+    constructor(treeDesigner, operationsForObject) {
         var menu = function (d) {
 
             var copyMenuItem = {
@@ -80,15 +80,20 @@ export class NodeContextMenu extends ContextMenu {
                 }
             });
 
-            if(d instanceof model.ChanceNode){
-                menu.push({divider: true});
-                menu.push({
-                    title: i18n.t('contextMenu.node.flipSubtree'),
-                    action: function (elm, d, i) {
-                        treeDesigner.flipSubTree(d);
-                    },
-                    disabled: !treeDesigner.canFlipSubTree(d)
-                });
+            if(operationsForObject){
+                var operations = operationsForObject(d);
+                if(operations.length) {
+                    menu.push({divider: true});
+                    operations.forEach(op=>{
+                        menu.push({
+                            title: i18n.t('contextMenu.node.'+op.name),
+                            action: function (elm, d, i) {
+                                treeDesigner.performOperation(d, op);
+                            },
+                            disabled: !op.canPerform(d)
+                        });
+                    })
+                }
             }
 
             return menu;

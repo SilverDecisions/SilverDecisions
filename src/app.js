@@ -1,26 +1,23 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
-import * as math from './mathjs'
 import * as log from "./log"
 
 import {Utils} from './utils'
 import * as model from './model/index'
 
-import {ObjectiveRulesManager} from './objective/objective-rules-manager'
-import  {TreeValidator} from './validation/tree-validator'
-
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
-import {DataModel} from './data-model'
+import {DataModel} from './model/data-model'
 import {Templates} from './templates'
 import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
-import {ExpressionEngine} from './expression-engine'
+import {ExpressionEngine} from './expression-engine/expression-engine'
 import {SettingsDialog} from './settings-dialog'
-import {ExpectedValueMaximizationRule} from './objective/rules/expected-value-maximization-rule'
+import {ExpectedValueMaximizationRule} from './computations/objective/rules/expected-value-maximization-rule'
 import {AboutDialog} from "./about-dialog";
 import * as _ from "lodash";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
+import {ComputationsManager} from "./computations/computations-manager";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -93,7 +90,7 @@ export class App {
     container;
     dataModel; //Data model manager
     expressionEngine;
-    objectiveRulesManager;
+    computationsManager;
     treeDesigner;
     toolbar;
     sidebar;
@@ -105,8 +102,7 @@ export class App {
 
         this.initDataModel();
         this.initExpressionEngine();
-        this.initTreeValidator();
-        this.initObjectiveRulesManager();
+        this.initComputationsManager();
         this.initProbabilityNumberFormat();
         this.initPayoffNumberFormat();
         this.initTreeDesigner();
@@ -172,17 +168,11 @@ export class App {
 
 
     initExpressionEngine() {
-        this.expressionEngine = new ExpressionEngine(this.dataModel.expressionScope);
-        this.dataModel.setExpressionEngine(this.expressionEngine);
+        this.expressionEngine = new ExpressionEngine();
     }
 
-    initTreeValidator() {
-        this.treeValidator = new TreeValidator(this.expressionEngine);
-        this.dataModel.setTreeValidator(this.treeValidator);
-    }
-
-    initObjectiveRulesManager() {
-        this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel, this.expressionEngine);
+    initComputationsManager() {
+        this.computationsManager = new ComputationsManager(this.config.rule, this.dataModel, this.expressionEngine);
         this.checkValidityAndRecomputeObjective(false, false, false);
 
     }
@@ -230,7 +220,6 @@ export class App {
         var self = this;
         return Utils.deepExtend({
             $readOnly: self.config.readOnly,
-            $rule: self.config.rule,
             onNodeSelected: function (node) {
                 self.onObjectSelected(node);
             },
@@ -244,7 +233,8 @@ export class App {
                 self.onSelectionCleared();
             },
             payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v),
-            probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v)
+            probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v),
+            operationsForObject: (o) => self.computationsManager.operationsForObject(o)
         }, self.config.treeDesigner);
     }
 
@@ -361,11 +351,19 @@ export class App {
     }
 
     setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
-        this.objectiveRulesManager.setCurrentRuleByName(ruleName);
+        this.computationsManager.setCurrentRuleByName(ruleName);
         this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric);
         if(updateView){
             this.updateView(true);
         }
+    }
+
+    getCurrentObjectiveRule(){
+        return this.computationsManager.getCurrentRule();
+    }
+
+    getObjectiveRules(){
+        return this.computationsManager.getObjectiveRules();
     }
 
 
@@ -386,22 +384,7 @@ export class App {
     }
 
     checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
-        this.validationResults = [];
-
-        if(evalCode||evalNumeric){
-            this.objectiveRulesManager.evalExpressions(evalCode, evalNumeric);
-        }
-
-
-        this.dataModel.getRoots().forEach(root=> {
-            var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
-            this.validationResults.push(vr);
-            if (vr.isValid()) {
-                this.objectiveRulesManager.recomputeTree(root, allRules);
-            } else {
-                this.objectiveRulesManager.updateDisplayValues();
-            }
-        });
+        this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric);
         this.updateValidationMessages();
         Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
     }
@@ -409,7 +392,7 @@ export class App {
     updateValidationMessages() {
         var self = this;
         setTimeout(function () {
-            self.treeDesigner.updateValidationMessages(self.validationResults);
+            self.treeDesigner.updateValidationMessages();
         }, 1);
     }
 
@@ -432,7 +415,7 @@ export class App {
 
         if(Utils.isString(diagramData)){
             try{
-                diagramData = JSON.parse(diagramData, math.json.reviver);
+                diagramData = JSON.parse(diagramData, self.expressionEngine.getJsonReviver());
             }catch (e){
                 errors.push('error.jsonParse');
                 alert(i18n.t('error.jsonParse'));
@@ -478,7 +461,7 @@ export class App {
                 this.config.lng = diagramData.lng;
             }
             if (diagramData.rule) {
-                if (this.objectiveRulesManager.isRuleName(diagramData.rule)) {
+                if (this.computationsManager.isRuleName(diagramData.rule)) {
                     this.config.rule = diagramData.rule;
                 } else {
                     delete this.config.rule;
@@ -549,7 +532,7 @@ export class App {
             buildTimestamp: App.buildTimestamp,
             savetime: d3.isoFormat(new Date()),
             lng: self.config.lng,
-            rule: self.objectiveRulesManager.currentRule.name,
+            rule: self.computationsManager.getCurrentRule().name,
             title: self.config.title,
             description: self.config.description,
             format: self.config.format,
@@ -579,7 +562,7 @@ export class App {
                 return undefined;
             }
 
-            if (v !== null && v !== undefined && v.mathjs) {
+            if (v !== null && v !== undefined && ExpressionEngine.isExpressionObject(v)) {
                 try{
                     return self.expressionEngine.serialize(v);
                 }catch (e){

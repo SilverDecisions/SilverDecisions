@@ -15,7 +15,7 @@ describe("Objective rules", function() {
     app.checkValidityAndRecomputeObjective(true, true, true);
     var result = JSON.parse(app.serialize());
 
-    app.objectiveRulesManager.rules.forEach(function(rule){
+    app.computationsManager.getObjectiveRules().forEach(function(rule){
         var ruleName = rule.name;
 
         describe(ruleName, function(){
