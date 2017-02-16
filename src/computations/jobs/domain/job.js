@@ -1,5 +1,6 @@
 import * as log from "../../../log"
 import {JOB_STATUS} from "./job-status";
+import {JobInterruptedException} from "./exceptions/job-interrupted-exception";
 /*Base class for jobs*/
 //A Job is an entity that encapsulates an entire job process ( an abstraction representing the configuration of a job).
 
@@ -13,7 +14,8 @@ export class Job {
     jobParametersValidator;
 
     jobRepository;
-    setJobRepository(jobRepository){
+
+    setJobRepository(jobRepository) {
         this.jobRepository = jobRepository;
     }
 
@@ -26,7 +28,7 @@ export class Job {
         log.debug("Job execution starting: " + execution);
 
         try {
-            if(this.jobParametersValidator){
+            if (this.jobParametersValidator) {
                 this.jobParametersValidator.validate(execution.jobParameters);
             }
 
@@ -36,13 +38,9 @@ export class Job {
                 execution.status = JOB_STATUS.STARTED;
 
                 this.executionListeners.forEach(listener=>listener.beforeJob(execution));
+                this.doExecute(execution);
+                log.debug("Job execution complete: " + execution);
 
-                try {
-                    this.doExecute(execution);
-                    log.debug("Job execution complete: " + execution);
-                } catch (e) {
-                    throw e;
-                }
             } else {
 
                 // The job was already stopped
@@ -53,9 +51,15 @@ export class Job {
             }
 
         } catch (e) {
-            log.error("Encountered fatal error executing job", e);
-            execution.status = JOB_STATUS.FAILED;
-            execution.exitStatus = JOB_STATUS.FAILED;
+            if (e instanceof JobInterruptedException) {
+                log.info("Encountered interruption executing job", e);
+                execution.status = JOB_STATUS.STOPPED;
+                execution.exitStatus = JOB_STATUS.STOPPED;
+            } else {
+                log.error("Encountered fatal error executing job", e);
+                execution.status = JOB_STATUS.FAILED;
+                execution.exitStatus = JOB_STATUS.FAILED;
+            }
             execution.failureExceptions.push(e);
         } finally {
 

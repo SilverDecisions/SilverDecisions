@@ -1,12 +1,11 @@
-
-export class JobExecutionListener{
+export class JobExecutionListener {
     /*Called before a job executes*/
-    beforeJob(){
+    beforeJob() {
 
     }
 
     /*Called after completion of a job. Called after both successful and failed executions*/
-    afterJob(){
+    afterJob() {
 
     }
 }

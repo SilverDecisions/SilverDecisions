@@ -5,5 +5,7 @@ export const JOB_STATUS = {
     STOPPING: 'STOPPING',
     STOPPED: 'STOPPED',
     FAILED: 'FAILED',
-    UNKNOWN: 'UNKNOWN'
+    UNKNOWN: 'UNKNOWN',
+    ABANDONED: 'ABANDONED',
+    EXECUTING: 'EXECUTING' //for exit status only
 };

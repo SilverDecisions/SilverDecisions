@@ -5,9 +5,9 @@ import *  as _ from 'lodash'
 import {ExecutionContext} from "./execution-context";
 
 /* Simple Job that sequentially executes a job by iterating through its list of steps.  Any Step that fails will fail the job.  The job is
-   considered complete when all steps have been executed.*/
+ considered complete when all steps have been executed.*/
 
-export class SimpleJob extends Job{
+export class SimpleJob extends Job {
 
     steps = [];
 
@@ -15,14 +15,14 @@ export class SimpleJob extends Job{
         super(name)
     }
 
-    getStep(stepName){
+    getStep(stepName) {
         return _.find(this.steps, s=>s.name == stepName);
     }
 
     doExecute(execution) {
         var stepExecution = null;
 
-        var allCompleted = this.steps.every(step=>{
+        var allCompleted = this.steps.every(step=> {
             stepExecution = this.handleStep(step, execution);
             return stepExecution.status == JOB_STATUS.COMPLETED; // Terminate the job if a step fails
         });
@@ -37,7 +37,7 @@ export class SimpleJob extends Job{
         }
     }
 
-    handleStep(step, execution){
+    handleStep(step, execution) {
         if (execution.isStopping()) {
             throw new Error("JobExecution interrupted.");
         }
@@ -46,7 +46,7 @@ export class SimpleJob extends Job{
         var lastStepExecution = this.jobRepository.getLastStepExecution(jobInstance, step.name);
         if (this.stepExecutionPartOfExistingJobExecution(execution, lastStepExecution)) {
             // If the last execution of this step was in the same job, it's probably intentional so we want to run it again.
-            log.info("Duplicate step detected in execution of job. step" + step.getName() +" jobName: ", jobInstance.jobName);
+            log.info("Duplicate step detected in execution of job. step" + step.getName() + " jobName: ", jobInstance.jobName);
             lastStepExecution = null;
         }
         var currentStepExecution = lastStepExecution;
@@ -59,7 +59,7 @@ export class SimpleJob extends Job{
 
             if (isRestart) {
                 currentStepExecution.executionContext = lastStepExecution.executionContext;
-                if(lastStepExecution.executionContext.containsKey("executed")) {
+                if (lastStepExecution.executionContext.containsKey("executed")) {
                     currentStepExecution.executionContext.remove("executed");
                 }
             }
@@ -95,7 +95,7 @@ export class SimpleJob extends Job{
         return stepExecution != null && stepExecution.jobExecution.id == jobExecution.id
     }
 
-    shouldStart(lastStepExecution, execution, step){
+    shouldStart(lastStepExecution, execution, step) {
         var stepStatus;
         if (lastStepExecution == null) {
             stepStatus = JOB_STATUS.STARTING;
@@ -104,7 +104,7 @@ export class SimpleJob extends Job{
             stepStatus = lastStepExecution.status;
         }
 
-        if(stepStatus == JOB_STATUS.UNKNOWN){
+        if (stepStatus == JOB_STATUS.UNKNOWN) {
             throw new Error("Cannot restart step from UNKNOWN status")
         }
 

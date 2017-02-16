@@ -3,11 +3,11 @@ import {StepExecution} from "./step-execution";
 import {Utils} from "../../../utils";
 import {ExecutionContext} from "./execution-context";
 /*domain object representing the execution of a job.*/
-export class JobExecution{
+export class JobExecution {
     id;
     jobInstance;
     jobParameters;
-    stepExecutions=[];
+    stepExecutions = [];
     status = JOB_STATUS.STARTING;
     exitStatus = JOB_STATUS.UNKNOWN;
     executionContext = new ExecutionContext();
@@ -19,7 +19,7 @@ export class JobExecution{
 
     failureExceptions = [];
 
-    constructor(jobInstance, jobParameters){
+    constructor(jobInstance, jobParameters) {
         this.id = Utils.guid();
         this.jobInstance = jobInstance;
         this.jobParameters = jobParameters;
@@ -51,8 +51,8 @@ export class JobExecution{
      * Signal the JobExecution to stop.
      */
     stop() {
-        this.stepExecutions.forEach(se=>{
-            se.terminateOnly=true;
+        this.stepExecutions.forEach(se=> {
+            se.terminateOnly = true;
         });
         this.status = JOB_STATUS.STOPPING;
     }
