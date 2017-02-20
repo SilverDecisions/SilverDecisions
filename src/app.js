@@ -424,6 +424,8 @@ export class App {
             }
         }
 
+        var dataModelObject = diagramData.data;
+
         this.clear();
         if (!diagramData.SilverDecisions) {
             errors.push('error.notSilverDecisionsFile');
@@ -431,28 +433,24 @@ export class App {
             return errors;
         }
 
-        //Check if version in file is newer than version of application
-        var incorrectVersionFormat = !Utils.isString(diagramData.SilverDecisions);
-        var versionInFileMatch;
-        //Major.Minor.Patch
-        var versionRegexp = /^([0-9]+)\.([0-9]+)\.([0-9]+)$/g;
-        if(!incorrectVersionFormat){
-            versionInFileMatch = versionRegexp.exec(diagramData.SilverDecisions)
-            incorrectVersionFormat = !versionInFileMatch;
-        }
-
-        if(incorrectVersionFormat){
+        if(!Utils.isValidVersionString(diagramData.SilverDecisions)){
+            console.log(diagramData.SilverDecisions);
             errors.push('error.incorrectVersionFormat');
             alert(i18n.t('error.incorrectVersionFormat'));
         }else{
-            //compare only major and minor
-            versionRegexp.lastIndex=0;
-            var versionMatch = versionRegexp.exec(App.version);
-            if(versionMatch &&
-                (versionInFileMatch[1] > versionMatch[1] ||
-                 versionInFileMatch[1] == versionMatch[1] && versionInFileMatch[2] > versionMatch[2])){
+            //Check if version in file is newer than version of application
+            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, App.version)>0){
                 errors.push('error.fileVersionNewerThanApplicationVersion');
                 alert(i18n.t('error.fileVersionNewerThanApplicationVersion'));
+            }
+
+            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, "0.7.0")<0){
+                dataModelObject ={
+                    code: diagramData.code,
+                    expressionScope: diagramData.expressionScope,
+                    trees: diagramData.trees,
+                    texts: diagramData.texts
+                }
             }
         }
 
@@ -473,7 +471,7 @@ export class App {
 
             this.setConfig(this.config);
 
-            this.dataModel.load(diagramData.trees, diagramData.texts, diagramData.code, diagramData.expressionScope);
+            this.dataModel.load(dataModelObject);
 
             if (diagramData.treeDesigner) {
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
@@ -537,41 +535,10 @@ export class App {
             description: self.config.description,
             format: self.config.format,
             treeDesigner: self.treeDesigner.config,
-            trees: self.dataModel.getRoots(),
-            texts: self.dataModel.texts,
-            expressionScope: self.dataModel.expressionScope,
-            code: self.dataModel.code
+            data: self.dataModel.serialize(false)
         };
 
-        var cache = [];
-        return JSON.stringify(obj, function (k, v) {
-            if (typeof v === 'object' && v !== null) {
-                if (cache.indexOf(v) !== -1) {
-                    // Circular reference found, discard key
-                    return;
-                }
-                cache.push(v);
-            }
-            if (_.startsWith(k, '$') || k == 'parentNode') {
-                return undefined;
-            }
-            if (filterLocation && k == 'location') {
-                return undefined;
-            }
-            if (filterComputed && k == 'computed') {
-                return undefined;
-            }
-
-            if (v !== null && v !== undefined && ExpressionEngine.isExpressionObject(v)) {
-                try{
-                    return self.expressionEngine.serialize(v);
-                }catch (e){
-                    return v;
-                }
-
-            }
-            return v;
-        }, 2);
+        return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.expressionEngine.getJsonReplacer()]);
     }
 
     updateNumberFormats(updateView=true) {

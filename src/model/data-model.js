@@ -35,17 +35,53 @@ export class DataModel {
     constructor() {
     }
 
+    getJsonReplacer(filterLocation=false, filterComputed=false, replacer){
+        return function (k, v) {
+            if (_.startsWith(k, '$') || k == 'parentNode') {
+                return undefined;
+            }
+            if (filterLocation && k == 'location') {
+                return undefined;
+            }
+            if (filterComputed && k == 'computed') {
+                return undefined;
+            }
+
+            if (replacer){
+                return replacer(k, v);
+            }
+
+            return v;
+        }
+    }
+
+    serialize(stringify=true, filterLocation=false, filterComputed=false, replacer){
+        var data =  {
+            code: this.code,
+            expressionScope: this.expressionScope,
+            trees: this.getRoots(),
+            texts: this.texts
+        };
+
+        if(!stringify){
+            return data;
+        }
+
+        return Utils.stringify(data, this.getJsonReplacer(filterLocation, filterComputed, replacer));
+    }
+
     /*Loads serialized data*/
-    load(roots, texts, code, expressionScope) {
+    load(data) {
+        //roots, texts, code, expressionScope
         var callbacksDisabled = this.callbacksDisabled;
         this.callbacksDisabled = true;
 
-        roots.forEach(nodeData=> {
+        data.trees.forEach(nodeData=> {
             var node = this.createNodeFromData(nodeData);
         });
 
-        if (texts) {
-            texts.forEach(textData=> {
+        if (data.texts) {
+            data.texts.forEach(textData=> {
                 var location = new model.Point(textData.location.x, textData.location.y);
                 var text = new model.Text(location, textData.value);
                 this.texts.push(text);
@@ -53,10 +89,10 @@ export class DataModel {
         }
 
         this.clearExpressionScope();
-        this.code = code || '';
+        this.code = data.code || '';
 
-        if (expressionScope) {
-            Utils.extend(this.expressionScope, expressionScope);
+        if (data.expressionScope) {
+            Utils.extend(this.expressionScope, data.expressionScope);
         }
         this.callbacksDisabled = callbacksDisabled;
     }

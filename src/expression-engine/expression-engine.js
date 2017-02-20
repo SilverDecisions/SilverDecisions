@@ -1,117 +1,116 @@
-import {Utils} from '../utils'
-import * as math from './mathjs'
-import * as _ from "lodash";
-import * as log from "../log"
+import {Utils} from "../utils";
+import * as math from "./mathjs";
+import * as log from "../log";
 
-export class ExpressionEngine{
+export class ExpressionEngine {
 
-    constructor(){
+    constructor() {
         this.parser = math.parser();
 
     }
 
-    setScope(scope){
+    setScope(scope) {
         this.parser.scope = scope;
     }
 
-    eval(expr, asNumber=true, scope){
-        log.trace('eval: '+expr);
-        expr+="";
+    eval(expr, asNumber = true, scope) {
+        log.trace('eval: ' + expr);
+        expr += "";
         expr = expr.trim();
-        if(asNumber){
-            try{
+        if (asNumber) {
+            try {
                 return ExpressionEngine.toNumber(expr);
-            }catch(e){
+            } catch (e) {
                 //   Left empty intentionally
             }
         }
 
         var prevScope = this.parser.scope;
-        if(scope){
+        if (scope) {
             this.setScope(scope);
         }
-        var ev = this.parser.eval(expr+"");
+        var ev = this.parser.eval(expr + "");
         this.setScope(prevScope);
-        if(!asNumber) {
+        if (!asNumber) {
             return ev;
         }
         return ExpressionEngine.toNumber(ev);
     }
 
-    static isHash(expr){
-        return expr && Utils.isString(expr) && expr.trim()==='#'
+    static isHash(expr) {
+        return expr && Utils.isString(expr) && expr.trim() === '#'
     }
 
-    static hasAssignmentExpression(expr){
-        return Utils.isString(expr)&&expr.indexOf('=')!==-1
+    static hasAssignmentExpression(expr) {
+        return Utils.isString(expr) && expr.indexOf('=') !== -1
     }
 
 
-    evalPayoff(edge){
-        if(ExpressionEngine.hasAssignmentExpression(edge.payoff)){
+    evalPayoff(edge) {
+        if (ExpressionEngine.hasAssignmentExpression(edge.payoff)) {
             return null;
         }
         return this.eval(edge.payoff, true, edge.parentNode.expressionScope);
     }
 
-    static add(a, b){
+    static add(a, b) {
         return math.add(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }
 
-    static subtract(a, b){
+    static subtract(a, b) {
         return math.subtract(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }
 
-    static divide(a, b){
+    static divide(a, b) {
         return math.divide(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }
 
-    static multiply(a,b){
+    static multiply(a, b) {
         return math.multiply(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b));
     }
 
-    static round(a, places){
+    static round(a, places) {
         return ExpressionEngine.toNumber(a).round(places)
     }
 
-    static toNumber(a){
+    static toNumber(a) {
         return math.fraction(a);
     }
 
-    static compare(a, b){
+    static compare(a, b) {
         return math.compare(ExpressionEngine.toNumber(a), ExpressionEngine.toNumber(b))
     }
 
 
-    validate(expr, scope, compileOnly=true){
-        if(expr===null || expr===undefined){
+    validate(expr, scope, compileOnly = true) {
+        if (expr === null || expr === undefined) {
             return false;
         }
 
-        try{
-            expr+="";
+        try {
+            expr += "";
             expr = expr.trim();
             var c = math.compile(expr);
 
-            if(compileOnly){
+            if (compileOnly) {
                 return true;
             }
-            if(!scope){
-                scope =this.parser.scope;
+            if (!scope) {
+                scope = this.parser.scope;
             }
 
             var e = c.eval(scope);
             return Utils.isNumeric(e);
-        }catch (e){
+        } catch (e) {
             return false;
         }
     }
 
-    static isExpressionObject(v){
+    static isExpressionObject(v) {
         return !!v.mathjs;
     }
 
-    serialize(v){
+    serialize(v) {
         return ExpressionEngine.toNumber(v).toFraction(true);
     }
 
@@ -119,7 +118,21 @@ export class ExpressionEngine{
         return math.json.reviver;
     }
 
-    static format(val){
+    getJsonReplacer() {
+        var self = this;
+        return function (k, v) {
+            if (v !== null && v !== undefined && ExpressionEngine.isExpressionObject(v)) {
+                try {
+                    return self.serialize(v);
+                } catch (e) {
+                    return v;
+                }
+            }
+            return v;
+        }
+    }
+
+    static format(val) {
         return math.format(val);
     }
 }

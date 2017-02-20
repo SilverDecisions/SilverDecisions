@@ -1,6 +1,6 @@
-import * as d3 from './d3'
-import * as autosize from 'autosize'
-import {Templates} from './templates'
+import * as d3 from "./d3";
+import * as autosize from "autosize";
+import {Templates} from "./templates";
 import * as _ from "lodash";
 
 export class Utils {
@@ -472,7 +472,107 @@ export class Utils {
         document.dispatchEvent(event);
     }
 
-    stripNumberToPrec(num, prec=12){
+    static stripNumberToPrec(num, prec=12){
         return parseFloat(parseFloat(num).toPrecision(prec));
+    }
+
+    static getGlobalObject(){
+        return (function () {
+            if (typeof self !== 'undefined') { return self; }
+            if (typeof window !== 'undefined') { return window; }
+            if (typeof global !== 'undefined') { return global; }
+
+            // When running tests none of the above have been defined
+            return {};
+        })();
+    }
+
+    static isWorker(){
+        var global = Utils.getGlobalObject();
+        return !global.document && !!global.postMessage;
+    }
+
+    static stringify(obj, replacer, filteredPrefixes = ['$']){
+        var cache = [];
+        return JSON.stringify(obj, function (k, v) {
+            if (typeof v === 'object' && v !== null) {
+                if (cache.indexOf(v) !== -1) {
+                    // Circular reference found, discard key
+                    return;
+                }
+                cache.push(v);
+            }
+
+            if(filteredPrefixes){
+                if(filteredPrefixes.some(prefix=>_.startsWith(k, prefix))){
+                    return undefined;
+                }
+            }
+
+            if(replacer){
+                if(!Utils.isArray(replacer)){
+                    return replacer(k, v);
+                }
+
+                replacer.forEach(r=>{
+                    v = r(k,v);
+                })
+
+            }
+            return v;
+
+        }, 2);
+
+    }
+
+    static  compareVersionNumbers(v1, v2) {
+        var v1parts = v1.split('.');
+        var v2parts = v2.split('.');
+
+        function validateParts(parts) {
+            for (var i = 0; i < parts.length; ++i) {
+                if (!Utils.isPositiveInteger(parts[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        if (!validateParts(v1parts) || !validateParts(v2parts)) {
+            return NaN;
+        }
+
+        for (var i = 0; i < v1parts.length; ++i) {
+            if (v2parts.length === i) {
+                return 1;
+            }
+
+            if (v1parts[i] === v2parts[i]) {
+                continue;
+            }
+            if (v1parts[i] > v2parts[i]) {
+                return 1;
+            }
+            return -1;
+        }
+
+        if (v1parts.length != v2parts.length) {
+            return -1;
+        }
+
+        return 0;
+    }
+
+    static isPositiveInteger(x) {
+        return /^\d+$/.test(x);
+    }
+
+    static versionRegexp = /^([0-9]+)\.([0-9]+)\.([0-9]+)$/;
+
+    static isValidVersionString(ver) {
+        if (!Utils.isString(ver)) {
+            return false;
+        }
+        return Utils.versionRegexp.test(ver)
     }
 }
