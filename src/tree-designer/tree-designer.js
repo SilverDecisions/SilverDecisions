@@ -1,7 +1,7 @@
 import * as d3 from '../d3'
 
 import {Utils} from '../utils'
-import * as model from '../model/index'
+import {domain as model} from '../model'
 import {ContextMenu} from './context-menu'
 import {MainContextMenu} from './main-context-menu'
 import {NodeContextMenu} from './node-context-menu'

@@ -1,4 +1,4 @@
-import * as model from '../../model/'
+import {domain as model} from '../../model/'
 import {ExpressionEngine} from '../../expression-engine'
 import * as log from "../../log"
 import {Operation} from "./operation";

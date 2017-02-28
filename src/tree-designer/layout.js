@@ -1,5 +1,5 @@
 import {Utils} from '../utils'
-import * as model from '../model/index'
+import {domain as model} from '../model'
 import * as d3 from '../d3'
 import * as _ from "lodash";
 import circleSymbol from './symbols/circle'

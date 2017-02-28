@@ -97,7 +97,7 @@ var data = {
                                 },
                                 "name": "win",
                                 "probability": "p",
-                                "payoff": "10",
+                                "payoff": "a",
                                 "childNode": {
                                     "computed": {
                                         "expected-value-maximization": {
@@ -122,7 +122,8 @@ var data = {
                                     "name": "",
                                     "code": "",
                                     "expressionScope": {
-                                        "p": 0.291638189333878
+                                        "p": 0.291638189333878,
+                                        "a": 10
                                     },
                                     "location": {
                                         "x": 320,
@@ -173,7 +174,8 @@ var data = {
                                     "name": "",
                                     "code": "",
                                     "expressionScope": {
-                                        "p": 0.291638189333878
+                                        "p": 0.291638189333878,
+                                        "a": 10
                                     },
                                     "location": {
                                         "x": 320,
@@ -186,7 +188,8 @@ var data = {
                         "name": "",
                         "code": "",
                         "expressionScope": {
-                            "p": 0.291638189333878
+                            "p": 0.291638189333878,
+                            "a": 10
                         },
                         "location": {
                             "x": 170,
@@ -236,7 +239,8 @@ var data = {
                         "name": "",
                         "code": "",
                         "expressionScope": {
-                            "p": 0.291638189333878
+                            "p": 0.291638189333878,
+                            "a": 10
                         },
                         "location": {
                             "x": 170,
@@ -249,7 +253,8 @@ var data = {
             "name": "game\ndilemma",
             "code": "",
             "expressionScope": {
-                "p": 0.291638189333878
+                "p": 0.291638189333878,
+                "a": 10
             },
             "location": {
                 "x": 20,
@@ -260,14 +265,16 @@ var data = {
     ],
     "texts": [],
     "expressionScope": {
-        "p": 0.291638189333878
+        "p": 0.291638189333878,
+        "a": 10
     },
-    "code": "p = random(0,1)"
+    "code": "p = random(0,1)\na = 10"
 };
-var app = new SilverDecisions('app-container', {
+var app = new SilverDecisions.App('app-container', {
     lng: lng,
     readOnly: false,
     logLevel: 'debug',
+    workerUrl: "job-worker.js",
     buttons:{
         new: true,
         save: true,

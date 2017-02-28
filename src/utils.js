@@ -84,6 +84,10 @@ export class Utils {
         return !isNaN(parseFloat(n)) && isFinite(n);
     }
 
+    static isInt(n){
+        return Utils.isNumber(n) && n % 1 === 0;
+    }
+
     static isFunction(a) {
         return typeof a === 'function';
     };

@@ -1,24 +1,14 @@
-import {ExpectedValueMaximizationRule} from './rules/expected-value-maximization-rule'
-import {MaxiMinRule} from "./rules/maxi-min-rule";
-import {MaxiMaxRule} from "./rules/maxi-max-rule";
-import {ExpectedValueMinimizationRule} from './rules/expected-value-minimization-rule'
-import {MiniMinRule} from "./rules/mini-min-rule";
-import {MiniMaxRule} from "./rules/mini-max-rule";
-
+import {ExpectedValueMaximizationRule, ExpectedValueMinimizationRule, MaxiMinRule, MaxiMaxRule, MiniMinRule, MiniMaxRule} from "./rules";
 import * as log from "../../log"
-import {DisplayMode} from "../display-mode";
 import * as model from "../../model";
 
-export class ObjectiveRulesManager extends DisplayMode{
-
-    static $MODE_NAME = 'objective';
+export class ObjectiveRulesManager{
 
     expressionEngine;
     currentRule;
     ruleByName={};
 
-    constructor(currentRuleName, data, expressionEngine){
-        super(ObjectiveRulesManager.$MODE_NAME);
+    constructor(data, expressionEngine, currentRuleName){
         this.data = data;
         this.expressionEngine=expressionEngine;
         var max = new ExpectedValueMaximizationRule(expressionEngine);
@@ -34,7 +24,12 @@ export class ObjectiveRulesManager extends DisplayMode{
         this.ruleByName[miniMin.name]=miniMin;
         this.ruleByName[miniMax.name]=miniMax;
         this.rules = [max, min, maxiMin, maxiMax, miniMin, miniMax];
-        this.currentRule = this.ruleByName[currentRuleName];
+        if(currentRuleName){
+            this.currentRule = this.ruleByName[currentRuleName];
+        }else{
+            this.currentRule = this.rules[0];
+        }
+
     }
 
     isRuleName(ruleName){
@@ -89,10 +84,10 @@ export class ObjectiveRulesManager extends DisplayMode{
 
     getEdgeDisplayValue(e, name){
         if(name==='probability'){
-            if(e.parentNode instanceof model.DecisionNode){
-                return this.currentRule.cValue(e, 'probability');
+            if(e.parentNode instanceof model.domain.DecisionNode){
+                return e.computedValue(this.currentRule.name, 'probability');
             }
-            if(e.parentNode instanceof model.ChanceNode){
+            if(e.parentNode instanceof model.domain.ChanceNode){
                 return e.computedBaseProbability();
             }
             return null;

@@ -1,6 +1,6 @@
 import {ContextMenu} from './context-menu'
 import {Utils} from '../utils'
-import * as model from '../model/index'
+import {domain as model} from '../model'
 import * as d3 from '../d3'
 import {i18n} from "../i18n/i18n";
 

@@ -1,40 +1,74 @@
 import {ExpressionEngine} from "../expression-engine/expression-engine";
-import * as model from '../model/index'
 import * as _ from "lodash";
 import * as log from "../log"
 import {Utils} from "../utils";
 import {ObjectiveRulesManager} from "./objective/objective-rules-manager";
 import {TreeValidator} from "./validation/tree-validator";
 import {OperationsManager} from "./operations/operations-manager";
+import {JobsManager} from "./jobs/jobs-manager";
+import {SensitivityAnalysisJobParameters} from "./jobs/configurations/sensitivity-analysis/sensitivity-analysis-job-parameters";
+import {JobWorker} from "./jobs/job-worker";
+import {ExpressionsEvaluator} from "./expressions-evaluator";
 
+
+export class ComputationsManagerConfig {
+
+    ruleName = null;
+    worker={
+        url: null
+    };
+
+    constructor(custom) {
+        if (custom) {
+            Utils.deepExtend(this, custom);
+        }
+    }
+}
 
 export class ComputationsManager {
     data;
     expressionEngine;
 
+    expressionsEvaluator;
     objectiveRulesManager;
     operationsManager;
     jobsManger;
 
     treeValidator;
 
-    mode;
-
-    constructor(currentRuleName, data, expressionEngine){
+    constructor(data, config){
         this.data = data;
-        this.expressionEngine = expressionEngine;
-        this.objectiveRulesManager = new ObjectiveRulesManager(currentRuleName, this.data, this.expressionEngine);
+        this.setConfig(config);
+        this.expressionEngine = new ExpressionEngine();
+        this.expressionsEvaluator =  new ExpressionsEvaluator(this.expressionEngine);
+        this.objectiveRulesManager = new ObjectiveRulesManager(this.data, this.expressionEngine, this.config.ruleName);
         this.operationsManager = new OperationsManager(this.data, this.expressionEngine);
+        this.jobsManger = new JobsManager(this.expressionsEvaluator, this.objectiveRulesManager, this.config.worker.url);
         this.treeValidator = new TreeValidator(this.expressionEngine);
-        this.mode = this.objectiveRulesManager;
     }
 
-    registerMode(mode){
-
+    setConfig(config) {
+        this.config = new ComputationsManagerConfig(config);
+        return this;
     }
 
     getCurrentRule(){
         return this.objectiveRulesManager.currentRule;
+    }
+
+    testJob(){
+        this.runJob("sensitivity-analysis", {
+            ruleName: this.getCurrentRule().name,
+            variables: [
+                { name: 'p', min: 0, max: 1, length: 11 },
+                { name: 'a', min: 1, max: 10, length: 10 },
+                { name: 'b', min: 0, max: 100, length: 10 }
+            ]
+        });
+    }
+
+    runJob(name, jobParamsValues, data){
+        this.jobsManger.run(name, jobParamsValues, data || this.data);
     }
 
     getObjectiveRules(){
@@ -46,6 +80,7 @@ export class ComputationsManager {
     }
 
     setCurrentRuleByName(ruleName){
+        this.config.ruleName=ruleName;
         return this.objectiveRulesManager.setCurrentRuleByName(ruleName)
     }
 
@@ -57,7 +92,7 @@ export class ComputationsManager {
         this.data.validationResults = [];
 
         if(evalCode||evalNumeric){
-            this.evalExpressions(evalCode, evalNumeric);
+            this.expressionsEvaluator.evalExpressions(this.data, evalCode, evalNumeric);
         }
 
         this.data.getRoots().forEach(root=> {
@@ -70,15 +105,6 @@ export class ComputationsManager {
         this.updateDisplayValues();
     }
 
-    clearTree(root){
-        this.data.getAllNodesInSubtree(root).forEach(n=>{
-            n.clearComputedValues();
-            n.childEdges.forEach(e=>{
-                e.clearComputedValues();
-            })
-        })
-    }
-
     updateDisplayValues() {
         this.data.nodes.forEach(n=>{
             this.updateNodeDisplayValues(n);
@@ -89,112 +115,10 @@ export class ComputationsManager {
     }
 
     updateNodeDisplayValues(node){
-        node.$DISPLAY_VALUE_NAMES.forEach(n=>node.displayValue(n,this.mode.getNodeDisplayValue(node, n)));
+        node.$DISPLAY_VALUE_NAMES.forEach(n=>node.displayValue(n,this.objectiveRulesManager.getNodeDisplayValue(node, n)));
     }
 
     updateEdgeDisplayValues(e){
-        e.$DISPLAY_VALUE_NAMES.forEach(n=>e.displayValue(n,this.mode.getEdgeDisplayValue(e, n)));
-    }
-
-    evalExpressions(evalCode=true, evalNumeric=true, initScopes=false){
-        log.debug('evalExpressions evalCode:'+evalCode+' evalNumeric:'+evalNumeric);
-        if(evalCode){
-            this.data.clearExpressionScope();
-            this.data.$codeDirty = false;
-            try{
-                this.data.$codeError = null;
-                this.expressionEngine.eval(this.data.code, false, this.data.expressionScope);
-            }catch (e){
-                this.data.$codeError = e;
-            }
-        }
-
-        this.data.getRoots().forEach(n=>{
-            this.clearTree(n);
-            this.evalExpressionsForNode(n, evalCode, evalNumeric,initScopes);
-        });
-
-    }
-
-    evalExpressionsForNode(node, evalCode=true, evalNumeric=true, initScope=false) {
-        if(!node.expressionScope || initScope || evalCode){
-            this.initScopeForNode(node);
-        }
-        if(evalCode){
-            node.$codeDirty = false;
-            if(node.code){
-                try{
-                    node.$codeError = null;
-                    this.expressionEngine.eval(node.code, false, node.expressionScope);
-                }catch (e){
-                    node.$codeError = e;
-                    log.debug(e);
-                }
-            }
-        }
-
-        if(evalNumeric){
-            var scope = node.expressionScope;
-            var probabilitySum=ExpressionEngine.toNumber(0);
-            var hashEdges= [];
-            var invalidProb = false;
-
-            node.childEdges.forEach(e=>{
-                if(e.isFieldValid('payoff', true, false)){
-                    try{
-                        e.computedValue(null, 'payoff', this.expressionEngine.evalPayoff(e))
-                    }catch (err){
-                        //   Left empty intentionally
-                    }
-                }
-
-                if(node instanceof model.ChanceNode){
-                    if(ExpressionEngine.isHash(e.probability)){
-                        hashEdges.push(e);
-                        return;
-                    }
-
-                    if(ExpressionEngine.hasAssignmentExpression(e.probability)){ //It should not occur here!
-                        log.warn("evalExpressionsForNode hasAssignmentExpression!", e);
-                        return null;
-                    }
-
-                    if(e.isFieldValid('probability', true, false)){
-                        try{
-                            var prob = this.expressionEngine.eval(e.probability, true, scope);
-                            e.computedValue(null, 'probability', prob);
-                            probabilitySum = ExpressionEngine.add(probabilitySum, prob);
-                        }catch (err){
-                            invalidProb = true;
-                        }
-                    }else{
-                        invalidProb = true;
-                    }
-                }
-
-            });
-
-
-            if(node instanceof model.ChanceNode){
-                var computeHash = hashEdges.length && !invalidProb && (probabilitySum.compare(0) >= 0 && probabilitySum.compare(1) <= 0);
-
-                if(computeHash) {
-                    var hash = ExpressionEngine.divide(ExpressionEngine.subtract(1, probabilitySum), hashEdges.length);
-                    hashEdges.forEach(e=> {
-                        e.computedValue(null, 'probability', hash);
-                    });
-                }
-            }
-
-            node.childEdges.forEach(e=>{
-                this.evalExpressionsForNode(e.childNode, evalCode, evalNumeric, initScope);
-            });
-        }
-    }
-
-    initScopeForNode(node){
-        var parent = node.$parent;
-        var parentScope = parent?parent.expressionScope : this.data.expressionScope;
-        node.expressionScope = _.cloneDeep(parentScope);
+        e.$DISPLAY_VALUE_NAMES.forEach(n=>e.displayValue(n,this.objectiveRulesManager.getEdgeDisplayValue(e, n)));
     }
 }

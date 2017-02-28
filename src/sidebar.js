@@ -2,10 +2,9 @@ import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
 
 import {Utils} from './utils'
-import * as model from './model/index'
+import {domain as model} from './model'
 import {PayoffInputValidator} from './validation/payoff-input-validator'
 import {ProbabilityInputValidator} from './validation/probability-input-validator'
-import {ExpressionEngine} from './expression-engine'
 import {Templates} from "./templates";
 import {Tooltip} from "./tooltip";
 import * as _ from "lodash";

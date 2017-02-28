@@ -19,11 +19,11 @@ var config = {
     }
 };
 
-if(SilverDecisions.utils.detectIE()=='11'){ // IE 11
+if(SilverDecisions.App.utils.detectIE()=='11'){ // IE 11
     if(platform.os.family.toLowerCase().indexOf('windows') !== -1){ // on Windows
         var osVersion = platform.os.version.toLowerCase();
         if(osVersion == '7' || osVersion.indexOf('windows server 2008') !== -1){
-            SilverDecisions.utils.growl('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)', 'warning', 'right', 5000);
+            SilverDecisions.App.utils.growl('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)', 'warning', 'right', 5000);
             config.treeDesigner.disableAnimations=true;
             config.treeDesigner.forceFullEdgeRedraw=true;
         }
@@ -41,14 +41,14 @@ if(jsonUrl){
         console.log(data);
         try{
 
-            app = new SilverDecisions('app-container', config, data);
+            app = new SilverDecisions.App('app-container', config, data);
         }catch (e){
             console.log(e);
-            app = new SilverDecisions('app-container', config);
+            app = new SilverDecisions.App('app-container', config);
         }
     });
 }else{
-    app = new SilverDecisions('app-container', config);
+    app = new SilverDecisions.App('app-container', config);
 }
 
 document.addEventListener('SilverDecisionsSaveEvent', function(data){

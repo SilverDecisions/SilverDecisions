@@ -36,38 +36,40 @@ gulp.task('build-config', function() {
 
 
 gulp.task('build-css', function () {
-    var fileName = projectName;
+    return buildCss(projectName, './dist/standalone');
+});
+
+function buildCss(fileName, dest) {
     var pipe = gulp.src('./src/styles/*')
         .pipe(plugins.plumber({errorHandler: onError}))
         .pipe(plugins.sass())
         .pipe(plugins.concat(fileName + '.css'))
-        .pipe(gulp.dest('./dist'))
+        .pipe(gulp.dest(dest))
         .pipe(plugins.minifyCss())
         .pipe(plugins.rename({extname: '.min.css'}))
-        .pipe(gulp.dest('./dist'));
+        .pipe(gulp.dest(dest));
 
     return pipe;
-});
+}
 
+function buildJs(src, standaloneName,  jsFileName, dest) {
 
-gulp.task('build-js', ['build-config'], function () {
-    var jsFileName =  projectName;
     var pipe = browserify({
         basedir: '.',
         debug: true,
-        entries: ['src/index.js'],
+        entries: [src],
         cache: {},
         packageCache: {},
-        standalone: 'SilverDecisions'
+        standalone: standaloneName
     }).transform(stringify, {
         appliesTo: { includeExtensions: ['.html'] }
     })
-        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign"]})
+        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
         .bundle()
         .on('error', map_error)
         .pipe(plugins.plumber({ errorHandler: onError }))
         .pipe(source(jsFileName+'.js'))
-        .pipe(gulp.dest("dist"))
+        .pipe(gulp.dest(dest))
         .pipe(buffer());
     var development = (argv.dev === undefined) ? false : true;
     if(!development){
@@ -81,11 +83,31 @@ gulp.task('build-js', ['build-config'], function () {
             .pipe(plugins.rename({ extname: '.min.js' }))
 
             .pipe(sourcemaps.write('./'))
-            .pipe(gulp.dest("dist"));
+            .pipe(gulp.dest(dest));
     }
 
 
     return pipe;
+}
+
+gulp.task('build-js', ['build-config'], function () {
+    var jsFileName =  projectName;
+    return buildJs('src/index.js', 'SilverDecisions', jsFileName, "dist/standalone")
+});
+
+gulp.task('build-app', ['build-config'], function () {
+    var jsFileName =  projectName;
+    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist/standalone")
+});
+
+gulp.task('build-expression-engine', ['build-config'], function () {
+    var jsFileName =  projectName+"-expression-engine";
+    return buildJs('src/expression-engine/index.js', 'SilverDecisions.ExpressionEngine', jsFileName, "dist/expression-engine")
+});
+
+gulp.task('build-computations', ['build-config'], function () {
+    var jsFileName =  projectName+"-computations";
+    return buildJs('src/computations/index.js', 'SilverDecisions.Computations', jsFileName, "dist/computations")
 });
 
 
@@ -93,7 +115,7 @@ gulp.task('build-clean', ['clean'], function () {
     return gulp.start('build');
 });
 
-gulp.task('build', ['build-css', 'build-js'], function () {
+gulp.task('build', ['build-css', 'build-app', 'build-computations', 'build-expression-engine'], function () {
     // var development = (argv.dev === undefined) ? false : true;
     // if(!development){
     //     return generateDocs();
@@ -178,9 +200,16 @@ gulp.task('docs-gen', ['docs-clean'], function () {
 function generateDocs(){
     gutil.log('generateDocs');
     var basename = "silver-decisions-"+p.version+'.min';
-    var copyFiles = gulp.src(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'])
+    var copyFiles = gulp.src(['./dist/standalone/silver-decisions.min.js', './dist/standalone/silver-decisions.min.css'])
         .pipe(plugins.rename({
             basename: basename
+        }))
+        .pipe(gulp.dest('./docs'));
+
+    var computationsBasename = "silver-decisions-computations-"+p.version+'.min'
+    var copyComputationsFiles = gulp.src(['./dist/computations/silver-decisions-computations.min.js'])
+        .pipe(plugins.rename({
+            basename: computationsBasename
         }))
         .pipe(gulp.dest('./docs'));
 
@@ -188,7 +217,11 @@ function generateDocs(){
         .pipe(plugins.replace(/"silver-decisions(.*)\.min/g, '"'+basename))
         .pipe(gulp.dest('./docs/'));
 
-    return merge(copyFiles, updateReferences)
+    var updateWorkerReferences = gulp.src('./docs/silverdecisions-job-worker.js')
+        .pipe(plugins.replace(/silver-decisions-computations-(.*)\.min/g, computationsBasename))
+        .pipe(gulp.dest('./docs/'));
+
+    return merge(copyFiles,copyComputationsFiles, updateReferences, updateWorkerReferences)
 }
 
 function map_error(err) {

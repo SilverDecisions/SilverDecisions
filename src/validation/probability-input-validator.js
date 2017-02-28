@@ -1,6 +1,3 @@
-import {ExpressionEngine} from '../expression-engine'
-import {Utils} from "../utils";
-
 export class ProbabilityInputValidator{
     expressionEngine;
     constructor(expressionEngine){
@@ -17,11 +14,11 @@ export class ProbabilityInputValidator{
             return false;
         }
 
-        if(ExpressionEngine.isHash(value)){
+        if(this.expressionEngine.constructor.isHash(value)){
             return true;
         }
 
-        if(ExpressionEngine.hasAssignmentExpression(value)) {
+        if(this.expressionEngine.constructor.hasAssignmentExpression(value)) {
             return false;
         }
         var scope = edge.parentNode.expressionScope;

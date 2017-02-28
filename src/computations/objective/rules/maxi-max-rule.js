@@ -1,4 +1,4 @@
-import * as model from '../../../model/index'
+import {domain as model} from '../../../model/'
 import {ObjectiveRule} from './objective-rule'
 import * as _ from "lodash";
 

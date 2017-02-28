@@ -3,27 +3,25 @@ import {i18n} from './i18n/i18n'
 import * as log from "./log"
 
 import {Utils} from './utils'
-import * as model from './model/index'
+import * as model from './model'
 
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
-import {DataModel} from './model/data-model'
 import {Templates} from './templates'
 import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
-import {ExpressionEngine} from './expression-engine/expression-engine'
 import {SettingsDialog} from './settings-dialog'
-import {ExpectedValueMaximizationRule} from './computations/objective/rules/expected-value-maximization-rule'
 import {AboutDialog} from "./about-dialog";
 import * as _ from "lodash";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
-import {ComputationsManager} from "./computations/computations-manager";
+import {ComputationsManager} from "./computations";
 
 var buildConfig = require('../tmp/build-config.js');
 
 export class AppConfig {
     readOnly = false;
     logLevel = 'warn';
+    workerUrl = null;
     buttons = {
         new: true,
         save: true,
@@ -47,7 +45,7 @@ export class AppConfig {
     jsonFileDownload = true;
     width = undefined;
     height = undefined;
-    rule = ExpectedValueMaximizationRule.NAME;
+    rule = "expected-value-maximization";
     lng = 'en';
     format = {// NumberFormat  options
         locales: 'en',
@@ -101,7 +99,6 @@ export class App {
         this.initContainer(containerIdOrElem);
 
         this.initDataModel();
-        this.initExpressionEngine();
         this.initComputationsManager();
         this.initProbabilityNumberFormat();
         this.initPayoffNumberFormat();
@@ -158,7 +155,7 @@ export class App {
 
     initDataModel() {
         var self = this;
-        this.dataModel = new DataModel();
+        this.dataModel = new model.DataModel();
         // this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = ()=>self.onNodeAddedOrRemoved();
         this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = (node)=> Utils.waitForFinalEvent(()=>this.onNodeAddedOrRemoved(), 'onNodeAddedOrRemoved', 5);
 
@@ -166,13 +163,14 @@ export class App {
         this.dataModel.textRemovedCallback = (text)=> Utils.waitForFinalEvent(()=>this.onTextRemoved(text), 'onTextAdded');
     }
 
-
-    initExpressionEngine() {
-        this.expressionEngine = new ExpressionEngine();
-    }
-
     initComputationsManager() {
-        this.computationsManager = new ComputationsManager(this.config.rule, this.dataModel, this.expressionEngine);
+        this.computationsManager = new ComputationsManager(this.dataModel, {
+            ruleName: this.config.ruleName,
+            worker:{
+                url: this.config.workerUrl
+            }
+        });
+        this.expressionEngine =  this.computationsManager.expressionEngine;
         this.checkValidityAndRecomputeObjective(false, false, false);
 
     }
@@ -264,10 +262,10 @@ export class App {
 
     getCurrentVariableDefinitionsSourceObject() {
         if (this.selectedObject) {
-            if (this.selectedObject instanceof model.Node) {
+            if (this.selectedObject instanceof model.domain.Node) {
                 return this.selectedObject;
             }
-            if (this.selectedObject instanceof model.Edge) {
+            if (this.selectedObject instanceof model.domain.Edge) {
                 return this.selectedObject.parentNode;
             }
         }
@@ -277,7 +275,7 @@ export class App {
     updateVariableDefinitions() {
         var self = this;
         var definitionsSourceObject = self.getCurrentVariableDefinitionsSourceObject();
-        var readOnly = (this.selectedObject instanceof model.Edge) || (this.selectedObject instanceof model.TerminalNode);
+        var readOnly = (this.selectedObject instanceof model.domain.Edge) || (this.selectedObject instanceof model.domain.TerminalNode);
         self.sidebar.updateDefinitions(definitionsSourceObject, readOnly, (code)=> {
             self.dataModel.saveState();
             definitionsSourceObject.code = code;
@@ -341,7 +339,7 @@ export class App {
     onObjectUpdated(object, fieldName) {
 
         var self = this;
-        if(!(object instanceof model.Text) && fieldName!=='name'){
+        if(!(object instanceof model.domain.Text) && fieldName!=='name'){
             this.checkValidityAndRecomputeObjective();
         }
         // this.sidebar.updateObjectPropertiesView(this.selectedObject);
@@ -415,7 +413,7 @@ export class App {
 
         if(Utils.isString(diagramData)){
             try{
-                diagramData = JSON.parse(diagramData, self.expressionEngine.getJsonReviver());
+                diagramData = JSON.parse(diagramData, self.computationsManager.expressionEngine.getJsonReviver());
             }catch (e){
                 errors.push('error.jsonParse');
                 alert(i18n.t('error.jsonParse'));
@@ -470,7 +468,6 @@ export class App {
             }
 
             this.setConfig(this.config);
-
             this.dataModel.load(dataModelObject);
 
             if (diagramData.treeDesigner) {
@@ -538,7 +535,7 @@ export class App {
             data: self.dataModel.serialize(false)
         };
 
-        return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.expressionEngine.getJsonReplacer()]);
+        return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.computationsManager.expressionEngine.getJsonReplacer()]);
     }
 
     updateNumberFormats(updateView=true) {
@@ -631,9 +628,9 @@ export class App {
 
 
             if (d3.event.altKey) {
-                if (this.selectedObject instanceof model.Node) {
+                if (this.selectedObject instanceof model.domain.Node) {
                     let selectedNode = this.selectedObject;
-                    if (selectedNode instanceof model.TerminalNode) {
+                    if (selectedNode instanceof model.domain.TerminalNode) {
                         return;
                     }
                     if (key == 68) { // ctrl + alt + d
@@ -644,7 +641,7 @@ export class App {
                         this.treeDesigner.addTerminalNode(selectedNode);
                     }
                     return;
-                } else if (this.selectedObject instanceof model.Edge) {
+                } else if (this.selectedObject instanceof model.domain.Edge) {
                     if (key == 68) { // ctrl + alt + d
                         this.treeDesigner.injectDecisionNode(this.selectedObject);
                     } else if (key == 67) { // ctrl + alt + c
@@ -677,7 +674,7 @@ export class App {
             if (key == 86) {//ctrl + v
                 if (selectedNodes.length == 1) {
                     let selectedNode = selectedNodes[0];
-                    if (selectedNode instanceof model.TerminalNode) {
+                    if (selectedNode instanceof model.domain.TerminalNode) {
                         return;
                     }
                     this.treeDesigner.pasteToNode(selectedNode)

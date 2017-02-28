@@ -1,5 +1,5 @@
 import {Utils} from '../utils'
-import * as model from './index'
+import * as domain from './domain'
 import *  as _ from 'lodash'
 import * as log from "../log"
 /*
@@ -32,7 +32,10 @@ export class DataModel {
 
     callbacksDisabled = false;
 
-    constructor() {
+    constructor(data) {
+        if(data){
+            this.load(data);
+        }
     }
 
     getJsonReplacer(filterLocation=false, filterComputed=false, replacer){
@@ -82,8 +85,8 @@ export class DataModel {
 
         if (data.texts) {
             data.texts.forEach(textData=> {
-                var location = new model.Point(textData.location.x, textData.location.y);
-                var text = new model.Text(location, textData.value);
+                var location = new domain.Point(textData.location.x, textData.location.y);
+                var text = new domain.Text(location, textData.value);
                 this.texts.push(text);
             })
         }
@@ -100,13 +103,13 @@ export class DataModel {
     /*create node from serialized data*/
     createNodeFromData(data, parent) {
         var node;
-        var location = new model.Point(data.location.x, data.location.y);
-        if (model.DecisionNode.$TYPE == data.type) {
-            node = new model.DecisionNode(location);
-        } else if (model.ChanceNode.$TYPE == data.type) {
-            node = new model.ChanceNode(location);
-        } else if (model.TerminalNode.$TYPE == data.type) {
-            node = new model.TerminalNode(location);
+        var location = new domain.Point(data.location.x, data.location.y);
+        if (domain.DecisionNode.$TYPE == data.type) {
+            node = new domain.DecisionNode(location);
+        } else if (domain.ChanceNode.$TYPE == data.type) {
+            node = new domain.ChanceNode(location);
+        } else if (domain.TerminalNode.$TYPE == data.type) {
+            node = new domain.TerminalNode(location);
         }
         node.name = data.name;
 
@@ -155,7 +158,7 @@ export class DataModel {
 
     _addChild(parent, child) {
         var self = this;
-        var edge = new model.Edge(parent, child);
+        var edge = new domain.Edge(parent, child);
         self._setEdgeInitialProbability(edge);
         self.edges.push(edge);
 
@@ -165,7 +168,7 @@ export class DataModel {
     }
 
     _setEdgeInitialProbability(edge) {
-        if (edge.parentNode instanceof model.ChanceNode) {
+        if (edge.parentNode instanceof domain.ChanceNode) {
             edge.probability = '#';
         } else {
             edge.probability = undefined;
@@ -204,9 +207,9 @@ export class DataModel {
         if(!node.childEdges.length && node.$parent){
             newNode = this.createNodeByType(typeToConvertTo, node.location);
         }else{
-            if(node instanceof model.DecisionNode && typeToConvertTo==model.ChanceNode.$TYPE){
+            if(node instanceof domain.DecisionNode && typeToConvertTo==domain.ChanceNode.$TYPE){
                 newNode = this.createNodeByType(typeToConvertTo, node.location);
-            }else if(typeToConvertTo==model.DecisionNode.$TYPE){
+            }else if(typeToConvertTo==domain.DecisionNode.$TYPE){
                 newNode = this.createNodeByType(typeToConvertTo, node.location);
             }
         }
@@ -221,12 +224,12 @@ export class DataModel {
     }
 
     createNodeByType(type, location){
-        if(type==model.DecisionNode.$TYPE){
-            return new model.DecisionNode(location)
-        }else if(type==model.ChanceNode.$TYPE){
-            return new model.ChanceNode(location)
-        }else if(type==model.TerminalNode.$TYPE){
-            return new model.TerminalNode(location)
+        if(type==domain.DecisionNode.$TYPE){
+            return new domain.DecisionNode(location)
+        }else if(type==domain.ChanceNode.$TYPE){
+            return new domain.ChanceNode(location)
+        }else if(type==domain.TerminalNode.$TYPE){
+            return new domain.TerminalNode(location)
         }
     }
 
@@ -264,7 +267,7 @@ export class DataModel {
         nodeToCopy.childEdges.forEach(e=> {
             var childClone = self.cloneSubtree(e.childNode, cloneComputedValues);
             childClone.$parent = clone;
-            var edge = new model.Edge(clone, childClone, e.name, e.payoff, e.probability);
+            var edge = new domain.Edge(clone, childClone, e.name, e.payoff, e.probability);
             if (cloneComputedValues) {
                 edge.computed = _.cloneDeep(e.computed)
                 childClone.computed = _.cloneDeep(e.childNode.computed)
