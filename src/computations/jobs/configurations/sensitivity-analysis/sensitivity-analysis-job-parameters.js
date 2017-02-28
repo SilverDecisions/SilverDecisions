@@ -11,8 +11,11 @@ export class SensitivityAnalysisJobParameters extends JobParameters{
             new JobParameterDefinition("name", PARAMETER_TYPE.STRING),
             new JobParameterDefinition("min", PARAMETER_TYPE.NUMBER),
             new JobParameterDefinition("max", PARAMETER_TYPE.NUMBER),
-            new JobParameterDefinition("length", PARAMETER_TYPE.INTEGER),
-        ], 1, Infinity))
+            new JobParameterDefinition("length", PARAMETER_TYPE.INTEGER).set("singleValueValidator", v => v>=0),
+        ], 1, Infinity, false,
+            v => v["min"]<=v["max"],
+            values => Utils.isUnique(values, v=>v["name"]) //Variable names should be unique
+        ))
     }
 
     initDefaultValues(){

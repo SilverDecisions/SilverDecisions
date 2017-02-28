@@ -88,14 +88,13 @@ export class Job {
     }
 
     /* Extension point for subclasses allowing them to concentrate on processing logic and ignore listeners, returns promise*/
-
     doExecute(execution) {
         throw 'doExecute function not implemented for job: ' + this.name
     }
 
     getJobParametersValidator() {
         return {
-            validate: (params) => true
+            validate: (params) => params.validate()
         }
     }
 

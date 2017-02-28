@@ -591,4 +591,8 @@ export class Utils {
             }
         };
     }
+
+    static isUnique(array, accesor){
+        return array.length === new Set(array.map(accesor)).size;
+    }
 }

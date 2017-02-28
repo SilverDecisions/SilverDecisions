@@ -2,7 +2,6 @@ export class ExtendableError extends Error {
     constructor(message) {
         super(message);
         this.name = this.constructor.name;
-        console.log(this.name)
         if (typeof Error.captureStackTrace === 'function') {
             Error.captureStackTrace(this, this.constructor);
         } else {

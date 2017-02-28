@@ -16,8 +16,9 @@ export class JobParameterDefinition{
     maxOccurs;
     identifying;
     validator;
+    singleValueValidator;
 
-    constructor(name, typeOrNestedParametersDefinitions, minOccurs = 1, maxOccurs=1,identifying=false, validator=null) {
+    constructor(name, typeOrNestedParametersDefinitions, minOccurs = 1, maxOccurs=1,identifying=false,singleValueValidator=null, validator=null) {
         this.name = name;
         if(Utils.isArray(typeOrNestedParametersDefinitions)){
             this.type = PARAMETER_TYPE.COMPOSITE;
@@ -26,6 +27,7 @@ export class JobParameterDefinition{
             this.type = typeOrNestedParametersDefinitions;
         }
         this.validator = validator;
+        this.singleValueValidator = singleValueValidator;
         this.identifying = identifying;
         this.minOccurs = minOccurs;
         this.maxOccurs = maxOccurs;
@@ -37,6 +39,32 @@ export class JobParameterDefinition{
     }
 
     validate(value){
+        var isArray = Utils.isArray(value);
+
+        if(this.maxOccurs>1 && !isArray){
+            return false;
+        }
+
+        if(!isArray){
+            return this.validateSingleValue(value)
+        }
+
+        if(value.length<this.minOccurs || value.length>this.maxOccurs) {
+            return false;
+        }
+
+        if(!value.every(this.validateSingleValue, this)){
+            return false;
+        }
+
+        if(this.validator){
+            return this.validator(value);
+        }
+
+        return true;
+    }
+
+    validateSingleValue(value){
         if(PARAMETER_TYPE.STRING === this.type && !Utils.isString(value)){
             return false;
         }
@@ -50,17 +78,17 @@ export class JobParameterDefinition{
             return false;
         }
 
-
         if(PARAMETER_TYPE.COMPOSITE === this.type){
-            if(!Utils.isArray(value) || value.length !== this.nestedParameters.length){
+            if(!Utils.isObject(value)){
                 return false;
             }
-
-            return this.nestedParameters.every((nestedDef, i)=>nestedDef.validate(value[i]))
+            if(!this.nestedParameters.every((nestedDef, i)=>nestedDef.validate(value[nestedDef.name]))){
+                return false;
+            }
         }
 
-        if(this.validator){
-            return this.validator.validate(value);
+        if(this.singleValueValidator){
+            return this.singleValueValidator(value);
         }
 
         return true;

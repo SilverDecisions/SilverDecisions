@@ -21,6 +21,10 @@ export class JobParameters{
 
     }
 
+    validate(){
+        return this.definitions.every((def, i)=>def.validate(this.values[def.name]));
+    }
+
     /*get or set value by path*/
     value(path, value){
         if (arguments.length === 1) {

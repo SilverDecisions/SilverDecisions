@@ -9,6 +9,8 @@ import {JobsManager} from "./jobs/jobs-manager";
 import {SensitivityAnalysisJobParameters} from "./jobs/configurations/sensitivity-analysis/sensitivity-analysis-job-parameters";
 import {JobWorker} from "./jobs/job-worker";
 import {ExpressionsEvaluator} from "./expressions-evaluator";
+import {JobDataInvalidException} from "./jobs/engine/exceptions/job-data-invalid-exception";
+import {JobParametersInvalidException} from "./jobs/engine/exceptions/job-parameters-invalid-exception";
 
 
 export class ComputationsManagerConfig {
@@ -67,7 +69,14 @@ export class ComputationsManager {
         }).then(r=>{
             log.debug(r);
         }).catch(e=>{
-            log.error(e);
+            if (e instanceof JobDataInvalidException){
+                log.warn("Jod data is invalid: "+e);
+            }if (e instanceof JobParametersInvalidException){
+                log.warn("Jod parameters are invalid: "+e);
+            }else{
+                log.error(e);
+            }
+
         })
     }
 
