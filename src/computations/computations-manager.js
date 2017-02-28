@@ -64,11 +64,15 @@ export class ComputationsManager {
                 { name: 'a', min: 1, max: 10, length: 10 },
                 { name: 'b', min: 0, max: 100, length: 10 }
             ]
-        });
+        }).then(r=>{
+            log.debug(r);
+        }).catch(e=>{
+            log.error(e);
+        })
     }
 
     runJob(name, jobParamsValues, data){
-        this.jobsManger.run(name, jobParamsValues, data || this.data);
+        return this.jobsManger.run(name, jobParamsValues, data || this.data);
     }
 
     getObjectiveRules(){

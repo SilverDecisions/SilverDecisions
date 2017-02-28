@@ -32,19 +32,22 @@ export class JobsManager extends JobExecutionListener{
         this.jobRepository = new SimpleJobRepository();
         this.registerJobs();
 
-        this.jobLauncher = new JobLauncher(this.jobRepository);
-
         this.useWorker = !!workerUrl;
         if(this.useWorker){
             this.initWorker(workerUrl);
-
         }
+
+        this.jobLauncher = new JobLauncher(this.jobRepository, this.jobWorker, (data)=>this.serializeData(data));
+
+
     }
 
+    serializeData(data){
+        return data.serialize(true, false, false, this.expressionEngine.getJsonReplacer());
+    }
+
+
     run(jobName, jobParametersValues, data) {
-        if(this.useWorker){
-            return this.jobWorker.runJob(jobName, jobParametersValues, data.serialize(true, false, false, this.expressionEngine.getJsonReplacer()))
-        }
         return this.jobLauncher.run(jobName, jobParametersValues, data);
     }
 
@@ -54,6 +57,8 @@ export class JobsManager extends JobExecutionListener{
     }
 
 
+
+    /*Returns a promise*/
     getLastJobExecution(jobName, jobParameters) {
         if(this.useWorker){
             return this.jobWorker;

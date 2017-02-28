@@ -579,4 +579,16 @@ export class Utils {
         }
         return Utils.versionRegexp.test(ver)
     }
+
+    static makeIterator(array) {
+        var nextIndex = 0;
+
+        return {
+            next: function() {
+                return nextIndex < array.length ?
+                {value: array[nextIndex++], done: false} :
+                {done: true};
+            }
+        };
+    }
 }
