@@ -43,9 +43,9 @@ export class ComputationsEngine{
 
             var instance = this;
             this.queryableFunctions = {
-                runJob: function(jobName, jobParametersValues, serializedData){
+                runJob: function(jobName, jobParametersValues, dataDTO){
                     // console.log(jobName, jobParameters, serializedData);
-                    var data = new DataModel(JSON.parse(serializedData, instance.computationsManager.expressionEngine.getJsonReviver()));
+                    var data = new DataModel(dataDTO);
                     instance.computationsManager.runJob(jobName, jobParametersValues, data);
                 }
             };

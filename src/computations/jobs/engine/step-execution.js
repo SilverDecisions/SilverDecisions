@@ -1,6 +1,8 @@
 import {Utils} from "../../../utils";
 import {ExecutionContext} from "./execution-context";
 import {JOB_STATUS} from "./job-status";
+import {JobExecution} from "./job-execution";
+import * as _ from "lodash";
 /*
  representation of the execution of a step
  */
@@ -20,8 +22,13 @@ export class StepExecution {
     terminateOnly = false; //flag to indicate that an execution should halt
     failureExceptions = [];
 
-    constructor(stepName, jobExecution) {
-        this.id = Utils.guid();
+    constructor(stepName, jobExecution, id) {
+        if(id===null || id === undefined){
+            this.id = Utils.guid();
+        }else{
+            this.id = id;
+        }
+
         this.stepName = stepName;
         this.jobExecution = jobExecution;
     }
@@ -36,5 +43,29 @@ export class StepExecution {
 
     getData(){
         return this.executionContext.get("data");
+    }
+
+    getDTO(filteredProperties=[], deepClone = true){
+
+        var cloneMethod = _.cloneDeepWith;
+        if(!deepClone) {
+            cloneMethod = _.cloneWith;
+        }
+
+        return _.assign({}, cloneMethod(this, (value, key, object, stack)=> {
+            if(filteredProperties.indexOf(key)>-1){
+                return null;
+            }
+            if(["executionContext"].indexOf(key)>-1){
+                return value.getDTO()
+            }
+            if(value instanceof Error){
+                return Utils.getErrorDTO(value);
+            }
+
+            if (value instanceof JobExecution) {
+                return value.getDTO(["stepExecutions"], deepClone)
+            }
+        }))
     }
 }

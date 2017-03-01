@@ -2,6 +2,7 @@ import {JOB_STATUS} from "./job-status";
 import {StepExecution} from "./step-execution";
 import {Utils} from "../../../utils";
 import {ExecutionContext} from "./execution-context";
+import * as _ from "lodash";
 /*domain object representing the execution of a job.*/
 export class JobExecution {
     id;
@@ -19,7 +20,13 @@ export class JobExecution {
 
     failureExceptions = [];
 
-    constructor(jobInstance, jobParameters) {
+    constructor(jobInstance, jobParameters, id) {
+        if(id===null || id === undefined){
+            this.id = Utils.guid();
+        }else{
+            this.id = id;
+        }
+
         this.id = Utils.guid();
         this.jobInstance = jobInstance;
         this.jobParameters = jobParameters;
@@ -57,11 +64,35 @@ export class JobExecution {
         this.status = JOB_STATUS.STOPPING;
     }
 
-    getData(){
-        return this.executionContext.get("data");
+    getData() {
+        return this.executionContext.getData();
     }
 
-    getResult(){
+    getResult() {
         return this.executionContext.get("result");
+    }
+
+    getDTO(filteredProperties = [], deepClone = true) {
+        var cloneMethod = _.cloneDeepWith;
+        if (!deepClone) {
+            cloneMethod = _.cloneWith;
+        }
+
+        return _.assign({}, cloneMethod(this, (value, key, object, stack)=> {
+            if (filteredProperties.indexOf(key) > -1) {
+                return null;
+            }
+
+            if (["jobParameters", "executionContext"].indexOf(key) > -1) {
+                return value.getDTO()
+            }
+            if (value instanceof Error) {
+                return Utils.getErrorDTO(value);
+            }
+
+            if (value instanceof StepExecution) {
+                return value.getDTO(["jobExecution"], deepClone)
+            }
+        }))
     }
 }

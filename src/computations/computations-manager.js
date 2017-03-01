@@ -71,7 +71,7 @@ export class ComputationsManager {
         }).catch(e=>{
             if (e instanceof JobDataInvalidException){
                 log.warn("Jod data is invalid: "+e);
-            }if (e instanceof JobParametersInvalidException){
+            }else if (e instanceof JobParametersInvalidException){
                 log.warn("Jod parameters are invalid: "+e);
             }else{
                 log.error(e);

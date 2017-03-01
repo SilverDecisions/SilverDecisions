@@ -37,8 +37,8 @@ export class JobWorker{
         });
     }
 
-    runJob(jobName, jobParametersValues, serializedData){
-        this.sendQuery('runJob', jobName, jobParametersValues, serializedData)
+    runJob(jobName, jobParametersValues, dataDTO){
+        this.sendQuery('runJob', jobName, jobParametersValues, dataDTO)
     }
 
     postMessage(message) {

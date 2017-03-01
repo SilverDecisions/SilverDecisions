@@ -77,7 +77,7 @@ export class SimpleJob extends Job {
                 }
             }
             else {
-                currentStepExecution.executionContext = new ExecutionContext(jobExecution.executionContext.data);
+                currentStepExecution.executionContext = new ExecutionContext(jobExecution.executionContext.context);
             }
 
             this.jobRepository.addStepExecution(currentStepExecution); // not waiting for promise resolve

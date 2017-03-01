@@ -31,7 +31,7 @@ export class SensitivityAnalysisJob extends SimpleJob{
             var params = stepExecution.getJobParameters();
             var variableNames = params.value("variables").map(v=>v.name);
 
-            var data = stepExecution.executionContext.get("data");
+            var data = stepExecution.getData();
             var variableValues = stepExecution.executionContext.get("variableValues");
             var ruleName = params.value("ruleName");
             objectiveRulesManager.setCurrentRuleByName(ruleName);

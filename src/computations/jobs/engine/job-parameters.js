@@ -54,4 +54,10 @@ export class JobParameters{
         result+="]";
         return result;
     }
+
+    getDTO(){
+        return {
+            values: this.values
+        }
+    }
 }

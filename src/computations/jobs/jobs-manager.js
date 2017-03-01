@@ -9,6 +9,7 @@ import {JobWorker} from "./job-worker";
 import {JobExecutionListener} from "./engine/job-execution-listener";
 import {JobParameters} from "./engine/job-parameters";
 import {SimpleJobRepository} from "./engine/job-repository/simple-job-repository";
+import {IdbJobRepository} from "./engine/job-repository/idb-job-repository";
 
 export class JobsManager extends JobExecutionListener{
 
@@ -29,7 +30,7 @@ export class JobsManager extends JobExecutionListener{
         this.expressionsEvaluator = expressionsEvaluator;
         this.objectiveRulesManager = objectiveRulesManager;
 
-        this.jobRepository = new SimpleJobRepository();
+        this.jobRepository = new IdbJobRepository();
         this.registerJobs();
 
         this.useWorker = !!workerUrl;

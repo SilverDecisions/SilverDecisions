@@ -595,4 +595,11 @@ export class Utils {
     static isUnique(array, accesor){
         return array.length === new Set(array.map(accesor)).size;
     }
+
+    static getErrorDTO(e){
+        return {
+            name: e.constructor.name,
+            message: e.message
+        }
+    }
 }

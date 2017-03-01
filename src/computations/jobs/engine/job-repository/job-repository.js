@@ -68,39 +68,6 @@ export class JobRepository {
      * the job must be restartable and it's last JobExecution must *not* be
      * completed. If matching JobInstance does not exist yet it will be  created.*/
 
-    createJobExecution_(jobName, jobParameters, data) {
-        var jobInstance = this.getJobInstance(jobName, jobParameters);
-
-        var executionContext;
-        // existing job instance found
-        if (jobInstance != null) {
-            var executions = this.findJobExecutions(jobInstance);
-            executions.forEach(execution=> {
-                if (execution.isRunning()) {
-                    throw new JobExecutionAlreadyRunningException("A job execution for this job is already running: " + jobInstance.jobName);
-                }
-                if (execution.status == JOB_STATUS.COMPLETED || execution.status == JOB_STATUS.ABANDONED) {
-                    throw new JobInstanceAlreadyCompleteException(
-                        "A job instance already exists and is complete for parameters=" + jobParameters
-                        + ".  If you want to run this job again, change the parameters.");
-                }
-            });
-            executionContext = executions[executions.length - 1].executionContext;
-        } else {
-            // no job found, create one
-            jobInstance = this.createJobInstance(jobName, jobParameters);
-            executionContext = new ExecutionContext({
-                data: data
-            });
-        }
-
-        var jobExecution = new JobExecution(jobInstance, jobParameters);
-        jobExecution.executionContext = executionContext;
-        jobExecution.lastUpdated = new Date();
-        this.jobExecutions.push(jobExecution);
-        return jobExecution;
-    }
-
     createJobExecution(jobName, jobParameters, data) {
         return this.getJobInstance(jobName, jobParameters).then(jobInstance=>{
             if (jobInstance != null) {
@@ -115,23 +82,22 @@ export class JobRepository {
                                 + ".  If you want to run this job again, change the parameters.");
                         }
                     });
+
                     var executionContext = executions[executions.length - 1].executionContext;
-                    return [jobInstance, executionContext];
+
+                    return [jobInstance, this.reviveExecutionContext(executionContext)];
                 })
             }
 
             // no job found, create one
             jobInstance = this.createJobInstance(jobName, jobParameters);
-            var executionContext = new ExecutionContext({
-                data: data
-            });
-
-            return [jobInstance, executionContext];
+            var executionContext = new ExecutionContext();
+            executionContext.setData(data);
+            return Promise.all([jobInstance, executionContext]);
         }).then(instanceAndExecutionContext=>{
             var jobExecution = new JobExecution(instanceAndExecutionContext[0], jobParameters);
             jobExecution.executionContext = instanceAndExecutionContext[1];
             jobExecution.lastUpdated = new Date();
-            this.jobExecutions.push(jobExecution);
             return this.saveJobExecution(jobExecution);
         }).catch(e=>{
             throw e;
@@ -183,5 +149,25 @@ export class JobRepository {
         }
 
         throw "Object not updatable: "+o
+    }
+
+
+
+
+
+    reviveJobInstance(dto) {
+        return dto;
+    }
+
+    reviveExecutionContext(dto) {
+        return dto;
+    }
+
+    reviveJobExecution(dto) {
+        return dto;
+    }
+
+    reviveStepExecution(dto, jobExecution) {
+        return dto;
     }
 }

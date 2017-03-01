@@ -38,7 +38,7 @@ export class JobLauncher {
 
             if(this.jobWorker){
                 log.debug("Job: [" + job.name + "] execution delegated to worker");
-                return this.jobWorker.runJob(job.name, jobParametersValues, this.dataModelSerializer(data))
+                return this.jobWorker.runJob(job.name, jobParametersValues, data.serialize(false))
             }
 
             return this.jobRepository.createJobExecution(job.name, jobParameters, data).then(jobExecution=>{
@@ -78,7 +78,7 @@ export class JobLauncher {
 
     execute(job, jobExecution){
         var jobName = job.name;
-        log.info("Job: [" + jobName + "] launched with the following parameters: [" + jobExecution.jobParameters + "]");
+        log.info("Job: [" + jobName + "] launched with the following parameters: [" + jobExecution.jobParameters + "]", jobExecution.getData());
         return job.execute(jobExecution).then(jobExecution=>{
             log.info("Job: [" + jobName + "] completed with the following parameters: [" + jobExecution.jobParameters + "] and the following status: [" + jobExecution.status + "]");
             return jobExecution;
