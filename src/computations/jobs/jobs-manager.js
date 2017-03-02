@@ -10,6 +10,7 @@ import {JobExecutionListener} from "./engine/job-execution-listener";
 import {JobParameters} from "./engine/job-parameters";
 import {SimpleJobRepository} from "./engine/job-repository/simple-job-repository";
 import {IdbJobRepository} from "./engine/job-repository/idb-job-repository";
+import {JOB_EXECUTION_FLAG} from "./engine/job-execution-flag";
 
 export class JobsManager extends JobExecutionListener{
 
@@ -45,32 +46,6 @@ export class JobsManager extends JobExecutionListener{
         return data.serialize(true, false, false, this.expressionEngine.getJsonReplacer());
     }
 
-    execute(jobExecutionOrId){
-        return this.jobLauncher.execute(jobExecutionOrId);
-    }
-
-
-    getProgress_(jobExecutionOrId, refreshFromDb=true){
-        return Promise.resolve().then(()=>{
-            var id = jobExecutionOrId;
-            if(!Utils.isString(jobExecutionOrId)){
-                if(!refreshFromDb){
-                    return jobExecutionOrId
-                }
-                id = jobExecutionOrId.id
-            }
-            return this.jobRepository.getJobExecutionById(id);
-        }).then(jobExecution=>{
-            var jobName = jobExecution.jobInstance.jobName;
-            var job = this.jobRepository.getJobByName(jobName);
-            if(!job){
-                return null;
-            }
-
-            return  job.getProgress(jobExecution);
-        })
-    }
-
     getProgress(jobExecutionOrId){
         var id = jobExecutionOrId;
         if(!Utils.isString(jobExecutionOrId)){
@@ -82,6 +57,32 @@ export class JobsManager extends JobExecutionListener{
     run(jobName, jobParametersValues, data) {
         return this.jobLauncher.run(jobName, jobParametersValues, data);
     }
+
+    execute(jobExecutionOrId){
+        return this.jobLauncher.execute(jobExecutionOrId);
+    }
+
+    stop(jobExecutionOrId){
+        var id = jobExecutionOrId;
+        if(!Utils.isString(jobExecutionOrId)){
+            id = jobExecutionOrId.id
+        }
+
+        return this.jobRepository.getJobExecutionById(id).then(jobExecution=>{
+            if(!jobExecution){
+                log.error("Job Execution not found: "+jobExecutionOrId);
+                return null;
+            }
+            if(!jobExecution.isRunning()){
+                log.warn("Job Execution not running, status: "+jobExecution.status+", endTime: "+jobExecution.endTime);
+                return jobExecution;
+            }
+
+            return this.jobRepository.saveJobExecutionFlag(jobExecution.id, JOB_EXECUTION_FLAG.STOP).then(()=>jobExecution);
+        });
+    }
+
+
 
     createJobParameters(jobName, jobParametersValues){
         var job = this.jobRepository.getJobByName(jobName);

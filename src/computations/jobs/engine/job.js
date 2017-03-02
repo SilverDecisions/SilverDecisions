@@ -3,6 +3,7 @@ import {JOB_STATUS} from "./job-status";
 import {JobInterruptedException} from "./exceptions/job-interrupted-exception";
 import {JobParametersInvalidException} from "./exceptions/job-parameters-invalid-exception";
 import {JobDataInvalidException} from "./exceptions/job-data-invalid-exception";
+import {JOB_EXECUTION_FLAG} from "./job-execution-flag";
 /*Base class for jobs*/
 //A Job is an entity that encapsulates an entire job process ( an abstraction representing the configuration of a job).
 
@@ -31,15 +32,7 @@ export class Job {
 
     execute(execution) {
         log.debug("Job execution starting: ", execution);
-        return Promise.resolve(execution).then(execution=>{
-
-            if (this.jobParametersValidator && !this.jobParametersValidator.validate(execution.jobParameters)) {
-                throw new JobParametersInvalidException("Invalid job parameters in job execute")
-            }
-
-            if(this.jobDataValidator && !this.jobDataValidator.validate(execution.getData())){
-                throw new JobDataInvalidException("Invalid job data in job execute")
-            }
+        return this.checkExecutionFlags(execution).then(execution=>{
 
             if (execution.status === JOB_STATUS.STOPPING) {
                 // The job was already stopped
@@ -47,6 +40,14 @@ export class Job {
                 execution.exitStatus = JOB_STATUS.COMPLETED;
                 log.debug("Job execution was stopped: " + execution);
                 return execution;
+            }
+
+            if (this.jobParametersValidator && !this.jobParametersValidator.validate(execution.jobParameters)) {
+                throw new JobParametersInvalidException("Invalid job parameters in job execute")
+            }
+
+            if(this.jobDataValidator && !this.jobDataValidator.validate(execution.getData())){
+                throw new JobDataInvalidException("Invalid job data in job execute")
             }
 
 
@@ -127,5 +128,14 @@ export class Job {
 
     registerExecutionListener(listener){
         this.executionListeners.push(listener);
+    }
+
+    checkExecutionFlags(execution){
+        return this.jobRepository.getJobExecutionFlag(execution.id).then(flag=>{
+            if(JOB_EXECUTION_FLAG.STOP === flag){
+                execution.stop();
+            }
+            return execution
+        })
     }
 }

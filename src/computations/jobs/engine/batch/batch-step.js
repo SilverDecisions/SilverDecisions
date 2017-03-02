@@ -1,6 +1,7 @@
 import {JOB_STATUS} from "../job-status";
 import * as log from "../../../../log";
 import {Step} from "../step";
+import {JobInterruptedException} from "../exceptions/job-interrupted-exception";
 
 /*job step that process batch of items*/
 export class BatchStep extends Step {
@@ -73,17 +74,23 @@ export class BatchStep extends Step {
             log.error("Failed to initialize batch step: " + this.name, e);
             throw e;
         }).then(totalItemCount=> {
-            this.setCurrentItemCount(stepExecution, 0);
-            this.setTotalItemCount(stepExecution, totalItemCount);
-            return this.handleNextChunk(stepExecution)
-        }).catch(e=> {
-            log.error("Failed to process batch step: " + this.name, e);
-            throw e;
+            return Promise.resolve().then(()=>{
+                this.setCurrentItemCount(stepExecution, 0);
+                this.setTotalItemCount(stepExecution, totalItemCount);
+                return this.handleNextChunk(stepExecution)
+            }).catch(e=> {
+                if(!(e instanceof JobInterruptedException)){
+                    log.error("Failed to handle batch step: " + this.name, e);
+                }
+                throw e;
+            })
         }).then(()=> {
-            return this.postProcess(stepExecution)
-        }).catch(e=> {
-            log.error("Failed to postProcess batch step: " + this.name, e);
-            throw e;
+            return Promise.resolve().then(()=>{
+                return this.postProcess(stepExecution)
+            }).catch(e=> {
+                log.error("Failed to postProcess batch step: " + this.name, e);
+                throw e;
+            })
         }).then(()=> {
             stepExecution.exitStatus = JOB_STATUS.COMPLETED;
             return stepExecution;
@@ -98,21 +105,33 @@ export class BatchStep extends Step {
         if (currentItemCount >= totalItemCount) {
             return stepExecution;
         }
-        return Promise.resolve().then(()=> {
-            return this.readNextChunk(stepExecution, currentItemCount, chunkSize);
-        }).catch(e=> {
-            log.error("Failed to read chunk (" + currentItemCount + "," + chunkSize + ") in batch step: " + this.name, e);
-            throw e;
+        return this.checkJobExecutionFlags(stepExecution).then(()=> {
+            // Check if someone is trying to stop us
+            if (stepExecution.terminateOnly) {
+                throw new JobInterruptedException("JobExecution interrupted.");
+            }
+            return stepExecution
+        }).then(()=> {
+            return Promise.resolve().then(()=>{
+                return this.readNextChunk(stepExecution, currentItemCount, chunkSize)
+            }).catch(e=> {
+                log.error("Failed to read chunk (" + currentItemCount + "," + chunkSize + ") in batch step: " + this.name, e);
+                throw e;
+            });
         }).then(chunk=> {
-            return this.processChunk(stepExecution, chunk);
-        }).catch(e=> {
-            log.error("Failed to process chunk (" + currentItemCount + "," + chunkSize + ") in batch step: " + this.name, e);
-            throw e;
+            return Promise.resolve().then(()=>{
+                return this.processChunk(stepExecution, chunk)
+            }).catch(e=> {
+                log.error("Failed to process chunk (" + currentItemCount + "," + chunkSize + ") in batch step: " + this.name, e);
+                throw e;
+            })
         }).then(processedChunk=> {
-            return this.writeChunk(stepExecution, processedChunk);
-        }).catch(e=> {
-            log.error("Failed to write chunk (" + currentItemCount + "," + chunkSize + ") in batch step: " + this.name, e);
-            throw e;
+            return Promise.resolve().then(()=>{
+                return this.writeChunk(stepExecution, processedChunk)
+            }).catch(e=> {
+                log.error("Failed to write chunk (" + currentItemCount + "," + chunkSize + ") in batch step: " + this.name, e);
+                throw e;
+            })
         }).then((res)=> {
             currentItemCount += chunkSize;
             this.setCurrentItemCount(stepExecution, currentItemCount);
@@ -134,5 +153,9 @@ export class BatchStep extends Step {
     updateJobProgress(stepExecution) {
         var progress = this.jobRepository.getJobByName(stepExecution.jobExecution.jobInstance.jobName).getProgress(stepExecution.jobExecution);
         return this.jobRepository.updateJobExecutionProgress(stepExecution.jobExecution.id, progress);
+    }
+
+    checkJobExecutionFlags(stepExecution){
+        return this.jobRepository.getJobByName(stepExecution.jobExecution.jobInstance.jobName).checkExecutionFlags(stepExecution.jobExecution);
     }
 }

@@ -58,13 +58,20 @@ export class ComputationsManager {
         return this.objectiveRulesManager.currentRule;
     }
 
-    testJob(){
+    testJob(testStop=false, stopAt=10){
+        var stopped = false;
         var checkProgress = (r)=> {
             var starttime = new Date().getTime();
             this.jobsManger.getProgress(r).then(progress=>{
                 progress = progress || 0;
                 log.debug('progress', progress, (new Date().getTime()-starttime)/1000);
                 if(progress<100){
+
+                    if(testStop &&!stopped && progress>=stopAt){
+                        this.jobsManger.stop(r)
+                        stopped=true;
+                    }
+
                     setTimeout(function () {
                         checkProgress(r)
                     }, 100);

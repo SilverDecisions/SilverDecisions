@@ -4,6 +4,9 @@ import {Job} from "./job";
 import *  as _ from 'lodash'
 import {ExecutionContext} from "./execution-context";
 import {Step} from "./step";
+import {JobInterruptedException} from "./exceptions/job-interrupted-exception";
+import {JobRestartException} from "./exceptions/job-restart-exception";
+import {JOB_EXECUTION_FLAG} from "./job-execution-flag";
 
 /* Simple Job that sequentially executes a job by iterating through its list of steps.  Any Step that fails will fail the job.  The job is
  considered complete when all steps have been executed.*/
@@ -48,12 +51,14 @@ export class SimpleJob extends Job {
     }
 
     handleStep(step, jobExecution) {
-        if (jobExecution.isStopping()) {
-            throw new Error("JobExecution interrupted.");
-        }
-
         var jobInstance = jobExecution.jobInstance;
-        return this.jobRepository.getLastStepExecution(jobInstance, step.name).then(lastStepExecution=>{
+        return this.checkExecutionFlags(jobExecution).then(jobExecution=>{
+            if (jobExecution.isStopping()) {
+                throw new JobInterruptedException("JobExecution interrupted.");
+            }
+            return this.jobRepository.getLastStepExecution(jobInstance, step.name)
+
+        }).then(lastStepExecution=>{
             if (this.stepExecutionPartOfExistingJobExecution(jobExecution, lastStepExecution)) {
                 // If the last execution of this step was in the same job, it's probably intentional so we want to run it again.
                 log.info("Duplicate step detected in execution of job. step: " + step.name + " jobName: ", jobInstance.jobName);
@@ -117,7 +122,7 @@ export class SimpleJob extends Job {
         }
 
         if (stepStatus == JOB_STATUS.UNKNOWN) {
-            throw new Error("Cannot restart step from UNKNOWN status")
+            throw new JobRestartException("Cannot restart step from UNKNOWN status")
         }
 
         return stepStatus != JOB_STATUS.COMPLETED || step.isRestartable;

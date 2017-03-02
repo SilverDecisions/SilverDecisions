@@ -49,6 +49,14 @@ export class JobRepository {
         throw "JobRepository.getJobExecutionProgress function not implemented!"
     }
 
+    saveJobExecutionFlag(jobExecutionId, flag){
+        throw "JobRepository.saveJobExecutionFlag function not implemented!"
+    }
+
+    getJobExecutionFlag(jobExecutionId){
+        throw "JobRepository.getJobExecutionFlag function not implemented!"
+    }
+
 
     /*should return promise which resolves to saved stepExecution*/
     saveStepExecution(stepExecution){

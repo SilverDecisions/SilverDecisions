@@ -14,6 +14,8 @@ export class IdbJobRepository extends JobRepository {
     jobInstanceDao;
     jobExecutionDao;
     stepExecutionDao;
+    jobExecutionProgressDao;
+    jobExecutionFlagDao;
 
     constructor(dbName ='sd-job-repository', deleteDB=false) {
         super();
@@ -30,6 +32,8 @@ export class IdbJobRepository extends JobRepository {
         this.jobInstanceDao = new ObjectStoreDao('job-instances', this.dbPromise);
         this.jobExecutionDao = new ObjectStoreDao('job-executions', this.dbPromise);
         this.jobExecutionProgressDao = new ObjectStoreDao('job-execution-progress', this.dbPromise);
+        this.jobExecutionFlagDao = new ObjectStoreDao('job-execution-flags', this.dbPromise);
+
         this.stepExecutionDao = new ObjectStoreDao('step-executions', this.dbPromise);
     }
 
@@ -39,7 +43,9 @@ export class IdbJobRepository extends JobRepository {
             var jobExecutionsOS = upgradeDB.createObjectStore('job-executions');
             jobExecutionsOS.createIndex("jobInstanceId", "jobInstance.id", { unique: false });
             jobExecutionsOS.createIndex("createTime", "createTime", { unique: false });
+            jobExecutionsOS.createIndex("status", "status", { unique: false });
             upgradeDB.createObjectStore('job-execution-progress');
+            upgradeDB.createObjectStore('job-execution-flags');
             var stepExecutionsOS = upgradeDB.createObjectStore('step-executions');
             stepExecutionsOS.createIndex("jobExecutionId", "jobExecution.id", { unique: false });
         });
@@ -73,6 +79,14 @@ export class IdbJobRepository extends JobRepository {
 
     getJobExecutionProgress(jobExecutionId){
         return this.jobExecutionProgressDao.get(jobExecutionId)
+    }
+
+    saveJobExecutionFlag(jobExecutionId, flag){
+        return this.jobExecutionFlagDao.set(jobExecutionId, flag)
+    }
+
+    getJobExecutionFlag(jobExecutionId){
+        return this.jobExecutionFlagDao.get(jobExecutionId)
     }
 
     /*should return promise which resolves to saved stepExecution*/

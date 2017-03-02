@@ -43,7 +43,7 @@ export class JobExecution {
     }
 
     isRunning() {
-        return !!this.endTime;
+        return !this.endTime;
     }
 
     /**
