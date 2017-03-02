@@ -148,7 +148,6 @@ export class JobRepository {
     }
 
     update(o){
-        console.log("UPDATE!!!!", o);
         o.lastUpdated = new Date();
 
         if(o instanceof JobExecution){

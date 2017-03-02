@@ -19,7 +19,7 @@ export class IdbJobRepository extends JobRepository {
         super();
         this.dbName=dbName;
         if(deleteDB){
-            idb.delete(dbName).then(()=>{
+            this.deleteDB().then(()=>{
                 this.initDB()
             })
         }else{
@@ -43,6 +43,10 @@ export class IdbJobRepository extends JobRepository {
             var stepExecutionsOS = upgradeDB.createObjectStore('step-executions');
             stepExecutionsOS.createIndex("jobExecutionId", "jobExecution.id", { unique: false });
         });
+    }
+
+    deleteDB(){
+        return Promise.resolve().then(_=>idb.delete(this.dbName));
     }
 
     /*returns promise*/

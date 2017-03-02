@@ -63,11 +63,11 @@ export class ComputationsManager {
             var starttime = new Date().getTime();
             this.jobsManger.getProgress(r).then(progress=>{
                 progress = progress || 0;
-                console.log('progress', progress, (new Date().getTime()-starttime)/1000);
+                log.debug('progress', progress, (new Date().getTime()-starttime)/1000);
                 if(progress<100){
                     setTimeout(function () {
                         checkProgress(r)
-                    }, 10);
+                    }, 100);
                 }
 
             })
@@ -97,8 +97,6 @@ export class ComputationsManager {
             }
 
         })
-
-        console.log('aaaaaaaaaaaaa');
     }
 
     runJob(name, jobParamsValues, data){

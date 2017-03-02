@@ -3,7 +3,7 @@ import {JOB_STATUS} from "./job-status";
 import {Job} from "./job";
 import *  as _ from 'lodash'
 import {ExecutionContext} from "./execution-context";
-import {Step} from "../engine/step";
+import {Step} from "./step";
 
 /* Simple Job that sequentially executes a job by iterating through its list of steps.  Any Step that fails will fail the job.  The job is
  considered complete when all steps have been executed.*/
@@ -140,4 +140,5 @@ export class SimpleJob extends Job {
         step.doExecute = arguments[1];
         return super.addStep(step);
     }
+
 }

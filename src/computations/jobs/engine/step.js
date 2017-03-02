@@ -33,7 +33,7 @@ export class Step {
             this.executionListeners.forEach(listener=>listener.beforeStep(stepExecution));
             this.open(stepExecution.executionContext);
 
-            return this.doExecute(stepExecution);
+            return this.doExecute(stepExecution)
         }).then(_stepExecution=>{
             stepExecution = _stepExecution;
             exitStatus = stepExecution.exitStatus;
@@ -110,7 +110,7 @@ export class Step {
      * Extension point for subclasses to execute business logic. Subclasses should set the exitStatus on the
      * StepExecution before returning. Must return stepExecution
      */
-    doExecute(stepExecution, progressUpdater) {
+    doExecute(stepExecution) {
     }
 
     /**
@@ -125,5 +125,10 @@ export class Step {
      * of the finally block), to close or release resources. Does nothing by default.
      */
     close(executionContext) {
+    }
+
+    /*Should return progress in percents (integer)*/
+    getProgress(stepExecution){
+        return stepExecution.status === JOB_STATUS.COMPLETED ? 100 : 0;
     }
 }
