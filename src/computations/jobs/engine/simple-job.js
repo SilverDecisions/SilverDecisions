@@ -80,20 +80,16 @@ export class SimpleJob extends Job {
                 currentStepExecution.executionContext = new ExecutionContext(jobExecution.executionContext.context);
             }
 
-            this.jobRepository.addStepExecution(currentStepExecution); // not waiting for promise resolve
-
-            return Promise.resolve(currentStepExecution).then(currentStepExecution=>{
-                try {
-                    log.info("Executing step: [" + step.name + "]");
-                    step.execute(currentStepExecution);
-                    currentStepExecution.executionContext.put("executed", true);
-                    return currentStepExecution;
-                }
-                catch (e) {
-                    jobExecution.status = JOB_STATUS.FAILED;
-                    return this.jobRepository.update(jobExecution).then(jobExecution=>{throw e})
-                }
-            })
+            return this.jobRepository.addStepExecution(currentStepExecution).then((currentStepExecution)=>{
+                log.info("Executing step: [" + step.name + "]");
+                return step.execute(currentStepExecution);
+            }).then(currentStepExecution=>{
+                currentStepExecution.executionContext.put("executed", true);
+                return currentStepExecution;
+            }).catch (e => {
+                jobExecution.status = JOB_STATUS.FAILED;
+                return this.jobRepository.update(jobExecution).then(jobExecution=>{throw e})
+            });
 
         }).then((currentStepExecution)=>{
             if (currentStepExecution.status == JOB_STATUS.STOPPING
@@ -102,7 +98,7 @@ export class SimpleJob extends Job {
                 jobExecution.status = JOB_STATUS.STOPPING;
                 // throw new Error("Job interrupted by step execution");
             }
-            return currentStepExecution;
+            return this.updateProgress(jobExecution).then(()=>currentStepExecution);
         })
 
     }

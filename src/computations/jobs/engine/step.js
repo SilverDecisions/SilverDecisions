@@ -26,30 +26,27 @@ export class Step {
         log.debug("Executing step: name=" + this.name);
         stepExecution.startTime = new Date();
         stepExecution.status = JOB_STATUS.STARTED;
-        this.jobRepository.update(stepExecution); //not waiting for promise resolve
+        var exitStatus;
+        return this.jobRepository.update(stepExecution).then(stepExecution=>{
+            exitStatus = JOB_STATUS.EXECUTING;
 
-        var exitStatus = JOB_STATUS.EXECUTING;
-        // doExecutionRegistration(stepExecution);
-
-        try {
             this.executionListeners.forEach(listener=>listener.beforeStep(stepExecution));
             this.open(stepExecution.executionContext);
 
-
-            this.doExecute(stepExecution);
-
+            return this.doExecute(stepExecution);
+        }).then(_stepExecution=>{
+            stepExecution = _stepExecution;
             exitStatus = stepExecution.exitStatus;
 
             // Check if someone is trying to stop us
             if (stepExecution.terminateOnly) {
                 throw new JobInterruptedException("JobExecution interrupted.");
             }
-
             // Need to upgrade here not set, in case the execution was stopped
             stepExecution.status = JOB_STATUS.COMPLETED;
             log.debug("Step execution success: name=" + this.name);
-        }
-        catch (e) {
+            return stepExecution
+        }).catch(e=>{
             stepExecution.status = this.determineJobStatus(e);
             exitStatus = stepExecution.status;
             stepExecution.failureExceptions.push(e);
@@ -60,9 +57,8 @@ export class Step {
             else {
                 log.error("Encountered an error executing step: " + this.name + " in job: " + stepExecution.jobExecution.jobInstance.jobName, e);
             }
-        }
-        finally {
-
+            return stepExecution;
+        }).then(stepExecution=>{
             try {
                 stepExecution.exitStatus = exitStatus;
                 this.executionListeners.forEach(listener=>listener.afterStep(stepExecution));
@@ -75,8 +71,8 @@ export class Step {
             stepExecution.exitStatus = exitStatus;
 
 
-            this.jobRepository.update(stepExecution); //not waiting for promise resolve
-
+            return this.jobRepository.update(stepExecution)
+        }).then(stepExecution=>{
             try {
                 this.close(stepExecution.executionContext);
             }
@@ -96,7 +92,9 @@ export class Step {
             // doExecutionRelease();
 
             log.debug("Step execution complete: " + stepExecution.id);
-        }
+            return stepExecution;
+        });
+
     }
 
     determineJobStatus(e) {
@@ -110,9 +108,9 @@ export class Step {
 
     /**
      * Extension point for subclasses to execute business logic. Subclasses should set the exitStatus on the
-     * StepExecution before returning.
+     * StepExecution before returning. Must return stepExecution
      */
-    doExecute(stepExecution) {
+    doExecute(stepExecution, progressUpdater) {
     }
 
     /**

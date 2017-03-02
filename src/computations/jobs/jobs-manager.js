@@ -39,14 +39,45 @@ export class JobsManager extends JobExecutionListener{
         }
 
         this.jobLauncher = new JobLauncher(this.jobRepository, this.jobWorker, (data)=>this.serializeData(data));
-
-
     }
 
     serializeData(data){
         return data.serialize(true, false, false, this.expressionEngine.getJsonReplacer());
     }
 
+    execute(jobExecutionOrId){
+        return this.jobLauncher.execute(jobExecutionOrId);
+    }
+
+
+    getProgress_(jobExecutionOrId, refreshFromDb=true){
+        return Promise.resolve().then(()=>{
+            var id = jobExecutionOrId;
+            if(!Utils.isString(jobExecutionOrId)){
+                if(!refreshFromDb){
+                    return jobExecutionOrId
+                }
+                id = jobExecutionOrId.id
+            }
+            return this.jobRepository.getJobExecutionById(id);
+        }).then(jobExecution=>{
+            var jobName = jobExecution.jobInstance.jobName;
+            var job = this.jobRepository.getJobByName(jobName);
+            if(!job){
+                return null;
+            }
+
+            return  job.getProgress(jobExecution);
+        })
+    }
+
+    getProgress(jobExecutionOrId){
+        var id = jobExecutionOrId;
+        if(!Utils.isString(jobExecutionOrId)){
+            id = jobExecutionOrId.id
+        }
+        return this.jobRepository.getJobExecutionProgress(id);
+    }
 
     run(jobName, jobParametersValues, data) {
         return this.jobLauncher.run(jobName, jobParametersValues, data);

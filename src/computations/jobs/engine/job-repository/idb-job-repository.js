@@ -29,6 +29,7 @@ export class IdbJobRepository extends JobRepository {
 
         this.jobInstanceDao = new ObjectStoreDao('job-instances', this.dbPromise);
         this.jobExecutionDao = new ObjectStoreDao('job-executions', this.dbPromise);
+        this.jobExecutionProgressDao = new ObjectStoreDao('job-execution-progress', this.dbPromise);
         this.stepExecutionDao = new ObjectStoreDao('step-executions', this.dbPromise);
     }
 
@@ -38,6 +39,7 @@ export class IdbJobRepository extends JobRepository {
             var jobExecutionsOS = upgradeDB.createObjectStore('job-executions');
             jobExecutionsOS.createIndex("jobInstanceId", "jobInstance.id", { unique: false });
             jobExecutionsOS.createIndex("createTime", "createTime", { unique: false });
+            upgradeDB.createObjectStore('job-execution-progress');
             var stepExecutionsOS = upgradeDB.createObjectStore('step-executions');
             stepExecutionsOS.createIndex("jobExecutionId", "jobExecution.id", { unique: false });
         });
@@ -61,10 +63,22 @@ export class IdbJobRepository extends JobRepository {
         return this.jobExecutionDao.set(jobExecution.id, dto).then(r=>jobExecution);
     }
 
+    updateJobExecutionProgress(jobExecutionId, progress){
+        return this.jobExecutionProgressDao.set(jobExecutionId, progress)
+    }
+
+    getJobExecutionProgress(jobExecutionId){
+        return this.jobExecutionProgressDao.get(jobExecutionId)
+    }
+
     /*should return promise which resolves to saved stepExecution*/
     saveStepExecution(stepExecution) {
         var dto = stepExecution.getDTO();
         return this.jobExecutionDao.set(stepExecution.id, dto).then(r=>stepExecution);
+    }
+
+    getJobExecutionById(id){
+        return this.jobExecutionDao.get(id).then(dto=>dto ? this.reviveJobExecution(dto): dto);
     }
 
     /*find job executions sorted by createTime, returns promise*/

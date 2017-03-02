@@ -59,15 +59,34 @@ export class ComputationsManager {
     }
 
     testJob(){
-        this.runJob("sensitivity-analysis", {
+        var checkProgress = (r)=> {
+            var starttime = new Date().getTime();
+            this.jobsManger.getProgress(r).then(progress=>{
+                progress = progress || 0;
+                console.log('progress', progress, (new Date().getTime()-starttime)/1000);
+                if(progress<100){
+                    setTimeout(function () {
+                        checkProgress(r)
+                    }, 10);
+                }
+
+            })
+
+        };
+        var jobParamsValues = {
             ruleName: this.getCurrentRule().name,
             variables: [
                 { name: 'p', min: 0, max: 1, length: 11 },
                 { name: 'a', min: 1, max: 10, length: 10 },
                 { name: 'b', min: 0, max: 100, length: 10 }
             ]
-        }).then(r=>{
+        };
+        this.runJob("sensitivity-analysis", jobParamsValues).then(r=>{
             log.debug(r);
+
+
+            checkProgress(r);
+
         }).catch(e=>{
             if (e instanceof JobDataInvalidException){
                 log.warn("Jod data is invalid: "+e);
@@ -78,6 +97,8 @@ export class ComputationsManager {
             }
 
         })
+
+        console.log('aaaaaaaaaaaaa');
     }
 
     runJob(name, jobParamsValues, data){

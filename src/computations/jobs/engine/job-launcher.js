@@ -35,14 +35,16 @@ export class JobLauncher {
 
             return this.validate(job, jobParameters, data);
         }).then(valid=>{
-
-            if(this.jobWorker){
-                log.debug("Job: [" + job.name + "] execution delegated to worker");
-                return this.jobWorker.runJob(job.name, jobParametersValues, data.serialize(false))
-            }
-
             return this.jobRepository.createJobExecution(job.name, jobParameters, data).then(jobExecution=>{
-                var executionPromise = this.execute(job, jobExecution);
+
+
+                if(this.jobWorker){
+                    log.debug("Job: [" + job.name + "] execution ["+jobExecution.id+"] delegated to worker");
+                    this.jobWorker.executeJob(jobExecution.id);
+                    return jobExecution;
+                }
+
+                var executionPromise = this._execute(job, jobExecution);
                 if(resolvePromiseAfterJobIsLaunched){
                     return jobExecution;
                 }
@@ -76,7 +78,34 @@ export class JobLauncher {
         })
     }
 
-    execute(job, jobExecution){
+    /**Execute previously created job execution*/
+    execute(jobExecutionOrId){
+
+        Promise.resolve().then(()=>{
+            if(Utils.isString(jobExecutionOrId)){
+                return this.jobRepository.getJobExecutionById(jobExecutionOrId);
+            }
+            return jobExecutionOrId;
+        }).then(jobExecution=>{
+            if(!jobExecution){
+                throw new JobRestartException("JobExecution [" + jobExecution.id + "] is not found");
+            }
+
+            if (jobExecution.status !== JOB_STATUS.STARTING) {
+                throw new JobRestartException("JobExecution [" + jobExecution.id + "] already started");
+            }
+
+            var jobName = jobExecution.jobInstance.jobName;
+            var job = this.jobRepository.getJobByName(jobName);
+            if(!job){
+                throw new JobRestartException("No such job: " + jobName);
+            }
+
+            return  this._execute(job, jobExecution);
+        })
+    }
+
+    _execute(job, jobExecution){
         var jobName = job.name;
         log.info("Job: [" + jobName + "] launched with the following parameters: [" + jobExecution.jobParameters + "]", jobExecution.getData());
         return job.execute(jobExecution).then(jobExecution=>{

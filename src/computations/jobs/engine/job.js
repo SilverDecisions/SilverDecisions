@@ -32,6 +32,7 @@ export class Job {
     execute(execution) {
         log.debug("Job execution starting: ", execution);
         return Promise.resolve(execution).then(execution=>{
+
             if (this.jobParametersValidator && !this.jobParametersValidator.validate(execution.jobParameters)) {
                 throw new JobParametersInvalidException("Invalid job parameters in job execute")
             }
@@ -48,11 +49,13 @@ export class Job {
                 return execution;
             }
 
-            execution.startTime = new Date();
-            this.updateStatus(execution, JOB_STATUS.STARTED);
-            this.executionListeners.forEach(listener=>listener.beforeJob(execution));
 
-            return this.doExecute(execution);
+            execution.startTime = new Date();
+            return Promise.all([this.updateStatus(execution, JOB_STATUS.STARTED), this.updateProgress(execution)]).then(res=>{
+                execution=res[0];
+                this.executionListeners.forEach(listener=>listener.beforeJob(execution));
+                return this.doExecute(execution);
+            });
 
         }).then(execution=>{
             log.debug("Job execution complete: ",execution);
@@ -77,14 +80,18 @@ export class Job {
             } catch (e) {
                 log.error("Exception encountered in afterStep callback", e);
             }
-            this.jobRepository.update(execution);
-            return execution;
+            return Promise.all([this.jobRepository.update(execution), this.updateProgress(execution)]).then(res=>res[0]);
         });
     }
 
+
     updateStatus(jobExecution, status) {
         jobExecution.status=status;
-        this.jobRepository.update(jobExecution);
+        return this.jobRepository.update(jobExecution)
+    }
+
+    updateProgress(jobExecution){
+        return this.jobRepository.updateJobExecutionProgress(jobExecution.id, this.getProgress(jobExecution));
     }
 
     /* Extension point for subclasses allowing them to concentrate on processing logic and ignore listeners, returns promise*/
@@ -112,7 +119,6 @@ export class Job {
     createJobParameters(values){
         throw 'createJobParameters function not implemented for job: ' + this.name
     }
-
 
     /*Should return progress in percents (integer)*/
     getProgress(execution){

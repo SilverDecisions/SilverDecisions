@@ -47,6 +47,9 @@ export class ComputationsEngine{
                     // console.log(jobName, jobParameters, serializedData);
                     var data = new DataModel(dataDTO);
                     instance.computationsManager.runJob(jobName, jobParametersValues, data);
+                },
+                executeJob: function(jobExecutionId){
+                    instance.computationsManager.jobsManger.execute(jobExecutionId)
                 }
             };
 

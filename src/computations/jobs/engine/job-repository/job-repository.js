@@ -32,10 +32,23 @@ export class JobRepository {
         throw "JobRepository.saveJobInstance function not implemented!"
     }
 
+    getJobExecutionById(id){
+        throw "JobRepository.getJobExecutionById function not implemented!"
+    }
+
     /*should return promise that resolves to saved jobExecution*/
     saveJobExecution(jobExecution){
         throw "JobRepository.saveJobInstance function not implemented!"
     }
+
+    updateJobExecutionProgress(jobExecutionId, progress){
+        throw "JobRepository.saveJobInstance function not implemented!"
+    }
+
+    getJobExecutionProgress(jobExecutionId){
+        throw "JobRepository.getJobExecutionProgress function not implemented!"
+    }
+
 
     /*should return promise which resolves to saved stepExecution*/
     saveStepExecution(stepExecution){
@@ -49,7 +62,6 @@ export class JobRepository {
 
     /*Create a new JobInstance with the name and job parameters provided. return promise*/
     createJobInstance(jobName, jobParameters) {
-
         var jobInstance = new JobInstance(Utils.guid(), jobName);
         return this.saveJobInstance(jobInstance, jobParameters);
     }
@@ -62,7 +74,6 @@ export class JobRepository {
     generateJobInstanceKey(jobName, jobParameters) {
         return jobName + "|" + JobKeyGenerator.generateKey(jobParameters);
     }
-
 
     /*Create a JobExecution for a given  Job and JobParameters. If matching JobInstance already exists,
      * the job must be restartable and it's last JobExecution must *not* be
@@ -104,7 +115,6 @@ export class JobRepository {
         })
     }
 
-
     getLastJobExecution(jobName, jobParameters) {
         return this.getJobInstance(jobName, jobParameters).then((jobInstance)=>{
             if(!jobInstance){
@@ -138,6 +148,7 @@ export class JobRepository {
     }
 
     update(o){
+        console.log("UPDATE!!!!", o);
         o.lastUpdated = new Date();
 
         if(o instanceof JobExecution){

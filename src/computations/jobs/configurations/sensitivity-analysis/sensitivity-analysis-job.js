@@ -24,6 +24,7 @@ export class SensitivityAnalysisJob extends SimpleJob{
             stepExecution.getJobExecutionContext().put("variableValues", variableValues);
 
             stepExecution.exitStatus = JOB_STATUS.COMPLETED;
+            return stepExecution;
         });
 
 
@@ -53,6 +54,7 @@ export class SensitivityAnalysisJob extends SimpleJob{
             });
 
             stepExecution.exitStatus = JOB_STATUS.COMPLETED;
+            return stepExecution;
         });
     }
 

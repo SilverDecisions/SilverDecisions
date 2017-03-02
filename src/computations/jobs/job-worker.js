@@ -29,7 +29,6 @@ export class JobWorker{
     sendQuery() {
         if (arguments.length < 1) {
             throw new TypeError('JobWorker.sendQuery takes at least one argument');
-            return;
         }
         this.worker.postMessage({
             'queryMethod': arguments[0],
@@ -39,6 +38,10 @@ export class JobWorker{
 
     runJob(jobName, jobParametersValues, dataDTO){
         this.sendQuery('runJob', jobName, jobParametersValues, dataDTO)
+    }
+
+    executeJob(jobExecutionId){
+        this.sendQuery('executeJob', jobExecutionId)
     }
 
     postMessage(message) {
