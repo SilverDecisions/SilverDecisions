@@ -63,7 +63,7 @@ export class BatchStep extends Step {
     }
 
     getCurrentItemCount(stepExecution) {
-        return stepExecution.executionContext.get(BatchStep.CURRENT_ITEM_COUNT_PROP);
+        return stepExecution.executionContext.get(BatchStep.CURRENT_ITEM_COUNT_PROP) || 0;
     }
 
 
@@ -75,7 +75,7 @@ export class BatchStep extends Step {
             throw e;
         }).then(totalItemCount=> {
             return Promise.resolve().then(()=>{
-                this.setCurrentItemCount(stepExecution, 0);
+                this.setCurrentItemCount(stepExecution, this.getCurrentItemCount(stepExecution));
                 this.setTotalItemCount(stepExecution, totalItemCount);
                 return this.handleNextChunk(stepExecution)
             }).catch(e=> {

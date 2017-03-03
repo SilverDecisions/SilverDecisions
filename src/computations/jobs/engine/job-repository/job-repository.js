@@ -104,7 +104,7 @@ export class JobRepository {
 
                     var executionContext = executions[executions.length - 1].executionContext;
 
-                    return [jobInstance, this.reviveExecutionContext(executionContext)];
+                    return [jobInstance, executionContext];
                 })
             }
 
@@ -139,7 +139,7 @@ export class JobRepository {
     getLastStepExecution(jobInstance, stepName) {
         return this.findJobExecutions(jobInstance).then(jobExecutions=>{
             var stepExecutions=[];
-            jobExecutions.forEach(jobExecution=>jobExecution.stepExecutions.filter(s=>s.name === stepName).forEach(stepExecutions.push));
+            jobExecutions.forEach(jobExecution=>jobExecution.stepExecutions.filter(s=>s.stepName === stepName).forEach((s)=>stepExecutions.push(s)));
             var latest = null;
             stepExecutions.forEach(s=>{
                 if (latest == null || latest.startTime.getTime() < s.startTime.getTime()) {

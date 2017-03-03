@@ -13,7 +13,7 @@ export class Job {
     name;
     steps = [];
 
-    isRestartable;
+    isRestartable=true;
     executionListeners = [];
     jobParametersValidator;
 

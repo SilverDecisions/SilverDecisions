@@ -73,7 +73,7 @@ export class SimpleJob extends Job {
 
             currentStepExecution = jobExecution.createStepExecution(step.name);
 
-            var isRestart = lastStepExecution != null && !lastStepExecution.status == JOB_STATUS.COMPLETED;
+            var isRestart = lastStepExecution != null && lastStepExecution.status !== JOB_STATUS.COMPLETED;
 
             if (isRestart) {
                 currentStepExecution.executionContext = lastStepExecution.executionContext;
