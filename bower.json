@@ -17,7 +17,7 @@
     "analysis",
     "d3"
   ],
-  "homepage": "https://github.com/bkamins/SilverDecisions",
+  "homepage": "https://github.com/SilverDecisions/SilverDecisions",
   "ignore": [
     "**/.*",
     "node_modules",

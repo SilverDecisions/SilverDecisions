@@ -2,9 +2,9 @@
 
 Software for creating and analyzing decision trees.
 
-If you are a SilverDecisions user please visit project [website](http://www.silverdecisions.pl) or [Wiki](https://github.com/bkamins/SilverDecisions/wiki).
+If you are a SilverDecisions user please visit project [website](http://www.silverdecisions.pl) or [Wiki](https://github.com/SilverDecisions/SilverDecisions/wiki).
 
-Basic technical information about SilverDecisions is provided in [Developer's Guide](https://github.com/bkamins/SilverDecisions/wiki/Developer%27s-guide)
+Basic technical information about SilverDecisions is provided in [Developer's Guide](https://github.com/SilverDecisions/SilverDecisions/wiki/Developer%27s-guide)
 
 ## User testing guide
 

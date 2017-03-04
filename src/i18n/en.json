@@ -235,7 +235,7 @@
         "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
       }
     },
-    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
+    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
   },
   "definitionsDialog":{
     "title": "Variable definitions",
@@ -310,7 +310,7 @@
   "confirm":{
     "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
     "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
-    "beforeunload": "Are you sure you want to close Silver Decisions? All unsaved diagram data will be lost."
+    "beforeunload": "Are you sure you want to close SilverDecisions? All unsaved diagram data will be lost."
   },
   "error":{
     "jsonParse": "Error parsing file!",
