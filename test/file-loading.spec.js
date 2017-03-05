@@ -12,7 +12,7 @@ describe("JSON file", function() {
         container = document.createElement("div");
         container.id = containerId;
         document.getElementsByTagName('body')[0].appendChild(container);
-        app = new SilverDecisions(containerId);
+        app = new SilverDecisions.App(containerId);
     });
 
     fileList.forEach(function (fileName) {
@@ -20,9 +20,12 @@ describe("JSON file", function() {
 
         describe(fileName, function(){
             var errors;
-            beforeEach(function(){
+            beforeEach(function(done){
                 spyOn(window, 'alert');
-                errors = app.openDiagram(rawJsonString);
+                app.openDiagram(rawJsonString).then((err)=>{
+                    errors = err;
+                    done();
+                });
             });
 
 
@@ -47,20 +50,26 @@ describe("JSON file", function() {
 
 
                 if(endsWith(fileName, "_pass.json")){
-                    it("should load without computation/validation errors", function(){
-                        app.checkValidityAndRecomputeObjective(true, true, true);
-                        app.dataModel.validationResults.forEach(function (result) {
-                            expect(result.isValid()).toBeTruthy()
+                    it("should load without computation/validation errors", function(done){
+                        app.checkValidityAndRecomputeObjective(true, true, true).then(()=>{
+                            app.dataModel.validationResults.forEach(function (result) {
+                                expect(result.isValid()).toBeTruthy()
+                            });
+                            done();
                         });
+
                     })
                 }else if(endsWith(fileName, "_fail.json")){
-                    it("should load with computation/validation errors", function(){
-                        app.checkValidityAndRecomputeObjective(true, true, true);
-                        var valid = true;
-                        app.dataModel.validationResults.forEach(function (result) {
-                            valid = valid && result.isValid();
+                    it("should load with computation/validation errors", function(done){
+                        app.checkValidityAndRecomputeObjective(true, true, true).then(()=>{
+                            var valid = true;
+                            app.dataModel.validationResults.forEach(function (result) {
+                                valid = valid && result.isValid();
+                            });
+                            expect(valid).toBeFalsy();
+                            done();
                         });
-                        expect(valid).toBeFalsy()
+
                     })
                 }
             }

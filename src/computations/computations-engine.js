@@ -33,11 +33,11 @@ export class ComputationsEngine{
         if(this.isWorker) {
             this.computationsManager.jobsManger.registerJobExecutionListener({
                 beforeJob: (jobExecution)=>{
-                    this.reply('beforeJob', Utils.stringify(jobExecution, [this.dataModel.getJsonReplacer(), this.computationsManager.expressionEngine.getJsonReplacer()]));
+                    this.reply('beforeJob', jobExecution.getDTO());
                 },
 
                 afterJob: (jobExecution)=>{
-                    this.reply('afterJob', Utils.stringify(jobExecution, [this.dataModel.getJsonReplacer(), this.computationsManager.expressionEngine.getJsonReplacer()]));
+                    this.reply('afterJob', jobExecution.getDTO());
                 }
             });
 

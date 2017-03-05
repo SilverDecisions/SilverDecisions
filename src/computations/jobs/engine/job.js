@@ -123,7 +123,7 @@ export class Job {
 
     /*Should return progress in percents (integer)*/
     getProgress(execution){
-        throw 'getProgress function not implemented for job: ' + this.name
+        return execution.status === JOB_STATUS.COMPLETED ? 100 : 0;
     }
 
     registerExecutionListener(listener){

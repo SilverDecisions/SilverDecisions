@@ -91,6 +91,21 @@ class PrepareVariablesStep extends Step {
     };
 }
 
+class InitPoliciesStep extends Step {
+    constructor(jobRepository) {
+        super("init_policies", jobRepository);
+    }
+
+    doExecute(stepExecution) {
+        var data = stepExecution.getData();
+
+        //TODO
+
+        stepExecution.exitStatus = JOB_STATUS.COMPLETED;
+        return stepExecution;
+    }
+}
+
 class CalculateStep extends BatchStep {
 
     constructor(jobRepository, expressionsEvaluator, objectiveRulesManager) {

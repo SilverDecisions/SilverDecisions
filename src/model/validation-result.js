@@ -48,4 +48,11 @@ export class ValidationResult{
         return i18n.t(key, error.data);
     }
 
+    static createFromDTO(dto){
+        var v = new ValidationResult();
+        v.errors = dto.errors;
+        v.warnings = dto.warnings;
+        v.objectIdToError = dto.objectIdToError;
+        return v;
+    }
 }

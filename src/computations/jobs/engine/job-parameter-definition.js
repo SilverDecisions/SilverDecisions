@@ -4,6 +4,7 @@ export const PARAMETER_TYPE = {
     DATE: 'DATE',
     INTEGER: 'INTEGER',
     NUMBER: 'FLOAT',
+    BOOLEAN: 'BOOLEAN',
     NUMBER_EXPRESSION: 'NUMBER_EXPRESSION',
     COMPOSITE: 'COMPOSITE' //composite parameter with nested subparameters
 };
@@ -14,6 +15,7 @@ export class JobParameterDefinition{
     nestedParameters=[];
     minOccurs;
     maxOccurs;
+
     identifying;
     validator;
     singleValueValidator;
@@ -65,6 +67,9 @@ export class JobParameterDefinition{
     }
 
     validateSingleValue(value){
+        if((value===null || value === undefined) && this.minOccurs>0){
+            return false
+        }
         if(PARAMETER_TYPE.STRING === this.type && !Utils.isString(value)){
             return false;
         }

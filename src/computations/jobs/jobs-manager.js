@@ -1,6 +1,3 @@
-import {JobRepository} from "./engine/job-repository/job-repository";
-import {JobRestartException} from "./engine/exceptions/job-restart-exception";
-import {JOB_STATUS} from "./engine/job-status";
 import * as log from "../../log";
 import {Utils} from "../../utils";
 import {SensitivityAnalysisJob} from "./configurations/sensitivity-analysis/sensitivity-analysis-job";
@@ -8,11 +5,11 @@ import {JobLauncher} from "./engine/job-launcher";
 import {JobWorker} from "./job-worker";
 import {JobExecutionListener} from "./engine/job-execution-listener";
 import {JobParameters} from "./engine/job-parameters";
-import {SimpleJobRepository} from "./engine/job-repository/simple-job-repository";
 import {IdbJobRepository} from "./engine/job-repository/idb-job-repository";
 import {JOB_EXECUTION_FLAG} from "./engine/job-execution-flag";
+import {RecomputeJob} from "./configurations/recompute/recompute-job";
 
-export class JobsManager extends JobExecutionListener{
+export class JobsManager extends JobExecutionListener {
 
 
     useWorker;
@@ -23,7 +20,9 @@ export class JobsManager extends JobExecutionListener{
     jobRepository;
     jobLauncher;
 
-    jobExecutionListeners=[];
+    jobExecutionListeners = [];
+
+    afterJobExecutionPromiseResolves = {};
 
     constructor(expressionsEvaluator, objectiveRulesManager, workerUrl) {
         super();
@@ -31,50 +30,59 @@ export class JobsManager extends JobExecutionListener{
         this.expressionsEvaluator = expressionsEvaluator;
         this.objectiveRulesManager = objectiveRulesManager;
 
-        this.jobRepository = new IdbJobRepository();
+        this.jobRepository = new IdbJobRepository(this.expressionEngine.getJsonReviver());
         this.registerJobs();
 
         this.useWorker = !!workerUrl;
-        if(this.useWorker){
+        if (this.useWorker) {
             this.initWorker(workerUrl);
         }
 
         this.jobLauncher = new JobLauncher(this.jobRepository, this.jobWorker, (data)=>this.serializeData(data));
     }
 
-    serializeData(data){
+    serializeData(data) {
         return data.serialize(true, false, false, this.expressionEngine.getJsonReplacer());
     }
 
-    getProgress(jobExecutionOrId){
+    getProgress(jobExecutionOrId) {
         var id = jobExecutionOrId;
-        if(!Utils.isString(jobExecutionOrId)){
+        if (!Utils.isString(jobExecutionOrId)) {
             id = jobExecutionOrId.id
         }
         return this.jobRepository.getJobExecutionProgress(id);
     }
 
-    run(jobName, jobParametersValues, data) {
-        return this.jobLauncher.run(jobName, jobParametersValues, data);
+    run(jobName, jobParametersValues, data, resolvePromiseAfterJobIsLaunched = true) {
+        return this.jobLauncher.run(jobName, jobParametersValues, data, resolvePromiseAfterJobIsLaunched).then(jobExecution=>{
+            if(resolvePromiseAfterJobIsLaunched || !jobExecution.isRunning()){
+                return jobExecution;
+            }
+            //job was delegated to worker and is still running
+
+            return new Promise((resolve, reject)=>{
+                this.afterJobExecutionPromiseResolves[jobExecution.id] = resolve;
+            });
+        });
     }
 
-    execute(jobExecutionOrId){
+    execute(jobExecutionOrId) {
         return this.jobLauncher.execute(jobExecutionOrId);
     }
 
-    stop(jobExecutionOrId){
+    stop(jobExecutionOrId) {
         var id = jobExecutionOrId;
-        if(!Utils.isString(jobExecutionOrId)){
+        if (!Utils.isString(jobExecutionOrId)) {
             id = jobExecutionOrId.id
         }
 
-        return this.jobRepository.getJobExecutionById(id).then(jobExecution=>{
-            if(!jobExecution){
-                log.error("Job Execution not found: "+jobExecutionOrId);
+        return this.jobRepository.getJobExecutionById(id).then(jobExecution=> {
+            if (!jobExecution) {
+                log.error("Job Execution not found: " + jobExecutionOrId);
                 return null;
             }
-            if(!jobExecution.isRunning()){
-                log.warn("Job Execution not running, status: "+jobExecution.status+", endTime: "+jobExecution.endTime);
+            if (!jobExecution.isRunning()) {
+                log.warn("Job Execution not running, status: " + jobExecution.status + ", endTime: " + jobExecution.endTime);
                 return jobExecution;
             }
 
@@ -83,20 +91,18 @@ export class JobsManager extends JobExecutionListener{
     }
 
 
-
-    createJobParameters(jobName, jobParametersValues){
+    createJobParameters(jobName, jobParametersValues) {
         var job = this.jobRepository.getJobByName(jobName);
         return job.createJobParameters(jobParametersValues);
     }
 
 
-
     /*Returns a promise*/
     getLastJobExecution(jobName, jobParameters) {
-        if(this.useWorker){
+        if (this.useWorker) {
             return this.jobWorker;
         }
-        if(!(jobParameters instanceof JobParameters)){
+        if (!(jobParameters instanceof JobParameters)) {
             jobParameters = this.createJobParameters(jobParameters)
         }
         return this.jobRepository.getLastJobExecution(jobName, jobParameters);
@@ -104,8 +110,8 @@ export class JobsManager extends JobExecutionListener{
 
     initWorker(workerUrl) {
         this.jobWorker = new JobWorker(workerUrl);
-        var argsDeserializer = (args)=>{
-            return [JSON.parse(args[0], this.expressionEngine.getJsonReviver())]
+        var argsDeserializer = (args)=> {
+            return [this.jobRepository.reviveJobExecution(args[0])]
         };
 
         this.jobWorker.addListener("beforeJob", this.beforeJob, this, argsDeserializer);
@@ -114,24 +120,29 @@ export class JobsManager extends JobExecutionListener{
 
     registerJobs() {
         this.registerJob(new SensitivityAnalysisJob(this.jobRepository, this.expressionsEvaluator, this.objectiveRulesManager));
+        this.registerJob(new RecomputeJob(this.jobRepository, this.expressionsEvaluator, this.objectiveRulesManager));
     }
 
-    registerJob(job){
+    registerJob(job) {
         this.jobRepository.registerJob(job);
         job.registerExecutionListener(this)
     }
 
-    registerJobExecutionListener(listener){
+    registerJobExecutionListener(listener) {
         this.jobExecutionListeners.push(listener);
     }
 
-    beforeJob(jobExecution){
-        log.debug("beforeJob",this.useWorker, jobExecution);
+    beforeJob(jobExecution) {
+        log.debug("beforeJob", this.useWorker, jobExecution);
         this.jobExecutionListeners.forEach(l=>l.beforeJob(jobExecution));
     }
 
-    afterJob(jobExecution){
+    afterJob(jobExecution) {
         log.debug("afterJob", this.useWorker, jobExecution);
         this.jobExecutionListeners.forEach(l=>l.afterJob(jobExecution));
+        var promiseResolve = this.afterJobExecutionPromiseResolves[jobExecution.id];
+        if(promiseResolve){
+            promiseResolve(jobExecution)
+        }
     }
 }

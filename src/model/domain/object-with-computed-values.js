@@ -37,4 +37,8 @@ export class ObjectWithComputedValues extends ObjectWithIdAndEditableFields{
     displayValue(fieldName, value){
         return this.computedValue(null, '$displayValues.'+fieldName, value);
     }
+
+    loadComputedValues(computed){
+        this.computed = computed;
+    }
 }

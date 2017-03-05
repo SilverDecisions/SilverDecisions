@@ -17,9 +17,10 @@ export class IdbJobRepository extends JobRepository {
     jobExecutionProgressDao;
     jobExecutionFlagDao;
 
-    constructor(dbName ='sd-job-repository', deleteDB=false) {
+    constructor(expressionsReviver, dbName ='sd-job-repository', deleteDB=false) {
         super();
         this.dbName=dbName;
+        this.expressionsReviver = expressionsReviver;
         if(deleteDB){
             this.deleteDB().then(()=>{
                 this.initDB()
@@ -117,8 +118,9 @@ export class IdbJobRepository extends JobRepository {
         executionContext.context = dto.context;
         var data = executionContext.getData();
         if(data){
-            data = new DataModel(data);
-            executionContext.setData(data);
+            var dataModel = new DataModel();
+            dataModel.loadFromDTO(data, this.expressionsReviver);
+            executionContext.setData(dataModel);
         }
         return executionContext
     }

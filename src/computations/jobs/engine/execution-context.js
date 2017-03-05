@@ -47,7 +47,7 @@ export class ExecutionContext {
         var dto = _.cloneDeep(this);
         var data = this.getData();
         if (data) {
-            data = data.serialize(false);
+            data = data.getDTO();
             dto.context["data"] = data;
         }
         return dto;

@@ -1,6 +1,7 @@
 import {Utils} from '../utils'
 import * as domain from './domain'
 import *  as _ from 'lodash'
+import {ValidationResult} from './validation-result'
 import * as log from "../log"
 /*
  * Data model manager
@@ -16,6 +17,7 @@ export class DataModel {
     code = "";//global expression code
     $codeError = null; //code evaluation errors
     $codeDirty = false; // is code changed without reevaluation?
+    $version=1;
 
     validationResults = [];
 
@@ -38,9 +40,10 @@ export class DataModel {
         }
     }
 
-    getJsonReplacer(filterLocation=false, filterComputed=false, replacer){
+    getJsonReplacer(filterLocation=false, filterComputed=false, replacer, filterPrivate =true){
         return function (k, v) {
-            if (_.startsWith(k, '$') || k == 'parentNode') {
+
+            if ((filterPrivate && _.startsWith(k, '$')) || k == 'parentNode') {
                 return undefined;
             }
             if (filterLocation && k == 'location') {
@@ -58,7 +61,7 @@ export class DataModel {
         }
     }
 
-    serialize(stringify=true, filterLocation=false, filterComputed=false, replacer){
+    serialize(stringify=true, filterLocation=false, filterComputed=false, replacer, filterPrivate =true){
         var data =  {
             code: this.code,
             expressionScope: this.expressionScope,
@@ -70,8 +73,9 @@ export class DataModel {
             return data;
         }
 
-        return Utils.stringify(data, this.getJsonReplacer(filterLocation, filterComputed, replacer));
+        return Utils.stringify(data, this.getJsonReplacer(filterLocation, filterComputed, replacer, filterPrivate), []);
     }
+
 
     /*Loads serialized data*/
     load(data) {
@@ -100,6 +104,56 @@ export class DataModel {
         this.callbacksDisabled = callbacksDisabled;
     }
 
+    getDTO(){
+        var dto = {
+            serializedData: this.serialize(true, false, false, null, false),
+            $codeError: this.$codeError,
+            $codeDirty: this.$codeDirty,
+            validationResults: this.validationResults
+
+        };
+        return dto
+    }
+
+    loadFromDTO(dto, dataReviver){
+        this.load(JSON.parse(dto.serializedData, dataReviver));
+        this.$codeError = dto.$codeError;
+        this.$codeDirty = dto.$codeDirty;
+        this.validationResults.length=0;
+        dto.validationResults.forEach(v=>{
+            this.validationResults.push(ValidationResult.createFromDTO(v))
+        })
+    }
+
+    /*This method updates only computation results/validation*/
+    updateFrom(dataModel){
+        if(this.$version>dataModel.$version){
+            log.warn("DataModel.updateFrom: version of current model greater than update")
+            return;
+        }
+        var byId = {}
+        dataModel.nodes.forEach(n=>{
+            byId[n.$id] = n;
+        });
+        this.nodes.forEach((n,i)=>{
+            if(byId[n.$id]){
+                n.loadComputedValues(byId[n.$id].computed);
+            }
+        });
+        dataModel.edges.forEach(e=>{
+            byId[e.$id] = e;
+        });
+        this.edges.forEach((e,i)=>{
+            if(byId[e.$id]){
+                e.loadComputedValues(byId[e.$id].computed);
+            }
+        });
+        this.expressionScope = dataModel.expressionScope;
+        this.$codeError = dataModel.$codeError;
+        this.$codeDirty = dataModel.$codeDirty;
+        this.validationResults  = dataModel.validationResults;
+    }
+
     /*create node from serialized data*/
     createNodeFromData(data, parent) {
         var node;
@@ -111,6 +165,12 @@ export class DataModel {
         } else if (domain.TerminalNode.$TYPE == data.type) {
             node = new domain.TerminalNode(location);
         }
+        if(data.$id){
+            node.$id = data.$id;
+        }
+        if(data.$fieldStatus){
+            node.$fieldStatus = data.$fieldStatus;
+        }
         node.name = data.name;
 
         if(data.code){
@@ -119,6 +179,9 @@ export class DataModel {
         if (data.expressionScope) {
             node.expressionScope = data.expressionScope
         }
+        if(data.computed){
+            node.loadComputedValues(data.computed);
+        }
 
         var edgeOrNode = this.addNode(node, parent);
         data.childEdges.forEach(ed=> {
@@ -126,6 +189,15 @@ export class DataModel {
             edge.payoff = ed.payoff;
             edge.probability = ed.probability;
             edge.name = ed.name;
+            if(ed.computed){
+                edge.loadComputedValues(ed.computed);
+            }
+            if(ed.$id){
+                edge.$id = ed.$id;
+            }
+            if(ed.$fieldStatus){
+                edge.$fieldStatus = ed.$fieldStatus;
+            }
         });
 
         return edgeOrNode;

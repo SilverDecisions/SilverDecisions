@@ -9,7 +9,7 @@ module.exports = function (config) {
         files:[
             'node_modules/jquery/dist/jquery.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
-            'dist/silver-decisions.js',
+            'dist/standalone/silver-decisions.js',
             'test/*.js',
             // JSON fixture
             { pattern:  'test/tree-json-filelist.json',

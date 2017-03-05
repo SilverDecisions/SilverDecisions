@@ -128,12 +128,13 @@ export class Layout{
     }
 
 
+    nodeSymbolSize = {};
     drawNodeSymbol(path, transition){
 
         var self = this;
         var nodeSize = this.config.nodeSize;
         this.nodeSymbol = d3.symbol().type(d=> self.nodeTypeToSymbol[d.type])
-            .size(d=>d.$symolSize ? _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", 64) : 64);
+            .size(d=>self.nodeSymbolSize[d.$id] ? _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", 64) : 64);
 
         path
             .each(function (d) {
@@ -146,18 +147,18 @@ export class Layout{
                 if(!size){
                     var box = path.node().getBBox();
                     var error = Math.min(nodeSize / box.width, nodeSize / box.height);
-                    size = error * error * (d.$symolSize||64);
+                    size = error * error * (self.nodeSymbolSize[d.$id]||64);
                     _.set(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", size);
                 }
                 if(transition){
                     path =  path.transition();
 
                 }else{
-                    d.$symolSize = size;
+                    self.nodeSymbolSize[d.$id] = size;
                 }
                 path.attr("d", self.nodeSymbol);
                 if(transition){
-                    d.$symolSize = size;
+                    self.nodeSymbolSize[d.$id] = size;
                 }
             });
     }

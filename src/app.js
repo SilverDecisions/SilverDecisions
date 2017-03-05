@@ -94,12 +94,12 @@ export class App {
     sidebar;
 
     constructor(containerIdOrElem, config, diagramData) {
+        var p = Promise.resolve();
         this.setConfig(config);
         this.initI18n();
         this.initContainer(containerIdOrElem);
-
         this.initDataModel();
-        this.initComputationsManager();
+        p = this.initComputationsManager();
         this.initProbabilityNumberFormat();
         this.initPayoffNumberFormat();
         this.initTreeDesigner();
@@ -107,15 +107,18 @@ export class App {
         this.initSettingsDialog();
         this.initAboutDialog();
         this.initDefinitionsDialog();
-        this.initToolbar();
         this.initOnBeforeUnload();
         this.initKeyCodes();
-
-        if (diagramData) {
-            this.openDiagram(diagramData);
-        }else{
-            this.updateView();
-        }
+        p.then(()=>{
+            this.initToolbar();
+            if (diagramData) {
+                this.openDiagram(diagramData);
+            }else{
+                this.updateView();
+            }
+        }).catch(e=>{
+            log.error(e);
+        });
     }
 
     setConfig(config) {
@@ -163,6 +166,7 @@ export class App {
         this.dataModel.textRemovedCallback = (text)=> Utils.waitForFinalEvent(()=>this.onTextRemoved(text), 'onTextAdded');
     }
 
+
     initComputationsManager() {
         this.computationsManager = new ComputationsManager(this.dataModel, {
             ruleName: this.config.ruleName,
@@ -171,7 +175,7 @@ export class App {
             }
         });
         this.expressionEngine =  this.computationsManager.expressionEngine;
-        this.checkValidityAndRecomputeObjective(false, false, false);
+        return this.checkValidityAndRecomputeObjective(false, false, false);
 
     }
 
@@ -309,8 +313,10 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.checkValidityAndRecomputeObjective(false, false, false);
-        self.updateView();
+        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=>{
+            self.updateView();
+        })
+
     }
 
     redo() {
@@ -319,17 +325,21 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.checkValidityAndRecomputeObjective(false, false, false);
-        self.updateView();
+
+        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=>{
+            self.updateView();
+        })
     }
 
     onNodeAddedOrRemoved() {
-        this.checkValidityAndRecomputeObjective();
-        this.updateView();
+        return this.checkValidityAndRecomputeObjective().then(()=>{
+            this.updateView();
+        });
+
     }
 
     onTextAdded(text) {
-        this.onObjectSelected(text);
+        return this.onObjectSelected(text);
     }
 
     onTextRemoved(text) {
@@ -337,23 +347,27 @@ export class App {
     }
 
     onObjectUpdated(object, fieldName) {
-
         var self = this;
+        var p = Promise.resolve();
         if(!(object instanceof model.domain.Text) && fieldName!=='name'){
-            this.checkValidityAndRecomputeObjective();
+            p = p.then(()=>this.checkValidityAndRecomputeObjective());
         }
         // this.sidebar.updateObjectPropertiesView(this.selectedObject);
-        setTimeout(function () {
-            self.treeDesigner.redraw(true);
-        },1);
+        return p.then(()=>{
+            setTimeout(function () {
+                self.treeDesigner.redraw(true);
+            },1);
+        });
     }
 
     setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
         this.computationsManager.setCurrentRuleByName(ruleName);
-        this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric);
-        if(updateView){
-            this.updateView(true);
-        }
+        return this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric).then(()=>{
+            if(updateView){
+                this.updateView(true);
+            }
+        });
+
     }
 
     getCurrentObjectiveRule(){
@@ -375,16 +389,22 @@ export class App {
             return;
         }
 
-        this.checkValidityAndRecomputeObjective(false, true);
-        if (updateView) {
-            this.updateView();
-        }
+        return this.checkValidityAndRecomputeObjective(false, true).then(()=>{
+            if (updateView) {
+                this.updateView();
+            }
+        });
+
     }
 
     checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
-        this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric);
-        this.updateValidationMessages();
-        Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
+        return this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric).then(()=>{
+            this.updateValidationMessages();
+            Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
+        }).catch(e=>{
+            log.error(e);
+        });
+
     }
 
     updateValidationMessages() {
@@ -408,6 +428,7 @@ export class App {
     }
 
     openDiagram(diagramData) {
+
         var self = this;
         var errors = [];
 
@@ -418,7 +439,7 @@ export class App {
                 errors.push('error.jsonParse');
                 alert(i18n.t('error.jsonParse'));
                 log.error(e);
-                return errors;
+                return Promise.resolve(errors);
             }
         }
 
@@ -428,11 +449,10 @@ export class App {
         if (!diagramData.SilverDecisions) {
             errors.push('error.notSilverDecisionsFile');
             alert(i18n.t('error.notSilverDecisionsFile'));
-            return errors;
+            return Promise.resolve(errors);
         }
 
         if(!Utils.isValidVersionString(diagramData.SilverDecisions)){
-            console.log(diagramData.SilverDecisions);
             errors.push('error.incorrectVersionFormat');
             alert(i18n.t('error.incorrectVersionFormat'));
         }else{
@@ -482,7 +502,7 @@ export class App {
             alert(i18n.t('error.malformedData'));
             this.clear();
             log.error('malformedData', e);
-            return errors;
+            return Promise.resolve(errors);
 
         }
         try {
@@ -495,47 +515,44 @@ export class App {
             this.setConfig(this.config);
             this.updateNumberFormats(false);
         }
-
-        try{
-            this.setObjectiveRule(this.config.rule, false, true, false);
-        }catch (e) {
-            log.error('objectiveComputationFailure',e);
-            errors.push('error.objectiveComputationFailure');
-            alert(i18n.t('error.objectiveComputationFailure'));
-            return errors
-        }
-
-        try{
-            this.updateView(false);
-        }catch (e) {
+        return this.setObjectiveRule(this.config.rule, false, true, false).catch(e=>{
             log.error('diagramDrawingFailure', e);
             errors.push('error.diagramDrawingFailure');
             alert(i18n.t('error.diagramDrawingFailure'));
             this.clear();
             return errors
-        }
-
-        return errors
+        }).then(()=>{
+            this.updateView(false);
+            return errors;
+        }).catch(e=>{
+            log.error('diagramDrawingFailure', e);
+            errors.push('error.diagramDrawingFailure');
+            alert(i18n.t('error.diagramDrawingFailure'));
+            this.clear();
+            return errors
+        });
     }
 
     serialize(filterLocation, filterComputed) {
         var self = this;
-        self.checkValidityAndRecomputeObjective(true, false, false);
+        return self.checkValidityAndRecomputeObjective(true, false, false).then(()=>{
+            var obj = {
+                SilverDecisions: App.version,
+                buildTimestamp: App.buildTimestamp,
+                savetime: d3.isoFormat(new Date()),
+                lng: self.config.lng,
+                rule: self.computationsManager.getCurrentRule().name,
+                title: self.config.title,
+                description: self.config.description,
+                format: self.config.format,
+                treeDesigner: self.treeDesigner.config,
+                data: self.dataModel.serialize(false)
+            };
 
-        var obj = {
-            SilverDecisions: App.version,
-            buildTimestamp: App.buildTimestamp,
-            savetime: d3.isoFormat(new Date()),
-            lng: self.config.lng,
-            rule: self.computationsManager.getCurrentRule().name,
-            title: self.config.title,
-            description: self.config.description,
-            format: self.config.format,
-            treeDesigner: self.treeDesigner.config,
-            data: self.dataModel.serialize(false)
-        };
+            return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.computationsManager.expressionEngine.getJsonReplacer()]);
+        });
 
-        return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.computationsManager.expressionEngine.getJsonReplacer()]);
+
     }
 
     updateNumberFormats(updateView=true) {

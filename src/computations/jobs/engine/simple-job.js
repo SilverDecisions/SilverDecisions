@@ -85,10 +85,11 @@ export class SimpleJob extends Job {
                 currentStepExecution.executionContext = new ExecutionContext(jobExecution.executionContext.context);
             }
 
-            return this.jobRepository.addStepExecution(currentStepExecution).then((currentStepExecution)=>{
+            return this.jobRepository.addStepExecution(currentStepExecution).then((_currentStepExecution)=>{
+                currentStepExecution=_currentStepExecution
                 log.info("Executing step: [" + step.name + "]");
-                return step.execute(currentStepExecution);
-            }).then(currentStepExecution=>{
+                return step.execute(currentStepExecution)
+            }).then(()=>{
                 currentStepExecution.executionContext.put("executed", true);
                 return currentStepExecution;
             }).catch (e => {

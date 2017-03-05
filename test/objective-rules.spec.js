@@ -1,4 +1,4 @@
-describe("Objective rules", function() {
+describe("Objective rules", function () {
     var containerId = 'container';
     var container;
     var app;
@@ -11,17 +11,24 @@ describe("Objective rules", function() {
     container = document.createElement("div");
     container.id = containerId;
     document.getElementsByTagName('body')[0].appendChild(container);
-    app = new SilverDecisions(containerId, {}, json);
-    app.checkValidityAndRecomputeObjective(true, true, true);
-    var result = JSON.parse(app.serialize());
+    app = new SilverDecisions.App(containerId, {}, json);
+    var result;
+    beforeEach(function (done) {
+        app.checkValidityAndRecomputeObjective(true, true, true).then(()=> {
+            return app.serialize().then((json)=> {
+                result = JSON.parse(json);
+                done();
+            });
+        });
+    });
 
-    app.computationsManager.getObjectiveRules().forEach(function(rule){
+
+    app.computationsManager.getObjectiveRules().forEach(function (rule) {
         var ruleName = rule.name;
 
-        describe(ruleName, function(){
+        describe(ruleName, function () {
             it("should be computed correctly", function () {
-
-                result.trees.forEach(function(root, index){
+                result.data.trees.forEach(function (root, index) {
                     compare(ruleName, root, json.trees[index]);
                 })
             })
@@ -29,11 +36,11 @@ describe("Objective rules", function() {
     });
 
 
-    function compare(ruleName, computedNode, expectedNode){
+    function compare(ruleName, computedNode, expectedNode) {
 
         expect(computedNode.computed[ruleName]).toEqual(expectedNode.computed[ruleName]);
 
-        computedNode.childEdges.forEach(function(e,i){
+        computedNode.childEdges.forEach(function (e, i) {
             var expectedEdge = expectedNode.childEdges[i];
             expect(e.computed[ruleName]).toEqual(expectedEdge.computed[ruleName]);
             compare(ruleName, e.childNode, expectedEdge.childNode)

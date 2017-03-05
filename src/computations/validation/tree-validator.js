@@ -46,7 +46,6 @@ export class TreeValidator {
                 if (!this.probabilityValueValidator.validate(probability)) {
                     if(!ExpressionEngine.isHash(e.probability)){
                         validationResult.addError({name: 'invalidProbability', data: {'number': i + 1}}, node);
-                        // console.log('invalidProbability', e);
                         e.setValueValidity('probability', false);
                     }
 
