@@ -1,4 +1,4 @@
-import {Utils} from '../utils'
+import {Utils} from 'sd-utils'
 import * as domain from './domain'
 import *  as _ from 'lodash'
 import {ValidationResult} from './validation-result'

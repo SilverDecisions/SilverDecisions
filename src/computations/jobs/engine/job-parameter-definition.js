@@ -1,4 +1,4 @@
-import {Utils} from "../../../utils";
+import {Utils} from "sd-utils";
 export const PARAMETER_TYPE = {
     STRING: 'STRING',
     DATE: 'DATE',

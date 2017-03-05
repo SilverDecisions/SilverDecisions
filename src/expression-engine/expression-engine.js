@@ -1,4 +1,4 @@
-import {Utils} from "../utils";
+import {Utils} from "sd-utils";
 import * as math from "./mathjs";
 import * as log from "../log";
 

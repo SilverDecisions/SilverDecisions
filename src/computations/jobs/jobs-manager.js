@@ -1,5 +1,5 @@
 import * as log from "../../log";
-import {Utils} from "../../utils";
+import {Utils} from "sd-utils";
 import {SensitivityAnalysisJob} from "./configurations/sensitivity-analysis/sensitivity-analysis-job";
 import {JobLauncher} from "./engine/job-launcher";
 import {JobWorker} from "./job-worker";

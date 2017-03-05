@@ -1,4 +1,4 @@
-import {Utils} from '../../utils'
+import {Utils} from 'sd-utils'
 import *  as _ from 'lodash'
 
 export class ObjectWithIdAndEditableFields {

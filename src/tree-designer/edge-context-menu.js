@@ -1,5 +1,5 @@
 import {ContextMenu} from './context-menu'
-import {Utils} from '../utils'
+import {Utils} from 'sd-utils'
 import * as d3 from '../d3'
 import {i18n} from "../i18n/i18n";
 

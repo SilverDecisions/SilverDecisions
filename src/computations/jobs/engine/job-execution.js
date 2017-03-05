@@ -1,6 +1,6 @@
 import {JOB_STATUS} from "./job-status";
 import {StepExecution} from "./step-execution";
-import {Utils} from "../../../utils";
+import {Utils} from "sd-utils";
 import {ExecutionContext} from "./execution-context";
 import * as _ from "lodash";
 /*domain object representing the execution of a job.*/

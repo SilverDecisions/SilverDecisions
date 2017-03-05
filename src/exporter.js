@@ -2,7 +2,7 @@ import {dataURLtoBlob} from 'blueimp-canvas-to-blob'
 import {saveAs} from 'file-saver'
 import * as d3 from './d3'
 import {i18n} from "./i18n/i18n";
-import {Utils} from "./utils";
+import {Utils} from "sd-utils";
 import * as _ from "lodash";
 import {LoadingIndicator} from "./loading-indicator";
 import * as log from "./log";

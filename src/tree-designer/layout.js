@@ -1,4 +1,4 @@
-import {Utils} from '../utils'
+import {Utils} from 'sd-utils'
 import {domain as model} from '../model'
 import * as d3 from '../d3'
 import * as _ from "lodash";

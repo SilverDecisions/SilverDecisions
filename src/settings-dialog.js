@@ -3,7 +3,7 @@ import {Dialog} from './dialog'
 import *  as _ from 'lodash'
 import {i18n} from "./i18n/i18n";
 import {Templates} from "./templates";
-import {Utils} from "./utils";
+import {Utils} from "sd-utils";
 import {AppUtils} from "./app-utils";
 
 export class SettingsDialog extends Dialog{

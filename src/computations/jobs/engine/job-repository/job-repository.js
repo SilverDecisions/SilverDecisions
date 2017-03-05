@@ -1,7 +1,7 @@
 import *  as _ from 'lodash'
 import {JobKeyGenerator} from "../job-key-generator";
 import {JobInstance} from "../job-instance";
-import {Utils} from "../../../../utils";
+import {Utils} from "sd-utils";
 import {JobExecution} from "../job-execution";
 import {JobExecutionAlreadyRunningException} from "../exceptions/job-execution-already-running-exception";
 import {JOB_STATUS} from "../job-status";

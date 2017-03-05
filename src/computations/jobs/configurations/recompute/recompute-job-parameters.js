@@ -1,4 +1,4 @@
-import {Utils} from "../../../../utils";
+import {Utils} from "sd-utils";
 import {JobParameters} from "../../engine/job-parameters";
 import {JobParameterDefinition, PARAMETER_TYPE} from "../../engine/job-parameter-definition";
 export class RecomputeJobParameters extends JobParameters {

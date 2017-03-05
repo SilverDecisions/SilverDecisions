@@ -1,7 +1,7 @@
 import {JobRestartException} from "./exceptions/job-restart-exception";
 import {JOB_STATUS} from "./job-status";
 import * as log from "../../../log";
-import {Utils} from "../../../utils";
+import {Utils} from "sd-utils";
 import {JobParametersInvalidException} from "./exceptions/job-parameters-invalid-exception";
 import {JobDataInvalidException} from "./exceptions/job-data-invalid-exception";
 

@@ -1,6 +1,6 @@
 import * as _ from "lodash";
 import {PARAMETER_TYPE} from "./job-parameter-definition";
-import {Utils} from "../../../utils";
+import {Utils} from "sd-utils";
 export class JobParameters{
     definitions = [];
     values={};

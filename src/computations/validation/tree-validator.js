@@ -1,4 +1,4 @@
-import {Utils} from '../../utils'
+import {Utils} from 'sd-utils'
 import {domain as model} from '../../model'
 import {ValidationResult} from '../../model/validation-result'
 import {ExpressionEngine} from '../../expression-engine'

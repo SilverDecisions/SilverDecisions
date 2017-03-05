@@ -1,6 +1,6 @@
 import {ExpressionEngine} from "../expression-engine/expression-engine";
 import * as log from "../log";
-import {Utils} from "../utils";
+import {Utils} from "sd-utils";
 import {ObjectiveRulesManager} from "./objective/objective-rules-manager";
 import {TreeValidator} from "./validation/tree-validator";
 import {OperationsManager} from "./operations/operations-manager";

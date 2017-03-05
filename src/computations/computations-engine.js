@@ -1,4 +1,4 @@
-import {Utils} from "../utils";
+import {Utils} from "sd-utils";
 import {DataModel} from "../model";
 import {ExpressionEngine} from "../expression-engine/expression-engine";
 import {ComputationsManager} from "./computations-manager";

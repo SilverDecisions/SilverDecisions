@@ -1,5 +1,5 @@
 import {Point} from "./point";
-import {Utils} from "../../utils";
+import {Utils} from "sd-utils";
 import {ObjectWithIdAndEditableFields} from "./object-with-id-and-editable-fields";
 
 export class Text extends ObjectWithIdAndEditableFields{
