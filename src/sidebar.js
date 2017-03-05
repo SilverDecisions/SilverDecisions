@@ -2,6 +2,7 @@ import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
 
 import {Utils} from './utils'
+import {AppUtils} from './app-utils'
 import {domain as model} from './model'
 import {PayoffInputValidator} from './validation/payoff-input-validator'
 import {ProbabilityInputValidator} from './validation/probability-input-validator'
@@ -99,14 +100,14 @@ export class Sidebar {
 
         this.diagramTitle = this.diagramDetailsContainer.select('input#diagram-title').on('change', function () {
             self.app.setDiagramTitle(this.value);
-            Utils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(d3.select(this));
         });
 
         this.diagramDescription = this.diagramDetailsContainer.select('textarea#diagram-description').on('change', function () {
             self.app.setDiagramDescription(this.value);
-            Utils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(d3.select(this));
         });
-        Utils.elasticTextarea(this.diagramDescription);
+        AppUtils.elasticTextarea(this.diagramDescription);
 
         this.updateDiagramDetails();
     }
@@ -118,15 +119,15 @@ export class Sidebar {
         this.onDefinitionsCodeChanged = null;
         this.definitionsContainer.select('.toggle-button').on('click', () => {
             this.definitionsContainer.classed('sd-extended', !this.definitionsContainer.classed('sd-extended'));
-            Utils.updateInputClass(this.definitionsCode);
-            Utils.autoResizeTextarea(this.definitionsCode.node())
+            AppUtils.updateInputClass(this.definitionsCode);
+            AppUtils.autoResizeTextarea(this.definitionsCode.node())
         });
 
         this.definitionsCode = this.definitionsContainer.select('textarea#sd-sidebar-definitions-code').on('change', function () {
             if (self.onDefinitionsCodeChanged) {
                 self.onDefinitionsCodeChanged(this.value)
             }
-            Utils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(d3.select(this));
         });
         Tooltip.attach(this.definitionsCode, (d)=>{
             return self.definitionsCode.attr('data-error-msg');
@@ -144,7 +145,7 @@ export class Sidebar {
             this.app.recompute();
         });
 
-        Utils.elasticTextarea(this.definitionsCode);
+        AppUtils.elasticTextarea(this.definitionsCode);
     }
 
     updateDefinitions(definitionsSourceObject, readOnly, changeCallback) {
@@ -155,16 +156,16 @@ export class Sidebar {
         this.definitionsCode.attr('data-error-msg', definitionsSourceObject.$codeError);
         var html = Templates.get('evaluatedVariables', {scopeVariables: Utils.getVariablesAsList(definitionsSourceObject.expressionScope)});
         this.definitionsEvaluatedValuesContainer.html(html);
-        Utils.updateInputClass(this.definitionsCode);
-        Utils.autoResizeTextarea(this.definitionsCode.node())
+        AppUtils.updateInputClass(this.definitionsCode);
+        AppUtils.autoResizeTextarea(this.definitionsCode.node())
     }
 
     updateDiagramDetails() {
         this.diagramTitle.node().value = this.app.config.title;
-        Utils.updateInputClass(this.diagramTitle);
+        AppUtils.updateInputClass(this.diagramTitle);
         this.diagramDescription.node().value = this.app.config.description;
-        Utils.updateInputClass(this.diagramDescription);
-        Utils.autoResizeTextarea(this.diagramDescription.node())
+        AppUtils.updateInputClass(this.diagramDescription);
+        AppUtils.autoResizeTextarea(this.diagramDescription.node())
     }
 
     displayObjectProperties(object) {
@@ -365,7 +366,7 @@ export class Sidebar {
                     return;
                 }
 
-                Utils.updateInputClass(d3.select(this));
+                AppUtils.updateInputClass(d3.select(this));
                 if (d.customOnInput) {
                     d.customOnInput(object, this.value, temp[i].pristineVal)
                 } else {
@@ -395,10 +396,10 @@ export class Sidebar {
 
                 self.dispatch.on("recomputed."+object.$id+"."+d.name, checkFieldStatus);
 
-                Utils.updateInputClass(d3.select(this));
+                AppUtils.updateInputClass(d3.select(this));
                 if (d.type == 'textarea') {
-                    Utils.elasticTextarea(d3.select(this));
-                    Utils.autoResizeTextarea(d3.select(this).node())
+                    AppUtils.elasticTextarea(d3.select(this));
+                    AppUtils.autoResizeTextarea(d3.select(this).node())
                 }
 
             });

@@ -1,6 +1,6 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
-import {Utils} from './utils'
+import {AppUtils} from './app-utils'
 import {Exporter} from './exporter'
 import {FileLoader} from './file-loader'
 
@@ -45,7 +45,7 @@ export class Toolbar{
         this.openDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.open);
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
             this.app.serialize().then((json)=>{
-                Utils.dispatchEvent('SilverDecisionsSaveEvent', json);
+                AppUtils.dispatchEvent('SilverDecisionsSaveEvent', json);
                 if(this.app.config.jsonFileDownload){
                     var blob = new Blob([json], {type: "application/json"});
                     Exporter.saveAs(blob, Exporter.getExportFileName('json'));

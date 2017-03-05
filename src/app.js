@@ -3,6 +3,7 @@ import {i18n} from './i18n/i18n'
 import * as log from "./log"
 
 import {Utils} from './utils'
+import {AppUtils} from './app-utils'
 import * as model from './model'
 
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
@@ -129,6 +130,10 @@ export class App {
         }
         this.setLogLevel(this.config.logLevel);
         return this;
+    }
+
+    static growl(){
+        return AppUtils.growl(arguments)
     }
 
     setLogLevel(level){
@@ -400,7 +405,7 @@ export class App {
     checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
         return this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric).then(()=>{
             this.updateValidationMessages();
-            Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
+            AppUtils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
         }).catch(e=>{
             log.error(e);
         });

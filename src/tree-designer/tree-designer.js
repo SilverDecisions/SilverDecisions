@@ -1,6 +1,7 @@
 import * as d3 from '../d3'
 
 import {Utils} from '../utils'
+import {AppUtils} from '../app-utils'
 import {domain as model} from '../model'
 import {ContextMenu} from './context-menu'
 import {MainContextMenu} from './main-context-menu'
@@ -247,8 +248,8 @@ export class TreeDesigner {
     }
 
     computeAvailableSpace(){
-        this.availableHeight = Utils.sanitizeHeight(this.config.height, this.container, this.config.margin);
-        this.availableWidth = Utils.sanitizeWidth(this.config.width, this.container, this.config.margin);
+        this.availableHeight = AppUtils.sanitizeHeight(this.config.height, this.container, this.config.margin);
+        this.availableWidth = AppUtils.sanitizeWidth(this.config.width, this.container, this.config.margin);
     }
 
     initSvg() {
@@ -683,7 +684,7 @@ export class TreeDesigner {
 
         tspans.enter().append('tspan')
             .merge(tspans)
-            .html(l=>Utils.replaceUrls(Utils.escapeHtml(l)))
+            .html(l=>AppUtils.replaceUrls(AppUtils.escapeHtml(l)))
             .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
             .attr('x', '0');
 
@@ -806,7 +807,7 @@ export class TreeDesigner {
                 if(b.x+mgt[0] <=m[0] && b.x+b.width+mgt[0] >= m[0] &&
                    b.y+mgt[1]-margin <=m[1] && b.y+b.height+mgt[1]+margin >= m[1]){
 
-                    var cp = Utils.closestPoint(pathNode, [m[0]-mgt[0], m[1]-mgt[1]]);
+                    var cp = AppUtils.closestPoint(pathNode, [m[0]-mgt[0], m[1]-mgt[1]]);
                     if(cp.distance < margin && cp.distance<closest[1]){
                         closest = [selection, cp.distance];
                     }
@@ -879,7 +880,7 @@ export class TreeDesigner {
     }
 
     getMainGroupTranslation(invert) {
-        var translation = Utils.getTranslation(this.mainGroup.attr("transform"));
+        var translation = AppUtils.getTranslation(this.mainGroup.attr("transform"));
         if(invert){
             translation[0] = -translation[0];
             translation[1] = -translation[1]
@@ -1232,7 +1233,7 @@ export class TreeDesigner {
         var tspans = desc.selectAll('tspan').data(lines);
         tspans.enter().append('tspan')
             .merge(tspans)
-            .html(l=>Utils.replaceUrls(Utils.escapeHtml(l)))
+            .html(l=>AppUtils.replaceUrls(AppUtils.escapeHtml(l)))
             .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
             .attr('x', '0');
 

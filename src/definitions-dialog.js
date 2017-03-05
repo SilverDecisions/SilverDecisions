@@ -1,6 +1,7 @@
 import * as d3 from './d3'
 import {Dialog} from './dialog'
 import {Utils} from "./utils";
+import {AppUtils} from "./app-utils";
 import * as _ from "lodash";
 import {Templates} from "./templates";
 
@@ -11,7 +12,7 @@ export class DefinitionsDialog extends Dialog {
         super(app.container.select('#sd-definitions-dialog'), app);
         var self = this;
         this.definitionsCode = this.container.select('textarea#sd-definitions-dialog-definitions-code').on('input', function () {
-            Utils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(d3.select(this));
         });
 
         this.definitionsCode = this.container.select('textarea#sd-definitions-dialog-definitions-code').on('change', function () {
@@ -25,7 +26,7 @@ export class DefinitionsDialog extends Dialog {
         });
 
         this.variableValuesContainer = this.container.select("#sd-definitions-dialog-variable-values");
-        Utils.elasticTextarea(this.definitionsCode);
+        AppUtils.elasticTextarea(this.definitionsCode);
 
         document.addEventListener('SilverDecisionsRecomputedEvent', function (data) {
             if (data.detail === app) {
@@ -47,8 +48,8 @@ export class DefinitionsDialog extends Dialog {
             return;
         }
         this.definitionsCode.node().value = this.definitionsSourceObject.code;
-        Utils.updateInputClass(this.definitionsCode);
-        Utils.autoResizeTextarea(this.definitionsCode.node());
+        AppUtils.updateInputClass(this.definitionsCode);
+        AppUtils.autoResizeTextarea(this.definitionsCode.node());
         this.definitionsCode.classed('invalid', !!this.definitionsSourceObject.$codeError);
         if(this.definitionsSourceObject.$codeError){
             this.printError(this.definitionsSourceObject.$codeError);
