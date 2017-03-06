@@ -1,4 +1,4 @@
-import {ExpressionEngine} from '../../expression-engine/expression-engine'
+import {ExpressionEngine} from 'sd-expression-engine'
 import {Utils} from "sd-utils";
 
 /*Computed base value validator*/

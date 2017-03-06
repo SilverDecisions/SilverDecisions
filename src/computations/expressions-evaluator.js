@@ -1,4 +1,4 @@
-import {ExpressionEngine} from "../expression-engine/expression-engine";
+import {ExpressionEngine} from "sd-expression-engine";
 import {domain as model} from '../model'
 import * as _ from "lodash";
 import * as log from "../log"

@@ -1,4 +1,4 @@
-import {ExpressionEngine} from "../expression-engine/expression-engine";
+import {ExpressionEngine} from "sd-expression-engine";
 import * as log from "../log";
 import {Utils} from "sd-utils";
 import {ObjectiveRulesManager} from "./objective/objective-rules-manager";

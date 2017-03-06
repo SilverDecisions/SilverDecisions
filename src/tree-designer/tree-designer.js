@@ -736,7 +736,7 @@ export class TreeDesigner {
                     if(tooltipHtml){
                         tooltipHtml+='<br/>'
                     }
-                    tooltipHtml+=ValidationResult.getMessage(e);
+                    tooltipHtml+=AppUtils.getValidationMessage(e);
                 });
 
                 Tooltip.attach(nodeSelection.select('.error-indicator'), tooltipHtml);

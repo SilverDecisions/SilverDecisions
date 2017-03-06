@@ -1,4 +1,4 @@
-import {ExpressionEngine} from '../../../expression-engine/expression-engine'
+import {ExpressionEngine} from 'sd-expression-engine'
 
 /*Base class for objective rules*/
 export class ObjectiveRule{

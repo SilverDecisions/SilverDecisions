@@ -1,7 +1,7 @@
 import {Utils} from 'sd-utils'
 import {domain as model} from '../../model'
 import {ValidationResult} from '../../model/validation-result'
-import {ExpressionEngine} from '../../expression-engine'
+import {ExpressionEngine} from 'sd-expression-engine'
 import {ProbabilityValueValidator} from "./probability-value-validator";
 import {PayoffValueValidator} from "./payoff-value-validator";
 

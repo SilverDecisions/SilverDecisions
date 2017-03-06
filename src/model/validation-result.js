@@ -40,14 +40,6 @@ export class ValidationResult{
         return Object.getOwnPropertyNames(this.errors).length === 0
     }
 
-    static getMessage(error){
-        if(Utils.isString(error)){
-            error = {name: error};
-        }
-        var key = 'validation.' + error.name;
-        return i18n.t(key, error.data);
-    }
-
     static createFromDTO(dto){
         var v = new ValidationResult();
         v.errors = dto.errors;

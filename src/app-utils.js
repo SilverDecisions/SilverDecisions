@@ -2,6 +2,8 @@ import * as d3 from "./d3";
 import * as autosize from "autosize";
 import {Templates} from "./templates";
 import * as _ from "lodash";
+import {i18n} from "./i18n/i18n";
+import {Utils} from "sd-utils";
 
 export class AppUtils {
 
@@ -235,5 +237,13 @@ export class AppUtils {
             event.initCustomEvent(name, false, false, data);
         }
         document.dispatchEvent(event);
+    }
+
+    static getValidationMessage(error){
+        if(Utils.isString(error)){
+            error = {name: error};
+        }
+        var key = 'validation.' + error.name;
+        return i18n.t(key, error.data);
     }
 }

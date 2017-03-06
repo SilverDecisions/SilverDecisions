@@ -1,5 +1,5 @@
 import {domain as model} from '../../model/'
-import {ExpressionEngine} from '../../expression-engine'
+import {ExpressionEngine} from 'sd-expression-engine'
 import * as log from "../../log"
 import {Operation} from "./operation";
 import {TreeValidator} from "../validation/tree-validator";
