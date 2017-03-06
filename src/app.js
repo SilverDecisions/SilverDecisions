@@ -4,7 +4,7 @@ import * as log from "./log"
 
 import {Utils} from 'sd-utils'
 import {AppUtils} from './app-utils'
-import * as model from './model'
+import * as model from 'sd-model'
 
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
 import {Templates} from './templates'

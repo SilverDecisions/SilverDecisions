@@ -5,7 +5,7 @@ import {JobExecution} from "../job-execution";
 import {JobInstance} from "../job-instance";
 import {StepExecution} from "../step-execution";
 import {ExecutionContext} from "../execution-context";
-import {DataModel} from "../../../../model/data-model";
+import {DataModel} from "sd-model";
 
 /* IndexedDB job repository*/
 export class IdbJobRepository extends JobRepository {

@@ -3,7 +3,7 @@ import {i18n} from './i18n/i18n'
 
 import {Utils} from 'sd-utils'
 import {AppUtils} from './app-utils'
-import {domain as model} from './model'
+import {domain as model} from 'sd-model'
 import {PayoffInputValidator} from './validation/payoff-input-validator'
 import {ProbabilityInputValidator} from './validation/probability-input-validator'
 import {Templates} from "./templates";

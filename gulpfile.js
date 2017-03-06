@@ -100,10 +100,6 @@ gulp.task('build-app', ['build-config'], function () {
     return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist/standalone")
 });
 
-gulp.task('build-expression-engine', ['build-config'], function () {
-    var jsFileName =  projectName+"-expression-engine";
-    return buildJs('src/expression-engine/index.js', 'SilverDecisions.ExpressionEngine', jsFileName, "dist/expression-engine")
-});
 
 gulp.task('build-computations', ['build-config'], function () {
     var jsFileName =  projectName+"-computations";
@@ -115,7 +111,7 @@ gulp.task('build-clean', ['clean'], function () {
     return gulp.start('build');
 });
 
-gulp.task('build', ['build-css', 'build-app', 'build-computations', 'build-expression-engine'], function () {
+gulp.task('build', ['build-css', 'build-app', 'build-computations'], function () {
     // var development = (argv.dev === undefined) ? false : true;
     // if(!development){
     //     return generateDocs();

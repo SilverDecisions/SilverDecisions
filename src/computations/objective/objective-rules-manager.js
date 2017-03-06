@@ -1,6 +1,6 @@
 import {ExpectedValueMaximizationRule, ExpectedValueMinimizationRule, MaxiMinRule, MaxiMaxRule, MiniMinRule, MiniMaxRule} from "./rules";
-import * as log from "../../log"
-import * as model from "../../model";
+import {log} from "sd-utils"
+import * as model from "sd-model";
 
 export class ObjectiveRulesManager{
 

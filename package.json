@@ -75,6 +75,7 @@
     "idb": "^2.0.0",
     "lodash": "^4.16.2",
     "sd-expression-engine": "latest",
+    "sd-model": "latest",
     "sd-utils": "latest"
   }
 }

@@ -2,14 +2,13 @@ import * as d3 from '../d3'
 
 import {Utils} from 'sd-utils'
 import {AppUtils} from '../app-utils'
-import {domain as model} from '../model'
+import {domain as model} from 'sd-model'
 import {ContextMenu} from './context-menu'
 import {MainContextMenu} from './main-context-menu'
 import {NodeContextMenu} from './node-context-menu'
 import {Layout} from './layout'
 import {NodeDragHandler} from './node-drag-handler'
 import {Tooltip} from '../tooltip'
-import {ValidationResult} from '../model/validation-result'
 import * as _ from "lodash";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";

@@ -1,4 +1,4 @@
-import {domain as model} from '../../model/'
+import {domain as model} from 'sd-model'
 import {ExpressionEngine} from 'sd-expression-engine'
 import * as log from "../../log"
 import {Operation} from "./operation";

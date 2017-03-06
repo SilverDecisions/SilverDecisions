@@ -1,5 +1,5 @@
 import {ExpressionEngine} from "sd-expression-engine";
-import {domain as model} from '../model'
+import {domain as model} from 'sd-model'
 import * as _ from "lodash";
 import * as log from "../log"
 

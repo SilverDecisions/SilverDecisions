@@ -1,5 +1,5 @@
 import {Utils} from "sd-utils";
-import {DataModel} from "../model";
+import {DataModel} from "sd-model";
 import {ExpressionEngine} from "sd-expression-engine";
 import {ComputationsManager} from "./computations-manager";
 import * as log from "../log";

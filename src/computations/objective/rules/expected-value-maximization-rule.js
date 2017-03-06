@@ -1,4 +1,4 @@
-import {domain as model} from '../../../model'
+import {domain as model} from 'sd-model'
 import {ObjectiveRule} from './objective-rule'
 
 /*expected value maximization rule*/
