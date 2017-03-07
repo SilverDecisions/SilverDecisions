@@ -1,4 +1,4 @@
-import *  as _ from 'lodash'
+import {Utils} from "sd-utils";
 import {i18n} from './i18n/i18n'
 
 export class Templates{
@@ -28,7 +28,7 @@ export class Templates{
     static main = require('./templates/main.html');
 
     static get(templateName, variables){
-        var compiled = _.template(Templates[templateName],{ 'imports': { 'i18n': i18n, 'Templates': Templates, 'include': function(n, v) {return Templates.get(n, v)} } });
+        var compiled = Utils.template(Templates[templateName],{ 'imports': { 'i18n': i18n, 'Templates': Templates, 'include': function(n, v) {return Templates.get(n, v)} } });
         if(variables){
             variables.variables = variables;
         }else{

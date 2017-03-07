@@ -1,6 +1,5 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
-
 import {Utils} from 'sd-utils'
 import {AppUtils} from './app-utils'
 import {domain as model} from 'sd-model'
@@ -8,8 +7,6 @@ import {PayoffInputValidator} from './validation/payoff-input-validator'
 import {ProbabilityInputValidator} from './validation/probability-input-validator'
 import {Templates} from "./templates";
 import {Tooltip} from "./tooltip";
-import * as _ from "lodash";
-
 
 export class Sidebar {
 
@@ -33,7 +30,7 @@ export class Sidebar {
             }
         });
 
-        self.dispatch.on("object-updated", _.debounce((object, fieldName)=> self.app.onObjectUpdated(object, fieldName), 350));
+        self.dispatch.on("object-updated", Utils.debounce((object, fieldName)=> self.app.onObjectUpdated(object, fieldName), 350));
 
     }
 

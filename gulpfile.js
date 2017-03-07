@@ -6,6 +6,7 @@ var browserSync = require('browser-sync').create();
 var argv = require('yargs').argv;
 
 var browserify = require("browserify");
+var resolutions = require('browserify-resolutions');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
@@ -16,10 +17,24 @@ stringify = require('stringify');
 var Server = require('karma').Server;
 
 /* nicer browserify errors */
-var gutil = require('gulp-util')
-var chalk = require('chalk')
+var gutil = require('gulp-util');
+var chalk = require('chalk');
 
-var projectName= "silver-decisions"
+var projectName= "silver-decisions";
+
+var dependencies = [];
+var vendorDependencies = [];
+var sdDependencies = [];
+for(var k in p.dependencies){
+    if(p.dependencies.hasOwnProperty(k)){
+        dependencies.push(k);
+        if(k.trim().startsWith("sd-")){
+            sdDependencies.push(k)
+        }else{
+            vendorDependencies.push(k)
+        }
+    }
+}
 
 gulp.task('clean', function (cb) {
     return del(['tmp', 'dist'], cb);
@@ -36,7 +51,7 @@ gulp.task('build-config', function() {
 
 
 gulp.task('build-css', function () {
-    return buildCss(projectName, './dist/standalone');
+    return buildCss(projectName, './dist');
 });
 
 function buildCss(fileName, dest) {
@@ -52,9 +67,12 @@ function buildCss(fileName, dest) {
     return pipe;
 }
 
-function buildJs(src, standaloneName,  jsFileName, dest) {
+function buildJs(src, standaloneName,  jsFileName, dest, external) {
+    if(!external){
+        external = []
+    }
 
-    var pipe = browserify({
+    var b = browserify({
         basedir: '.',
         debug: true,
         entries: [src],
@@ -64,6 +82,23 @@ function buildJs(src, standaloneName,  jsFileName, dest) {
     }).transform(stringify, {
         appliesTo: { includeExtensions: ['.html'] }
     })
+        // .plugin(resolutions, '*')
+        .external(external)
+
+    return finishBrowserifyBuild(b,jsFileName, dest)
+}
+
+function buildJsDependencies(jsFileName, moduleNames, dest){
+    var b = browserify({
+        debug: true,
+        require: [moduleNames]
+    })
+
+    return finishBrowserifyBuild(b, jsFileName, dest)
+}
+
+function finishBrowserifyBuild(b, jsFileName, dest){
+    var pipe = b
         .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
         .bundle()
         .on('error', map_error)
@@ -85,33 +120,27 @@ function buildJs(src, standaloneName,  jsFileName, dest) {
             .pipe(sourcemaps.write('./'))
             .pipe(gulp.dest(dest));
     }
-
-
     return pipe;
 }
 
-gulp.task('build-js', ['build-config'], function () {
-    var jsFileName =  projectName;
-    return buildJs('src/index.js', 'SilverDecisions', jsFileName, "dist/standalone")
-});
-
 gulp.task('build-app', ['build-config'], function () {
     var jsFileName =  projectName;
-    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist/standalone")
+    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist", dependencies)
 });
 
-
-gulp.task('build-computations', ['build-config'], function () {
-    var jsFileName =  projectName+"-computations";
-    return buildJs('src/computations/index.js', 'SilverDecisions.Computations', jsFileName, "dist/computations")
+gulp.task('build-sd-core', function () {
+    return buildJsDependencies("silver-decisions-core", sdDependencies, "dist")
 });
 
+gulp.task('build-vendor', function () {
+    return buildJsDependencies("silver-decisions-vendor", vendorDependencies, "dist")
+});
 
 gulp.task('build-clean', ['clean'], function () {
     return gulp.start('build');
 });
 
-gulp.task('build', ['build-css', 'build-app', 'build-computations'], function () {
+gulp.task('build', ['build-css', 'build-app', 'build-sd-core', 'build-vendor'], function () {
     // var development = (argv.dev === undefined) ? false : true;
     // if(!development){
     //     return generateDocs();
@@ -193,31 +222,31 @@ gulp.task('docs-gen', ['docs-clean'], function () {
     return generateDocs();
 });
 
-function generateDocs(){
-    gutil.log('generateDocs');
-    var basename = "silver-decisions-"+p.version+'.min';
-    var copyFiles = gulp.src(['./dist/standalone/silver-decisions.min.js', './dist/standalone/silver-decisions.min.css'])
+function copyFilesToDocs(src, basename){
+    return gulp.src(src)
         .pipe(plugins.rename({
             basename: basename
         }))
         .pipe(gulp.dest('./docs'));
+}
 
-    var computationsBasename = "silver-decisions-computations-"+p.version+'.min'
-    var copyComputationsFiles = gulp.src(['./dist/computations/silver-decisions-computations.min.js'])
-        .pipe(plugins.rename({
-            basename: computationsBasename
-        }))
-        .pipe(gulp.dest('./docs'));
+function generateDocs(){
+    gutil.log('generateDocs');
+    var basename = "silver-decisions-"+p.version+'.min';
+    var copyFiles = copyFilesToDocs(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'], basename);
+    var coreBasename = "silver-decisions-core-"+p.version+'.min';
+    var copyCoreFiles = copyFilesToDocs(['./dist/silver-decisions-core.min.js'], coreBasename);
+    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js'], "silver-decisions-vendor-"+p.version+'.min');
 
     var updateReferences = gulp.src('./docs/SilverDecisions.html')
-        .pipe(plugins.replace(/"silver-decisions(.*)\.min/g, '"'+basename))
+        .pipe(plugins.replace(/"silver-decisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)\.min/g, '"silver-decisions$1'+p.version+'.min'))
         .pipe(gulp.dest('./docs/'));
 
     var updateWorkerReferences = gulp.src('./docs/silverdecisions-job-worker.js')
-        .pipe(plugins.replace(/silver-decisions-computations-(.*)\.min/g, computationsBasename))
+        .pipe(plugins.replace(/silver-decisions-core-(.*)\.min/g, coreBasename))
         .pipe(gulp.dest('./docs/'));
 
-    return merge(copyFiles,copyComputationsFiles, updateReferences, updateWorkerReferences)
+    return merge(copyFiles,copyCoreFiles, updateReferences, updateWorkerReferences)
 }
 
 function map_error(err) {
@@ -236,9 +265,7 @@ function map_error(err) {
             + chalk.blue(err.description))
     } else {
         // browserify error..
-        gutil.log(chalk.red(err.name)
-            + ': '
-            + chalk.yellow(err.message))
+        gutil.log(chalk.red(err))
     }
 
     this.emit('end');

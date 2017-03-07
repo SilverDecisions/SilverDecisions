@@ -1,8 +1,6 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
-import * as log from "./log"
-
-import {Utils} from 'sd-utils'
+import {Utils, log} from 'sd-utils'
 import {AppUtils} from './app-utils'
 import * as model from 'sd-model'
 
@@ -12,10 +10,9 @@ import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
 import {SettingsDialog} from './settings-dialog'
 import {AboutDialog} from "./about-dialog";
-import * as _ from "lodash";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
-import {ComputationsManager} from "./computations";
+import {ComputationsManager} from "sd-computations";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -145,7 +142,7 @@ export class App {
         if (Utils.isString(containerIdOrElem)) {
             var selector = containerIdOrElem.trim();
 
-            if (!_.startsWith(selector, '#') && !_.startsWith(selector, '.')) {
+            if (!Utils.startsWith(selector, '#') && !Utils.startsWith(selector, '.')) {
                 selector = '#' + selector;
             }
             this.container = d3.select(selector);
@@ -171,14 +168,13 @@ export class App {
         this.dataModel.textRemovedCallback = (text)=> Utils.waitForFinalEvent(()=>this.onTextRemoved(text), 'onTextAdded');
     }
 
-
     initComputationsManager() {
-        this.computationsManager = new ComputationsManager(this.dataModel, {
+        this.computationsManager = new ComputationsManager({
             ruleName: this.config.ruleName,
             worker:{
                 url: this.config.workerUrl
             }
-        });
+        }, this.dataModel);
         this.expressionEngine =  this.computationsManager.expressionEngine;
         return this.checkValidityAndRecomputeObjective(false, false, false);
 
@@ -388,7 +384,7 @@ export class App {
     recompute(updateView = true, debounce = false) {
         if(debounce){
             if(!this.debouncedRecompute){
-                this.debouncedRecompute = _.debounce((updateView)=>this.recompute(updateView, false), 200);
+                this.debouncedRecompute = Utils.debounce((updateView)=>this.recompute(updateView, false), 200);
             }
             this.debouncedRecompute(updateView);
             return;
@@ -598,7 +594,7 @@ export class App {
 
     setConfigParam(path, value, withoutStateSaving, callback) {
         var self = this;
-        var prevValue = _.get(this.config, path);
+        var prevValue = Utils.get(this.config, path);
 
         if (prevValue == value) {
             return;
@@ -616,7 +612,7 @@ export class App {
                 }
             });
         }
-        _.set(this.config, path, value);
+        Utils.set(this.config, path, value);
         if (callback) {
             callback(value);
         }

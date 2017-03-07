@@ -16,8 +16,31 @@
     "url": "https://github.com/bkamins/SilverDecisions/issues"
   },
   "homepage": "https://github.com/bkamins/SilverDecisions#readme",
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "es2015"
+          ],
+          "plugins": [
+            "transform-class-properties",
+            "transform-object-assign",
+            [
+              "babel-plugin-transform-builtin-extend",
+              {
+                "globals": [
+                  "Error"
+                ]
+              }
+            ]
+          ]
+        }
+      ]
+    ]
+  },
   "devDependencies": {
-    "autosize": "^3.0.19",
     "babel-plugin-transform-builtin-extend": "^1.1.2",
     "babel-plugin-transform-class-properties": "^6.11.5",
     "babel-plugin-transform-object-assign": "^6.8.0",
@@ -25,6 +48,7 @@
     "babelify": "^7.3.0",
     "browser-sync": "^2.13.0",
     "browserify": "^13.1.0",
+    "browserify-resolutions": "^1.1.0",
     "chalk": "^1.1.3",
     "del": "^2.2.0",
     "gulp": "^3.9.1",
@@ -42,8 +66,6 @@
     "gulp-template": "^4.0.0",
     "gulp-uglify": "^1.5.3",
     "gulp-util": "^3.0.7",
-    "hammerjs": "^2.0.8",
-    "i18next": "^3.4.3",
     "jasmine": "^2.5.2",
     "jasmine-jquery": "^2.1.1",
     "jquery": "^3.1.1",
@@ -61,6 +83,9 @@
     "yargs": "^6.0.0"
   },
   "dependencies": {
+    "hammerjs": "^2.0.8",
+    "autosize": "^3.0.19",
+    "i18next": "^3.4.3",
     "blueimp-canvas-to-blob": "^3.3.0",
     "d3-array": "^1.0.1",
     "d3-brush": "^1.0.3",
@@ -72,9 +97,7 @@
     "d3-shape": "^1.0.3",
     "d3-time-format": "^2.0.2",
     "file-saver": "^1.3.2",
-    "idb": "^2.0.0",
-    "lodash": "^4.16.2",
-    "sd-expression-engine": "latest",
+    "sd-computations": "latest",
     "sd-model": "latest",
     "sd-utils": "latest"
   }

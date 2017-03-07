@@ -2,10 +2,8 @@ import {dataURLtoBlob} from 'blueimp-canvas-to-blob'
 import {saveAs} from 'file-saver'
 import * as d3 from './d3'
 import {i18n} from "./i18n/i18n";
-import {Utils} from "sd-utils";
-import * as _ from "lodash";
+import {Utils, log} from "sd-utils";
 import {LoadingIndicator} from "./loading-indicator";
-import * as log from "./log";
 
 export class Exporter {
     static saveAs = saveAs;
@@ -51,7 +49,7 @@ export class Exporter {
 
             for (let i= 0; i<cs.length; i++){
                 var styleName = cs.item(i);
-                if(_.startsWith(styleName, '-')){
+                if(Utils.startsWith(styleName, '-')){
                     continue;
                 }
 

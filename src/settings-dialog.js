@@ -1,6 +1,5 @@
 import * as d3 from './d3'
 import {Dialog} from './dialog'
-import *  as _ from 'lodash'
 import {i18n} from "./i18n/i18n";
 import {Templates} from "./templates";
 import {Utils} from "sd-utils";
@@ -272,11 +271,11 @@ class PathValueAccessor {
     }
 
     get(){
-        return _.get(this.sourceObject, this.path);
+        return Utils.get(this.sourceObject, this.path);
     }
 
     set(v){
-        return _.set(this.sourceObject, this.path, v);
+        return Utils.set(this.sourceObject, this.path, v);
     }
 }
 

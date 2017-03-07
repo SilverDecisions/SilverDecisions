@@ -9,7 +9,6 @@ import {NodeContextMenu} from './node-context-menu'
 import {Layout} from './layout'
 import {NodeDragHandler} from './node-drag-handler'
 import {Tooltip} from '../tooltip'
-import * as _ from "lodash";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
@@ -310,7 +309,7 @@ export class TreeDesigner {
         if(!withoutStateSaving){
             this.data.saveState({
                 data:{
-                    margin: _.clone(self.config.margin)
+                    margin: Utils.clone(self.config.margin)
                 },
                 onUndo: (data)=> {
                     self.setMargin(data.margin, true);

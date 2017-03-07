@@ -1,4 +1,5 @@
-importScripts('../dist/computations/silver-decisions-computations.js');
-var engine = new SilverDecisions.Computations.ComputationsEngine({
+importScripts('../dist/silver-decisions-core.js');
+var computationsModule = require('sd-computations');
+var engine = new computationsModule.ComputationsEngine({
     logLevel: 'debug'
 });
