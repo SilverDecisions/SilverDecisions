@@ -928,6 +928,11 @@ table.sd-job-result-table{
   td, th{
     padding: 7px;
   }
+  tr{
+    &.sd-selected{
+      background-color: rgba(30, 144, 255, 0.35);
+    }
+  }
   td{
     text-align: right;
   }

@@ -842,5 +842,8 @@ table.sd-job-result-table, table.sd-job-result-table tr, table.sd-job-result-tab
 table.sd-job-result-table td, table.sd-job-result-table th {
   padding: 7px; }
 
+table.sd-job-result-table tr.sd-selected {
+  background-color: rgba(30, 144, 255, 0.35); }
+
 table.sd-job-result-table td {
   text-align: right; }

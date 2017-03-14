@@ -13,6 +13,8 @@ export class SensitivityAnalysisDialog extends Dialog {
     jobConfigurations = [];
     jobInstanceManager;
 
+    treePreviewMode = false;
+
     constructor(app) {
         super(app.container.select('.sd-sensitivity-analysis-dialog'), app);
         this.computationsManager = this.app.computationsManager;
@@ -25,11 +27,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.progressBarContainer = this.container.select(".sd-job-progress-bar-container");
         this.progressBar = this.progressBarContainer.select(".sd-progress-bar");
         this.jobResultsContainer = this.container.select(".sd-sensitivity-analysis-job-results");
-        this.resultTable = new JobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"));
+        this.initResultTable();
         this.initButtons();
     }
 
     clear(){
+        this.treePreviewMode = false;
         this.setProgress(0);
         this.onJobSelected(this.jobConfigurations[0]);
         AppUtils.show(this.jobConfigurationContainer);
@@ -43,10 +46,18 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onOpen() {
+        if(this.treePreviewMode){
+            this.treePreviewMode=false;
+            this.app.exitTreePreview();
+            return;
+        }
         this.clear();
     }
 
     onClosed() {
+        if(this.treePreviewMode){
+            return;
+        }
         this.clear();
         if(!this.jobInstanceManager){
             return;
@@ -113,6 +124,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         });
     }
 
+    initResultTable() {
+        this.resultTable = new JobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), {
+            onRowSelected: (row, index)=> this.onResultRowSelected(row, index)
+        });
+    }
+
     initButtons() {
         this.runJobButton = this.container.select(".sd-run-job-button").on('click', ()=>{
             if(!this.jobParametersBuilder.validate()){
@@ -138,7 +155,6 @@ export class SensitivityAnalysisDialog extends Dialog {
             if(!this.jobInstanceManager){
                 return;
             }
-            console.log('resumeJobButton');
             this.jobInstanceManager.resume();
         });
 
@@ -181,7 +197,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     displayResult(result){
-        console.log(result);
+        log.debug(result);
         this.resultTable.setData(result);
     }
 
@@ -206,5 +222,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         var value = progress+"%";
         this.progressBar.style("width", value)
         this.progressBar.html(value)
+    }
+
+
+    onResultRowSelected(row, index) {
+        this.treePreviewMode = true;
+        this.app.showTreePreview(row.data);
+        this.close();
     }
 }

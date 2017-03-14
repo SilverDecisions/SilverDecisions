@@ -390,6 +390,19 @@ export class App {
         this.sensitivityAnalysisDialog.open();
     }
 
+    showTreePreview(dataDTO){
+        var self = this;
+        this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
+        this.dataModel.loadFromDTO(dataDTO,  this.computationsManager.expressionEngine.getJsonReviver());
+        this.computationsManager.updateDisplayValues(this.dataModel);
+        this.updateView(true);
+    }
+
+    exitTreePreview(){
+        this.dataModel._setNewState(this.originalDataModelSnapshot)
+        this.updateView();
+    }
+
 
     recompute(updateView = true, debounce = false) {
         if(debounce){

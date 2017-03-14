@@ -1,7 +1,9 @@
 import {Utils} from "sd-utils";
+import * as d3 from '../d3'
 
 export class JobResultTableConfig {
     onRowSelected = (row) => {};
+
 
     constructor(custom) {
         if (custom) {
@@ -44,15 +46,25 @@ export class JobResultTable{
     }
 
     drawRows(rowsData) {
+        var self = this;
         var rows = this.resultTableBody.selectAll("tr").data(rowsData);
         var rowsEnter = rows.enter().append("tr");
         var rowsMerge = rowsEnter.merge(rows);
+        rowsMerge.on('click', function(d,i){
+            d3.select(this).classed('sd-selected', true);
+            self.config.onRowSelected(d,i)
+        });
         rows.exit().remove();
 
-        var cells = rowsMerge.selectAll("td").data(d=>d)
+        var cells = rowsMerge.selectAll("td").data(d=>d.cells)
         var cellsEnter = cells.enter().append("td");
         var cellsMerge = cellsEnter.merge(cells);
         cellsMerge.text(d=>d);
         cells.exit().remove();
+
+    }
+
+    clearSelection(){
+        this.resultTable.selectAll('.sd-selected').classed('sd-selected', false);
     }
 }

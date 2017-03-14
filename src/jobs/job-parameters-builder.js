@@ -94,7 +94,6 @@ export class JobParametersBuilder{
                 var callbacks = {};
                 callbacks.onValueRemoved = function(v,i){
                     value.splice(i, 1);
-                    console.log('onValueRemoved', v, i);
                     self.buildParameterValues(valuesContainer, d, value, path,callbacks)
                     addButton.classed('sd-hidden', value.length>=d.maxOccurs)
                     callbacks.onChange();
