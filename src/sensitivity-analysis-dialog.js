@@ -13,8 +13,6 @@ export class SensitivityAnalysisDialog extends Dialog {
     jobConfigurations = [];
     jobInstanceManager;
 
-    treePreviewMode = false;
-
     constructor(app) {
         super(app.container.select('.sd-sensitivity-analysis-dialog'), app);
         this.computationsManager = this.app.computationsManager;
@@ -32,7 +30,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     clear(){
-        this.treePreviewMode = false;
+        this.resultTable.clear();
         this.setProgress(0);
         this.onJobSelected(this.jobConfigurations[0]);
         AppUtils.show(this.jobConfigurationContainer);
@@ -46,18 +44,10 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onOpen() {
-        if(this.treePreviewMode){
-            this.treePreviewMode=false;
-            this.app.exitTreePreview();
-            return;
-        }
         this.clear();
     }
 
     onClosed() {
-        if(this.treePreviewMode){
-            return;
-        }
         this.clear();
         if(!this.jobInstanceManager){
             return;
@@ -69,10 +59,10 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.selectedJobConfig = jobConfig;
         this.job  =  this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-           /* variables: [
+            variables: [
                 {name: 'p', min: 0, max: 1, length: 11},
                 {name: 'a', min: 1, max: 10, length: 10}
-            ]*/
+            ]
         };
         this.jobParameters = this.job.createJobParameters(jobParamsValues);
         this.jobParametersBuilder.setJobParameters(this.job.name, this.jobParameters, this.selectedJobConfig.customParamsConfig);
@@ -220,14 +210,15 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     setProgress(progress){
         var value = progress+"%";
-        this.progressBar.style("width", value)
+        this.progressBar.style("width", value);
         this.progressBar.html(value)
     }
 
 
     onResultRowSelected(row, index) {
-        this.treePreviewMode = true;
-        this.app.showTreePreview(row.data);
-        this.close();
+        this.app.showTreePreview(row.data, ()=>{
+            this.resultTable.clearSelection();
+        });
+
     }
 }

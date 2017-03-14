@@ -847,3 +847,32 @@ table.sd-job-result-table tr.sd-selected {
 
 table.sd-job-result-table td {
   text-align: right; }
+
+.sd-fullscreen-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: white;
+  border: 5px solid #d0d0d0; }
+  .sd-fullscreen-popup .sd-popup-body {
+    overflow: auto;
+    width: 100%;
+    height: 100%; }
+    .sd-fullscreen-popup .sd-popup-body::-webkit-scrollbar {
+      width: 7px;
+      height: 7px; }
+    .sd-fullscreen-popup .sd-popup-body::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); }
+    .sd-fullscreen-popup .sd-popup-body::-webkit-scrollbar-thumb {
+      background-color: darkgrey;
+      outline: 1px solid slategrey; }
+  .sd-fullscreen-popup .sd-close-popup {
+    position: fixed;
+    cursor: pointer;
+    top: 20px;
+    right: 20px; }
+    .sd-fullscreen-popup .sd-close-popup i {
+      font-size: 30px; }

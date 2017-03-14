@@ -64,6 +64,11 @@ export class JobResultTable{
 
     }
 
+    clear(){
+        this.clearSelection();
+        this.setData({headers: [], rows: []});
+    }
+
     clearSelection(){
         this.resultTable.selectAll('.sd-selected').classed('sd-selected', false);
     }

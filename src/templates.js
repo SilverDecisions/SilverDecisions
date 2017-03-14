@@ -29,6 +29,7 @@ export class Templates{
     static jobParametersBuilder = require('./templates/jobs/job_parameters_builder.html');
     static jobParameter = require('./templates/jobs/job_parameter.html');
     static loadingIndicator = require('./templates/loading_indicator.html');
+    static fullscreenPopup = require('./templates/fullscreen_popup.html');
     static main = require('./templates/main.html');
 
     static get(templateName, variables){
