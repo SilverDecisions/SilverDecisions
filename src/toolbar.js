@@ -18,6 +18,7 @@ export class Toolbar{
         this.initUndoRedoButtons();
         this.initSettingsButton();
         this.initAboutButton();
+        this.initSensitivityAnalysisButton();
         this.initRecomputeButton();
         this.initObjectiveRuleToolbarGroup();
     }
@@ -105,6 +106,12 @@ export class Toolbar{
     initRecomputeButton(){
         this.recomputeButton = this.container.select('#recompute-button').on('click', ()=>{
             this.app.recompute();
+        });
+    }
+
+    initSensitivityAnalysisButton(){
+        this.sensitivityAnalysisButton = this.container.select('#sensitivity-analysis-button').on('click', ()=>{
+            this.app.openSensitivityAnalysis();
         });
     }
 

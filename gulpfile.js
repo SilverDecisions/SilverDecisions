@@ -128,7 +128,7 @@ gulp.task('build-app', ['build-config'], function () {
     return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist", dependencies)
 });
 
-gulp.task('build-sd-core', function () {
+gulp.task('build-core', function () {
     return buildJsDependencies("silver-decisions-core", sdDependencies, "dist")
 });
 
@@ -140,7 +140,7 @@ gulp.task('build-clean', ['clean'], function () {
     return gulp.start('build');
 });
 
-gulp.task('build', ['build-css', 'build-app', 'build-sd-core', 'build-vendor'], function () {
+gulp.task('build', ['build-css', 'build-app', 'build-core', 'build-vendor'], function () {
     // var development = (argv.dev === undefined) ? false : true;
     // if(!development){
     //     return generateDocs();
@@ -148,7 +148,9 @@ gulp.task('build', ['build-css', 'build-app', 'build-sd-core', 'build-vendor'], 
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.html', './src/styles/*.*css', 'src/**/*.js', './src/i18n/*.*json'], ['default']);
+    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json'], ['build-app']);
+    gulp.watch(['./src/styles/*.*css'], ['build-css']);
+    gulp.watch(['./node_modules/sd-computations/src/**/*.js', './node_modules/sd-model/src/**/*.js', './node_modules/sd-utils/src/**/*.js'], ['build-core']);
 });
 
 gulp.task('default', ['build-clean'],  function() {

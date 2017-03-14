@@ -3,6 +3,7 @@ import {i18n} from './i18n/i18n'
 
 export class Templates{
 
+    //TODO automate
     static about_de = require('./templates/about/de.html');
     static about_en = require('./templates/about/en.html');
     static about_fr = require('./templates/about/fr.html');
@@ -24,6 +25,9 @@ export class Templates{
     static aboutDialog = require('./templates/about_dialog.html');
     static growl = require('./templates/growl_message.html');
     static definitionsDialog = require('./templates/definitions_dialog.html');
+    static sensitivityAnalysisDialog = require('./templates/sensitivity_analysis_dialog.html');
+    static jobParametersBuilder = require('./templates/jobs/job_parameters_builder.html');
+    static jobParameter = require('./templates/jobs/job_parameter.html');
     static loadingIndicator = require('./templates/loading_indicator.html');
     static main = require('./templates/main.html');
 

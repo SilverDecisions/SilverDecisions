@@ -67,6 +67,9 @@
       border: none;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       background: none; }
+      #silver-decisions .input-group input.invalid, #silver-decisions .input-group textarea.invalid, #silver-decisions .input-group select.invalid {
+        border-color: red;
+        outline-color: red; }
     #silver-decisions .input-group select {
       outline: none; }
     #silver-decisions .input-group.inline-group input, #silver-decisions .input-group.inline-group textarea, #silver-decisions .input-group.inline-group select {
@@ -124,6 +127,29 @@
         right: 50%; }
     #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after, #silver-decisions .input-group textarea:focus ~ .bar:before, #silver-decisions .input-group textarea:focus ~ .bar:after, #silver-decisions .input-group select:focus ~ .bar:before, #silver-decisions .input-group select:focus ~ .bar:after {
       width: 50%; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group {
+  max-width: 150px; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .sd-job-parameter-name {
+  margin-top: 20px; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .sd-job-parameter-values .sd-job-parameter {
+  display: inline-block;
+  margin-right: 7px; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .sd-job-parameter-values .sd-job-parameter-value {
+  display: flex;
+  align-items: center; }
+
+#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter.invalid > .sd-job-parameter-name {
+  color: red; }
+
+#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter .sd-job-parameter-value.invalid {
+  background-color: rgba(255, 0, 0, 0.11); }
+
+#silver-decisions .sd-job-parameters-builder:not(.sd-strict-validation) input.invalid, #silver-decisions .sd-job-parameters-builder:not(.sd-strict-validation) select.invalid {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 
 /* The Modal (background) */
@@ -606,6 +632,15 @@
     #silver-decisions svg.tree-designer tspan a {
       cursor: pointer;
       text-decoration: underline; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-select-input-group {
+    display: inline-block; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons {
+    margin-top: 25px;
+    float: right; }
+    #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons button {
+      margin-left: 7px; }
+    #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons button.sd-run-job-button {
+      font-size: 16px; }
   #silver-decisions button {
     background: rgba(158, 158, 158, 0.2);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -784,3 +819,28 @@
   100% {
     transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
     -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+.sd-progress-bar-container {
+  width: 100%;
+  border: 1px solid #bfbfbf;
+  background-color: #e8e8e8;
+  border-radius: 5px; }
+  .sd-progress-bar-container .sd-progress-bar {
+    height: 100%;
+    background-color: #2196F3;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 2px 0;
+    /*    -webkit-transition: width 0.1s; !* Safari *!
+    transition: width 0.1s;*/ }
+
+table.sd-job-result-table, table.sd-job-result-table tr, table.sd-job-result-table td, table.sd-job-result-table th {
+  border: 1px solid black;
+  border-collapse: collapse; }
+
+table.sd-job-result-table td, table.sd-job-result-table th {
+  padding: 7px; }
+
+table.sd-job-result-table td {
+  text-align: right; }

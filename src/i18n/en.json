@@ -30,6 +30,7 @@
     "redo": "Redo",
     "settings": "Settings",
     "about": "About",
+    "sensitivityAnalysis": "Sensitivity analysis",
     "recompute": "Recompute"
   },
   "node":{
@@ -75,6 +76,49 @@
     },
     "text":{
       "delete": "Delete"
+    }
+  },
+  "sensitivityAnalysisDialog":{
+    "title": "Sensitivity analysis",
+    "jobSelect": "",
+    "buttons": {
+      "runJob": "Run",
+      "stopJob": "Stop",
+      "terminateJob": "Terminate",
+      "resumeJob": "Resume"
+    }
+  },
+  "jobParametersBuilder": {
+    "buttons": {
+      "removeParameterValue": "Remove",
+      "addParameterValue": "Add"
+    }
+  },
+  "job":{
+    "sensitivity-analysis":{
+      "name": "N-way sensitivity analysis",
+      "param":{
+        "ruleName": "Rule name",
+        "variables": {
+          "": "Variables",
+          "name": "Name",
+          "min": "Min",
+          "max": "Max",
+          "length": "Length"
+        }
+      }
+    },
+    "probabilistic-sensitivity-analysis":{
+      "name": "Probabilistic sensitivity analysis",
+      "param":{
+        "ruleName": "Rule name",
+        "numberOfRuns": "Number of runs",
+        "variables": {
+          "": "Variables",
+          "name": "Name",
+          "formula": "Formula"
+        }
+      }
     }
   },
   "settingsDialog":{

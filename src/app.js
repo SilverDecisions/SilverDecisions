@@ -13,6 +13,7 @@ import {AboutDialog} from "./about-dialog";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
 import {ComputationsManager} from "sd-computations";
+import {SensitivityAnalysisDialog} from "./sensitivity-analysis-dialog";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -105,6 +106,7 @@ export class App {
         this.initSettingsDialog();
         this.initAboutDialog();
         this.initDefinitionsDialog();
+        this.initSensitivityAnalysisDialog();
         this.initOnBeforeUnload();
         this.initKeyCodes();
         p.then(()=>{
@@ -199,6 +201,10 @@ export class App {
 
     }
 
+    initSensitivityAnalysisDialog() {
+        this.sensitivityAnalysisDialog = new SensitivityAnalysisDialog(this);
+
+    }
     initToolbar() {
         this.toolbar = new Toolbar(this.container.select('#sd-toolbar'), this);
 
@@ -379,6 +385,10 @@ export class App {
         return this.computationsManager.getObjectiveRules();
     }
 
+
+    openSensitivityAnalysis(){
+        this.sensitivityAnalysisDialog.open();
+    }
 
 
     recompute(updateView = true, debounce = false) {

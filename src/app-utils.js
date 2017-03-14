@@ -246,4 +246,12 @@ export class AppUtils {
         var key = 'validation.' + error.name;
         return i18n.t(key, error.data);
     }
+
+    static hide(selection){
+        selection.classed('sd-hidden', true);
+    }
+
+    static show(selection, show=true){
+        selection.classed('sd-hidden', !show);
+    }
 }

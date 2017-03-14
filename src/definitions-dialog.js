@@ -2,7 +2,6 @@ import * as d3 from './d3'
 import {Dialog} from './dialog'
 import {Utils} from "sd-utils";
 import {AppUtils} from "./app-utils";
-import * as _ from "lodash";
 import {Templates} from "./templates";
 
 export class DefinitionsDialog extends Dialog {
