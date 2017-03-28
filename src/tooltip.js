@@ -8,20 +8,26 @@ export class Tooltip {
         return d3.select("body").selectOrAppend('div.sd-tooltip');
     }
 
-    static show(html, xOffset = 5, yOffset = 28) {
+    static show(html, xOffset = 5, yOffset = 28, event, duration=null) {
         var container = Tooltip.getContainer()
             .style("opacity", 0);
         container.transition()
             .duration(200)
             .style("opacity", .98);
         container.html(html);
-        Tooltip.updatePosition(xOffset, yOffset);
+        Tooltip.updatePosition(xOffset, yOffset, event);
+        if(duration){
+            setTimeout(function(){
+                Tooltip.hide();
+            }, duration)
+        }
     }
 
-    static updatePosition(xOffset = 5, yOffset = 28) {
+    static updatePosition(xOffset = 5, yOffset = 28, event) {
+        event = event || d3.event;
         Tooltip.getContainer()
-            .style("left", (d3.event.pageX + xOffset) + "px")
-            .style("top", (d3.event.pageY - yOffset) + "px");
+            .style("left", (event.pageX + xOffset) + "px")
+            .style("top", (event.pageY - yOffset) + "px");
     }
 
     static hide(duration = 500) {

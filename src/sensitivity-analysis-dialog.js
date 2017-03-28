@@ -5,6 +5,7 @@ import {Templates} from "./templates";
 import {i18n} from "./i18n/i18n";
 import {AppUtils} from "./app-utils";
 import {JobResultTable} from "./jobs/job-result-table";
+import {Tooltip} from "./tooltip";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;
@@ -29,21 +30,31 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.initButtons();
     }
 
-    clear(){
+    clear(clearParams=true){
         this.resultTable.clear();
         this.setProgress(0);
-        this.onJobSelected(this.jobConfigurations[0]);
+        this.markAsError(false);
+        if(clearParams || !this.selectedJobConfig){
+            this.onJobSelected(this.jobConfigurations[0]);
+        }else if(this.jobParameters){
+            delete this.jobParameters.values.id;
+            this.jobParameters = this.job.createJobParameters(this.jobParameters.values);
+        }
+
         AppUtils.show(this.jobConfigurationContainer);
         AppUtils.show(this.runJobButton);
+        AppUtils.show(this.clearButton);
 
         AppUtils.hide(this.resumeJobButton);
         AppUtils.hide(this.progressBarContainer);
         AppUtils.hide(this.stopJobButton);
         AppUtils.hide(this.terminateJobButton);
         AppUtils.hide(this.jobResultsContainer);
+        AppUtils.hide(this.backButton);
     }
 
     onOpen() {
+        this.initJobConfigurations();
         this.clear();
     }
 
@@ -57,24 +68,38 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     onJobSelected(jobConfig){
         this.selectedJobConfig = jobConfig;
+        this.jobSelect.node().value = jobConfig.jobName;
         this.job  =  this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
+           /* numberOfRuns: 100,
             variables: [
-                {name: 'p', min: 0, max: 1, length: 11},
-                {name: 'a', min: 1, max: 10, length: 10}
-            ]
+                {name: 'p', min: 0, max: 1, length: 11, formula: "random(0,1)"},
+                {name: 'a', min: 1, max: 10, length: 10,  formula: "random(-10,10)"}
+            ]*/
         };
         this.jobParameters = this.job.createJobParameters(jobParamsValues);
         this.jobParametersBuilder.setJobParameters(this.job.name, this.jobParameters, this.selectedJobConfig.customParamsConfig);
     }
 
     initJobConfigurations() {
-
+        this.jobConfigurations.length=0;
         this.jobConfigurations.push({
             jobName: 'sensitivity-analysis',
             customParamsConfig: {
                 'id': {
                     // value: undefined, //leave default,
+                    hidden: true
+                },
+                'ruleName': {
+                    value: this.computationsManager.getCurrentRule().name,
+                    hidden: true
+                }
+            }
+        });
+        this.jobConfigurations.push({
+            jobName: 'tornado-diagram',
+            customParamsConfig: {
+                'id': {
                     hidden: true
                 },
                 'ruleName': {
@@ -101,7 +126,7 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     initJobSelect() {
         var self = this;
-        this.container.select(".sd-job-select-input-group").html(Templates.get("selectInputGroup", {
+        this.jobSelect = this.container.select(".sd-job-select-input-group").html(Templates.get("selectInputGroup", {
             id: Utils.guid(),
             label: i18n.t("sensitivityAnalysisDialog.jobSelect"),
             name: "sd-job-select",
@@ -116,7 +141,7 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     initResultTable() {
         this.resultTable = new JobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), {
-            onRowSelected: (row, index)=> this.onResultRowSelected(row, index)
+            onRowSelected: (rows, indexes, e)=> this.onResultRowSelected(rows, indexes, e)
         });
     }
 
@@ -161,27 +186,43 @@ export class SensitivityAnalysisDialog extends Dialog {
             }
             this.jobInstanceManager.terminate();
         });
+
+        this.backButton = this.container.select(".sd-back-button ").on('click', ()=>{
+            if(this.jobInstanceManager){
+                this.jobInstanceManager.terminate();
+            }
+
+        });
+
+        this.clearButton = this.container.select(".sd-clear-button ").on('click', ()=>{
+            this.clear(true);
+        });
     }
 
     onJobStarted(){
         AppUtils.hide(this.jobConfigurationContainer);
         AppUtils.hide(this.runJobButton);
         AppUtils.hide(this.resumeJobButton);
+        AppUtils.hide(this.backButton);
+        AppUtils.hide(this.clearButton);
 
         AppUtils.show(this.progressBarContainer);
         AppUtils.show(this.stopJobButton);
         AppUtils.show(this.terminateJobButton);
 
-        this.onProgress(this.jobInstanceManager ? this.jobInstanceManager.progress : 0);
+        this.onProgress(this.jobInstanceManager ? this.jobInstanceManager.progress : null);
 
     }
 
 
     onJobCompleted(result){
         AppUtils.show(this.jobResultsContainer);
+        AppUtils.show(this.backButton);
+
         AppUtils.hide(this.progressBarContainer);
         AppUtils.hide(this.stopJobButton);
         AppUtils.hide(this.terminateJobButton);
+        AppUtils.hide(this.clearButton);
 
         this.displayResult(result)
     }
@@ -193,11 +234,19 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     onJobFailed(errors){
         AppUtils.hide(this.stopJobButton);
+        AppUtils.hide(this.backButton);
+        AppUtils.hide(this.clearButton);
+        this.markAsError();
+    }
+
+    markAsError(error=true){
+        this.container.classed('sd-job-error', error);
     }
 
     onJobStopped(){
         AppUtils.hide(this.stopJobButton);
         AppUtils.show(this.resumeJobButton);
+
     }
 
     onJobTerminated(){
@@ -209,16 +258,27 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     setProgress(progress){
-        var value = progress+"%";
-        this.progressBar.style("width", value);
+        var percents = 0;
+        var value="0%";
+        if(progress){
+            value = progress.current+" / "+progress.total;
+            percents = progress.current * 100 /progress.total;
+        }
+
+        this.progressBar.style("width", percents+"%");
         this.progressBar.html(value)
     }
 
 
-    onResultRowSelected(row, index) {
-        this.app.showTreePreview(row.data, ()=>{
-            this.resultTable.clearSelection();
-        });
+    onResultRowSelected(rows, indexes, event) {
+        if(rows.length===1) {
+            this.app.showTreePreview(rows[0].data, ()=>{
+                this.resultTable.clearSelection();
+            });
+            return;
+        }
+
+        Tooltip.show(rows.length + ' rows', 5, 28, event, 2000);
 
     }
 }

@@ -85,7 +85,9 @@
       "runJob": "Run",
       "stopJob": "Stop",
       "terminateJob": "Terminate",
-      "resumeJob": "Resume"
+      "resumeJob": "Resume",
+      "back": "Back",
+      "clear": "Clear"
     }
   },
   "jobParametersBuilder": {
@@ -99,6 +101,21 @@
       "name": "N-way sensitivity analysis",
       "param":{
         "ruleName": "Rule name",
+        "preserveDataModel": "Preserve data model",
+        "variables": {
+          "": "Variables",
+          "name": "Name",
+          "min": "Min",
+          "max": "Max",
+          "length": "Length"
+        }
+      }
+    },
+    "tornado-diagram":{
+      "name": "Tornado diagram",
+      "param":{
+        "ruleName": "Rule name",
+        "preserveDataModel": "Preserve data model",
         "variables": {
           "": "Variables",
           "name": "Name",
@@ -113,6 +130,7 @@
       "param":{
         "ruleName": "Rule name",
         "numberOfRuns": "Number of runs",
+        "preserveDataModel": "Preserve data model",
         "variables": {
           "": "Variables",
           "name": "Name",

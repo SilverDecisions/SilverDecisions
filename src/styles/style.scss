@@ -607,6 +607,15 @@
 
   .sd-sensitivity-analysis-dialog{
 
+    &.sd-job-error{
+      .sd-job-progress-bar-container{
+        background-color: #edc9cb;
+        .sd-progress-bar{
+          background-color: red;
+        }
+      }
+    }
+
     .sd-job-select-input-group{
       display: inline-block;
     }
@@ -914,27 +923,35 @@
     text-align: center;
     border-radius: 5px;
     padding: 2px 0;
+    white-space: nowrap;
 /*    -webkit-transition: width 0.1s; !* Safari *!
     transition: width 0.1s;*/
   }
 }
 
-table.sd-job-result-table{
-  &, tr, td, th{
-    border: 1px solid black;
-    border-collapse: collapse;
-  }
+div.sd-job-result-table{
+  //tr, td, th{
+  //  border: 1px solid black;
+  //  border-collapse: collapse;
+  //}
 
-  td, th{
-    padding: 7px;
-  }
+  //td, th{
+  //  padding: 7px;
+  //}
   tr{
     &.sd-selected{
       background-color: rgba(30, 144, 255, 0.35);
     }
   }
-  td{
-    text-align: right;
+  //td{
+  //  text-align: right;
+  //}
+
+  td.rowTotal{
+    cursor: pointer;
+  }
+  table.pvtTable thead tr th{
+    white-space: pre;
   }
 }
 

@@ -205,6 +205,11 @@ export class App {
         this.sensitivityAnalysisDialog = new SensitivityAnalysisDialog(this);
 
     }
+
+    isSensitivityAnalysisAvailable() {
+        return this.dataModel.getRoots().length===1
+    }
+
     initToolbar() {
         this.toolbar = new Toolbar(this.container.select('#sd-toolbar'), this);
 
@@ -390,7 +395,7 @@ export class App {
         this.sensitivityAnalysisDialog.open();
     }
 
-    showTreePreview(dataDTO, closeCallback){
+    showTreePreview(dataDTO, closeCallback, autoLayout=true){
         var self = this;
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
         this.dataModel.loadFromDTO(dataDTO,  this.computationsManager.expressionEngine.getJsonReviver());
@@ -400,7 +405,17 @@ export class App {
             self.updateView();
             setTimeout(function(){
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
-                AppUtils.showFullScreenPopup(svgString, closeCallback);
+                AppUtils.showFullScreenPopup(svgString, ()=>{
+                    if(closeCallback) {
+                        self.dataModel._setNewState(self.originalDataModelSnapshot);
+                        self.updateView();
+
+                        closeCallback();
+                        setTimeout(function(){
+                            self.updateView();
+                        }, 1)
+                    }
+                });
             }, 300);
         }, 1)
 

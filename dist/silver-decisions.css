@@ -196,6 +196,21 @@
     display: flex;
     flex-direction: column;
     overflow: auto; }
+  .sd-modal .sd-extend-modal {
+    display: block; }
+  .sd-modal .sd-shrink-modal {
+    display: none; }
+  .sd-modal.sd-full-screen {
+    padding-top: 0;
+    overflow: initial; }
+    .sd-modal.sd-full-screen .sd-modal-content {
+      width: 100%;
+      max-height: 100vh;
+      height: 100vh; }
+    .sd-modal.sd-full-screen .sd-extend-modal {
+      display: none; }
+    .sd-modal.sd-full-screen .sd-shrink-modal {
+      display: block; }
   .sd-modal .sd-modal-header {
     padding: 2px 16px;
     background-color: #3F51B5;
@@ -204,13 +219,14 @@
     font-size: 13px;
     padding: 15px 16px;
     overflow: auto; }
-  .sd-modal .sd-close-modal {
+  .sd-modal .sd-modal-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-    margin-top: 20px; }
-    .sd-modal .sd-close-modal:hover, .sd-modal .sd-close-modal:focus {
+    margin-top: 20px;
+    margin-left: 15px; }
+    .sd-modal .sd-modal-button:hover, .sd-modal .sd-modal-button:focus {
       color: black;
       text-decoration: none;
       cursor: pointer; }
@@ -632,6 +648,10 @@
     #silver-decisions svg.tree-designer tspan a {
       cursor: pointer;
       text-decoration: underline; }
+  #silver-decisions .sd-sensitivity-analysis-dialog.sd-job-error .sd-job-progress-bar-container {
+    background-color: #edc9cb; }
+    #silver-decisions .sd-sensitivity-analysis-dialog.sd-job-error .sd-job-progress-bar-container .sd-progress-bar {
+      background-color: red; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-select-input-group {
     display: inline-block; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons {
@@ -832,21 +852,18 @@
     text-align: center;
     border-radius: 5px;
     padding: 2px 0;
+    white-space: nowrap;
     /*    -webkit-transition: width 0.1s; !* Safari *!
     transition: width 0.1s;*/ }
 
-table.sd-job-result-table, table.sd-job-result-table tr, table.sd-job-result-table td, table.sd-job-result-table th {
-  border: 1px solid black;
-  border-collapse: collapse; }
-
-table.sd-job-result-table td, table.sd-job-result-table th {
-  padding: 7px; }
-
-table.sd-job-result-table tr.sd-selected {
+div.sd-job-result-table tr.sd-selected {
   background-color: rgba(30, 144, 255, 0.35); }
 
-table.sd-job-result-table td {
-  text-align: right; }
+div.sd-job-result-table td.rowTotal {
+  cursor: pointer; }
+
+div.sd-job-result-table table.pvtTable thead tr th {
+  white-space: pre; }
 
 .sd-fullscreen-popup {
   position: fixed;

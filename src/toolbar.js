@@ -115,6 +115,11 @@ export class Toolbar{
         });
     }
 
+    updateSensitivityAnalysisButton(){
+        this.sensitivityAnalysisButton.attr("disabled", this.app.isSensitivityAnalysisAvailable() ? null : 'disabled');
+    }
+
+
     onLayoutChanged(layout){
         Object.getOwnPropertyNames(this.layoutButtons).forEach(l=>{
             this.layoutButtons[l].classed('active', false);
@@ -138,6 +143,7 @@ export class Toolbar{
 
     onUndoRedoChanged() {
         this.updateUndoRedoButtons();
+        this.updateSensitivityAnalysisButton();
     }
     updateUndoRedoButtons(){
         this.undoButton.attr("disabled", this.app.dataModel.isUndoAvailable() ? null : 'disabled');
@@ -146,6 +152,7 @@ export class Toolbar{
 
     update(){
         this.updateUndoRedoButtons();
+        this.updateSensitivityAnalysisButton();
         this.updateLayoutButtons();
         this.updateObjectiveRuleValue();
     }

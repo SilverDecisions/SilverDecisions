@@ -1,7 +1,10 @@
 <div class="sd-modal sd-sensitivity-analysis-dialog">
     <div class="sd-modal-content">
         <div class="sd-modal-header">
-            <span class="sd-close-modal"><i class="material-icons">close</i></span>
+            <span class="sd-modal-button sd-close-modal"><i class="material-icons">close</i></span>
+            <span class="sd-modal-button sd-extend-modal"><i class="material-icons">fullscreen</i></span>
+            <span class="sd-modal-button sd-shrink-modal"><i class="material-icons">fullscreen_exit</i></span>
+
             <h2><%= i18n.t("sensitivityAnalysisDialog.title")%></h2>
         </div>
         <div class="sd-modal-body">
@@ -17,7 +20,10 @@
                 <button class="sd-terminate-job-button sd-hidden"><%= i18n.t('sensitivityAnalysisDialog.buttons.terminateJob')%></button>
                 <button class="sd-stop-job-button sd-hidden"><%= i18n.t('sensitivityAnalysisDialog.buttons.stopJob')%></button>
                 <button class="sd-resume-job-button sd-hidden"><%= i18n.t('sensitivityAnalysisDialog.buttons.resumeJob')%></button>
+                <button class="sd-back-button  sd-hidden"><%= i18n.t('sensitivityAnalysisDialog.buttons.back')%></button>
+                <button class="sd-clear-button "><%= i18n.t('sensitivityAnalysisDialog.buttons.clear')%></button>
                 <button class="sd-run-job-button"><%= i18n.t('sensitivityAnalysisDialog.buttons.runJob')%></button>
+
             </div>
         </div>
     </div>

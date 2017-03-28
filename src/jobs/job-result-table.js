@@ -1,9 +1,12 @@
 import {Utils} from "sd-utils";
 import * as d3 from '../d3'
+import {PivotTable} from '../pivot-table'
+var jQuery = require('jquery');
 
 export class JobResultTableConfig {
-    onRowSelected = (row) => {};
+    onRowSelected = (rows, indexes, event) => {};
 
+    pivotTable;
 
     constructor(custom) {
         if (custom) {
@@ -25,15 +28,58 @@ export class JobResultTable{
     }
 
     init(){
-        this.resultTable = this.container.selectOrAppend("table.sd-job-result-table");
-        this.resultTableHead = this.resultTable.selectOrAppend("thead");
-        this.resultTableBody = this.resultTable.selectOrAppend("tbody");
-        this.resultTableFoot = this.resultTable.selectOrAppend("tfoot");
+        this.pivotTable = new PivotTable(this.container.selectOrAppend("div.sd-job-result-table"));
+        // this.resultTable = this.container.selectOrAppend("table.sd-job-result-table");
+        // this.resultTableHead = this.resultTable.selectOrAppend("thead");
+        // this.resultTableBody = this.resultTable.selectOrAppend("tbody");
+        // this.resultTableFoot = this.resultTable.selectOrAppend("tfoot");
     }
 
     setData(data){
-        this.drawHeaders(data.headers);
-        this.drawRows(data.rows)
+        var self = this;
+        var derivers = jQuery.pivotUtilities.derivers;
+
+
+        var pivotOptions={
+            rows: data.headers.slice(0,2),
+            vals: [data.headers[data.headers.length-1]],
+            hiddenAttributes: ['$rowIndex'],
+            aggregatorName: "Maximum",
+            rendererOptions: {
+                table: {
+                    clickCallback: function(e, value, filters, pivotData){
+                        var selectedIndexes = [];
+                        var selectedRows=[]
+                        pivotData.forEachMatchingRecord(filters, record=>{
+                            selectedIndexes.push(record['$rowIndex'])
+                            selectedRows.push(data.rows[record['$rowIndex']]);
+                        });
+                        self.config.onRowSelected(selectedRows, selectedIndexes, e)
+
+                    }
+
+
+                }
+            },
+            derivedAttributes:{
+                "policy\nid": (record)=>{
+                    return data.policies[data.rows[record.$rowIndex].policyIndex].id
+                }
+
+            }
+            /*rendererName: 'custom',
+            renderers: {
+                'custom': function(pivotData, options){
+                    console.log(pivotData)
+                }
+            }*/
+
+        }
+
+        this.pivotTable.update([data.headers.concat(['$rowIndex'])].concat(data.rows.map((r,i)=>r.cells.concat(i))), pivotOptions);
+
+        // this.drawHeaders(data.headers);
+        // this.drawRows(data.rows)
     }
 
     drawHeaders(headerData) {
@@ -70,6 +116,6 @@ export class JobResultTable{
     }
 
     clearSelection(){
-        this.resultTable.selectAll('.sd-selected').classed('sd-selected', false);
+        // this.resultTable.selectAll('.sd-selected').classed('sd-selected', false);
     }
 }
