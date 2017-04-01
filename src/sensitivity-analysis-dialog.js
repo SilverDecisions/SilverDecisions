@@ -1,11 +1,12 @@
 import {Dialog} from "./dialog";
 import {JobParametersBuilder} from "./jobs/job-parameters-builder";
-import {Utils, log} from 'sd-utils'
+import {Utils, log} from "sd-utils";
 import {Templates} from "./templates";
 import {i18n} from "./i18n/i18n";
 import {AppUtils} from "./app-utils";
 import {JobResultTable} from "./jobs/job-result-table";
 import {Tooltip} from "./tooltip";
+import {LoadingIndicator} from "./loading-indicator";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;
@@ -30,15 +31,15 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.initButtons();
     }
 
-    clear(clearParams=true){
+    clear(clearParams = false) {
         this.resultTable.clear();
         this.setProgress(0);
         this.markAsError(false);
-        if(clearParams || !this.selectedJobConfig){
+        if (clearParams || !this.selectedJobConfig) {
             this.onJobSelected(this.jobConfigurations[0]);
-        }else if(this.jobParameters){
+        } else if (this.jobParameters) {
             delete this.jobParameters.values.id;
-            this.jobParameters = this.job.createJobParameters(this.jobParameters.values);
+            this.setJobParamsValues(this.jobParameters.values);
         }
 
         AppUtils.show(this.jobConfigurationContainer);
@@ -51,6 +52,7 @@ export class SensitivityAnalysisDialog extends Dialog {
         AppUtils.hide(this.terminateJobButton);
         AppUtils.hide(this.jobResultsContainer);
         AppUtils.hide(this.backButton);
+        this.disableActionButtonsAndShowLoadingIndicator(false);
     }
 
     onOpen() {
@@ -60,29 +62,33 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     onClosed() {
         this.clear();
-        if(!this.jobInstanceManager){
+        if (!this.jobInstanceManager) {
             return;
         }
         this.jobInstanceManager.terminate();
     }
 
-    onJobSelected(jobConfig){
+    onJobSelected(jobConfig) {
         this.selectedJobConfig = jobConfig;
         this.jobSelect.node().value = jobConfig.jobName;
-        this.job  =  this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
+        this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-           /* numberOfRuns: 100,
-            variables: [
-                {name: 'p', min: 0, max: 1, length: 11, formula: "random(0,1)"},
-                {name: 'a', min: 1, max: 10, length: 10,  formula: "random(-10,10)"}
-            ]*/
+            // numberOfRuns: 100,
+            // variables: [
+            //     {name: 'p', min: 0, max: 1, length: 11, formula: "random(0,1)"},
+            //     {name: 'a', min: 1, max: 10, length: 10, formula: "random(-10,10)"}
+            // ]
         };
+        this.setJobParamsValues(jobParamsValues)
+    }
+
+    setJobParamsValues(jobParamsValues) {
         this.jobParameters = this.job.createJobParameters(jobParamsValues);
         this.jobParametersBuilder.setJobParameters(this.job.name, this.jobParameters, this.selectedJobConfig.customParamsConfig);
     }
 
     initJobConfigurations() {
-        this.jobConfigurations.length=0;
+        this.jobConfigurations.length = 0;
         this.jobConfigurations.push({
             jobName: 'sensitivity-analysis',
             customParamsConfig: {
@@ -135,7 +141,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                 value: c.jobName
             }))
         })).select("select").on('change input', function (d) {
-            self.onJobSelected(Utils.find(self.jobConfigurations, c=>c.jobName===this.value))
+            self.onJobSelected(Utils.find(self.jobConfigurations, c=>c.jobName === this.value))
         });
     }
 
@@ -145,11 +151,21 @@ export class SensitivityAnalysisDialog extends Dialog {
         });
     }
 
+    disableActionButtonsAndShowLoadingIndicator(disable = true) {
+        if(disable){
+            LoadingIndicator.show();
+        }else{
+            LoadingIndicator.hide();
+        }
+        this.container.select('.sd-sensitivity-analysis-action-buttons').selectAll('button').attr('disabled', disable ? 'disabled' : undefined)
+    }
+
     initButtons() {
-        this.runJobButton = this.container.select(".sd-run-job-button").on('click', ()=>{
-            if(!this.jobParametersBuilder.validate()){
+        this.runJobButton = this.container.select(".sd-run-job-button").on('click', ()=> {
+            if (!this.jobParametersBuilder.validate()) {
                 return;
             }
+            this.disableActionButtonsAndShowLoadingIndicator();
 
             this.computationsManager.runJobWithInstanceManager(this.job.name, this.jobParameters.values, {
                 onJobStarted: this.onJobStarted,
@@ -159,47 +175,53 @@ export class SensitivityAnalysisDialog extends Dialog {
                 onJobTerminated: this.onJobTerminated,
                 onProgress: this.onProgress,
                 callbacksThisArg: this
-            }).then(jobInstanceManager=>{
+            }).then(jobInstanceManager=> {
                 this.jobInstanceManager = jobInstanceManager;
-            }).catch(e=>{
+            }).catch(e=> {
                 log.error(e);
+            }).then(()=>{
+                this.disableActionButtonsAndShowLoadingIndicator(false);
             })
+
         });
 
-        this.resumeJobButton = this.container.select(".sd-resume-job-button").on('click', ()=>{
-            if(!this.jobInstanceManager){
+        this.resumeJobButton = this.container.select(".sd-resume-job-button").on('click', ()=> {
+            if (!this.jobInstanceManager) {
                 return;
             }
+            this.disableActionButtonsAndShowLoadingIndicator();
             this.jobInstanceManager.resume();
         });
 
-        this.stopJobButton = this.container.select(".sd-stop-job-button").on('click', ()=>{
-            if(!this.jobInstanceManager){
+        this.stopJobButton = this.container.select(".sd-stop-job-button").on('click', ()=> {
+            if (!this.jobInstanceManager) {
                 return;
             }
+            this.disableActionButtonsAndShowLoadingIndicator();
             this.jobInstanceManager.stop();
         });
 
-        this.terminateJobButton = this.container.select(".sd-terminate-job-button").on('click', ()=>{
-            if(!this.jobInstanceManager){
+        this.terminateJobButton = this.container.select(".sd-terminate-job-button").on('click', ()=> {
+            if (!this.jobInstanceManager) {
                 return;
             }
+            this.disableActionButtonsAndShowLoadingIndicator();
             this.jobInstanceManager.terminate();
         });
 
-        this.backButton = this.container.select(".sd-back-button ").on('click', ()=>{
-            if(this.jobInstanceManager){
+        this.backButton = this.container.select(".sd-back-button ").on('click', ()=> {
+            if (this.jobInstanceManager) {
                 this.jobInstanceManager.terminate();
             }
 
         });
 
-        this.clearButton = this.container.select(".sd-clear-button ").on('click', ()=>{
+        this.clearButton = this.container.select(".sd-clear-button ").on('click', ()=> {
             this.clear(true);
         });
     }
 
-    onJobStarted(){
+    onJobStarted() {
         AppUtils.hide(this.jobConfigurationContainer);
         AppUtils.hide(this.runJobButton);
         AppUtils.hide(this.resumeJobButton);
@@ -210,12 +232,13 @@ export class SensitivityAnalysisDialog extends Dialog {
         AppUtils.show(this.stopJobButton);
         AppUtils.show(this.terminateJobButton);
 
+        this.disableActionButtonsAndShowLoadingIndicator(false);
         this.onProgress(this.jobInstanceManager ? this.jobInstanceManager.progress : null);
 
     }
 
 
-    onJobCompleted(result){
+    onJobCompleted(result) {
         AppUtils.show(this.jobResultsContainer);
         AppUtils.show(this.backButton);
 
@@ -224,55 +247,59 @@ export class SensitivityAnalysisDialog extends Dialog {
         AppUtils.hide(this.terminateJobButton);
         AppUtils.hide(this.clearButton);
 
+        this.disableActionButtonsAndShowLoadingIndicator(false);
         this.displayResult(result)
     }
 
-    displayResult(result){
+    displayResult(result) {
         log.debug(result);
+        this.result = result;
         this.resultTable.setData(result);
     }
 
-    onJobFailed(errors){
+    onJobFailed(errors) {
         AppUtils.hide(this.stopJobButton);
         AppUtils.hide(this.backButton);
         AppUtils.hide(this.clearButton);
+        this.disableActionButtonsAndShowLoadingIndicator(false);
         this.markAsError();
     }
 
-    markAsError(error=true){
+    markAsError(error = true) {
         this.container.classed('sd-job-error', error);
     }
 
-    onJobStopped(){
+    onJobStopped() {
         AppUtils.hide(this.stopJobButton);
         AppUtils.show(this.resumeJobButton);
+        this.disableActionButtonsAndShowLoadingIndicator(false);
 
     }
 
-    onJobTerminated(){
+    onJobTerminated() {
         this.clear();
     }
 
-    onProgress(progress){
-       this.setProgress(progress)
+    onProgress(progress) {
+        this.setProgress(progress)
     }
 
-    setProgress(progress){
+    setProgress(progress) {
         var percents = 0;
-        var value="0%";
-        if(progress){
-            value = progress.current+" / "+progress.total;
-            percents = progress.current * 100 /progress.total;
+        var value = "0%";
+        if (progress) {
+            value = progress.current + " / " + progress.total;
+            percents = progress.current * 100 / progress.total;
         }
 
-        this.progressBar.style("width", percents+"%");
+        this.progressBar.style("width", percents + "%");
         this.progressBar.html(value)
     }
 
 
     onResultRowSelected(rows, indexes, event) {
-        if(rows.length===1) {
-            this.app.showTreePreview(rows[0].data, ()=>{
+        if (rows.length === 1) {
+            this.app.showPolicyPreview(this.result.policies[rows[0].policyIndex], ()=> {
                 this.resultTable.clearSelection();
             });
             return;

@@ -867,6 +867,7 @@
 }
 
 .sd-loading-indicator {
+  z-index: 1000;
   position: fixed;
   top: 10vh;
   left: 50vw;
@@ -950,7 +951,7 @@ div.sd-job-result-table{
   td.rowTotal{
     cursor: pointer;
   }
-  table.pvtTable thead tr th{
+  table.pvtTable thead tr th, table.pvtTable tbody tr th{
     white-space: pre;
   }
 }

@@ -803,6 +803,7 @@
     border-color: #ebccd1; }
 
 .sd-loading-indicator {
+  z-index: 1000;
   position: fixed;
   top: 10vh;
   left: 50vw;
@@ -862,7 +863,7 @@ div.sd-job-result-table tr.sd-selected {
 div.sd-job-result-table td.rowTotal {
   cursor: pointer; }
 
-div.sd-job-result-table table.pvtTable thead tr th {
+div.sd-job-result-table table.pvtTable thead tr th, div.sd-job-result-table table.pvtTable tbody tr th {
   white-space: pre; }
 
 .sd-fullscreen-popup {

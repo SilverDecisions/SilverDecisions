@@ -101,7 +101,7 @@
       "name": "N-way sensitivity analysis",
       "param":{
         "ruleName": "Rule name",
-        "preserveDataModel": "Preserve data model",
+        "extendedPolicyDescription": "Extended policy description",
         "variables": {
           "": "Variables",
           "name": "Name",
@@ -115,7 +115,6 @@
       "name": "Tornado diagram",
       "param":{
         "ruleName": "Rule name",
-        "preserveDataModel": "Preserve data model",
         "variables": {
           "": "Variables",
           "name": "Name",
@@ -130,7 +129,7 @@
       "param":{
         "ruleName": "Rule name",
         "numberOfRuns": "Number of runs",
-        "preserveDataModel": "Preserve data model",
+        "extendedPolicyDescription": "Extended policy description",
         "variables": {
           "": "Variables",
           "name": "Name",

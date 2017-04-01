@@ -14,6 +14,7 @@ import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
 import {ComputationsManager} from "sd-computations";
 import {SensitivityAnalysisDialog} from "./sensitivity-analysis-dialog";
+import {LoadingIndicator} from "./loading-indicator";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -207,7 +208,7 @@ export class App {
     }
 
     isSensitivityAnalysisAvailable() {
-        return this.dataModel.getRoots().length===1
+        return this.dataModel.getRoots().length===1 && this.computationsManager.isValid();
     }
 
     initToolbar() {
@@ -419,6 +420,33 @@ export class App {
             }, 300);
         }, 1)
 
+    }
+
+    showPolicyPreview(policy, closeCallback){
+        var self = this;
+
+        this.computationsManager.displayPolicy(policy);
+        this.updateView();
+        AppUtils.showFullScreenPopup('');
+        LoadingIndicator.show();
+        setTimeout(function(){
+            self.updateView();
+            setTimeout(function(){
+                var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
+                LoadingIndicator.hide();
+                AppUtils.showFullScreenPopup(svgString, ()=>{
+                    if(closeCallback) {
+                        self.computationsManager.updateDisplayValues();
+                        self.updateView();
+
+                        closeCallback();
+                        setTimeout(function(){
+                            self.updateView();
+                        }, 1)
+                    }
+                });
+            }, 500);
+        }, 1)
     }
 
 
