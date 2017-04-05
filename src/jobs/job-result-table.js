@@ -1,10 +1,12 @@
 import {Utils} from "sd-utils";
-import * as d3 from '../d3'
-import {PivotTable} from '../pivot-table'
+import {i18n} from "../i18n/i18n";
+import * as d3 from "../d3";
+import {PivotTable} from "../pivot-table";
 var jQuery = require('jquery');
 
 export class JobResultTableConfig {
-    onRowSelected = (rows, indexes, event) => {};
+    onRowSelected = (rows, indexes, event) => {
+    };
 
     pivotTable;
 
@@ -15,19 +17,18 @@ export class JobResultTableConfig {
     }
 }
 
-export class JobResultTable{
+export class JobResultTable {
 
-    constructor(container, config, data){
+    constructor(container, config, data) {
         this.container = container;
         this.config = new JobResultTableConfig(config);
         this.init();
-        if(data){
+        if (data) {
             this.setData(data);
         }
-
     }
 
-    init(){
+    init() {
         this.pivotTable = new PivotTable(this.container.selectOrAppend("div.sd-job-result-table"));
         // this.resultTable = this.container.selectOrAppend("table.sd-job-result-table");
         // this.resultTableHead = this.resultTable.selectOrAppend("thead");
@@ -35,48 +36,60 @@ export class JobResultTable{
         // this.resultTableFoot = this.resultTable.selectOrAppend("tfoot");
     }
 
-    setData(data){
+    setData(data) {
         var self = this;
         var derivers = jQuery.pivotUtilities.derivers;
-
-
-        var pivotOptions={
-            rows: data.headers.slice(0,2),
-            vals: [data.headers[data.headers.length-1]],
+        var pivotOptions = {
+            rows: data.headers.slice(0, 2),
+            vals: [data.headers[data.headers.length - 1]],
             hiddenAttributes: ['$rowIndex'],
-            aggregatorName: "Maximum",
+            aggregatorName: this.pivotTable.getAggregatorName("maximum"),
             rendererOptions: {
                 table: {
-                    clickCallback: function(e, value, filters, pivotData){
+                    clickCallback: function (e, value, filters, pivotData) {
                         var selectedIndexes = [];
-                        var selectedRows=[]
-                        pivotData.forEachMatchingRecord(filters, record=>{
+                        var selectedRows = []
+                        pivotData.forEachMatchingRecord(filters, record=> {
                             selectedIndexes.push(record['$rowIndex'])
                             selectedRows.push(data.rows[record['$rowIndex']]);
                         });
                         self.config.onRowSelected(selectedRows, selectedIndexes, e)
 
                     }
+                },
+                heatmap: {
+                    colorScaleGenerator: function (values) {
+                        var extent = d3.extent(values)
+                        var domain = [];
+                        var min = Math.min(0, extent[0] || 0);
+                        var max = Math.max(0, extent[1] || 0);
 
-
+                        return d3.scaleLinear()
+                            .domain([min, 0, max])
+                            .range(["#4b53ff", "#FFF", "#FF0000"])
+                    }
                 }
             },
-            derivedAttributes:{
-                "policy\nid": (record)=>{
+            derivedAttributes: {
+                "policy\nid": (record)=> {
                     return data.policies[data.rows[record.$rowIndex].policyIndex].id
                 }
 
-            }
-            /*rendererName: 'custom',
-            renderers: {
-                'custom': function(pivotData, options){
-                    console.log(pivotData)
-                }
-            }*/
+            },
+            rendererName: this.pivotTable.getRendererName("heatmap")
+            /*
+             rendererName: 'custom',
+             renderers: {
+             'custom': function(pivotData, options){
+             console.log(pivotData)
+             }
+             }*/
 
         }
 
-        this.pivotTable.update([data.headers.concat(['$rowIndex'])].concat(data.rows.map((r,i)=>r.cells.concat(i))), pivotOptions);
+
+
+        this.pivotTable.update([data.headers.concat(['$rowIndex'])].concat(data.rows.map((r, i)=>r.cells.concat(i))), pivotOptions);
 
         // this.drawHeaders(data.headers);
         // this.drawRows(data.rows)
@@ -96,9 +109,9 @@ export class JobResultTable{
         var rows = this.resultTableBody.selectAll("tr").data(rowsData);
         var rowsEnter = rows.enter().append("tr");
         var rowsMerge = rowsEnter.merge(rows);
-        rowsMerge.on('click', function(d,i){
+        rowsMerge.on('click', function (d, i) {
             d3.select(this).classed('sd-selected', true);
-            self.config.onRowSelected(d,i)
+            self.config.onRowSelected(d, i)
         });
         rows.exit().remove();
 
@@ -110,12 +123,13 @@ export class JobResultTable{
 
     }
 
-    clear(){
+    clear() {
         this.clearSelection();
         this.setData({headers: [], rows: []});
     }
 
-    clearSelection(){
+    clearSelection() {
         // this.resultTable.selectAll('.sd-selected').classed('sd-selected', false);
     }
+
 }

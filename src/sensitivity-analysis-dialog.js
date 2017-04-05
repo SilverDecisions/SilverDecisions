@@ -73,11 +73,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-            // numberOfRuns: 100,
-            // variables: [
-            //     {name: 'p', min: 0, max: 1, length: 11, formula: "random(0,1)"},
-            //     {name: 'a', min: 1, max: 10, length: 10, formula: "random(-10,10)"}
-            // ]
+            numberOfRuns: 100,
+
+            variables: [
+                {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
+                {name: 'a', min: 1, max: 10, length: 10, formula: "random(-10,10)"}
+            ]
         };
         this.setJobParamsValues(jobParamsValues)
     }
@@ -298,14 +299,25 @@ export class SensitivityAnalysisDialog extends Dialog {
 
 
     onResultRowSelected(rows, indexes, event) {
-        if (rows.length === 1) {
-            this.app.showPolicyPreview(this.result.policies[rows[0].policyIndex], ()=> {
-                this.resultTable.clearSelection();
-            });
+
+        if(!rows.length){
             return;
         }
 
-        Tooltip.show(rows.length + ' rows', 5, 28, event, 2000);
+        let policyIndexes = rows.map(r=>r.policyIndex).filter((value, index, self)=>self.indexOf(value) === index);
+
+        if(policyIndexes.length>1) {
+            Tooltip.show(i18n.t('jobResultTable.tooltip.multiplePoliciesInCell', {number:policyIndexes.length}), 5, 28, event, 2000);
+            return;
+        }
+
+
+        this.app.showPolicyPreview(this.result.policies[policyIndexes[0]], ()=> {
+                this.resultTable.clearSelection();
+        });
+
+
+
 
     }
 }

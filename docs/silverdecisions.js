@@ -34,7 +34,7 @@ if(SilverDecisions.App.utils.detectIE()=='11'){ // IE 11
 
 var app;
 if(jsonUrl){
-    getJSON(jsonUrl, function(err, data) {
+    SilverDecisions.App.appUtils.getJSON(jsonUrl, function(data, err) {
         if (err != null) {
             alert('Error loading json from url.');
             data = null;
@@ -68,18 +68,5 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function getJSON(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('get', url, true);
-    xhr.responseType = 'json';
-    xhr.onload = function() {
-        var status = xhr.status;
-        if (status == 200) {
-            callback(null, xhr.response);
-        } else {
-            callback(status);
-        }
-    };
-    xhr.send();
-}
+
 

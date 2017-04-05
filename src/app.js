@@ -82,6 +82,7 @@ export class App {
     static version = ''; // version is set from package.json
     static buildTimestamp = buildConfig.buildTimestamp;
     static utils = Utils;
+    static appUtils = AppUtils;
     static d3 = d3;
 
     config;
@@ -401,19 +402,19 @@ export class App {
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
         this.dataModel.loadFromDTO(dataDTO,  this.computationsManager.expressionEngine.getJsonReviver());
         this.computationsManager.updateDisplayValues(this.dataModel);
-        this.updateView();
+        this.updateView(false);
         setTimeout(function(){
-            self.updateView();
+            self.updateView(false);
             setTimeout(function(){
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
                 AppUtils.showFullScreenPopup(svgString, ()=>{
                     if(closeCallback) {
                         self.dataModel._setNewState(self.originalDataModelSnapshot);
-                        self.updateView();
+                        self.updateView(false);
 
                         closeCallback();
                         setTimeout(function(){
-                            self.updateView();
+                            self.updateView(false);
                         }, 1)
                     }
                 });
@@ -426,22 +427,22 @@ export class App {
         var self = this;
 
         this.computationsManager.displayPolicy(policy);
-        this.updateView();
+        this.updateView(false);
         AppUtils.showFullScreenPopup('');
         LoadingIndicator.show();
         setTimeout(function(){
-            self.updateView();
+            self.updateView(false);
             setTimeout(function(){
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
                 LoadingIndicator.hide();
                 AppUtils.showFullScreenPopup(svgString, ()=>{
                     if(closeCallback) {
                         self.computationsManager.updateDisplayValues();
-                        self.updateView();
+                        self.updateView(false);
 
                         closeCallback();
                         setTimeout(function(){
-                            self.updateView();
+                            self.updateView(false);
                         }, 1)
                     }
                 });

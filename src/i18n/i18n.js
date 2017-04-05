@@ -7,8 +7,11 @@ import * as fr from './fr.json'
 
 export class i18n{
 
+    static language;
+
     static init(lng){
         var self = this;
+        i18n.language = lng;
         i18next.init({
             lng: lng,
             fallbackLng: 'en',

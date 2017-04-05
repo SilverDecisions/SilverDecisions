@@ -860,7 +860,7 @@
 div.sd-job-result-table tr.sd-selected {
   background-color: rgba(30, 144, 255, 0.35); }
 
-div.sd-job-result-table td.rowTotal {
+div.sd-job-result-table td.rowTotal, div.sd-job-result-table td.pvtVal {
   cursor: pointer; }
 
 div.sd-job-result-table table.pvtTable thead tr th, div.sd-job-result-table table.pvtTable tbody tr th {

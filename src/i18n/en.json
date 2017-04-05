@@ -96,6 +96,20 @@
       "addParameterValue": "Add"
     }
   },
+  "jobResultTable":{
+    "tooltip": {
+      "multiplePoliciesInCell": "{{number}} policies"
+    },
+    "pivot": {
+      "aggregators":{
+        "maximum": "Maximum",
+        "minimum": "Minimum"
+      },
+      "renderers":{
+        "heatmap": "Heatmap"
+      }
+    }
+  },
   "job":{
     "sensitivity-analysis":{
       "name": "N-way sensitivity analysis",
