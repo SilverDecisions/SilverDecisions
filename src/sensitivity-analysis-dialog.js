@@ -30,11 +30,18 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.progressBar = this.progressBarContainer.select(".sd-progress-bar");
         this.jobResultsContainer = this.container.select(".sd-sensitivity-analysis-job-results");
 
+
+
         this.initButtons();
     }
 
     onOpen() {
         this.initJobConfigurations();
+
+        let payoffConf = Utils.cloneDeep(this.app.config.format.payoff);
+        payoffConf.style = 'decimal';
+        this.payoffNumberFormat = new Intl.NumberFormat(this.app.config.format.locales, payoffConf);
+
         this.clear();
     }
 
@@ -138,8 +145,9 @@ export class SensitivityAnalysisDialog extends Dialog {
             this.resultTable.setData(result, this.jobParameters, this.job);
             this.resultTable.show();
         } else if (this.job.name == "probabilistic-sensitivity-analysis") {
-            this.resultTable = new ProbabilisticSensitivityAnalysisJobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), config, this.app.dataModel);
-            this.resultTable.setData(result, this.jobParameters, this.job,);
+
+            this.resultTable = new ProbabilisticSensitivityAnalysisJobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), config, (v) => this.payoffNumberFormat.format(v), (v) => this.app.probabilityNumberFormat.format(v));
+            this.resultTable.setData(result, this.jobParameters, this.job);
             this.resultTable.show();
 
         }

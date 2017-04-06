@@ -6,9 +6,10 @@ var jQuery = require('jquery');
 
 export class ProbabilisticSensitivityAnalysisJobResultTable extends JobResultTable {
 
-    constructor(container, config, appDataModel){
+    constructor(container, config, payoffNumberFormatter, probabilityNumberFormatter){
         super(container, config);
-
+        this.payoffNumberFormatter = payoffNumberFormatter;
+        this.probabilityNumberFormatter = probabilityNumberFormatter;
     }
 
     setData(jobResult, jobParameters, job) {
@@ -20,10 +21,10 @@ export class ProbabilisticSensitivityAnalysisJobResultTable extends JobResultTab
         jobResult.policies.forEach((policy, i)=> {
             var row = [
                 Policy.toPolicyString(policy, jobParameters.values.extendedPolicyDescription),
-                jobResult.expectedValues[i],
-                jobResult.medians[i],
-                jobResult.standardDeviations[i],
-                jobResult.policyIsBestProbabilities[i]
+                this.payoffNumberFormatter(jobResult.expectedValues[i]),
+                this.payoffNumberFormatter(jobResult.medians[i]),
+                this.payoffNumberFormatter(jobResult.standardDeviations[i]),
+                this.probabilityNumberFormatter(jobResult.policyIsBestProbabilities[i])
             ];
             data.data.push(row);
         });

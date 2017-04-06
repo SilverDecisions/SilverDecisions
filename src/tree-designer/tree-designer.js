@@ -422,7 +422,7 @@ export class TreeDesigner {
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
                 var val = d.displayValue('childrenPayoff');
-                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
+                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
             });
 
         Tooltip.attach(payoff, d=>i18n.t('tooltip.node.payoff',{value: d.payoff}));
@@ -443,7 +443,7 @@ export class TreeDesigner {
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
                 var val = d.displayValue('aggregatedPayoff');
-                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
+                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
             });
         Tooltip.attach(aggregatedPayoff, i18n.t('tooltip.node.aggregatedPayoff'));
 
@@ -587,7 +587,7 @@ export class TreeDesigner {
                 var val = d.displayPayoff();
                 if(val!==null){
                     if(!isNaN(val)){
-                        return self.config.probabilityNumberFormatter(val);
+                        return self.config.payoffNumberFormatter(val);
                     }
                     if(Utils.isString(val)){
                         return val;
@@ -595,7 +595,7 @@ export class TreeDesigner {
                 }
 
                 if(d.payoff!==null && !isNaN(d.payoff))
-                    return self.config.probabilityNumberFormatter(d.payoff);
+                    return self.config.payoffNumberFormatter(d.payoff);
 
                 return d.payoff;
             });
