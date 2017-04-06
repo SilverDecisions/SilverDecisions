@@ -346,8 +346,9 @@ export class App {
     }
 
     onNodeAddedOrRemoved() {
+        var self = this;
         return this.checkValidityAndRecomputeObjective().then(()=>{
-            this.updateView();
+            self.updateView();
         });
 
     }

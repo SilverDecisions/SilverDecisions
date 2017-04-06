@@ -4,9 +4,11 @@ import {Utils, log} from "sd-utils";
 import {Templates} from "./templates";
 import {i18n} from "./i18n/i18n";
 import {AppUtils} from "./app-utils";
-import {JobResultTable} from "./jobs/job-result-table";
 import {Tooltip} from "./tooltip";
 import {LoadingIndicator} from "./loading-indicator";
+import {Exporter} from "./exporter";
+import {SensitivityAnalysisJobResultTable} from "./jobs/sensitivity-analysis-result-table";
+import {ProbabilisticSensitivityAnalysisJobResultTable} from "./jobs/probabilistic-sensitivity-analysis-result-table";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;
@@ -27,32 +29,8 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.progressBarContainer = this.container.select(".sd-job-progress-bar-container");
         this.progressBar = this.progressBarContainer.select(".sd-progress-bar");
         this.jobResultsContainer = this.container.select(".sd-sensitivity-analysis-job-results");
-        this.initResultTable();
+
         this.initButtons();
-    }
-
-    clear(clearParams = false) {
-        this.resultTable.clear();
-        this.setProgress(0);
-        this.markAsError(false);
-        if (clearParams || !this.selectedJobConfig) {
-            this.onJobSelected(this.jobConfigurations[0]);
-        } else if (this.jobParameters) {
-            delete this.jobParameters.values.id;
-            this.setJobParamsValues(this.jobParameters.values);
-        }
-
-        AppUtils.show(this.jobConfigurationContainer);
-        AppUtils.show(this.runJobButton);
-        AppUtils.show(this.clearButton);
-
-        AppUtils.hide(this.resumeJobButton);
-        AppUtils.hide(this.progressBarContainer);
-        AppUtils.hide(this.stopJobButton);
-        AppUtils.hide(this.terminateJobButton);
-        AppUtils.hide(this.jobResultsContainer);
-        AppUtils.hide(this.backButton);
-        this.disableActionButtonsAndShowLoadingIndicator(false);
     }
 
     onOpen() {
@@ -73,12 +51,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-            numberOfRuns: 100,
-
-            variables: [
-                {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
-                {name: 'a', min: 1, max: 10, length: 10, formula: "random(-10,10)"}
-            ]
+            // numberOfRuns: 100,
+            //
+            // variables: [
+            //     {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
+            //     {name: 'sens', min: 0, max: 1, length: 11, formula: "random(0,1)"}
+            // ]
         };
         this.setJobParamsValues(jobParamsValues)
     }
@@ -146,16 +124,33 @@ export class SensitivityAnalysisDialog extends Dialog {
         });
     }
 
-    initResultTable() {
-        this.resultTable = new JobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), {
+    initResultTable(result) {
+        let config = {
             onRowSelected: (rows, indexes, e)=> this.onResultRowSelected(rows, indexes, e)
-        });
+        };
+        if (this.resultTable) {
+            this.resultTable.clear();
+            this.resultTable.hide();
+        }
+
+        if (this.job.name == "sensitivity-analysis") {
+            this.resultTable = new SensitivityAnalysisJobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), config);
+            this.resultTable.setData(result, this.jobParameters, this.job);
+            this.resultTable.show();
+        } else if (this.job.name == "probabilistic-sensitivity-analysis") {
+            this.resultTable = new ProbabilisticSensitivityAnalysisJobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), config, this.app.dataModel);
+            this.resultTable.setData(result, this.jobParameters, this.job,);
+            this.resultTable.show();
+
+        }
+
+
     }
 
     disableActionButtonsAndShowLoadingIndicator(disable = true) {
-        if(disable){
+        if (disable) {
             LoadingIndicator.show();
-        }else{
+        } else {
             LoadingIndicator.hide();
         }
         this.container.select('.sd-sensitivity-analysis-action-buttons').selectAll('button').attr('disabled', disable ? 'disabled' : undefined)
@@ -180,7 +175,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                 this.jobInstanceManager = jobInstanceManager;
             }).catch(e=> {
                 log.error(e);
-            }).then(()=>{
+            }).then(()=> {
                 this.disableActionButtonsAndShowLoadingIndicator(false);
             })
 
@@ -217,9 +212,48 @@ export class SensitivityAnalysisDialog extends Dialog {
 
         });
 
+        this.downloadCsvButtons = this.container.select(".sd-download-csv-button ").on('click', ()=> {
+            this.downloadCSV();
+        });
+
         this.clearButton = this.container.select(".sd-clear-button ").on('click', ()=> {
             this.clear(true);
         });
+    }
+
+    clear(clearParams = false) {
+        this.clearResults();
+        this.setProgress(0);
+        this.markAsError(false);
+        if (clearParams || !this.selectedJobConfig) {
+            this.onJobSelected(this.jobConfigurations[0]);
+        } else if (this.jobParameters) {
+            delete this.jobParameters.values.id;
+            this.jobParameters.values.ruleName = this.computationsManager.getCurrentRule().name;
+            this.setJobParamsValues(this.jobParameters.values);
+        }
+
+        AppUtils.show(this.jobConfigurationContainer);
+        AppUtils.show(this.runJobButton);
+        AppUtils.show(this.clearButton);
+
+        AppUtils.hide(this.resumeJobButton);
+        AppUtils.hide(this.progressBarContainer);
+        AppUtils.hide(this.stopJobButton);
+        AppUtils.hide(this.downloadCsvButtons);
+        AppUtils.hide(this.terminateJobButton);
+        AppUtils.hide(this.jobResultsContainer);
+        AppUtils.hide(this.backButton);
+        this.disableActionButtonsAndShowLoadingIndicator(false);
+    }
+
+    clearResults() {
+        if (this.resultTable) {
+            this.resultTable.clear();
+            this.resultTable.hide();
+
+        }
+
     }
 
     onJobStarted() {
@@ -228,6 +262,7 @@ export class SensitivityAnalysisDialog extends Dialog {
         AppUtils.hide(this.resumeJobButton);
         AppUtils.hide(this.backButton);
         AppUtils.hide(this.clearButton);
+        AppUtils.hide(this.downloadCsvButtons);
 
         AppUtils.show(this.progressBarContainer);
         AppUtils.show(this.stopJobButton);
@@ -242,6 +277,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     onJobCompleted(result) {
         AppUtils.show(this.jobResultsContainer);
         AppUtils.show(this.backButton);
+        AppUtils.show(this.downloadCsvButtons);
 
         AppUtils.hide(this.progressBarContainer);
         AppUtils.hide(this.stopJobButton);
@@ -255,12 +291,14 @@ export class SensitivityAnalysisDialog extends Dialog {
     displayResult(result) {
         log.debug(result);
         this.result = result;
-        this.resultTable.setData(result);
+        this.initResultTable(result);
+
     }
 
     onJobFailed(errors) {
         AppUtils.hide(this.stopJobButton);
         AppUtils.hide(this.backButton);
+        AppUtils.hide(this.downloadCsvButtons);
         AppUtils.hide(this.clearButton);
         this.disableActionButtonsAndShowLoadingIndicator(false);
         this.markAsError();
@@ -300,24 +338,29 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     onResultRowSelected(rows, indexes, event) {
 
-        if(!rows.length){
+        if (!rows.length) {
             return;
         }
 
         let policyIndexes = rows.map(r=>r.policyIndex).filter((value, index, self)=>self.indexOf(value) === index);
 
-        if(policyIndexes.length>1) {
-            Tooltip.show(i18n.t('jobResultTable.tooltip.multiplePoliciesInCell', {number:policyIndexes.length}), 5, 28, event, 2000);
+        if (policyIndexes.length > 1) {
+            Tooltip.show(i18n.t('jobResultTable.tooltip.multiplePoliciesInCell', {number: policyIndexes.length}), 5, 28, event, 2000);
             return;
         }
 
 
         this.app.showPolicyPreview(this.result.policies[policyIndexes[0]], ()=> {
-                this.resultTable.clearSelection();
+            this.resultTable.clearSelection();
         });
 
+    }
 
+    downloadCSV() {
+        Exporter.saveAsCSV(this.getRows())
+    }
 
-
+    getRows() {
+        return this.job.jobResultToCsvRows(this.result, this.jobParameters);
     }
 }

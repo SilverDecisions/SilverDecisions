@@ -19,13 +19,10 @@ export class JobResultTableConfig {
 
 export class JobResultTable {
 
-    constructor(container, config, data) {
+    constructor(container, config) {
         this.container = container;
         this.config = new JobResultTableConfig(config);
         this.init();
-        if (data) {
-            this.setData(data);
-        }
     }
 
     init() {
@@ -36,25 +33,30 @@ export class JobResultTable {
         // this.resultTableFoot = this.resultTable.selectOrAppend("tfoot");
     }
 
-    setData(data) {
+    clickCallback(e, value, filters, pivotData) {
+        var self=this;
+        var selectedIndexes = [];
+        var selectedRows = []
+        pivotData.forEachMatchingRecord(filters, record=> {
+            selectedIndexes.push(record['$rowIndex'])
+            selectedRows.push(data.data[record['$rowIndex']]);
+        });
+        self.config.onRowSelected(selectedRows, selectedIndexes, e)
+
+    }
+
+    setData(data, jobParameters, job) {
         var self = this;
         var derivers = jQuery.pivotUtilities.derivers;
         var pivotOptions = {
-            rows: data.headers.slice(0, 2),
-            vals: [data.headers[data.headers.length - 1]],
+            rows: data.rows,
+            vals: data.vals,
             hiddenAttributes: ['$rowIndex'],
             aggregatorName: this.pivotTable.getAggregatorName("maximum"),
             rendererOptions: {
                 table: {
                     clickCallback: function (e, value, filters, pivotData) {
-                        var selectedIndexes = [];
-                        var selectedRows = []
-                        pivotData.forEachMatchingRecord(filters, record=> {
-                            selectedIndexes.push(record['$rowIndex'])
-                            selectedRows.push(data.rows[record['$rowIndex']]);
-                        });
-                        self.config.onRowSelected(selectedRows, selectedIndexes, e)
-
+                        self.clickCallback(e, value, filters, pivotData);
                     }
                 },
                 heatmap: {
@@ -70,12 +72,6 @@ export class JobResultTable {
                     }
                 }
             },
-            derivedAttributes: {
-                "policy\nid": (record)=> {
-                    return data.policies[data.rows[record.$rowIndex].policyIndex].id
-                }
-
-            },
             rendererName: this.pivotTable.getRendererName("heatmap")
             /*
              rendererName: 'custom',
@@ -87,45 +83,23 @@ export class JobResultTable {
 
         }
 
-
-
-        this.pivotTable.update([data.headers.concat(['$rowIndex'])].concat(data.rows.map((r, i)=>r.cells.concat(i))), pivotOptions);
+        this.pivotTable.update(data.data.map((r, i)=>r.concat(i ?  i-1 : '$rowIndex')), pivotOptions);
 
         // this.drawHeaders(data.headers);
         // this.drawRows(data.rows)
     }
 
-    drawHeaders(headerData) {
-        var headers = this.resultTableHead.selectOrAppend("tr").selectAll("th").data(headerData);
-        var headersEnter = headers.enter().append("th");
-        var headersMerge = headersEnter.merge(headers);
-        headers.exit().remove();
-
-        headersMerge.text(d=>d);
-    }
-
-    drawRows(rowsData) {
-        var self = this;
-        var rows = this.resultTableBody.selectAll("tr").data(rowsData);
-        var rowsEnter = rows.enter().append("tr");
-        var rowsMerge = rowsEnter.merge(rows);
-        rowsMerge.on('click', function (d, i) {
-            d3.select(this).classed('sd-selected', true);
-            self.config.onRowSelected(d, i)
-        });
-        rows.exit().remove();
-
-        var cells = rowsMerge.selectAll("td").data(d=>d.cells)
-        var cellsEnter = cells.enter().append("td");
-        var cellsMerge = cellsEnter.merge(cells);
-        cellsMerge.text(d=>d);
-        cells.exit().remove();
-
-    }
-
     clear() {
         this.clearSelection();
-        this.setData({headers: [], rows: []});
+        this.pivotTable.clear();
+    }
+
+    show(show=true){
+        this.container.classed('sd-hidden', !show);
+    }
+
+    hide(){
+        this.show(false);
     }
 
     clearSelection() {

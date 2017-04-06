@@ -612,8 +612,8 @@ export class TreeDesigner {
 
         edgesMerge.select('text.probability')
             .classed('sd-hidden', this.config.hideProbabilities);
-        var probabilityMergeT = edgesMergeT.select('text.probability');
-        probabilityMergeT
+        var probabilityMerge = edgesMerge.select('text.probability');
+        probabilityMerge
             .attr('text-anchor', 'end')
             .text(d=>{
                 if(this.config.raw){
@@ -635,12 +635,13 @@ export class TreeDesigner {
 
                 return d.probability;
             });
+        var probabilityMergeT = probabilityMerge;
+        if(this.transition){
+            probabilityMergeT = probabilityMerge.transition();
+        }
 
         this.layout.edgeProbabilityPosition(probabilityEnter);
         this.layout.edgeProbabilityPosition(probabilityMergeT);
-
-
-        edgesContainer.selectAll('.edge.'+optimalClassName).raise();
 
         edgesMerge.on('contextmenu', this.edgeContextMenu);
         edgesMerge.on('dblclick', this.edgeContextMenu)
@@ -916,6 +917,7 @@ export class TreeDesigner {
     addNode(node, parent, redraw=false){
         this.data.saveState();
         this.data.addNode(node, parent);
+        console.log('redraw');
         this.redraw(true);
         this.layout.update(node);
         return node;

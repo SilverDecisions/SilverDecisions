@@ -811,9 +811,11 @@
   -webkit-transition: opacity 0.6s;
   /* Safari */
   transition: opacity 0.6s;
+  display: none;
   /* https://github.com/tobiasahlin/SpinKit */ }
   .sd-loading-indicator.visible {
-    opacity: 1; }
+    opacity: 1;
+    display: block; }
   .sd-loading-indicator .sd-spinner {
     width: 40px;
     height: 40px;

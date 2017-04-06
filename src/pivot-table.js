@@ -35,6 +35,12 @@ export class PivotTable{
         jQuery(this.container.node()).pivotUI(data, options, true, i18n.language)
     }
 
+    clear(){
+        jQuery(this.container.node()).pivotUI([], null, true)
+    }
+
+
+
     getAggregatorName(name){
         return i18n.t("jobResultTable.pivot.aggregators."+name.toLowerCase());
     }

@@ -86,6 +86,7 @@
       "stopJob": "Stop",
       "terminateJob": "Terminate",
       "resumeJob": "Resume",
+      "downloadCsv": "Download CSV",
       "back": "Back",
       "clear": "Clear"
     }
