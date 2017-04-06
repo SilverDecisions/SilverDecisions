@@ -392,7 +392,7 @@ export class Exporter {
 
     }
 
-    static saveAsCSV(rows, fileName = 'data.csv') {
+    static saveAsCSV(rows) {
         var csvRows = [];
         rows.forEach(row => {
             csvRows.push(row.map(r=>Exporter.escapeCsvField(r)).join(','))
@@ -400,7 +400,7 @@ export class Exporter {
         var csvString = csvRows.join("\r\n");
 
         var blob = new Blob([csvString], {type: "text/csv"});
-        Exporter.saveAs(blob, fileName);
+        Exporter.saveAs(blob, Exporter.getExportFileName('csv'));
 
     }
 

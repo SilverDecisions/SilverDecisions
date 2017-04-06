@@ -51,6 +51,7 @@ export class JobResultTable {
         var pivotOptions = {
             rows: data.rows,
             vals: data.vals,
+            cols: data.cols,
             hiddenAttributes: ['$rowIndex'],
             aggregatorName: this.pivotTable.getAggregatorName("maximum"),
             rendererOptions: {

@@ -51,12 +51,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-            // numberOfRuns: 100,
-            //
-            // variables: [
-            //     {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
-            //     {name: 'sens', min: 0, max: 1, length: 11, formula: "random(0,1)"}
-            // ]
+            numberOfRuns: 100,
+
+            variables: [
+                {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
+                {name: 'sens', min: 0, max: 1, length: 11, formula: "random(0,1)"}
+            ]
         };
         this.setJobParamsValues(jobParamsValues)
     }
@@ -81,7 +81,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                 }
             }
         });
-        this.jobConfigurations.push({
+        /*this.jobConfigurations.push({
             jobName: 'tornado-diagram',
             customParamsConfig: {
                 'id': {
@@ -92,7 +92,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                     hidden: true
                 }
             }
-        });
+        });*/
 
         this.jobConfigurations.push({
             jobName: 'probabilistic-sensitivity-analysis',
@@ -361,6 +361,8 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     getRows() {
-        return this.job.jobResultToCsvRows(this.result, this.jobParameters);
+        var params = Utils.cloneDeep(this.jobParameters.values);
+        params.extendedPolicyDescription=false;
+        return this.job.jobResultToCsvRows(this.result, this.job.createJobParameters(params));
     }
 }

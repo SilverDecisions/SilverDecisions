@@ -426,7 +426,7 @@ export class App {
 
     showPolicyPreview(policy, closeCallback){
         var self = this;
-
+        this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
         this.computationsManager.displayPolicy(policy);
         this.updateView(false);
         AppUtils.showFullScreenPopup('');
@@ -437,15 +437,15 @@ export class App {
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
                 LoadingIndicator.hide();
                 AppUtils.showFullScreenPopup(svgString, ()=>{
+                    self.dataModel._setNewState(self.originalDataModelSnapshot);
+                    self.computationsManager.updateDisplayValues();
+                    self.updateView(false);
                     if(closeCallback) {
-                        self.computationsManager.updateDisplayValues();
-                        self.updateView(false);
-
                         closeCallback();
-                        setTimeout(function(){
-                            self.updateView(false);
-                        }, 1)
                     }
+                    setTimeout(function(){
+                        self.updateView(false);
+                    }, 1)
                 });
             }, 500);
         }, 1)
