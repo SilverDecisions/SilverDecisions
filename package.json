@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bkamins/SilverDecisions.git"
+    "url": "git+https://github.com/SilverDecisions/SilverDecisions.git"
   },
   "author": "Michał Wasiluk, Bogumił Kamiński, Przemysław Szufel",
   "license": "LGPL-3.0",
   "bugs": {
-    "url": "https://github.com/bkamins/SilverDecisions/issues"
+    "url": "https://github.com/SilverDecisions/SilverDecisions/issues"
   },
-  "homepage": "https://github.com/bkamins/SilverDecisions#readme",
+  "homepage": "https://github.com/SilverDecisions/SilverDecisions#readme",
   "devDependencies": {
     "autosize": "^3.0.19",
     "babel-plugin-transform-class-properties": "^6.11.5",

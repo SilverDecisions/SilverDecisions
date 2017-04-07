@@ -235,7 +235,7 @@
         "6": "Ctrl-Alt-D/C: injecter un nouveau noeud de décision/aléatoire dans un <strong>bord sélectionné</strong>"
       }
     },
-    "docs": "La documentation de SilverDecisions est disponible  <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">ici</a>"
+    "docs": "La documentation de SilverDecisions est disponible  <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">ici</a>"
   },
   "definitionsDialog":{
     "title": "Définitions des variables",
@@ -310,7 +310,7 @@
   "confirm":{
     "newDiagram": "Voulez-vous vraiment effacer le diagramme actuel? Toutes les données non enregistrées seront perdues.",
     "openDiagram": "Etes-vous sur? Toutes les données de diagramme non enregistrées seront perdues.",
-    "beforeunload": "Voulez-vous vraiment fermer Silver Decisions? Toutes les données de diagramme non enregistrées seront perdues."
+    "beforeunload": "Voulez-vous vraiment fermer SilverDecisions? Toutes les données de diagramme non enregistrées seront perdues."
   },
   "error":{
     "jsonParse": "Erreur lors de l'analyse du fichier!",

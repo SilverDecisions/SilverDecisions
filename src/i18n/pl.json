@@ -234,7 +234,7 @@
         "6": "Ctrl-Alt-D/C: Wstrzyknij nowy węzeł Decyzyjny/Losowy do <strong>wybranej krawędzi</strong>"
       }
     },
-    "docs": "Dokumentacja SilverDecisions jest dostępna <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">tutaj</a>"
+    "docs": "Dokumentacja SilverDecisions jest dostępna <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">tutaj</a>"
   },
   "definitionsDialog":{
     "title": "Definicje zmiennych",

@@ -235,7 +235,7 @@
         "6": "Ctrl-Alt-D/C: Neue Entscheidungs/Zufall Knoten in <strong>ausgewählten Zweig </strong> Injizieren"
       }
     },
-    "docs": "Die Dokumentation von SilverDecisions ist unter <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a> verfügbar"
+    "docs": "Die Dokumentation von SilverDecisions ist unter <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a> verfügbar"
   },
   "definitionsDialog":{
     "title": "Variablendefinitionen",
@@ -310,7 +310,7 @@
   "confirm":{
     "newDiagram": "Möchten Sie das aktuelle Diagramm wirklich löschen? Alle nicht gespeicherten Daten werden verloren.",
     "openDiagram": "Sind Sie sicher? Alle nicht gespeicherten Diagrammdaten werden verloren.",
-    "beforeunload": "Sind Sie sicher, dass Sie Silver Decisions schließen möchten? Alle nicht gespeicherten Diagrammdaten werden verloren."
+    "beforeunload": "Sind Sie sicher, dass Sie SilverDecisions schließen möchten? Alle nicht gespeicherten Diagrammdaten werden verloren."
   },
   "error":{
     "jsonParse": "Fehler beim Analysieren der Datei!",

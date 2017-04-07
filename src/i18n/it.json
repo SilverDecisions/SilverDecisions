@@ -236,7 +236,7 @@
         "6": "Ctrl-Alt-D/C: inietta un nuovo nodo Decisione/Opportunità in un <strong>ramo selezionato</strong>"
       }
     },
-    "docs": "La documentazione di SilverDecision e disponibile <a href=\"https://github.com/bkamins/SilverDecisions/wiki/Documentation\" target=\"_blank\">qui</a>"
+    "docs": "La documentazione di SilverDecisions e disponibile <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">qui</a>"
   },
   "definitionsDialog":{
     "title": "Definizioni delle variabili",
