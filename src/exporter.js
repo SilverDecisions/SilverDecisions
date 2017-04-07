@@ -107,14 +107,14 @@ export class Exporter {
     }
 
 
-    static getSVGString(svgNode) {
+    static getSVGString(svgNode, removeIds=false) {
         // svgNode = svgNode.cloneNode(true);
         var svgClone = Exporter.getSvgCloneWithInlineStyles(svgNode);
 
         var svgString = Exporter.serializeSvgNode(svgClone);
         // svgString = svgString.replace(/(\w+)?:?xlink=/g, 'xmlns:xlink=') // Fix root xlink without namespace
         // svgString = svgString.replace(/NS\d+:href/g, 'xlink:href') // Safari NS namespace fix
-        svgString = Exporter.sanitizeSVG(svgString);
+        svgString = Exporter.sanitizeSVG(svgString, removeIds);
 
         return svgString;
     }
@@ -374,8 +374,8 @@ export class Exporter {
     }
 
 
-    static sanitizeSVG(svg) {
-        return svg
+    static sanitizeSVG(svg, removeIds=false) {
+        let sanitized = svg
             .replace(/zIndex="[^"]+"/g, '')
             .replace(/isShadow="[^"]+"/g, '')
             .replace(/symbolName="[^"]+"/g, '')
@@ -389,6 +389,12 @@ export class Exporter {
             .replace(/(fill|stroke)="rgba\(([ 0-9]+,[ 0-9]+,[ 0-9]+),([ 0-9\.]+)\)"/g, '$1="rgb($2)" $1-opacity="$3"')
             .replace(/&nbsp;/g, '\u00A0')
             .replace(/&shy;/g, '\u00AD');
+
+        if(removeIds){
+            return sanitized.replace(/id="[^"]+"/g, '')
+        }
+
+        return sanitized;
 
     }
 

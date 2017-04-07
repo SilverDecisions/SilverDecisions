@@ -437,7 +437,7 @@ export class App {
         setTimeout(function(){
             self.updateView(false);
             setTimeout(function(){
-                var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
+                var svgString = Exporter.getSVGString(self.treeDesigner.svg.node(), true);
                 LoadingIndicator.hide();
                 AppUtils.showFullScreenPopup(svgString, ()=>{
 
