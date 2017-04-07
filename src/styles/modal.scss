@@ -37,6 +37,33 @@
     overflow: auto;
   }
 
+  .sd-extend-modal{
+    display: block;
+  }
+
+  .sd-shrink-modal{
+    display: none;
+  }
+
+  &.sd-full-screen{
+    padding-top: 0;
+    overflow: initial;
+    .sd-modal-content {
+      width: 100%;
+      max-height: 100vh;
+      height: 100vh;
+    }
+
+
+    .sd-extend-modal{
+      display: none;
+    }
+
+    .sd-shrink-modal{
+      display: block;
+    }
+  }
+
   .sd-modal-header {
     padding: 2px 16px;
     background-color: #3F51B5;
@@ -49,12 +76,13 @@
   }
 
   /* The Close Button */
-  .sd-close-modal {
+  .sd-modal-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
     margin-top: 20px;
+    margin-left: 15px;
     &:hover, &:focus{
       color: black;
       text-decoration: none;

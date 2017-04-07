@@ -14,16 +14,22 @@ if(!logLevel || ['debug', 'info', 'warn', 'error'].indexOf(logLevel.toLowerCase(
 var config = {
     lng:lng,
     readOnly:!!readOnly,
+    workerUrl: './silverdecisions-job-worker.js',
     logLevel: logLevel,
     treeDesigner:{
     }
 };
+var edgeOrIE = SilverDecisions.App.utils.detectEdge() || SilverDecisions.App.utils.detectIE();
+if(edgeOrIE){ //There are some problems with worker on Edge and IE
+    config.workerUrl = null;
+    config.jobRepositoryType = 'timeout'
+}
 
-if(SilverDecisions.utils.detectIE()=='11'){ // IE 11
+if(SilverDecisions.App.utils.detectIE()=='11'){ // IE 11
     if(platform.os.family.toLowerCase().indexOf('windows') !== -1){ // on Windows
         var osVersion = platform.os.version.toLowerCase();
         if(osVersion == '7' || osVersion.indexOf('windows server 2008') !== -1){
-            SilverDecisions.utils.growl('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)', 'warning', 'right', 5000);
+            SilverDecisions.App.growl('Sorry, your platform is not fully supported (Internet Explorer 11 on Windows 7)', 'warning', 'right', 5000);
             config.treeDesigner.disableAnimations=true;
             config.treeDesigner.forceFullEdgeRedraw=true;
         }
@@ -31,9 +37,11 @@ if(SilverDecisions.utils.detectIE()=='11'){ // IE 11
     }
 }
 
+
+
 var app;
 if(jsonUrl){
-    getJSON(jsonUrl, function(err, data) {
+    SilverDecisions.App.appUtils.getJSON(jsonUrl, function(data, err) {
         if (err != null) {
             alert('Error loading json from url.');
             data = null;
@@ -41,14 +49,14 @@ if(jsonUrl){
         console.log(data);
         try{
 
-            app = new SilverDecisions('app-container', config, data);
+            app = new SilverDecisions.App('app-container', config, data);
         }catch (e){
             console.log(e);
-            app = new SilverDecisions('app-container', config);
+            app = new SilverDecisions.App('app-container', config);
         }
     });
 }else{
-    app = new SilverDecisions('app-container', config);
+    app = new SilverDecisions.App('app-container', config);
 }
 
 document.addEventListener('SilverDecisionsSaveEvent', function(data){
@@ -67,18 +75,5 @@ function getParameterByName(name, url) {
     return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
-function getJSON(url, callback) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('get', url, true);
-    xhr.responseType = 'json';
-    xhr.onload = function() {
-        var status = xhr.status;
-        if (status == 200) {
-            callback(null, xhr.response);
-        } else {
-            callback(status);
-        }
-    };
-    xhr.send();
-}
+
 

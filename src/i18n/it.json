@@ -78,6 +78,20 @@
       "delete": "Cancella"
     }
   },
+  "jobResultTable":{
+    "tooltip": {
+      "multiplePoliciesInCell": "{{number}} policies"
+    },
+    "pivot": {
+      "aggregators":{
+        "maximum": "Massimo",
+        "minimum": "Minimo"
+      },
+      "renderers":{
+        "heatmap": "Mappa di calore"
+      }
+    }
+  },
   "settingsDialog":{
     "title": "Settaggi",
     "general":{

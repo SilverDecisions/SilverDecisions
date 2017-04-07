@@ -1,32 +1,28 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
-import * as math from './mathjs'
-import * as log from "./log"
-
-import {Utils} from './utils'
-import * as model from './model/index'
-
-import {ObjectiveRulesManager} from './objective/objective-rules-manager'
-import  {TreeValidator} from './validation/tree-validator'
+import {Utils, log} from 'sd-utils'
+import {AppUtils} from './app-utils'
+import * as model from 'sd-model'
 
 import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
-import {DataModel} from './data-model'
 import {Templates} from './templates'
 import {Sidebar} from './sidebar'
 import {Toolbar} from './toolbar'
-import {ExpressionEngine} from './expression-engine'
 import {SettingsDialog} from './settings-dialog'
-import {ExpectedValueMaximizationRule} from './objective/rules/expected-value-maximization-rule'
 import {AboutDialog} from "./about-dialog";
-import * as _ from "lodash";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
+import {ComputationsManager} from "sd-computations";
+import {SensitivityAnalysisDialog} from "./sensitivity-analysis-dialog";
+import {LoadingIndicator} from "./loading-indicator";
 
 var buildConfig = require('../tmp/build-config.js');
 
 export class AppConfig {
     readOnly = false;
     logLevel = 'warn';
+    workerUrl = null;
+    jobRepositoryType = 'idb';
     buttons = {
         new: true,
         save: true,
@@ -50,7 +46,7 @@ export class AppConfig {
     jsonFileDownload = true;
     width = undefined;
     height = undefined;
-    rule = ExpectedValueMaximizationRule.NAME;
+    rule = "expected-value-maximization";
     lng = 'en';
     format = {// NumberFormat  options
         locales: 'en',
@@ -87,26 +83,25 @@ export class App {
     static version = ''; // version is set from package.json
     static buildTimestamp = buildConfig.buildTimestamp;
     static utils = Utils;
+    static appUtils = AppUtils;
     static d3 = d3;
 
     config;
     container;
     dataModel; //Data model manager
     expressionEngine;
-    objectiveRulesManager;
+    computationsManager;
     treeDesigner;
     toolbar;
     sidebar;
 
     constructor(containerIdOrElem, config, diagramData) {
+        var p = Promise.resolve();
         this.setConfig(config);
         this.initI18n();
         this.initContainer(containerIdOrElem);
-
         this.initDataModel();
-        this.initExpressionEngine();
-        this.initTreeValidator();
-        this.initObjectiveRulesManager();
+        p = this.initComputationsManager();
         this.initProbabilityNumberFormat();
         this.initPayoffNumberFormat();
         this.initTreeDesigner();
@@ -114,15 +109,19 @@ export class App {
         this.initSettingsDialog();
         this.initAboutDialog();
         this.initDefinitionsDialog();
-        this.initToolbar();
+        this.initSensitivityAnalysisDialog();
         this.initOnBeforeUnload();
         this.initKeyCodes();
-
-        if (diagramData) {
-            this.openDiagram(diagramData);
-        }else{
-            this.updateView();
-        }
+        p.then(()=>{
+            this.initToolbar();
+            if (diagramData) {
+                this.openDiagram(diagramData);
+            }else{
+                this.updateView();
+            }
+        }).catch(e=>{
+            log.error(e);
+        });
     }
 
     setConfig(config) {
@@ -135,6 +134,10 @@ export class App {
         return this;
     }
 
+    static growl(){
+        return AppUtils.growl(arguments)
+    }
+
     setLogLevel(level){
         log.setLevel(level)
     }
@@ -144,7 +147,7 @@ export class App {
         if (Utils.isString(containerIdOrElem)) {
             var selector = containerIdOrElem.trim();
 
-            if (!_.startsWith(selector, '#') && !_.startsWith(selector, '.')) {
+            if (!Utils.startsWith(selector, '#') && !Utils.startsWith(selector, '.')) {
                 selector = '#' + selector;
             }
             this.container = d3.select(selector);
@@ -162,7 +165,7 @@ export class App {
 
     initDataModel() {
         var self = this;
-        this.dataModel = new DataModel();
+        this.dataModel = new model.DataModel();
         // this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = ()=>self.onNodeAddedOrRemoved();
         this.dataModel.nodeAddedCallback = this.dataModel.nodeRemovedCallback = (node)=> Utils.waitForFinalEvent(()=>this.onNodeAddedOrRemoved(), 'onNodeAddedOrRemoved', 5);
 
@@ -170,20 +173,16 @@ export class App {
         this.dataModel.textRemovedCallback = (text)=> Utils.waitForFinalEvent(()=>this.onTextRemoved(text), 'onTextAdded');
     }
 
-
-    initExpressionEngine() {
-        this.expressionEngine = new ExpressionEngine(this.dataModel.expressionScope);
-        this.dataModel.setExpressionEngine(this.expressionEngine);
-    }
-
-    initTreeValidator() {
-        this.treeValidator = new TreeValidator(this.expressionEngine);
-        this.dataModel.setTreeValidator(this.treeValidator);
-    }
-
-    initObjectiveRulesManager() {
-        this.objectiveRulesManager = new ObjectiveRulesManager(this.config.rule, this.dataModel, this.expressionEngine);
-        this.checkValidityAndRecomputeObjective(false, false, false);
+    initComputationsManager() {
+        this.computationsManager = new ComputationsManager({
+            ruleName: this.config.ruleName,
+            worker:{
+                url: this.config.workerUrl,
+            },
+            jobRepositoryType: this.config.jobRepositoryType
+        }, this.dataModel);
+        this.expressionEngine =  this.computationsManager.expressionEngine;
+        return this.checkValidityAndRecomputeObjective(false, false, false);
 
     }
 
@@ -204,6 +203,15 @@ export class App {
         this.definitionsDialog = new DefinitionsDialog(this);
         this.definitionsDialog.onClosed = ()=> this.recompute(true, true);
 
+    }
+
+    initSensitivityAnalysisDialog() {
+        this.sensitivityAnalysisDialog = new SensitivityAnalysisDialog(this);
+
+    }
+
+    isSensitivityAnalysisAvailable() {
+        return this.dataModel.getRoots().length===1 && this.computationsManager.isValid();
     }
 
     initToolbar() {
@@ -230,7 +238,6 @@ export class App {
         var self = this;
         return Utils.deepExtend({
             $readOnly: self.config.readOnly,
-            $rule: self.config.rule,
             onNodeSelected: function (node) {
                 self.onObjectSelected(node);
             },
@@ -244,7 +251,8 @@ export class App {
                 self.onSelectionCleared();
             },
             payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v),
-            probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v)
+            probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v),
+            operationsForObject: (o) => self.computationsManager.operationsForObject(o)
         }, self.config.treeDesigner);
     }
 
@@ -274,10 +282,10 @@ export class App {
 
     getCurrentVariableDefinitionsSourceObject() {
         if (this.selectedObject) {
-            if (this.selectedObject instanceof model.Node) {
+            if (this.selectedObject instanceof model.domain.Node) {
                 return this.selectedObject;
             }
-            if (this.selectedObject instanceof model.Edge) {
+            if (this.selectedObject instanceof model.domain.Edge) {
                 return this.selectedObject.parentNode;
             }
         }
@@ -287,7 +295,7 @@ export class App {
     updateVariableDefinitions() {
         var self = this;
         var definitionsSourceObject = self.getCurrentVariableDefinitionsSourceObject();
-        var readOnly = (this.selectedObject instanceof model.Edge) || (this.selectedObject instanceof model.TerminalNode);
+        var readOnly = (this.selectedObject instanceof model.domain.Edge) || (this.selectedObject instanceof model.domain.TerminalNode);
         self.sidebar.updateDefinitions(definitionsSourceObject, readOnly, (code)=> {
             self.dataModel.saveState();
             definitionsSourceObject.code = code;
@@ -321,8 +329,10 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.checkValidityAndRecomputeObjective(false, false, false);
-        self.updateView();
+        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=>{
+            self.updateView();
+        })
+
     }
 
     redo() {
@@ -331,17 +341,22 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        this.checkValidityAndRecomputeObjective(false, false, false);
-        self.updateView();
+
+        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=>{
+            self.updateView();
+        })
     }
 
     onNodeAddedOrRemoved() {
-        this.checkValidityAndRecomputeObjective();
-        this.updateView();
+        var self = this;
+        return this.checkValidityAndRecomputeObjective().then(()=>{
+            self.updateView();
+        });
+
     }
 
     onTextAdded(text) {
-        this.onObjectSelected(text);
+        return this.onObjectSelected(text);
     }
 
     onTextRemoved(text) {
@@ -349,67 +364,130 @@ export class App {
     }
 
     onObjectUpdated(object, fieldName) {
-
         var self = this;
-        if(!(object instanceof model.Text) && fieldName!=='name'){
-            this.checkValidityAndRecomputeObjective();
+        var p = Promise.resolve();
+        if(!(object instanceof model.domain.Text) && fieldName!=='name'){
+            p = p.then(()=>this.checkValidityAndRecomputeObjective());
         }
         // this.sidebar.updateObjectPropertiesView(this.selectedObject);
-        setTimeout(function () {
-            self.treeDesigner.redraw(true);
-        },1);
+        return p.then(()=>{
+            setTimeout(function () {
+                self.treeDesigner.redraw(true);
+            },1);
+        });
     }
 
     setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
-        this.objectiveRulesManager.setCurrentRuleByName(ruleName);
-        this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric);
-        if(updateView){
-            this.updateView(true);
-        }
+        this.computationsManager.setCurrentRuleByName(ruleName);
+        return this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric).then(()=>{
+            if(updateView){
+                this.updateView(true);
+            }
+        });
+
     }
 
+    getCurrentObjectiveRule(){
+        return this.computationsManager.getCurrentRule();
+    }
+
+    getObjectiveRules(){
+        return this.computationsManager.getObjectiveRules();
+    }
+
+
+    openSensitivityAnalysis(){
+        this.sensitivityAnalysisDialog.open();
+    }
+
+    showTreePreview(dataDTO, closeCallback, autoLayout=true){
+        var self = this;
+        this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
+        this.dataModel.loadFromDTO(dataDTO,  this.computationsManager.expressionEngine.getJsonReviver());
+        this.computationsManager.updateDisplayValues(this.dataModel);
+        this.updateView(false);
+        setTimeout(function(){
+            self.updateView(false);
+            setTimeout(function(){
+                var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
+                AppUtils.showFullScreenPopup(svgString, ()=>{
+                    if(closeCallback) {
+                        self.dataModel._setNewState(self.originalDataModelSnapshot);
+                        self.updateView(false);
+
+                        closeCallback();
+                        setTimeout(function(){
+                            self.updateView(false);
+                        }, 1)
+                    }
+                });
+            }, 300);
+        }, 1)
+
+    }
+
+    showPolicyPreview(policy, closeCallback){
+        var self = this;
+        this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
+        console.log(this.originalDataModelSnapshot);
+        this.computationsManager.displayPolicy(policy);
+        this.updateView(false);
+        AppUtils.showFullScreenPopup('');
+        LoadingIndicator.show();
+        setTimeout(function(){
+            self.updateView(false);
+            setTimeout(function(){
+                var svgString = Exporter.getSVGString(self.treeDesigner.svg.node(), true);
+                LoadingIndicator.hide();
+                AppUtils.showFullScreenPopup(svgString, ()=>{
+
+                    self.dataModel._setNewState(self.originalDataModelSnapshot);
+
+                    // self.computationsManager.updateDisplayValues(self.dataModel);
+                    self.updateView(false);
+                    if(closeCallback) {
+                        closeCallback();
+                    }
+                    setTimeout(function(){
+                        self.updateView(false);
+                    }, 1)
+                });
+            }, 500);
+        }, 1)
+    }
 
 
     recompute(updateView = true, debounce = false) {
         if(debounce){
             if(!this.debouncedRecompute){
-                this.debouncedRecompute = _.debounce((updateView)=>this.recompute(updateView, false), 200);
+                this.debouncedRecompute = Utils.debounce((updateView)=>this.recompute(updateView, false), 200);
             }
             this.debouncedRecompute(updateView);
             return;
         }
 
-        this.checkValidityAndRecomputeObjective(false, true);
-        if (updateView) {
-            this.updateView();
-        }
+        return this.checkValidityAndRecomputeObjective(false, true).then(()=>{
+            if (updateView) {
+                this.updateView();
+            }
+        });
+
     }
 
     checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
-        this.validationResults = [];
-
-        if(evalCode||evalNumeric){
-            this.objectiveRulesManager.evalExpressions(evalCode, evalNumeric);
-        }
-
-
-        this.dataModel.getRoots().forEach(root=> {
-            var vr = this.treeValidator.validate(this.dataModel.getAllNodesInSubtree(root));
-            this.validationResults.push(vr);
-            if (vr.isValid()) {
-                this.objectiveRulesManager.recomputeTree(root, allRules);
-            } else {
-                this.objectiveRulesManager.updateDisplayValues();
-            }
+        return this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric).then(()=>{
+            this.updateValidationMessages();
+            AppUtils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
+        }).catch(e=>{
+            log.error(e);
         });
-        this.updateValidationMessages();
-        Utils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
+
     }
 
     updateValidationMessages() {
         var self = this;
         setTimeout(function () {
-            self.treeDesigner.updateValidationMessages(self.validationResults);
+            self.treeDesigner.updateValidationMessages();
         }, 1);
     }
 
@@ -424,52 +502,51 @@ export class App {
         this.setDiagramDescription('', true);
         this.treeDesigner.setConfig(Utils.deepExtend(this.getTreeDesignerInitialConfig()));
         this.onSelectionCleared();
+        this.sensitivityAnalysisDialog.clear(true)
     }
 
     openDiagram(diagramData) {
+
         var self = this;
         var errors = [];
 
         if(Utils.isString(diagramData)){
             try{
-                diagramData = JSON.parse(diagramData, math.json.reviver);
+                diagramData = JSON.parse(diagramData, self.computationsManager.expressionEngine.getJsonReviver());
             }catch (e){
                 errors.push('error.jsonParse');
                 alert(i18n.t('error.jsonParse'));
                 log.error(e);
-                return errors;
+                return Promise.resolve(errors);
             }
         }
+
+        var dataModelObject = diagramData.data;
 
         this.clear();
         if (!diagramData.SilverDecisions) {
             errors.push('error.notSilverDecisionsFile');
             alert(i18n.t('error.notSilverDecisionsFile'));
-            return errors;
+            return Promise.resolve(errors);
         }
 
-        //Check if version in file is newer than version of application
-        var incorrectVersionFormat = !Utils.isString(diagramData.SilverDecisions);
-        var versionInFileMatch;
-        //Major.Minor.Patch
-        var versionRegexp = /^([0-9]+)\.([0-9]+)\.([0-9]+)$/g;
-        if(!incorrectVersionFormat){
-            versionInFileMatch = versionRegexp.exec(diagramData.SilverDecisions)
-            incorrectVersionFormat = !versionInFileMatch;
-        }
-
-        if(incorrectVersionFormat){
+        if(!Utils.isValidVersionString(diagramData.SilverDecisions)){
             errors.push('error.incorrectVersionFormat');
             alert(i18n.t('error.incorrectVersionFormat'));
         }else{
-            //compare only major and minor
-            versionRegexp.lastIndex=0;
-            var versionMatch = versionRegexp.exec(App.version);
-            if(versionMatch &&
-                (versionInFileMatch[1] > versionMatch[1] ||
-                 versionInFileMatch[1] == versionMatch[1] && versionInFileMatch[2] > versionMatch[2])){
+            //Check if version in file is newer than version of application
+            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, App.version)>0){
                 errors.push('error.fileVersionNewerThanApplicationVersion');
                 alert(i18n.t('error.fileVersionNewerThanApplicationVersion'));
+            }
+
+            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, "0.7.0")<0){
+                dataModelObject ={
+                    code: diagramData.code,
+                    expressionScope: diagramData.expressionScope,
+                    trees: diagramData.trees,
+                    texts: diagramData.texts
+                }
             }
         }
 
@@ -478,7 +555,7 @@ export class App {
                 this.config.lng = diagramData.lng;
             }
             if (diagramData.rule) {
-                if (this.objectiveRulesManager.isRuleName(diagramData.rule)) {
+                if (this.computationsManager.isRuleName(diagramData.rule)) {
                     this.config.rule = diagramData.rule;
                 } else {
                     delete this.config.rule;
@@ -489,8 +566,7 @@ export class App {
             }
 
             this.setConfig(this.config);
-
-            this.dataModel.load(diagramData.trees, diagramData.texts, diagramData.code, diagramData.expressionScope);
+            this.dataModel.load(dataModelObject);
 
             if (diagramData.treeDesigner) {
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
@@ -504,7 +580,7 @@ export class App {
             alert(i18n.t('error.malformedData'));
             this.clear();
             log.error('malformedData', e);
-            return errors;
+            return Promise.resolve(errors);
 
         }
         try {
@@ -517,78 +593,44 @@ export class App {
             this.setConfig(this.config);
             this.updateNumberFormats(false);
         }
-
-        try{
-            this.setObjectiveRule(this.config.rule, false, true, false);
-        }catch (e) {
-            log.error('objectiveComputationFailure',e);
-            errors.push('error.objectiveComputationFailure');
-            alert(i18n.t('error.objectiveComputationFailure'));
-            return errors
-        }
-
-        try{
-            this.updateView(false);
-        }catch (e) {
+        return this.setObjectiveRule(this.config.rule, false, true, false).catch(e=>{
             log.error('diagramDrawingFailure', e);
             errors.push('error.diagramDrawingFailure');
             alert(i18n.t('error.diagramDrawingFailure'));
             this.clear();
             return errors
-        }
-
-        return errors
+        }).then(()=>{
+            this.updateView(false);
+            return errors;
+        }).catch(e=>{
+            log.error('diagramDrawingFailure', e);
+            errors.push('error.diagramDrawingFailure');
+            alert(i18n.t('error.diagramDrawingFailure'));
+            this.clear();
+            return errors
+        });
     }
 
     serialize(filterLocation, filterComputed) {
         var self = this;
-        self.checkValidityAndRecomputeObjective(true, false, false);
+        return self.checkValidityAndRecomputeObjective(true, false, false).then(()=>{
+            var obj = {
+                SilverDecisions: App.version,
+                buildTimestamp: App.buildTimestamp,
+                savetime: d3.isoFormat(new Date()),
+                lng: self.config.lng,
+                rule: self.computationsManager.getCurrentRule().name,
+                title: self.config.title,
+                description: self.config.description,
+                format: self.config.format,
+                treeDesigner: self.treeDesigner.config,
+                data: self.dataModel.serialize(false)
+            };
 
-        var obj = {
-            SilverDecisions: App.version,
-            buildTimestamp: App.buildTimestamp,
-            savetime: d3.isoFormat(new Date()),
-            lng: self.config.lng,
-            rule: self.objectiveRulesManager.currentRule.name,
-            title: self.config.title,
-            description: self.config.description,
-            format: self.config.format,
-            treeDesigner: self.treeDesigner.config,
-            trees: self.dataModel.getRoots(),
-            texts: self.dataModel.texts,
-            expressionScope: self.dataModel.expressionScope,
-            code: self.dataModel.code
-        };
+            return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.computationsManager.expressionEngine.getJsonReplacer()]);
+        });
 
-        var cache = [];
-        return JSON.stringify(obj, function (k, v) {
-            if (typeof v === 'object' && v !== null) {
-                if (cache.indexOf(v) !== -1) {
-                    // Circular reference found, discard key
-                    return;
-                }
-                cache.push(v);
-            }
-            if (_.startsWith(k, '$') || k == 'parentNode') {
-                return undefined;
-            }
-            if (filterLocation && k == 'location') {
-                return undefined;
-            }
-            if (filterComputed && k == 'computed') {
-                return undefined;
-            }
 
-            if (v !== null && v !== undefined && v.mathjs) {
-                try{
-                    return self.expressionEngine.serialize(v);
-                }catch (e){
-                    return v;
-                }
-
-            }
-            return v;
-        }, 2);
     }
 
     updateNumberFormats(updateView=true) {
@@ -629,7 +671,7 @@ export class App {
 
     setConfigParam(path, value, withoutStateSaving, callback) {
         var self = this;
-        var prevValue = _.get(this.config, path);
+        var prevValue = Utils.get(this.config, path);
 
         if (prevValue == value) {
             return;
@@ -647,7 +689,7 @@ export class App {
                 }
             });
         }
-        _.set(this.config, path, value);
+        Utils.set(this.config, path, value);
         if (callback) {
             callback(value);
         }
@@ -681,9 +723,9 @@ export class App {
 
 
             if (d3.event.altKey) {
-                if (this.selectedObject instanceof model.Node) {
+                if (this.selectedObject instanceof model.domain.Node) {
                     let selectedNode = this.selectedObject;
-                    if (selectedNode instanceof model.TerminalNode) {
+                    if (selectedNode instanceof model.domain.TerminalNode) {
                         return;
                     }
                     if (key == 68) { // ctrl + alt + d
@@ -694,7 +736,7 @@ export class App {
                         this.treeDesigner.addTerminalNode(selectedNode);
                     }
                     return;
-                } else if (this.selectedObject instanceof model.Edge) {
+                } else if (this.selectedObject instanceof model.domain.Edge) {
                     if (key == 68) { // ctrl + alt + d
                         this.treeDesigner.injectDecisionNode(this.selectedObject);
                     } else if (key == 67) { // ctrl + alt + c
@@ -727,7 +769,7 @@ export class App {
             if (key == 86) {//ctrl + v
                 if (selectedNodes.length == 1) {
                     let selectedNode = selectedNodes[0];
-                    if (selectedNode instanceof model.TerminalNode) {
+                    if (selectedNode instanceof model.domain.TerminalNode) {
                         return;
                     }
                     this.treeDesigner.pasteToNode(selectedNode)

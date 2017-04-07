@@ -67,6 +67,9 @@
       border: none;
       border-bottom: 1px solid rgba(0, 0, 0, 0.12);
       background: none; }
+      #silver-decisions .input-group input.invalid, #silver-decisions .input-group textarea.invalid, #silver-decisions .input-group select.invalid {
+        border-color: red;
+        outline-color: red; }
     #silver-decisions .input-group select {
       outline: none; }
     #silver-decisions .input-group.inline-group input, #silver-decisions .input-group.inline-group textarea, #silver-decisions .input-group.inline-group select {
@@ -125,6 +128,29 @@
     #silver-decisions .input-group input:focus ~ .bar:before, #silver-decisions .input-group input:focus ~ .bar:after, #silver-decisions .input-group textarea:focus ~ .bar:before, #silver-decisions .input-group textarea:focus ~ .bar:after, #silver-decisions .input-group select:focus ~ .bar:before, #silver-decisions .input-group select:focus ~ .bar:after {
       width: 50%; }
 
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group {
+  max-width: 150px; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .sd-job-parameter-name {
+  margin-top: 20px; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .sd-job-parameter-values .sd-job-parameter {
+  display: inline-block;
+  margin-right: 7px; }
+
+#silver-decisions .sd-job-parameters-builder .sd-job-parameter .sd-job-parameter-values .sd-job-parameter-value {
+  display: flex;
+  align-items: center; }
+
+#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter.invalid > .sd-job-parameter-name {
+  color: red; }
+
+#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter .sd-job-parameter-value.invalid {
+  background-color: rgba(255, 0, 0, 0.11); }
+
+#silver-decisions .sd-job-parameters-builder:not(.sd-strict-validation) input.invalid, #silver-decisions .sd-job-parameters-builder:not(.sd-strict-validation) select.invalid {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
 
 /* The Modal (background) */
 .sd-modal {
@@ -170,6 +196,21 @@
     display: flex;
     flex-direction: column;
     overflow: auto; }
+  .sd-modal .sd-extend-modal {
+    display: block; }
+  .sd-modal .sd-shrink-modal {
+    display: none; }
+  .sd-modal.sd-full-screen {
+    padding-top: 0;
+    overflow: initial; }
+    .sd-modal.sd-full-screen .sd-modal-content {
+      width: 100%;
+      max-height: 100vh;
+      height: 100vh; }
+    .sd-modal.sd-full-screen .sd-extend-modal {
+      display: none; }
+    .sd-modal.sd-full-screen .sd-shrink-modal {
+      display: block; }
   .sd-modal .sd-modal-header {
     padding: 2px 16px;
     background-color: #3F51B5;
@@ -178,13 +219,14 @@
     font-size: 13px;
     padding: 15px 16px;
     overflow: auto; }
-  .sd-modal .sd-close-modal {
+  .sd-modal .sd-modal-button {
     color: #aaa;
     float: right;
     font-size: 28px;
     font-weight: bold;
-    margin-top: 20px; }
-    .sd-modal .sd-close-modal:hover, .sd-modal .sd-close-modal:focus {
+    margin-top: 20px;
+    margin-left: 15px; }
+    .sd-modal .sd-modal-button:hover, .sd-modal .sd-modal-button:focus {
       color: black;
       text-decoration: none;
       cursor: pointer; }
@@ -606,6 +648,19 @@
     #silver-decisions svg.tree-designer tspan a {
       cursor: pointer;
       text-decoration: underline; }
+  #silver-decisions .sd-sensitivity-analysis-dialog.sd-job-error .sd-job-progress-bar-container {
+    background-color: #edc9cb; }
+    #silver-decisions .sd-sensitivity-analysis-dialog.sd-job-error .sd-job-progress-bar-container .sd-progress-bar {
+      background-color: red; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-select-input-group {
+    display: inline-block; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons {
+    margin-top: 25px;
+    float: right; }
+    #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons button {
+      margin-left: 7px; }
+    #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons button.sd-run-job-button {
+      font-size: 16px; }
   #silver-decisions button {
     background: rgba(158, 158, 158, 0.2);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -748,6 +803,7 @@
     border-color: #ebccd1; }
 
 .sd-loading-indicator {
+  z-index: 1000;
   position: fixed;
   top: 10vh;
   left: 50vw;
@@ -755,9 +811,11 @@
   -webkit-transition: opacity 0.6s;
   /* Safari */
   transition: opacity 0.6s;
+  display: none;
   /* https://github.com/tobiasahlin/SpinKit */ }
   .sd-loading-indicator.visible {
-    opacity: 1; }
+    opacity: 1;
+    display: block; }
   .sd-loading-indicator .sd-spinner {
     width: 40px;
     height: 40px;
@@ -784,3 +842,57 @@
   100% {
     transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
     -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg); } }
+
+.sd-progress-bar-container {
+  width: 100%;
+  border: 1px solid #bfbfbf;
+  background-color: #e8e8e8;
+  border-radius: 5px; }
+  .sd-progress-bar-container .sd-progress-bar {
+    height: 100%;
+    background-color: #2196F3;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 2px 0;
+    white-space: nowrap;
+    /*    -webkit-transition: width 0.1s; !* Safari *!
+    transition: width 0.1s;*/ }
+
+div.sd-job-result-table tr.sd-selected {
+  background-color: rgba(30, 144, 255, 0.35); }
+
+div.sd-job-result-table td.rowTotal, div.sd-job-result-table td.pvtVal {
+  cursor: pointer; }
+
+div.sd-job-result-table table.pvtTable thead tr th, div.sd-job-result-table table.pvtTable tbody tr th {
+  white-space: pre; }
+
+.sd-fullscreen-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: white;
+  border: 5px solid #d0d0d0; }
+  .sd-fullscreen-popup .sd-popup-body {
+    overflow: auto;
+    width: 100%;
+    height: 100%; }
+    .sd-fullscreen-popup .sd-popup-body::-webkit-scrollbar {
+      width: 7px;
+      height: 7px; }
+    .sd-fullscreen-popup .sd-popup-body::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3); }
+    .sd-fullscreen-popup .sd-popup-body::-webkit-scrollbar-thumb {
+      background-color: darkgrey;
+      outline: 1px solid slategrey; }
+  .sd-fullscreen-popup .sd-close-popup {
+    position: fixed;
+    cursor: pointer;
+    top: 20px;
+    right: 20px; }
+    .sd-fullscreen-popup .sd-close-popup i {
+      font-size: 30px; }

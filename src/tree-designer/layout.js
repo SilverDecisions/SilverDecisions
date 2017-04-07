@@ -1,7 +1,6 @@
-import {Utils} from '../utils'
-import * as model from '../model/index'
+import {Utils} from 'sd-utils'
+import {domain as model} from 'sd-model'
 import * as d3 from '../d3'
-import * as _ from "lodash";
 import circleSymbol from './symbols/circle'
 import triangleSymbol from './symbols/triangle'
 
@@ -84,7 +83,7 @@ export class Layout{
         this.nodesSortedByX.sort((a,b)=>a.location.x - b.location.x);
 
         function findCollidingNode(node, location){
-            return _.find(self.nodesSortedByX, n=>{
+            return Utils.find(self.nodesSortedByX, n=>{
                 if(node == n){
                     return false;
                 }
@@ -128,12 +127,13 @@ export class Layout{
     }
 
 
+    nodeSymbolSize = {};
     drawNodeSymbol(path, transition){
 
         var self = this;
         var nodeSize = this.config.nodeSize;
         this.nodeSymbol = d3.symbol().type(d=> self.nodeTypeToSymbol[d.type])
-            .size(d=>d.$symolSize ? _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", 64) : 64);
+            .size(d=>self.nodeSymbolSize[d.$id] ? Utils.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", 64) : 64);
 
         path
             .each(function (d) {
@@ -142,22 +142,22 @@ export class Layout{
                 if(!prev){
                     path.attr("d", self.nodeSymbol);
                 }
-                var size = _.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']");
+                var size = Utils.get(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']");
                 if(!size){
                     var box = path.node().getBBox();
                     var error = Math.min(nodeSize / box.width, nodeSize / box.height);
-                    size = error * error * (d.$symolSize||64);
-                    _.set(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", size);
+                    size = error * error * (self.nodeSymbolSize[d.$id]||64);
+                    Utils.set(self.targetSymbolSize, d.type+"['"+self.config.nodeSize+"']", size);
                 }
                 if(transition){
                     path =  path.transition();
 
                 }else{
-                    d.$symolSize = size;
+                    self.nodeSymbolSize[d.$id] = size;
                 }
                 path.attr("d", self.nodeSymbol);
                 if(transition){
-                    d.$symolSize = size;
+                    self.nodeSymbolSize[d.$id] = size;
                 }
             });
     }

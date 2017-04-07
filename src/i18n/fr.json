@@ -30,7 +30,7 @@
     "redo": "Refaire",
     "settings": "Parametres",
     "about": "A propos",
-    "recompute": "Recalculer"	
+    "recompute": "Recalculer"
   },
   "node":{
     "name": "Étiquette"
@@ -75,6 +75,20 @@
     },
     "text":{
       "delete": "Effacer"
+    }
+  },
+  "jobResultTable":{
+    "tooltip": {
+      "multiplePoliciesInCell": "{{number}} policies"
+    },
+    "pivot": {
+      "aggregators":{
+        "maximum": "Maximum",
+        "minimum": "Minimum"
+      },
+      "renderers":{
+        "heatmap": "Carte de chaleur"
+      }
     }
   },
   "settingsDialog":{

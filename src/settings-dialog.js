@@ -1,9 +1,9 @@
 import * as d3 from './d3'
 import {Dialog} from './dialog'
-import *  as _ from 'lodash'
 import {i18n} from "./i18n/i18n";
 import {Templates} from "./templates";
-import {Utils} from "./utils";
+import {Utils} from "sd-utils";
+import {AppUtils} from "./app-utils";
 
 export class SettingsDialog extends Dialog{
 
@@ -188,7 +188,7 @@ export class SettingsDialog extends Dialog{
             if(d.valueUpdateCallback){
                 d.valueUpdateCallback();
             }
-            Utils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(d3.select(this));
 
 
         }).each(function(d, i){
@@ -205,7 +205,7 @@ export class SettingsDialog extends Dialog{
             }else{
                 d3.select(this).classed('invalid', false);
             }
-            Utils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(d3.select(this));
 
         });
 
@@ -271,11 +271,11 @@ class PathValueAccessor {
     }
 
     get(){
-        return _.get(this.sourceObject, this.path);
+        return Utils.get(this.sourceObject, this.path);
     }
 
     set(v){
-        return _.set(this.sourceObject, this.path, v);
+        return Utils.set(this.sourceObject, this.path, v);
     }
 }
 

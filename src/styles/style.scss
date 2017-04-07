@@ -605,6 +605,37 @@
 
   }
 
+  .sd-sensitivity-analysis-dialog{
+
+    &.sd-job-error{
+      .sd-job-progress-bar-container{
+        background-color: #edc9cb;
+        .sd-progress-bar{
+          background-color: red;
+        }
+      }
+    }
+
+    .sd-job-select-input-group{
+      display: inline-block;
+    }
+
+    .sd-sensitivity-analysis-action-buttons {
+      margin-top: 25px;
+      float: right;
+
+      button{
+        margin-left: 7px;
+      }
+
+      button.sd-run-job-button {
+        $font-size: 16px;
+        font-size: $font-size;
+      }
+
+    }
+  }
+
   button{
     background: rgba(158,158,158,.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
@@ -781,6 +812,8 @@
   }
 }
 
+
+
 .sd-hidden {
   display: none !important;
 }
@@ -834,14 +867,17 @@
 }
 
 .sd-loading-indicator {
+  z-index: 1000;
   position: fixed;
   top: 10vh;
   left: 50vw;
   opacity: 0;
   -webkit-transition: opacity 0.6s; /* Safari */
   transition: opacity 0.6s;
+  display: none;
   &.visible {
     opacity: 1;
+    display: block;
   }
 
   /* https://github.com/tobiasahlin/SpinKit */
@@ -874,5 +910,78 @@
       transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
       -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
     }
+  }
+}
+
+.sd-progress-bar-container{
+  width: 100%;
+  border: 1px solid #bfbfbf;
+  background-color: #e8e8e8;
+  border-radius: 5px;
+
+  .sd-progress-bar{
+    height: 100%;
+    background-color: #2196F3;
+    color: white;
+    text-align: center;
+    border-radius: 5px;
+    padding: 2px 0;
+    white-space: nowrap;
+/*    -webkit-transition: width 0.1s; !* Safari *!
+    transition: width 0.1s;*/
+  }
+}
+
+div.sd-job-result-table{
+  //tr, td, th{
+  //  border: 1px solid black;
+  //  border-collapse: collapse;
+  //}
+
+  //td, th{
+  //  padding: 7px;
+  //}
+  tr{
+    &.sd-selected{
+      background-color: rgba(30, 144, 255, 0.35);
+    }
+  }
+  //td{
+  //  text-align: right;
+  //}
+
+  td.rowTotal, td.pvtVal{
+    cursor: pointer;
+  }
+  table.pvtTable thead tr th, table.pvtTable tbody tr th{
+    white-space: pre;
+  }
+}
+
+.sd-fullscreen-popup{
+  position: fixed;
+  top:0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 999;
+  background-color: white;
+  border: 5px solid #d0d0d0;
+
+  .sd-popup-body{
+    overflow: auto;
+    width: 100%;
+    height: 100%;
+    @include scrollbar-mixin();
+  }
+  .sd-close-popup{
+    position: fixed;
+    cursor: pointer;
+    top: 20px;
+    right: 20px;
+    i{
+      font-size: 30px;
+    }
+
   }
 }

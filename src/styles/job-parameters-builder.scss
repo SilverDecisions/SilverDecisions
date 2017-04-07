@@ -1,0 +1,51 @@
+#silver-decisions {
+  .sd-job-parameters-builder{
+    .sd-job-parameter{
+      .input-group{
+        max-width: 150px;
+      }
+
+      .sd-job-parameter-name{
+        margin-top: 20px;
+      }
+
+
+      .sd-job-parameter-values{
+        .sd-job-parameter{
+          display: inline-block;
+          margin-right: 7px;
+        }
+
+        .sd-job-parameter-value{
+          display: flex;
+          align-items: center;
+        }
+      }
+    }
+
+    &.sd-strict-validation{
+      .sd-job-parameter{
+        &.invalid{
+          >.sd-job-parameter-name{
+            color: red;
+          }
+        }
+        .sd-job-parameter-value{
+          &.invalid{
+            background-color: rgba(255, 0, 0, 0.11);
+          }
+        }
+      }
+    }
+
+    &:not(.sd-strict-validation){
+      input, select{
+        &.invalid{
+          border-bottom: 1px solid rgba(0,0,0,.12);
+        }
+      }
+    }
+  }
+
+}
+

@@ -1,7 +1,7 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
 
-import {Utils} from './utils'
+import {Utils} from 'sd-utils'
 
 export class Dialog{
 
@@ -13,6 +13,8 @@ export class Dialog{
         this.app = app;
         this.container=container;
         this.container.select('.sd-close-modal').on('click', ()=>this.close());
+        this.container.select('.sd-extend-modal').on('click', ()=>this.extend());
+        this.container.select('.sd-shrink-modal').on('click', ()=>this.shrink());
     }
 
     open(){
@@ -22,6 +24,14 @@ export class Dialog{
     close(){
         this.container.classed('open', false);
         this.onClosed();
+    }
+
+    extend(){
+        this.container.classed('sd-full-screen', true);
+    }
+
+    shrink(){
+        this.container.classed('sd-full-screen', false);
     }
 
     isVisible(){

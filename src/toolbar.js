@@ -1,7 +1,6 @@
 import * as d3 from './d3'
 import {i18n} from './i18n/i18n'
-import {Utils} from './utils'
-import * as model from './model/index'
+import {AppUtils} from './app-utils'
 import {Exporter} from './exporter'
 import {FileLoader} from './file-loader'
 
@@ -19,6 +18,7 @@ export class Toolbar{
         this.initUndoRedoButtons();
         this.initSettingsButton();
         this.initAboutButton();
+        this.initSensitivityAnalysisButton();
         this.initRecomputeButton();
         this.initObjectiveRuleToolbarGroup();
     }
@@ -45,15 +45,15 @@ export class Toolbar{
         });
         this.openDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.open);
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
-            var json = this.app.serialize();
+            this.app.serialize().then((json)=>{
+                AppUtils.dispatchEvent('SilverDecisionsSaveEvent', json);
+                if(this.app.config.jsonFileDownload){
+                    var blob = new Blob([json], {type: "application/json"});
+                    Exporter.saveAs(blob, Exporter.getExportFileName('json'));
+                }
+            });
 
-            Utils.dispatchEvent('SilverDecisionsSaveEvent', json);
 
-
-            if(this.app.config.jsonFileDownload){
-                var blob = new Blob([json], {type: "application/json"});
-                Exporter.saveAs(blob, Exporter.getExportFileName('json'));
-            }
 
         });
         this.saveDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.save);
@@ -109,6 +109,17 @@ export class Toolbar{
         });
     }
 
+    initSensitivityAnalysisButton(){
+        this.sensitivityAnalysisButton = this.container.select('#sensitivity-analysis-button').on('click', ()=>{
+            this.app.openSensitivityAnalysis();
+        });
+    }
+
+    updateSensitivityAnalysisButton(){
+        this.sensitivityAnalysisButton.attr("disabled", this.app.isSensitivityAnalysisAvailable() ? null : 'disabled');
+    }
+
+
     onLayoutChanged(layout){
         Object.getOwnPropertyNames(this.layoutButtons).forEach(l=>{
             this.layoutButtons[l].classed('active', false);
@@ -132,6 +143,7 @@ export class Toolbar{
 
     onUndoRedoChanged() {
         this.updateUndoRedoButtons();
+        this.updateSensitivityAnalysisButton();
     }
     updateUndoRedoButtons(){
         this.undoButton.attr("disabled", this.app.dataModel.isUndoAvailable() ? null : 'disabled');
@@ -140,6 +152,7 @@ export class Toolbar{
 
     update(){
         this.updateUndoRedoButtons();
+        this.updateSensitivityAnalysisButton();
         this.updateLayoutButtons();
         this.updateObjectiveRuleValue();
     }
@@ -178,7 +191,7 @@ export class Toolbar{
     initObjectiveRuleToolbarGroup() {
         var self = this;
         this.objectiveRuleSelect = this.container.select('#objective-rule-select');
-        var rules = this.app.objectiveRulesManager.rules;
+        var rules = this.app.getObjectiveRules();
         var options = this.objectiveRuleSelect.selectAll('option').data(rules);
         options.enter()
             .append('option')
@@ -194,6 +207,6 @@ export class Toolbar{
     }
 
     updateObjectiveRuleValue(){
-        this.objectiveRuleSelect.node().value = this.app.objectiveRulesManager.currentRule.name;
+        this.objectiveRuleSelect.node().value = this.app.getCurrentObjectiveRule().name;
     }
 }

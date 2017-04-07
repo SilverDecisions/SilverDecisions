@@ -7,7 +7,7 @@ describe("A SilverDecisions", function() {
         container = document.createElement("div");
         container.id = containerId;
         document.getElementsByTagName('body')[0].appendChild(container);
-        app = new SilverDecisions(containerId);
+        app = new SilverDecisions.App(containerId);
     });
 
     it("should be initialized", function() {

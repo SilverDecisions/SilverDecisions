@@ -9,6 +9,8 @@ module.exports = function (config) {
         files:[
             'node_modules/jquery/dist/jquery.js',
             'node_modules/jasmine-jquery/lib/jasmine-jquery.js',
+            'dist/silver-decisions-vendor.js',
+            'dist/silver-decisions-core.js',
             'dist/silver-decisions.js',
             'test/*.js',
             // JSON fixture

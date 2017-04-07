@@ -30,6 +30,7 @@
     "redo": "Redo",
     "settings": "Settings",
     "about": "About",
+    "sensitivityAnalysis": "Sensitivity analysis",
     "recompute": "Recompute"
   },
   "node":{
@@ -75,6 +76,81 @@
     },
     "text":{
       "delete": "Delete"
+    }
+  },
+  "sensitivityAnalysisDialog":{
+    "title": "Sensitivity analysis",
+    "jobSelect": "",
+    "buttons": {
+      "runJob": "Run",
+      "stopJob": "Stop",
+      "terminateJob": "Terminate",
+      "resumeJob": "Resume",
+      "downloadCsv": "Download CSV",
+      "back": "Back",
+      "clear": "Clear"
+    }
+  },
+  "jobParametersBuilder": {
+    "buttons": {
+      "removeParameterValue": "Remove",
+      "addParameterValue": "Add"
+    }
+  },
+  "jobResultTable":{
+    "tooltip": {
+      "multiplePoliciesInCell": "{{number}} policies"
+    },
+    "pivot": {
+      "aggregators":{
+        "maximum": "Maximum",
+        "minimum": "Minimum"
+      },
+      "renderers":{
+        "heatmap": "Heatmap"
+      }
+    }
+  },
+  "job":{
+    "sensitivity-analysis":{
+      "name": "N-way sensitivity analysis",
+      "param":{
+        "ruleName": "Rule name",
+        "extendedPolicyDescription": "Extended policy description",
+        "variables": {
+          "": "Variables",
+          "name": "Name",
+          "min": "Min",
+          "max": "Max",
+          "length": "Length"
+        }
+      }
+    },
+    "tornado-diagram":{
+      "name": "Tornado diagram",
+      "param":{
+        "ruleName": "Rule name",
+        "variables": {
+          "": "Variables",
+          "name": "Name",
+          "min": "Min",
+          "max": "Max",
+          "length": "Length"
+        }
+      }
+    },
+    "probabilistic-sensitivity-analysis":{
+      "name": "Probabilistic sensitivity analysis",
+      "param":{
+        "ruleName": "Rule name",
+        "numberOfRuns": "Number of runs",
+        "extendedPolicyDescription": "Extended policy description",
+        "variables": {
+          "": "Variables",
+          "name": "Name",
+          "formula": "Formula"
+        }
+      }
     }
   },
   "settingsDialog":{

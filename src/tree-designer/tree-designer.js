@@ -1,15 +1,14 @@
 import * as d3 from '../d3'
 
-import {Utils} from '../utils'
-import * as model from '../model/index'
-import {ContextMenu} from '../context-menu'
+import {Utils} from 'sd-utils'
+import {AppUtils} from '../app-utils'
+import {domain as model} from 'sd-model'
+import {ContextMenu} from './context-menu'
 import {MainContextMenu} from './main-context-menu'
 import {NodeContextMenu} from './node-context-menu'
 import {Layout} from './layout'
 import {NodeDragHandler} from './node-drag-handler'
 import {Tooltip} from '../tooltip'
-import {ValidationResult} from '../validation/validation-result'
-import * as _ from "lodash";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
@@ -141,6 +140,7 @@ export class TreeDesignerConfig {
     hideProbabilities=false;
     raw=false;
 
+
     payoffNumberFormatter = (v)=> v;
     probabilityNumberFormatter  = (v)=> v;
 
@@ -148,6 +148,9 @@ export class TreeDesignerConfig {
     onEdgeSelected = (edge) => {};
     onTextSelected = (text) => {};
     onSelectionCleared = () => {};
+
+    operationsForObject = (o) => [];
+
 
     constructor(custom) {
         if (custom) {
@@ -231,6 +234,7 @@ export class TreeDesigner {
         this.redrawNodes();
         this.redrawEdges();
         this.redrawFloatingTexts();
+        this.updateValidationMessages();
         if(withTransitions){
             self.transition =  self.transitionPrev;
         }
@@ -242,8 +246,8 @@ export class TreeDesigner {
     }
 
     computeAvailableSpace(){
-        this.availableHeight = Utils.sanitizeHeight(this.config.height, this.container, this.config.margin);
-        this.availableWidth = Utils.sanitizeWidth(this.config.width, this.container, this.config.margin);
+        this.availableHeight = AppUtils.sanitizeHeight(this.config.height, this.container, this.config.margin);
+        this.availableWidth = AppUtils.sanitizeWidth(this.config.width, this.container, this.config.margin);
     }
 
     initSvg() {
@@ -305,7 +309,7 @@ export class TreeDesigner {
         if(!withoutStateSaving){
             this.data.saveState({
                 data:{
-                    margin: _.clone(self.config.margin)
+                    margin: Utils.clone(self.config.margin)
                 },
                 onUndo: (data)=> {
                     self.setMargin(data.margin, true);
@@ -418,7 +422,7 @@ export class TreeDesigner {
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
                 var val = d.displayValue('childrenPayoff');
-                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
+                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
             });
 
         Tooltip.attach(payoff, d=>i18n.t('tooltip.node.payoff',{value: d.payoff}));
@@ -439,7 +443,7 @@ export class TreeDesigner {
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
                 var val = d.displayValue('aggregatedPayoff');
-                return val!==null ? (isNaN(val) ? val : self.config.probabilityNumberFormatter(val)): ''
+                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
             });
         Tooltip.attach(aggregatedPayoff, i18n.t('tooltip.node.aggregatedPayoff'));
 
@@ -583,7 +587,7 @@ export class TreeDesigner {
                 var val = d.displayPayoff();
                 if(val!==null){
                     if(!isNaN(val)){
-                        return self.config.probabilityNumberFormatter(val);
+                        return self.config.payoffNumberFormatter(val);
                     }
                     if(Utils.isString(val)){
                         return val;
@@ -591,7 +595,7 @@ export class TreeDesigner {
                 }
 
                 if(d.payoff!==null && !isNaN(d.payoff))
-                    return self.config.probabilityNumberFormatter(d.payoff);
+                    return self.config.payoffNumberFormatter(d.payoff);
 
                 return d.payoff;
             });
@@ -608,8 +612,8 @@ export class TreeDesigner {
 
         edgesMerge.select('text.probability')
             .classed('sd-hidden', this.config.hideProbabilities);
-        var probabilityMergeT = edgesMergeT.select('text.probability');
-        probabilityMergeT
+        var probabilityMerge = edgesMerge.select('text.probability');
+        probabilityMerge
             .attr('text-anchor', 'end')
             .text(d=>{
                 if(this.config.raw){
@@ -631,12 +635,13 @@ export class TreeDesigner {
 
                 return d.probability;
             });
+        var probabilityMergeT = probabilityMerge;
+        if(this.transition){
+            probabilityMergeT = probabilityMerge.transition();
+        }
 
         this.layout.edgeProbabilityPosition(probabilityEnter);
         this.layout.edgeProbabilityPosition(probabilityMergeT);
-
-
-        edgesContainer.selectAll('.edge.'+optimalClassName).raise();
 
         edgesMerge.on('contextmenu', this.edgeContextMenu);
         edgesMerge.on('dblclick', this.edgeContextMenu)
@@ -678,7 +683,7 @@ export class TreeDesigner {
 
         tspans.enter().append('tspan')
             .merge(tspans)
-            .html(l=>Utils.replaceUrls(Utils.escapeHtml(l)))
+            .html(l=>AppUtils.replaceUrls(AppUtils.escapeHtml(l)))
             .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
             .attr('x', '0');
 
@@ -712,11 +717,11 @@ export class TreeDesigner {
 
     }
 
-    updateValidationMessages(validationResults) {
+    updateValidationMessages() {
         var nodes = this.mainGroup.selectAll('.node');
         nodes.classed('error', false);
 
-        validationResults.forEach(validationResult=>{
+        this.data.validationResults.forEach(validationResult=>{
             if(validationResult.isValid()){
                 return;
             }
@@ -730,7 +735,7 @@ export class TreeDesigner {
                     if(tooltipHtml){
                         tooltipHtml+='<br/>'
                     }
-                    tooltipHtml+=ValidationResult.getMessage(e);
+                    tooltipHtml+=AppUtils.getValidationMessage(e);
                 });
 
                 Tooltip.attach(nodeSelection.select('.error-indicator'), tooltipHtml);
@@ -801,7 +806,7 @@ export class TreeDesigner {
                 if(b.x+mgt[0] <=m[0] && b.x+b.width+mgt[0] >= m[0] &&
                    b.y+mgt[1]-margin <=m[1] && b.y+b.height+mgt[1]+margin >= m[1]){
 
-                    var cp = Utils.closestPoint(pathNode, [m[0]-mgt[0], m[1]-mgt[1]]);
+                    var cp = AppUtils.closestPoint(pathNode, [m[0]-mgt[0], m[1]-mgt[1]]);
                     if(cp.distance < margin && cp.distance<closest[1]){
                         closest = [selection, cp.distance];
                     }
@@ -874,7 +879,7 @@ export class TreeDesigner {
     }
 
     getMainGroupTranslation(invert) {
-        var translation = Utils.getTranslation(this.mainGroup.attr("transform"));
+        var translation = AppUtils.getTranslation(this.mainGroup.attr("transform"));
         if(invert){
             translation[0] = -translation[0];
             translation[1] = -translation[1]
@@ -883,7 +888,7 @@ export class TreeDesigner {
     }
 
     initNodeContextMenu() {
-        this.nodeContextMenu = new NodeContextMenu(this);
+        this.nodeContextMenu = new NodeContextMenu(this, this.config.operationsForObject);
     }
 
     initEdgeContextMenu() {
@@ -1083,21 +1088,15 @@ export class TreeDesigner {
         },10)
     }
 
-    canFlipSubTree(node){
-        return this.data.canFlipSubTree(node);
-    }
-
-    flipSubTree(node){
+    performOperation(object, operation){
         var self = this;
         this.data.saveState();
-        this.data.flipSubTree(node);
+        operation.perform(object);
         setTimeout(function(){
             self.redraw();
             self.layout.update();
         },10)
-
     }
-
 
 
     moveNodeTo(x,y){
@@ -1233,7 +1232,7 @@ export class TreeDesigner {
         var tspans = desc.selectAll('tspan').data(lines);
         tspans.enter().append('tspan')
             .merge(tspans)
-            .html(l=>Utils.replaceUrls(Utils.escapeHtml(l)))
+            .html(l=>AppUtils.replaceUrls(AppUtils.escapeHtml(l)))
             .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
             .attr('x', '0');
 

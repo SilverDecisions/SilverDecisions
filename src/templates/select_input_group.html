@@ -1,6 +1,6 @@
 <select id="<%= id %>" name="<%= name %>">
     <% for(i=0; i<options.length; ++i) { %>
-    <option value="<%= options[i] %>"><%= options[i] %></option>
+    <option value="<% if (options[i].value !== undefined){ %><%= options[i].value %><%} else { %><%= options[i] %><%}%>"><% if (options[i].label !== undefined){ %><%= options[i].label %><%} else { %><%= options[i] %><%}%></option>
     <% } %>
 </select>
 <span class="bar"></span>

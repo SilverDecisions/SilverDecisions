@@ -1,5 +1,4 @@
-import {ExpressionEngine} from '../expression-engine'
-import {Utils} from "../utils";
+import {Utils} from "sd-utils";
 
 export class PayoffInputValidator{
     expressionEngine;
@@ -15,7 +14,7 @@ export class PayoffInputValidator{
         if(!value.trim()){
             return false;
         }
-        if(ExpressionEngine.hasAssignmentExpression(value)) {
+        if(this.expressionEngine.constructor.hasAssignmentExpression(value)) {
             return false;
         }
         return this.expressionEngine.validate(value);

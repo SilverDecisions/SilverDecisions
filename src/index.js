@@ -1,3 +1,4 @@
+require('es6-set/implement');
 import {D3Extensions} from './d3-extensions'
 import {App} from './app'
 import {version} from '../package.json';

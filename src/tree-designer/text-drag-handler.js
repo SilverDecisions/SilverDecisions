@@ -1,7 +1,6 @@
-import {Utils} from '../utils'
-import * as model from '../model/index'
+import {AppUtils} from '../app-utils'
 import * as d3 from '../d3'
-import {ContextMenu} from '../context-menu'
+import {ContextMenu} from './context-menu'
 
 export class TextDragHandler{
 
@@ -27,8 +26,8 @@ export class TextDragHandler{
                 }
                 var t = d3.select(this);
                 return {
-                    x: t.attr("x") + Utils.getTranslation(t.attr("transform"))[0],
-                    y: t.attr("y") + Utils.getTranslation(t.attr("transform"))[1]
+                    x: t.attr("x") + AppUtils.getTranslation(t.attr("transform"))[0],
+                    y: t.attr("y") + AppUtils.getTranslation(t.attr("transform"))[1]
                 };
             })
             .on("start", function(d){
