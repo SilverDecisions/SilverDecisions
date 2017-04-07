@@ -58,12 +58,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-            numberOfRuns: 100,
+           /* numberOfRuns: 100,
 
             variables: [
                 {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
                 {name: 'sens', min: 0, max: 1, length: 11, formula: "random(0,1)"}
-            ]
+            ]*/
         };
         this.setJobParamsValues(jobParamsValues)
     }
