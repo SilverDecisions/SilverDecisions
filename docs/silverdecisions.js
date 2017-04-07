@@ -19,6 +19,11 @@ var config = {
     treeDesigner:{
     }
 };
+var edgeOrIE = SilverDecisions.App.utils.detectEdge() || SilverDecisions.App.utils.detectIE();
+if(edgeOrIE){ //There are some problems with worker on Edge and IE
+    config.workerUrl = null;
+    config.jobRepositoryType = 'timeout'
+}
 
 if(SilverDecisions.App.utils.detectIE()=='11'){ // IE 11
     if(platform.os.family.toLowerCase().indexOf('windows') !== -1){ // on Windows
@@ -31,6 +36,8 @@ if(SilverDecisions.App.utils.detectIE()=='11'){ // IE 11
 
     }
 }
+
+
 
 var app;
 if(jsonUrl){

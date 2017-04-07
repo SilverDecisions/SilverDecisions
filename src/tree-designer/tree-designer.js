@@ -917,7 +917,6 @@ export class TreeDesigner {
     addNode(node, parent, redraw=false){
         this.data.saveState();
         this.data.addNode(node, parent);
-        console.log('redraw');
         this.redraw(true);
         this.layout.update(node);
         return node;

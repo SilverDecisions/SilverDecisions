@@ -22,6 +22,7 @@ export class AppConfig {
     readOnly = false;
     logLevel = 'warn';
     workerUrl = null;
+    jobRepositoryType = 'idb';
     buttons = {
         new: true,
         save: true,
@@ -176,8 +177,9 @@ export class App {
         this.computationsManager = new ComputationsManager({
             ruleName: this.config.ruleName,
             worker:{
-                url: this.config.workerUrl
-            }
+                url: this.config.workerUrl,
+            },
+            jobRepositoryType: this.config.jobRepositoryType
         }, this.dataModel);
         this.expressionEngine =  this.computationsManager.expressionEngine;
         return this.checkValidityAndRecomputeObjective(false, false, false);
@@ -427,6 +429,7 @@ export class App {
     showPolicyPreview(policy, closeCallback){
         var self = this;
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
+        console.log(this.originalDataModelSnapshot);
         this.computationsManager.displayPolicy(policy);
         this.updateView(false);
         AppUtils.showFullScreenPopup('');
@@ -437,8 +440,10 @@ export class App {
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
                 LoadingIndicator.hide();
                 AppUtils.showFullScreenPopup(svgString, ()=>{
+
                     self.dataModel._setNewState(self.originalDataModelSnapshot);
-                    self.computationsManager.updateDisplayValues();
+
+                    // self.computationsManager.updateDisplayValues(self.dataModel);
                     self.updateView(false);
                     if(closeCallback) {
                         closeCallback();
