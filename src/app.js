@@ -502,6 +502,7 @@ export class App {
         this.setDiagramDescription('', true);
         this.treeDesigner.setConfig(Utils.deepExtend(this.getTreeDesignerInitialConfig()));
         this.onSelectionCleared();
+        this.sensitivityAnalysisDialog.clear(true)
     }
 
     openDiagram(diagramData) {

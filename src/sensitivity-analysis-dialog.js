@@ -40,7 +40,11 @@ export class SensitivityAnalysisDialog extends Dialog {
 
         let payoffConf = Utils.cloneDeep(this.app.config.format.payoff);
         payoffConf.style = 'decimal';
-        this.payoffNumberFormat = new Intl.NumberFormat(this.app.config.format.locales, payoffConf);
+        payoffConf.useGrouping = false;
+        this.payoffNumberFormat = new Intl.NumberFormat('en', payoffConf);
+        // this.payoffNumberFormat = {
+        //     format: v => this.app.computationsManager.expressionEngine.constructor.toFloat(v, payoffConf.maximumFractionDigits)
+        // }
 
         this.clear();
     }
@@ -58,7 +62,7 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-           /* numberOfRuns: 100,
+            /*numberOfRuns: 100,
 
             variables: [
                 {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
