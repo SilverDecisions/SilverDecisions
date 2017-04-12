@@ -23,6 +23,7 @@ export class AppConfig {
     logLevel = 'warn';
     workerUrl = null;
     jobRepositoryType = 'idb';
+    clearRepository = true;
     buttons = {
         new: true,
         save: true,
@@ -179,7 +180,8 @@ export class App {
             worker:{
                 url: this.config.workerUrl,
             },
-            jobRepositoryType: this.config.jobRepositoryType
+            jobRepositoryType: this.config.jobRepositoryType,
+            clearRepository: this.config.clearRepository
         }, this.dataModel);
         this.expressionEngine =  this.computationsManager.expressionEngine;
         return this.checkValidityAndRecomputeObjective(false, false, false);

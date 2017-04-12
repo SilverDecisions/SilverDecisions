@@ -1,18 +1,22 @@
 import {JobResultTable} from "./job-result-table";
-var jQuery = require('jquery');
+import {Utils} from "sd-utils"
 
 
 export class SensitivityAnalysisJobResultTable extends JobResultTable {
 
     setData(jobResult, jobParameters, job) {
         this.jobResult = jobResult;
+
+        jobParameters =job.createJobParameters(Utils.cloneDeep(jobParameters.values));
+        jobParameters.values.roundVariables = true;
         var csvDAta = job.jobResultToCsvRows(jobResult, jobParameters);
 
         if (csvDAta.length) {
             csvDAta[0][0] = 'policy\nnumber'
         }
 
-        var data = {rows: ['policy'], cols: jobResult.variableNames.slice(), vals: ['payoff'], data: csvDAta};
+        let cols = jobResult.variableNames.slice(0, Math.min(2, jobResult.variableNames.length));
+        var data = {rows: ['policy'], cols: cols, vals: ['payoff'], data: csvDAta};
         super.setData(data)
     }
 

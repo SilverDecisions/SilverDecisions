@@ -1,4 +1,4 @@
-import {Utils} from 'sd-utils';
+import {Utils, log} from 'sd-utils';
 import {i18n} from "./i18n/i18n";
 var jQuery = require('jquery');
 Utils.getGlobalObject().jQuery = jQuery; //FIXME
@@ -8,12 +8,88 @@ require('jquery-ui/ui/widget');
 require('jquery-ui/ui/widgets/mouse');
 require('jquery-ui/ui/widgets/sortable');
 require('pivottable');
+
+
+// pivot show zero hack start
+var numberFormat = jQuery.pivotUtilities.numberFormat;
+try{
+    jQuery.pivotUtilities.numberFormat = function(opts){
+        if(!opts){
+            opts = {};
+        }
+        opts.showZero = true;
+        return numberFormat(opts);
+    };
+}catch (e){
+    log.error('Error when performing pivottable "show zero" hack, reverting');
+
+    try{
+        jQuery.pivotUtilities.numberFormat = numberFormat;
+    }catch (e){
+
+    }
+}
+
 require('pivottable/dist/pivot.it');
 require('pivottable/dist/pivot.de');
 require('pivottable/dist/pivot.fr');
-// require('pivottable/dist/pivot.pl');
 
+// pivot show zero hack continuation
+try{
+    var origAggregators = {};
+    Utils.forOwn(jQuery.pivotUtilities.locales.en.aggregators, (value, key, object)=>{
+        origAggregators[key] = value;
+        object[key] = function(){
+            var args1 = arguments;
+            try{
+                let res1 = value(...args1);
+                return function(){
+                    var res = res1(...arguments);
+                    var format_ = res.format;
+                    res.format = function(x){
+                        var origX = x;
+                        if(x===0){
+                            x =  "0";
+                        }
+                        try{
+                            return format_(x);
+                        }catch (e){
+                            log.error('Error when performing pivottable "show zero" hack (format func call), reverting', e);
+                            if(format_){
+                                return format_(origX);
+                            }
+                            revertAggregators();
+                        }
+                    };
+                    return res;
+                };
+            }catch(e){
+                log.error('Error when performing pivottable "show zero" hack, reverting', e);
+                revertAggregators();
+                return origAggregators[key](...args1)
+            }
+        }
+    });
+}catch (e){
+    log.error('Error when performing pivottable "show zero" hack, reverting', e);
+    revertAggregators();
+}
 
+function revertAggregators(){
+    try {
+        Utils.forOwn(jQuery.pivotUtilities.locales.en.aggregators, (value, key, object)=>{
+            let origAggregator = origAggregators[key];
+            if(origAggregator){
+                object[key] = origAggregator
+            }
+
+        });
+    }catch(e){
+        log.error('Error when reverting aggregators', e)
+    }
+}
+
+///////////////////// hack end
 
 export class PivotTable{
 
