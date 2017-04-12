@@ -58,6 +58,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onJobSelected(jobConfig) {
+        this.clearWarnings();
         this.selectedJobConfig = jobConfig;
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
