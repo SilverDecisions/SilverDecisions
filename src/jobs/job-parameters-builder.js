@@ -11,7 +11,7 @@ export class JobParametersBuilder{
 
     jobParameters;
     hiddenParams;
-    constructor(container, i18nPrefix=''){
+    constructor(container, i18nPrefix='', onChange=()=>{}){
         this.container=container;
         this.i18nPrefix = i18nPrefix;
         this.paramTypeToInputType ={};
@@ -20,6 +20,7 @@ export class JobParametersBuilder{
         this.paramTypeToInputType[PARAMETER_TYPE.INTEGER] = 'number';
         this.paramTypeToInputType[PARAMETER_TYPE.NUMBER] = 'number';
         this.paramTypeToInputType[PARAMETER_TYPE.STRING] = 'text';
+        this.onChange = onChange;
     }
 
 
@@ -28,15 +29,16 @@ export class JobParametersBuilder{
         this.jobParameters = jobParameters;
         this.customParamsConfig = customParamsConfig;
         this.clean();
-        this.build(this.container, this.jobParameters.definitions, this.jobParameters.values);
+        this.build(this.container, this.jobParameters.definitions, this.jobParameters.values, '', this.onChange);
     }
+
     clean() {
         this.container.html('');
         this.container.classed('sd-strict-validation', false)
     }
 
     validate(){
-        this.container.classed('sd-strict-validation', true)
+        this.container.classed('sd-strict-validation', true);
         return this.jobParameters.validate();
     }
 
@@ -87,7 +89,7 @@ export class JobParametersBuilder{
                 var valuesContainer = paramSelection.appendSelector("div.sd-job-parameter-values");
                 var actionButtons = paramSelection.appendSelector("div.sd-action-buttons");
                 var addButton = actionButtons.appendSelector('button.sd-add-job-parameter-value-button.icon-button');
-                addButton.appendSelector("i.material-icons").html('add')
+                addButton.appendSelector("i.material-icons").html('add');
 
 
                 paramSelection.classed('invalid', !d.validate(value));
@@ -110,7 +112,7 @@ export class JobParametersBuilder{
                     .on('click', ()=>{
                         value.push(self.getEmptyValue(d.type));
                         self.buildParameterValues(valuesContainer, d, value, path, callbacks);
-                        addButton.classed('sd-hidden', value.length>=d.maxOccurs)
+                        addButton.classed('sd-hidden', value.length>=d.maxOccurs);
                         callbacks.onChange();
                     });
 

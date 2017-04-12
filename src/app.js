@@ -23,7 +23,7 @@ export class AppConfig {
     logLevel = 'warn';
     workerUrl = null;
     jobRepositoryType = 'idb';
-    clearRepository = true;
+    clearRepository = false;
     buttons = {
         new: true,
         save: true,

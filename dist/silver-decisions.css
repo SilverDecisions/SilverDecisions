@@ -654,6 +654,8 @@
       background-color: red; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-select-input-group {
     display: inline-block; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-warning:first-of-type {
+    margin-top: 15px; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons {
     margin-top: 25px;
     float: right; }
@@ -703,6 +705,15 @@
       #silver-decisions button.icon-button:hover:not([disabled]) {
         background: rgba(158, 158, 158, 0.1);
         box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  #silver-decisions .sd-warning-message {
+    display: flex;
+    align-items: center;
+    padding: 5px; }
+    #silver-decisions .sd-warning-message .sd-icon {
+      color: #f0bb3e; }
+    #silver-decisions .sd-warning-message .sd-warning-message-text {
+      color: #8a6d3b;
+      padding-left: 10px; }
 
 .sd-tooltip {
   position: absolute;
