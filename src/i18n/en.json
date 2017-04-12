@@ -124,6 +124,9 @@
           "max": "Max",
           "length": "Length"
         }
+      },
+      "errors":{
+        "computations": "Error in sensitivity analysis computations for the following parameters:"
       }
     },
     "tornado-diagram":{
@@ -137,6 +140,9 @@
           "max": "Max",
           "length": "Length"
         }
+      },
+      "errors":{
+        "computations": "Error in sensitivity analysis computations for the following parameters:"
       }
     },
     "probabilistic-sensitivity-analysis":{
@@ -150,7 +156,14 @@
           "name": "Name",
           "formula": "Formula"
         }
+      },
+      "errors":{
+        "computations": "Error in sensitivity analysis computations for the following parameters:",
+        "param-computation": "Error computing parameter values:"
       }
+    },
+    "errors":{
+      "generic": "Error in sensitivity analysis computations: {{message}}"
     }
   },
   "settingsDialog":{

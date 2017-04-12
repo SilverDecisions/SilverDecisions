@@ -65,7 +65,7 @@ export class SensitivityAnalysisDialog extends Dialog {
            /* numberOfRuns: 100,
 
             variables: [
-                {name: 'pr', min: 0, max: 1, length: 12, formula: "random(0,1)"},
+                {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
                 {name: 'sens', min: 0, max: 1, length: 12, formula: "random(0,1)"}
             ]*/
         };
@@ -84,6 +84,10 @@ export class SensitivityAnalysisDialog extends Dialog {
             customParamsConfig: {
                 'id': {
                     // value: undefined, //leave default,
+                    hidden: true
+                },
+                'failOnInvalidTree': {
+                    value: true,
                     hidden: true
                 },
                 'ruleName': {
@@ -109,6 +113,10 @@ export class SensitivityAnalysisDialog extends Dialog {
             jobName: 'probabilistic-sensitivity-analysis',
             customParamsConfig: {
                 'id': {
+                    hidden: true
+                },
+                'failOnInvalidTree': {
+                    value: true,
                     hidden: true
                 },
                 'ruleName': {
@@ -213,8 +221,7 @@ export class SensitivityAnalysisDialog extends Dialog {
             if (!this.jobInstanceManager) {
                 return;
             }
-            this.disableActionButtonsAndShowLoadingIndicator();
-            this.jobInstanceManager.terminate();
+            this.terminateJob();
         });
 
         this.backButton = this.container.select(".sd-back-button ").on('click', ()=> {
@@ -307,6 +314,11 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     }
 
+    terminateJob(){
+        this.disableActionButtonsAndShowLoadingIndicator();
+        this.jobInstanceManager.terminate();
+    }
+
     onJobFailed(errors) {
         AppUtils.hide(this.stopJobButton);
         AppUtils.hide(this.backButton);
@@ -314,6 +326,34 @@ export class SensitivityAnalysisDialog extends Dialog {
         AppUtils.hide(this.clearButton);
         this.disableActionButtonsAndShowLoadingIndicator(false);
         this.markAsError();
+        var self = this;
+        setTimeout(function () {
+            var errorMessage = "";
+            errors.forEach((e,i)=>{
+                if(i){
+                    errorMessage+="\n\n";
+                }
+
+                let msgKeyBase = "job."+self.job.name+".errors.";
+                let msgKey = msgKeyBase+e.message;
+                let msg = i18n.t(msgKey, e.data);
+                if(msg === msgKey){
+                    msg = i18n.t("job.errors.generic", e);
+                }
+
+                errorMessage += msg;
+                if(e.data && e.data.variables){
+                    Utils.forOwn(e.data.variables, (value, key)=>{
+                        errorMessage += "\n";
+                        errorMessage+= key + " = "+value;
+                    })
+                }
+            });
+
+            alert(errorMessage);
+            self.terminateJob();
+        },10);
+
     }
 
     markAsError(error = true) {
