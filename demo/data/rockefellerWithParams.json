@@ -1,7 +1,7 @@
 {
   "SilverDecisions": "0.7.0",
-  "buildTimestamp": 1491401982316,
-  "savetime": "2017-04-05T14:34:28.787Z",
+  "buildTimestamp": 1492092763941,
+  "savetime": "2017-04-13T14:15:11.288Z",
   "lng": "en",
   "rule": "expected-value-maximization",
   "title": "Problem inwestycyjny",
@@ -1356,5 +1356,34 @@
         }
       }
     ]
+  },
+  "sensitivityAnalysis": {
+    "sensitivity-analysis": {
+      "id": "294e9f88-4aeb-9e79-8865-5f987d7a45eb",
+      "extendedPolicyDescription": true,
+      "failOnInvalidTree": true,
+      "ruleName": "expected-value-maximization",
+      "variables": [
+        {
+          "name": "pr",
+          "min": 0,
+          "max": 1,
+          "length": 11
+        }
+      ]
+    },
+    "probabilistic-sensitivity-analysis": {
+      "id": "eefa2ff5-9180-19d0-bb0f-867f2bdba696",
+      "extendedPolicyDescription": true,
+      "failOnInvalidTree": true,
+      "ruleName": "expected-value-maximization",
+      "numberOfRuns": 100,
+      "variables": [
+        {
+          "name": "sens",
+          "formula": "random()"
+        }
+      ]
+    }
   }
 }

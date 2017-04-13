@@ -16,6 +16,7 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     jobConfigurations = [];
     jobInstanceManager;
+    jobNameToParamValues = {};
 
     constructor(app) {
         super(app.container.select('.sd-sensitivity-analysis-dialog'), app);
@@ -30,20 +31,15 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobResultsContainer = this.container.select(".sd-sensitivity-analysis-job-results");
 
 
-
         this.initButtons();
     }
 
     onOpen() {
 
         this.initJobConfigurations();
-        if(!this.jobSelect){
+        if (!this.jobSelect) {
             this.initJobSelect();
-        }else{
-            this.setJobParamsValues(this.jobParameters.values);
-
         }
-
 
         let payoffConf = Utils.cloneDeep(this.app.config.format.payoff);
         payoffConf.style = 'decimal';
@@ -64,43 +60,52 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.jobInstanceManager.terminate();
     }
 
+
+
     onJobSelected(jobConfig) {
 
         this.clearWarnings();
         this.selectedJobConfig = jobConfig;
-        if(!jobConfig){
+        if (!jobConfig) {
             return;
         }
         this.jobSelect.node().value = jobConfig.jobName;
-        this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
-        var jobParamsValues = {
-           /* numberOfRuns: 100,
-            variables: [
-                {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
-                {name: 'sens', min: 0, max: 1, length: 12, formula: "random(0,1)"}
-            ]*/
-        };
+        let jobName = this.selectedJobConfig.jobName;
+        this.job = this.computationsManager.getJobByName(jobName);
+
+        var jobParamsValues = this.jobNameToParamValues[jobName] || {};
+
         this.setJobParamsValues(jobParamsValues)
     }
 
-    refreshSelectedJobConfig(){
-        if(this.selectedJobConfig){
+    refreshSelectedJobConfig() {
+        if (this.selectedJobConfig) {
             this.selectedJobConfig = Utils.find(this.jobConfigurations, (c)=>c.jobName === this.selectedJobConfig.jobName);
         }
     }
 
-    setJobParamsValues(jobParamsValues) {
+    setJobParamsValues(jobParamsValues, deleteId = true) {
+        if(!this.job){
+            return;
+        }
         this.refreshSelectedJobConfig();
+
+        if(deleteId){
+            delete jobParamsValues.id;
+        }
         this.jobParameters = this.job.createJobParameters(jobParamsValues);
+
+        this.jobNameToParamValues[this.job.name] = this.jobParameters.values;
+
         this.jobParametersBuilder.setJobParameters(this.job.name, this.jobParameters, this.selectedJobConfig.customParamsConfig);
     }
 
-    onJobParametersChanged(){
+    onJobParametersChanged() {
         Utils.debounce(()=>this.checkWarnings(), 50);
     }
 
-    getGlobalVariableNames(){
-        return  this.app.dataModel.getGlobalVariableNames(true);
+    getGlobalVariableNames() {
+        return this.app.dataModel.getGlobalVariableNames(true);
     }
 
     initJobConfigurations() {
@@ -120,8 +125,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                     value: this.computationsManager.getCurrentRule().name,
                     hidden: true
                 },
-                variables:{
-                    name:{
+                variables: {
+                    name: {
                         options: this.getGlobalVariableNames()
                     }
                 }
@@ -133,8 +138,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                         number: 10000,
                         numberFormatted: "10,000"
                     },
-                    check: function (jobParameters){ // called with this set to warning config object
-                        let combinations = jobParameters.values.variables.map(v => v.length).reduce((a, b) => a * (b||1), 1);
+                    check: function (jobParameters) { // called with this set to warning config object
+                        let combinations = jobParameters.values.variables.map(v => v.length).reduce((a, b) => a * (b || 1), 1);
                         return combinations > this.data.number
                     }
                 },
@@ -143,24 +148,24 @@ export class SensitivityAnalysisDialog extends Dialog {
                     data: {
                         number: 2,
                     },
-                    check: function (jobParameters){ // called with this set to warning config object
+                    check: function (jobParameters) { // called with this set to warning config object
                         return jobParameters.values.variables.length > this.data.number
                     }
                 }
             ]
         });
         /*this.jobConfigurations.push({
-            jobName: 'tornado-diagram',
-            customParamsConfig: {
-                'id': {
-                    hidden: true
-                },
-                'ruleName': {
-                    value: this.computationsManager.getCurrentRule().name,
-                    hidden: true
-                }
-            }
-        });*/
+         jobName: 'tornado-diagram',
+         customParamsConfig: {
+         'id': {
+         hidden: true
+         },
+         'ruleName': {
+         value: this.computationsManager.getCurrentRule().name,
+         hidden: true
+         }
+         }
+         });*/
 
         this.jobConfigurations.push({
             jobName: 'probabilistic-sensitivity-analysis',
@@ -176,8 +181,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                     value: this.computationsManager.getCurrentRule().name,
                     hidden: true
                 },
-                variables:{
-                    name:{
+                variables: {
+                    name: {
                         options: this.getGlobalVariableNames()
                     }
                 }
@@ -189,7 +194,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                         number: 10000,
                         numberFormatted: "10,000"
                     },
-                    check: function (jobParameters){ // called with this set to warning config object
+                    check: function (jobParameters) { // called with this set to warning config object
                         return jobParameters.values.numberOfRuns > this.data.number
                     }
                 }
@@ -199,15 +204,14 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
 
-
     checkWarnings() {
         this.clearWarnings();
-        if(!this.selectedJobConfig.warnings){
+        if (!this.selectedJobConfig.warnings) {
             return;
         }
 
-        this.selectedJobConfig.warnings.forEach(warnConf=>{
-            if(warnConf.check.call(warnConf, this.jobParameters)){
+        this.selectedJobConfig.warnings.forEach(warnConf=> {
+            if (warnConf.check.call(warnConf, this.jobParameters)) {
                 this.addWarning(warnConf);
             }
         })
@@ -244,11 +248,11 @@ export class SensitivityAnalysisDialog extends Dialog {
     initResultTable(result) {
         let config = {
             onRowSelected: (rows, indexes, e)=> this.onResultRowSelected(rows, indexes, e),
-            className: "sd-"+this.job.name
+            className: "sd-" + this.job.name
         };
         if (this.resultTable) {
             this.resultTable.clear();
-            this.resultTable.setClassName("sd-"+this.job.name);
+            this.resultTable.setClassName("sd-" + this.job.name);
             this.resultTable.hide();
         }
 
@@ -340,18 +344,33 @@ export class SensitivityAnalysisDialog extends Dialog {
         });
     }
 
+    loadSavedParamValues(jobNameToParamValues){
+        this.jobNameToParamValues = jobNameToParamValues;
+        this.selectedJobConfig = null;
+        this.jobParameters = null;
+    }
+
+
     clear(clearParams = false) {
         this.clearResults();
         this.clearWarnings();
         this.setProgress(0);
         this.markAsError(false);
-        if (clearParams || !this.selectedJobConfig) {
+
+        if (!this.selectedJobConfig) {
             this.onJobSelected(this.jobConfigurations[0]);
-        } else if (this.jobParameters) {
-            delete this.jobParameters.values.id;
-            this.jobParameters.values.ruleName = this.computationsManager.getCurrentRule().name;
-            this.setJobParamsValues(this.jobParameters.values);
         }
+
+        if (this.job) {
+            if (clearParams) {
+                this.jobNameToParamValues[this.job.name] = {};
+                this.setJobParamsValues({});
+            } else {
+                this.jobParameters.values.ruleName = this.computationsManager.getCurrentRule().name;
+                this.setJobParamsValues(this.jobParameters.values);
+            }
+        }
+
 
         AppUtils.show(this.jobConfigurationContainer);
         AppUtils.show(this.runJobButton);
@@ -415,7 +434,7 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     }
 
-    terminateJob(){
+    terminateJob() {
         this.disableActionButtonsAndShowLoadingIndicator();
         this.jobInstanceManager.terminate();
     }
@@ -430,30 +449,30 @@ export class SensitivityAnalysisDialog extends Dialog {
         var self = this;
         setTimeout(function () {
             var errorMessage = "";
-            errors.forEach((e,i)=>{
-                if(i){
-                    errorMessage+="\n\n";
+            errors.forEach((e, i)=> {
+                if (i) {
+                    errorMessage += "\n\n";
                 }
 
-                let msgKeyBase = "job."+self.job.name+".errors.";
-                let msgKey = msgKeyBase+e.message;
+                let msgKeyBase = "job." + self.job.name + ".errors.";
+                let msgKey = msgKeyBase + e.message;
                 let msg = i18n.t(msgKey, e.data);
-                if(msg === msgKey){
+                if (msg === msgKey) {
                     msg = i18n.t("job.errors.generic", e);
                 }
 
                 errorMessage += msg;
-                if(e.data && e.data.variables){
-                    Utils.forOwn(e.data.variables, (value, key)=>{
+                if (e.data && e.data.variables) {
+                    Utils.forOwn(e.data.variables, (value, key)=> {
                         errorMessage += "\n";
-                        errorMessage+= key + " = "+value;
+                        errorMessage += key + " = " + value;
                     })
                 }
             });
 
             alert(errorMessage);
             self.terminateJob();
-        },10);
+        }, 10);
 
     }
 
@@ -515,10 +534,9 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     getRows() {
         var params = Utils.cloneDeep(this.jobParameters.values);
-        params.extendedPolicyDescription=false;
+        params.extendedPolicyDescription = false;
         return this.job.jobResultToCsvRows(this.result, this.job.createJobParameters(params));
     }
-
 
 
 }

@@ -577,6 +577,10 @@ export class App {
             this.setDiagramTitle(diagramData.title || '', true);
             this.setDiagramDescription(diagramData.description || '', true);
 
+            if(diagramData.sensitivityAnalysis){
+                this.sensitivityAnalysisDialog.loadSavedParamValues(diagramData.sensitivityAnalysis) ;
+            }
+
         } catch (e) {
             errors.push('error.malformedData');
             alert(i18n.t('error.malformedData'));
@@ -626,7 +630,8 @@ export class App {
                 description: self.config.description,
                 format: self.config.format,
                 treeDesigner: self.treeDesigner.config,
-                data: self.dataModel.serialize(false)
+                data: self.dataModel.serialize(false),
+                sensitivityAnalysis: this.sensitivityAnalysisDialog.jobNameToParamValues
             };
 
             return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed), self.computationsManager.expressionEngine.getJsonReplacer()]);
