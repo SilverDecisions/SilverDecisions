@@ -31,6 +31,7 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.progressBar = this.progressBarContainer.select(".sd-progress-bar");
         this.jobResultsContainer = this.container.select(".sd-sensitivity-analysis-job-results");
 
+        this.debouncedCheckWarnings = Utils.debounce(()=>this.checkWarnings(), 200);
 
         this.initButtons();
     }
@@ -102,7 +103,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onJobParametersChanged() {
-        Utils.debounce(()=>this.checkWarnings(), 50);
+        this.debouncedCheckWarnings();
     }
 
     getGlobalVariableNames() {
