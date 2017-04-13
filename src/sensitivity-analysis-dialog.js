@@ -96,7 +96,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onJobParametersChanged(){
-        this.checkWarnings();
+        Utils.debounce(()=>this.checkWarnings(), 50);
     }
 
     getGlobalVariableNames(){
@@ -130,8 +130,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                 {
                     name: 'largeScenariosNumber',
                     data: {
-                        number: 100000,
-                        numberFormatted: "100,000"
+                        number: 10000,
+                        numberFormatted: "10,000"
                     },
                     check: function (jobParameters){ // called with this set to warning config object
                         let combinations = jobParameters.values.variables.map(v => v.length).reduce((a, b) => a * (b||1), 1);
@@ -186,8 +186,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                 {
                     name: 'largeScenariosNumber',
                     data: {
-                        number: 100000,
-                        numberFormatted: "100,000"
+                        number: 10000,
+                        numberFormatted: "10,000"
                     },
                     check: function (jobParameters){ // called with this set to warning config object
                         return jobParameters.values.numberOfRuns > this.data.number
@@ -281,6 +281,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                 return;
             }
             this.disableActionButtonsAndShowLoadingIndicator();
+            this.checkWarnings();
 
             this.computationsManager.runJobWithInstanceManager(this.job.name, this.jobParameters.values, {
                 onJobStarted: this.onJobStarted,

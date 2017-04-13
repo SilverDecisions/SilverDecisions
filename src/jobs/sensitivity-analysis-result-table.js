@@ -15,7 +15,18 @@ export class SensitivityAnalysisJobResultTable extends JobResultTable {
             csvDAta[0][0] = 'policy\nnumber'
         }
 
-        let cols = jobResult.variableNames.slice(0, Math.min(2, jobResult.variableNames.length));
+        let cols = [];
+        let totalInColNum = 1;
+
+        jobParameters.values.variables.forEach(v=>{
+            let _totalInColNum = v.length * totalInColNum;
+            if((_totalInColNum>1000)){
+                return;
+            }
+            totalInColNum=_totalInColNum;
+            cols.push(v.name);
+        });
+
         var data = {rows: ['policy'], cols: cols, vals: ['payoff'], data: csvDAta};
         super.setData(data)
     }
