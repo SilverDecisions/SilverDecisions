@@ -39,7 +39,11 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.initJobConfigurations();
         if(!this.jobSelect){
             this.initJobSelect();
+        }else{
+            this.setJobParamsValues(this.jobParameters.values);
+
         }
+
 
         let payoffConf = Utils.cloneDeep(this.app.config.format.payoff);
         payoffConf.style = 'decimal';
@@ -79,7 +83,14 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.setJobParamsValues(jobParamsValues)
     }
 
+    refreshSelectedJobConfig(){
+        if(this.selectedJobConfig){
+            this.selectedJobConfig = Utils.find(this.jobConfigurations, (c)=>c.jobName === this.selectedJobConfig.jobName);
+        }
+    }
+
     setJobParamsValues(jobParamsValues) {
+        this.refreshSelectedJobConfig();
         this.jobParameters = this.job.createJobParameters(jobParamsValues);
         this.jobParametersBuilder.setJobParameters(this.job.name, this.jobParameters, this.selectedJobConfig.customParamsConfig);
     }
@@ -89,7 +100,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     getGlobalVariableNames(){
-        return this.app.dataModel.getGlobalVariableNames(true);
+        return  this.app.dataModel.getGlobalVariableNames(true);
     }
 
     initJobConfigurations() {
