@@ -254,8 +254,8 @@ export class AppUtils {
         selection.classed('sd-hidden', !show);
     }
 
-    static showFullScreenPopup(html, closeCallback){
-        var popup = d3.select("body").selectOrAppend("div.sd-full-screen-popup-container").html(Templates.get('fullscreenPopup', {body:html}));
+    static showFullScreenPopup(title, html, closeCallback){
+        var popup = d3.select("body").selectOrAppend("div.sd-full-screen-popup-container").html(Templates.get('fullscreenPopup', {title:title,body:html}));
         popup.select('.sd-close-popup').on('click', ()=>{
             popup.remove();
             if(closeCallback) {

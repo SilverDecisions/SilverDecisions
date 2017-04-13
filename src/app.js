@@ -16,6 +16,7 @@ import {ComputationsManager} from "sd-computations";
 import {SensitivityAnalysisDialog} from "./sensitivity-analysis-dialog";
 import {LoadingIndicator} from "./loading-indicator";
 
+
 var buildConfig = require('../tmp/build-config.js');
 
 export class AppConfig {
@@ -412,7 +413,7 @@ export class App {
             self.updateView(false);
             setTimeout(function(){
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
-                AppUtils.showFullScreenPopup(svgString, ()=>{
+                AppUtils.showFullScreenPopup('', svgString, ()=>{
                     if(closeCallback) {
                         self.dataModel._setNewState(self.originalDataModelSnapshot);
                         self.updateView(false);
@@ -428,20 +429,19 @@ export class App {
 
     }
 
-    showPolicyPreview(policy, closeCallback){
+    showPolicyPreview(title, policy, closeCallback){
         var self = this;
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
-        console.log(this.originalDataModelSnapshot);
         this.computationsManager.displayPolicy(policy);
         this.updateView(false);
-        AppUtils.showFullScreenPopup('');
+        AppUtils.showFullScreenPopup(title, '');
         LoadingIndicator.show();
         setTimeout(function(){
             self.updateView(false);
             setTimeout(function(){
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node(), true);
                 LoadingIndicator.hide();
-                AppUtils.showFullScreenPopup(svgString, ()=>{
+                AppUtils.showFullScreenPopup(title, svgString, ()=>{
 
                     self.dataModel._setNewState(self.originalDataModelSnapshot);
 

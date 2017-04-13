@@ -9,6 +9,7 @@ import {LoadingIndicator} from "./loading-indicator";
 import {Exporter} from "./exporter";
 import {SensitivityAnalysisJobResultTable} from "./jobs/sensitivity-analysis-result-table";
 import {ProbabilisticSensitivityAnalysisJobResultTable} from "./jobs/probabilistic-sensitivity-analysis-result-table";
+import {Policy} from "sd-computations/src/policies/policy";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;
@@ -522,7 +523,24 @@ export class SensitivityAnalysisDialog extends Dialog {
         }
 
 
-        this.app.showPolicyPreview(this.result.policies[policyIndexes[0]], ()=> {
+        let policy = this.result.policies[policyIndexes[0]];
+        let title = Policy.toPolicyString(policy, false);
+
+        if(rows.length==1){
+
+            let row = rows[0];
+            if(row.variables){
+                title = '';
+                this.result.variableNames.forEach((v, i)=>{
+                    if(i){
+                        title += "; "
+                    }
+                    title += v + " = " + row.variables[i];
+                });
+            }
+        }
+
+        this.app.showPolicyPreview(title, policy, ()=> {
             this.resultTable.clearSelection();
         });
 

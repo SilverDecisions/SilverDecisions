@@ -909,6 +909,10 @@ div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtTotalLabel, di
   z-index: 999;
   background-color: white;
   border: 5px solid #d0d0d0; }
+  .sd-fullscreen-popup .sd-popup-header {
+    padding: 2px 16px;
+    background-color: #3F51B5;
+    color: white; }
   .sd-fullscreen-popup .sd-popup-body {
     overflow: auto;
     width: 100%;
@@ -922,9 +926,13 @@ div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtTotalLabel, di
       background-color: darkgrey;
       outline: 1px solid slategrey; }
   .sd-fullscreen-popup .sd-close-popup {
-    position: fixed;
-    cursor: pointer;
-    top: 20px;
-    right: 20px; }
-    .sd-fullscreen-popup .sd-close-popup i {
-      font-size: 30px; }
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-left: 15px; }
+    .sd-fullscreen-popup .sd-close-popup:hover, .sd-fullscreen-popup .sd-close-popup:focus {
+      color: black;
+      text-decoration: none;
+      cursor: pointer; }
