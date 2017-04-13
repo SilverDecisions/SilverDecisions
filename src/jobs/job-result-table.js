@@ -5,8 +5,8 @@ import {PivotTable} from "../pivot-table";
 var jQuery = require('jquery');
 
 export class JobResultTableConfig {
-    onRowSelected = (rows, indexes, event) => {
-    };
+    onRowSelected = (rows, indexes, event) => {};
+    className = '';
 
     pivotTable;
 
@@ -26,11 +26,7 @@ export class JobResultTable {
     }
 
     init() {
-        this.pivotTable = new PivotTable(this.container.selectOrAppend("div.sd-job-result-table"));
-        // this.resultTable = this.container.selectOrAppend("table.sd-job-result-table");
-        // this.resultTableHead = this.resultTable.selectOrAppend("thead");
-        // this.resultTableBody = this.resultTable.selectOrAppend("tbody");
-        // this.resultTableFoot = this.resultTable.selectOrAppend("tfoot");
+        this.pivotTable = new PivotTable(this.container.selectOrAppend("div.sd-job-result-table").classed(this.config.className, true));
     }
 
     clickCallback(e, value, filters, pivotData) {
@@ -38,14 +34,22 @@ export class JobResultTable {
         var selectedIndexes = [];
         var selectedRows = []
         pivotData.forEachMatchingRecord(filters, record=> {
-            selectedIndexes.push(record['$rowIndex'])
+            selectedIndexes.push(record['$rowIndex']);
             selectedRows.push(data.data[record['$rowIndex']]);
         });
         self.config.onRowSelected(selectedRows, selectedIndexes, e)
 
     }
 
-    setData(data, jobParameters, job) {
+    setClassName(className){
+        if(this.config.className){
+            this.container.selectOrAppend("div.sd-job-result-table").classed(this.config.className, false);
+            this.config.className = className;
+        }
+        this.container.selectOrAppend("div.sd-job-result-table").classed(this.config.className, true)
+    }
+
+    setData(data, jobParameters, job, config) {
         var self = this;
         var derivers = jQuery.pivotUtilities.derivers;
         var pivotOptions = {
@@ -82,6 +86,15 @@ export class JobResultTable {
              }
              }*/
 
+        };
+
+        if(config){
+            if(config.aggregatorName){
+                pivotOptions.aggregatorName = config.aggregatorName;
+            }
+            if(config.aggregators){
+                pivotOptions.aggregators = config.aggregators;
+            }
         }
 
         this.pivotTable.update(data.data.map((r, i)=>r.concat(i ?  i-1 : '$rowIndex')), pivotOptions);

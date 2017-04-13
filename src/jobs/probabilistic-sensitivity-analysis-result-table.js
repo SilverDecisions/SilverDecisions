@@ -1,6 +1,7 @@
 import {JobResultTable} from "./job-result-table";
 import {Policy} from "sd-computations/src/policies/policy";
 import {log} from "sd-utils";
+import {i18n} from "../i18n/i18n";
 var jQuery = require('jquery');
 
 
@@ -30,7 +31,20 @@ export class ProbabilisticSensitivityAnalysisJobResultTable extends JobResultTab
         });
 
         log.trace(data);
-        super.setData(data)
+        super.setData(data, jobParameters, job,{
+            aggregatorName: "empty",
+            aggregators:{
+                empty: (attributeArray)=>(data, rowKey, colKey)=>{
+                    return {
+                        push: function(record) {
+                        },
+                        value: function() { return 0; },
+                        format: function(x) { return i18n.t('jobResultTable.policyPreview'); },
+                        numInputs: 1
+                    };
+                }
+            }
+        })
     }
 
     clickCallback(e, value, filters, pivotData) {

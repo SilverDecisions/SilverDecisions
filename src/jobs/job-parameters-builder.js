@@ -5,6 +5,7 @@ import * as d3 from "../d3";
 import {Utils} from "sd-utils";
 import {i18n} from "../i18n/i18n";
 import {AppUtils} from "../app-utils";
+import {Tooltip} from "../tooltip";
 
 export class JobParametersBuilder{
 
@@ -84,7 +85,7 @@ export class JobParametersBuilder{
                     set: (v)=> parentValueObject[d.name]=v
                 }, path,onChange)
             }else{
-                paramSelection.appendSelector("div.sd-job-parameter-name").html(self.getParamNameI18n(path+'.'));
+                paramSelection.appendSelector("div.sd-job-parameter-name").html(self.getParamNameI18n(path));
 
                 var valuesContainer = paramSelection.appendSelector("div.sd-job-parameter-values");
                 var actionButtons = paramSelection.appendSelector("div.sd-action-buttons");
@@ -176,12 +177,33 @@ export class JobParametersBuilder{
     buildParameterSingleValue(container, paramDefinition, valueAccessor, path,onChange){
         var self = this;
         var temp = {};
-        var inputType = this.paramTypeToInputType[paramDefinition.type];
+
         var inputId = Utils.guid();
         var selection = container.appendSelector('div.input-group')
-        var input = selection.append('input')
-            .attr('id', inputId)
-            .attr('type', inputType);
+        var help = this.getParamHelpI18n(path);
+        if(help) {
+            let helpContainer = container.appendSelector('div.sd-help-icon');
+            helpContainer.html('<i class="material-icons">info_outline</i>');
+            Tooltip.attach(helpContainer, (d)=>{
+                return help;
+            }, 5, 15);
+        }
+
+        var options = Utils.get(self.customParamsConfig, path+'.options', null);
+
+        var inputType = this.paramTypeToInputType[paramDefinition.type];
+        var input;
+        if(options && options.length){
+            inputType = 'select';
+            input = selection.append('select');
+            var optionsSel = input.selectAll("option").data(options);
+            optionsSel.enter().append("option").attr("value", d=>d).text(d=>d);
+        }else{
+            input = selection.append('input').attr('type', inputType);
+        }
+
+        input.attr('id', inputId)
+
         input.classed('sd-input', true);
         input.on('input change', function(d, i){
             var value = self.parseInput(this.value, paramDefinition.type);
@@ -215,9 +237,12 @@ export class JobParametersBuilder{
         });
 
         selection.appendSelector('span.bar');
-        selection.append('label')
+        var label = selection.append('label')
             .attr('for', inputId)
-            .html(d=>this.getParamNameI18n(path));
+            .html(d=>{
+                let label = this.getParamNameI18n(path);
+                return label;
+            });
         input.node().value = valueAccessor.get();
     }
 
@@ -229,10 +254,7 @@ export class JobParametersBuilder{
         if(parameterType===PARAMETER_TYPE.DATE){
             return new Date(value)
         }
-        if(parameterType===PARAMETER_TYPE.INTEGER){
-            return parseInt(value);
-        }
-        if(parameterType===PARAMETER_TYPE.NUMBER){
+        if(parameterType===PARAMETER_TYPE.NUMBER || parameterType===PARAMETER_TYPE.INTEGER){
             return parseFloat(value);
         }
         return value;
@@ -247,6 +269,12 @@ export class JobParametersBuilder{
     }
 
     getParamNameI18n(path){
-        return i18n.t(this.i18nPrefix+'.'+this.jobName+'.param.'+path)
+        return i18n.t(this.i18nPrefix+'.'+this.jobName+'.param.'+path+'.label')
+    }
+
+    getParamHelpI18n(path){
+        let key = this.i18nPrefix+'.'+this.jobName+'.param.'+path+'.help';
+        let help = i18n.t(key);
+        return help === key ? null : help;
     }
 }

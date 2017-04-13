@@ -1,10 +1,28 @@
 #silver-decisions {
   .sd-job-parameters-builder{
+
+    .sd-help-icon{
+      opacity: 0.6;
+      cursor: help;
+
+      &:hover{
+        opacity: 1;
+      }
+    }
+
+
     .sd-job-parameter{
       .input-group{
         max-width: 150px;
-      }
 
+        select{
+          padding-bottom: 4px;
+        }
+
+      }
+      .input-group:not(.no-floating-label) select~label {
+        top: -.85em;
+      }
       .sd-job-parameter-name{
         margin-top: 20px;
       }
@@ -12,7 +30,8 @@
 
       .sd-job-parameter-values{
         .sd-job-parameter{
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
           margin-right: 7px;
         }
 

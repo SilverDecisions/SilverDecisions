@@ -20,8 +20,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     constructor(app) {
         super(app.container.select('.sd-sensitivity-analysis-dialog'), app);
         this.computationsManager = this.app.computationsManager;
-        this.initJobConfigurations();
-        this.initJobSelect();
+        // this.initJobConfigurations();
 
         this.jobConfigurationContainer = this.container.select(".sd-sensitivity-analysis-job-configuration");
         this.parameterBuilderContainer = this.jobConfigurationContainer.select(".sd-job-parameters-builder");
@@ -36,7 +35,11 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onOpen() {
+
         this.initJobConfigurations();
+        if(!this.jobSelect){
+            this.initJobSelect();
+        }
 
         let payoffConf = Utils.cloneDeep(this.app.config.format.payoff);
         payoffConf.style = 'decimal';
@@ -58,12 +61,16 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     onJobSelected(jobConfig) {
+
         this.clearWarnings();
         this.selectedJobConfig = jobConfig;
+        if(!jobConfig){
+            return;
+        }
         this.jobSelect.node().value = jobConfig.jobName;
         this.job = this.computationsManager.getJobByName(this.selectedJobConfig.jobName);
         var jobParamsValues = {
-            /*numberOfRuns: 100,
+           /* numberOfRuns: 100,
             variables: [
                 {name: 'pr', min: 0, max: 1, length: 11, formula: "random(0,1)"},
                 {name: 'sens', min: 0, max: 1, length: 12, formula: "random(0,1)"}
@@ -79,6 +86,10 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     onJobParametersChanged(){
         this.checkWarnings();
+    }
+
+    getGlobalVariableNames(){
+        return this.app.dataModel.getGlobalVariableNames(true);
     }
 
     initJobConfigurations() {
@@ -97,6 +108,11 @@ export class SensitivityAnalysisDialog extends Dialog {
                 'ruleName': {
                     value: this.computationsManager.getCurrentRule().name,
                     hidden: true
+                },
+                variables:{
+                    name:{
+                        options: this.getGlobalVariableNames()
+                    }
                 }
             },
             warnings: [
@@ -148,6 +164,11 @@ export class SensitivityAnalysisDialog extends Dialog {
                 'ruleName': {
                     value: this.computationsManager.getCurrentRule().name,
                     hidden: true
+                },
+                variables:{
+                    name:{
+                        options: this.getGlobalVariableNames()
+                    }
                 }
             },
             warnings: [
@@ -165,6 +186,8 @@ export class SensitivityAnalysisDialog extends Dialog {
         });
 
     }
+
+
 
     checkWarnings() {
         this.clearWarnings();
@@ -209,10 +232,12 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     initResultTable(result) {
         let config = {
-            onRowSelected: (rows, indexes, e)=> this.onResultRowSelected(rows, indexes, e)
+            onRowSelected: (rows, indexes, e)=> this.onResultRowSelected(rows, indexes, e),
+            className: "sd-"+this.job.name
         };
         if (this.resultTable) {
             this.resultTable.clear();
+            this.resultTable.setClassName("sd-"+this.job.name);
             this.resultTable.hide();
         }
 
@@ -221,7 +246,6 @@ export class SensitivityAnalysisDialog extends Dialog {
             this.resultTable.setData(result, this.jobParameters, this.job);
             this.resultTable.show();
         } else if (this.job.name == "probabilistic-sensitivity-analysis") {
-
             this.resultTable = new ProbabilisticSensitivityAnalysisJobResultTable(this.jobResultsContainer.select(".sd-job-result-table-container"), config, (v) => this.payoffNumberFormat.format(v), (v) => this.app.probabilityNumberFormat.format(v));
             this.resultTable.setData(result, this.jobParameters, this.job);
             this.resultTable.show();

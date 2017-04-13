@@ -109,20 +109,31 @@
       "renderers":{
         "heatmap": "Heatmap"
       }
-    }
+    },
+    "policyPreview": "policy preview"
   },
   "job":{
     "sensitivity-analysis":{
       "name": "N-way sensitivity analysis",
       "param":{
         "ruleName": "Rule name",
-        "extendedPolicyDescription": "Extended policy description",
+        "extendedPolicyDescription": {
+          "label": "Extended policy description"
+        },
         "variables": {
-          "": "Variables",
-          "name": "Name",
-          "min": "Min",
-          "max": "Max",
-          "length": "Length"
+          "label": "Variables",
+          "name": {
+            "label": "Name"
+          },
+          "min": {
+            "label": "Min"
+          },
+          "max": {
+            "label": "Max"
+          },
+          "length": {
+            "label": "Length"
+          }
         }
       },
       "errors":{
@@ -138,11 +149,19 @@
       "param":{
         "ruleName": "Rule name",
         "variables": {
-          "": "Variables",
-          "name": "Name",
-          "min": "Min",
-          "max": "Max",
-          "length": "Length"
+          "label": "Variables",
+          "name": {
+            "label": "Name"
+          },
+          "min": {
+            "label": "Min"
+          },
+          "max": {
+            "label": "Max"
+          },
+          "length": {
+            "label": "Length"
+          }
         }
       },
       "errors":{
@@ -153,12 +172,21 @@
       "name": "Probabilistic sensitivity analysis",
       "param":{
         "ruleName": "Rule name",
-        "numberOfRuns": "Number of runs",
-        "extendedPolicyDescription": "Extended policy description",
+        "numberOfRuns": {
+          "label": "Number of runs"
+        },
+        "extendedPolicyDescription": {
+          "label": "Extended policy description"
+        },
         "variables": {
-          "": "Variables",
-          "name": "Name",
-          "formula": "Formula"
+          "label": "Variables",
+          "name": {
+            "label": "Name"
+          },
+          "formula": {
+            "label": "Formula",
+            "help": "Example: formula random() samples a random value from interval from 0 to 1"
+          }
         }
       },
       "errors":{

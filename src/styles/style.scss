@@ -975,6 +975,18 @@ div.sd-job-result-table{
   table.pvtTable thead tr th, table.pvtTable tbody tr th{
     white-space: pre;
   }
+
+  &.sd-probabilistic-sensitivity-analysis{
+    .pvtVals {
+      display: none;
+    }
+    .pvtUnused {
+      height: 20px;
+    }
+    .pvtTotalLabel,.pvtGrandTotal, .pvtRenderer, .pvtCols{
+      display: none;
+    }
+  }
 }
 
 .sd-fullscreen-popup{
