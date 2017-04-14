@@ -43,7 +43,7 @@ export class JobParametersBuilder{
         return this.jobParameters.validate();
     }
 
-    build(container, jobParameterDefinitions, parentValueObject,  parentPath='', onChange=()=>{}){
+    build(container, jobParameterDefinitions, parentValueObject,  parentPath='', onChange=()=>{}, onInput=()=>{}){
         container.html('');
         var self = this;
         var params = container.selectAll(".sd-job-parameter").data(jobParameterDefinitions);
@@ -83,7 +83,7 @@ export class JobParametersBuilder{
                 self.buildParameterSingleValue(paramSelection, d, {
                     get: ()=> parentValueObject[d.name],
                     set: (v)=> parentValueObject[d.name]=v
-                }, path,onChange)
+                }, path,onChange, onInput)
             }else{
                 paramSelection.appendSelector("div.sd-job-parameter-name").html(self.getParamNameI18n(path));
 
@@ -105,7 +105,9 @@ export class JobParametersBuilder{
                     paramSelection.classed('invalid', !d.validate(value));
                     onChange();
                 };
-
+                callbacks.onInput = () =>{
+                    onInput();
+                };
 
                 addButton
                     .attr('title', i18n.t('jobParametersBuilder.buttons.addParameterValue'))
@@ -139,23 +141,57 @@ export class JobParametersBuilder{
 
             var selection = d3.select(this);
 
+            var derivedValueUpdaters = [];
+
+            function updateDerivedValues(){
+                derivedValueUpdaters.forEach(updater=>updater(values[i]))
+            }
 
             if (PARAMETER_TYPE.COMPOSITE == paramDefinition.type) {
                 var nestedParameters = selection.selectOrAppend("div.sd-nested-parameters");
                 var onChange = ()=>{
                     selection.classed('invalid', !paramDefinition.validateSingleValue(value));
+                    updateDerivedValues();
                     if(callbacks.onChange){
                         callbacks.onChange();
                     }
                 };
-                self.build(nestedParameters, paramDefinition.nestedParameters, value, path, onChange)
+                var onInput = ()=>{
+                    updateDerivedValues();
+                    if(callbacks.onInput){
+                        callbacks.onInput();
+                    }
+                };
+                self.build(nestedParameters, paramDefinition.nestedParameters, value, path, onChange, onInput);
                 selection.classed('invalid', !paramDefinition.validateSingleValue(value));
             }else{
                 self.buildParameterSingleValue(selection, paramDefinition, {
                     get: ()=> values[i],
                     set: (v)=> values[i]=v
-                }, path, callbacks.onChange)
+                }, path, ()=>{
+                    updateDerivedValues();
+                    if(callbacks.onChange){
+                        callbacks.onChange();
+                    }
+                },()=>{
+                    updateDerivedValues();
+                    if(callbacks.onInput){
+                        callbacks.onInput();
+                    }
+                })
+
             }
+
+
+            var derivedValuesConfigs = Utils.get(self.customParamsConfig, path+'._derivedValues');
+            if(derivedValuesConfigs){
+                derivedValuesConfigs.forEach(derivedValueConfig =>{
+                    let updater = self.buildDerivedValue(selection, derivedValueConfig, path);
+                    updater(value);
+                    derivedValueUpdaters.push(updater);
+                });
+            }
+
 
             var actionButtons = selection.appendSelector("div.sd-action-buttons");
             var removeButton = actionButtons.appendSelector('button.sd-remove-job-parameter-value-button.icon-button');
@@ -170,11 +206,31 @@ export class JobParametersBuilder{
         paramValuesMerge.each(function (value, i) {
 
         });
+
+
     }
 
+    buildDerivedValue(container, derivedValueConfig, path){
+        var self = this;
 
+        var inputId = Utils.guid();
+        var selection = container.appendSelector('div.input-group.sd-derived-value');
+        var name = this.getParamNameI18n(path+'.'+derivedValueConfig.name);
+        var input = selection.append('input').attr('type', 'text').attr("disabled", "disabled");
 
-    buildParameterSingleValue(container, paramDefinition, valueAccessor, path,onChange){
+        selection.appendSelector('span.bar');
+        var label = selection.append('label')
+            .attr('for', inputId)
+            .html(name);
+
+        return (paramValue) => {
+            input.node().value = derivedValueConfig.value(paramValue);
+            AppUtils.updateInputClass(input);
+        }
+
+    }
+
+    buildParameterSingleValue(container, paramDefinition, valueAccessor, path, onChange, onInput){
         var self = this;
         var temp = {};
 
@@ -202,7 +258,7 @@ export class JobParametersBuilder{
             input = selection.append('input').attr('type', inputType);
         }
 
-        input.attr('id', inputId)
+        input.attr('id', inputId);
 
         input.classed('sd-input', true);
         input.on('input change', function(d, i){
@@ -219,6 +275,12 @@ export class JobParametersBuilder{
             if (d3.event.type == 'change') {
                 if (onChange) {
                     onChange();
+                }
+            }
+
+            if (d3.event.type == 'input') {
+                if (onInput) {
+                    onInput();
                 }
             }
 

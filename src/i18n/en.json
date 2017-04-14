@@ -133,6 +133,9 @@
           },
           "length": {
             "label": "Length"
+          },
+          "step": {
+            "label": "Step"
           }
         }
       },

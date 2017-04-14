@@ -19,6 +19,11 @@
           padding-bottom: 4px;
         }
 
+        &.sd-derived-value{
+          input{
+            cursor: not-allowed
+          }
+        }
       }
       .input-group:not(.no-floating-label) select~label {
         top: -.85em;

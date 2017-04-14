@@ -112,6 +112,7 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     initJobConfigurations() {
         this.jobConfigurations.length = 0;
+        let ExpressionEngine = this.app.expressionEngine.constructor;
         this.jobConfigurations.push({
             jobName: 'sensitivity-analysis',
             customParamsConfig: {
@@ -130,7 +131,34 @@ export class SensitivityAnalysisDialog extends Dialog {
                 variables: {
                     name: {
                         options: this.getGlobalVariableNames()
-                    }
+                    },
+                    _derivedValues:[
+                        {
+                            name: "step",
+                            value: (variable)=>{
+                                if(variable.max == undefined || variable.max==null) {
+                                    return "";
+                                }
+                                if(variable.min == undefined || variable.min==null) {
+                                    return "";
+                                }
+                                if(variable.length == undefined || variable.length==null || variable.length < 2) {
+                                    return "";
+                                }
+                                if(variable.min > variable.max){
+                                    return ""
+                                }
+
+                                try{
+                                    return ExpressionEngine.toFloat(ExpressionEngine.divide(ExpressionEngine.subtract(variable.max, variable.min), variable.length-1))
+                                }catch(e){
+                                    return "";
+                                }
+
+                            }
+                        }
+
+                    ]
                 }
             },
             warnings: [
