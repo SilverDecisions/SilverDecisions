@@ -287,7 +287,8 @@ export class JobParametersBuilder{
         var temp = {};
 
         var inputId = Utils.guid();
-        var selection = container.appendSelector('div.input-group')
+        var selection = container.appendSelector('div.input-group');
+        selection.classed('sd-parameter-'+paramDefinition.name, true);
         var help = this.getParamHelpI18n(path);
         if(help) {
             let helpContainer = container.appendSelector('div.sd-help-icon');

@@ -638,6 +638,12 @@
       }
 
     }
+    .sd-job-parameters-builder .sd-job-parameter{
+      .sd-parameter-formula{
+        max-width: 200px;
+      }
+    }
+
   }
 
   button{
@@ -709,6 +715,23 @@
     }
   }
 
+
+  .sd-combobox{
+    display: inline-block;
+    position: relative;
+    margin-right: 6px;
+    button.sd-combobox-toggle{
+      padding: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+
+      border: none;
+      background: none;
+      box-shadow: none;
+      transform: scale(0.65,1.2);
+    }
+  }
 }
 
 .sd-tooltip {
@@ -1027,17 +1050,7 @@ div.sd-job-result-table{
   }
 }
 
-.sd-combobox{
-  display: inline-block;
-  position: relative;
-  margin-right: 6px;
-  button.sd-combobox-toggle{
-    padding: 0;
-    position: absolute!important;
-    right: 0;
-    top: 0;
-  }
-}
+
 .sd-combobox-autocomplete{
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 13px;

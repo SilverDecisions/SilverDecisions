@@ -43,6 +43,8 @@ $( function() {
                         "ui-autocomplete": "sd-combobox-autocomplete"
                     }
                 });
+            $( "<span class='bar'>" ).appendTo( this.wrapper )
+
             var input = this.input;
             this._on( this.input, {
                 autocompleteselect: function( event, ui ) {
