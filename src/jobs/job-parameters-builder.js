@@ -35,13 +35,29 @@ export class JobParametersBuilder{
 
     clean() {
         this.container.html('');
-        this.container.classed('sd-strict-validation', false)
+        this.pristine = {};
+        this.customValidators = {};
+        this.strictValidation(false);
     }
 
-    validate(){
-        this.container.classed('sd-strict-validation', true);
+    validate(strictValidation = true){
+        this.strictValidation(strictValidation);
+        this.pristine = {};
+        this.container.selectAll('.sd-pristine').classed('sd-pristine', false);
+        this.checkCustomValidators();
         return this.jobParameters.validate();
     }
+
+    checkCustomValidators(){
+        Utils.forOwn(this.customValidators, (val, key)=>{
+            val();
+        });
+    }
+
+    strictValidation(enabled=true){
+        this.container.classed('sd-strict-validation', enabled);
+    }
+
 
     build(container, jobParameterDefinitions, parentValueObject,  parentPath='', onChange=()=>{}, onInput=()=>{}){
         container.html('');
@@ -106,6 +122,7 @@ export class JobParametersBuilder{
                     onChange();
                 };
                 callbacks.onInput = () =>{
+                    paramSelection.classed('invalid', !d.validate(value));
                     onInput();
                 };
 
@@ -114,13 +131,16 @@ export class JobParametersBuilder{
                     .classed('sd-hidden', value.length>=d.maxOccurs)
                     .on('click', ()=>{
                         value.push(self.getEmptyValue(d.type));
+                        Utils.set(self.pristine, path+"["+(value.length-1)+"]", true);
                         self.buildParameterValues(valuesContainer, d, value, path, callbacks);
                         addButton.classed('sd-hidden', value.length>=d.maxOccurs);
                         callbacks.onChange();
                     });
 
-                self.buildParameterValues(valuesContainer, d, value, path,callbacks);
 
+
+
+                self.buildParameterValues(valuesContainer, d, value, path,callbacks);
             }
 
         });
@@ -133,24 +153,47 @@ export class JobParametersBuilder{
 
         var paramValues = container.selectAll(".sd-job-parameter-value").data(values);
 
+        paramValues.exit().remove();
         var paramValuesEnter = paramValues.enter().appendSelector('div.sd-job-parameter-value');
 
         var paramValuesMerge = paramValuesEnter.merge(paramValues);
 
+        var temp = {};
+
+        var indexToSelection = {};
+
+        var customValidator = Utils.get(self.customParamsConfig, path+'.customValidator');
+
+        function checkCustomValidator(){
+            if(customValidator){
+                customValidator(values).forEach((isValid, i)=>{
+                    var selection = indexToSelection[i];
+                    selection.classed('invalid', !paramDefinition.validateSingleValue(values[i]));
+                    if(!isValid) {
+                        selection.classed('invalid', true);
+                    }
+                })
+            }
+        }
+
+        self.customValidators[path] = checkCustomValidator;
+
         paramValuesEnter.each(function (value, i) {
-
-            var selection = d3.select(this);
-
             var derivedValueUpdaters = [];
 
             function updateDerivedValues(){
                 derivedValueUpdaters.forEach(updater=>updater(values[i]))
             }
 
+            var selection = d3.select(this);
+            indexToSelection[i] = selection;
+
+
             if (PARAMETER_TYPE.COMPOSITE == paramDefinition.type) {
                 var nestedParameters = selection.selectOrAppend("div.sd-nested-parameters");
                 var onChange = ()=>{
                     selection.classed('invalid', !paramDefinition.validateSingleValue(value));
+                    checkCustomValidator();
                     updateDerivedValues();
                     if(callbacks.onChange){
                         callbacks.onChange();
@@ -158,23 +201,29 @@ export class JobParametersBuilder{
                 };
                 var onInput = ()=>{
                     updateDerivedValues();
+                    selection.classed('invalid', !paramDefinition.validateSingleValue(value));
+                    checkCustomValidator();
                     if(callbacks.onInput){
                         callbacks.onInput();
                     }
                 };
+
                 self.build(nestedParameters, paramDefinition.nestedParameters, value, path, onChange, onInput);
                 selection.classed('invalid', !paramDefinition.validateSingleValue(value));
+                selection.classed('sd-pristine', Utils.get(self.pristine, path+"["+i+"]", false));
             }else{
                 self.buildParameterSingleValue(selection, paramDefinition, {
                     get: ()=> values[i],
                     set: (v)=> values[i]=v
                 }, path, ()=>{
                     updateDerivedValues();
+                    checkCustomValidator();
                     if(callbacks.onChange){
                         callbacks.onChange();
                     }
                 },()=>{
                     updateDerivedValues();
+                    checkCustomValidator();
                     if(callbacks.onInput){
                         callbacks.onInput();
                     }
@@ -202,6 +251,8 @@ export class JobParametersBuilder{
                 .on('click', (d)=>callbacks.onValueRemoved(d,i))
 
         });
+
+        checkCustomValidator();
 
         paramValuesMerge.each(function (value, i) {
 

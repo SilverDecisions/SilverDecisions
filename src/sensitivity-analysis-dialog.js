@@ -104,6 +104,7 @@ export class SensitivityAnalysisDialog extends Dialog {
 
     onJobParametersChanged() {
         this.debouncedCheckWarnings();
+
     }
 
     getGlobalVariableNames() {
@@ -113,6 +114,19 @@ export class SensitivityAnalysisDialog extends Dialog {
     initJobConfigurations() {
         this.jobConfigurations.length = 0;
         let ExpressionEngine = this.app.expressionEngine.constructor;
+        let customVariablesValidator = values => {
+            var isValidArray = [];
+
+            var names = [];
+            values.forEach((v, i)=>{
+                var valid = names.indexOf(v.name)<0;
+                names.push(v.name);
+                isValidArray.push(valid);
+            });
+
+            return isValidArray;
+        };
+
         this.jobConfigurations.push({
             jobName: 'sensitivity-analysis',
             customParamsConfig: {
@@ -154,11 +168,12 @@ export class SensitivityAnalysisDialog extends Dialog {
                                 }catch(e){
                                     return "";
                                 }
-
                             }
                         }
 
-                    ]
+                    ],
+                    customValidator: customVariablesValidator
+
                 }
             },
             warnings: [
@@ -214,7 +229,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                 variables: {
                     name: {
                         options: this.getGlobalVariableNames()
-                    }
+                    },
+                    customValidator: customVariablesValidator
                 }
             },
             warnings: [

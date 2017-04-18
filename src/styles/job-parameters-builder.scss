@@ -47,15 +47,15 @@
       }
     }
 
-    &.sd-strict-validation{
-      .sd-job-parameter{
-        &.invalid{
+    &.sd-strict-validation, .sd-strict-validation{
+      .sd-job-parameter, &.sd-job-parameter{
+        &.invalid:not(.sd-pristine){
           >.sd-job-parameter-name{
             color: red;
           }
         }
         .sd-job-parameter-value{
-          &.invalid{
+          &.invalid:not(.sd-pristine){
             background-color: rgba(255, 0, 0, 0.11);
           }
         }
@@ -63,10 +63,17 @@
     }
 
     &:not(.sd-strict-validation){
+
       input, select{
         &.invalid{
           border-bottom: 1px solid rgba(0,0,0,.12);
         }
+      }
+    }
+
+    .sd-pristine{
+      input, select{
+        border-bottom: 1px solid rgba(0,0,0,.12);
       }
     }
   }

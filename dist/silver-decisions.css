@@ -156,13 +156,16 @@
   display: flex;
   align-items: center; }
 
-#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter.invalid > .sd-job-parameter-name {
+#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter.invalid:not(.sd-pristine) > .sd-job-parameter-name, #silver-decisions .sd-job-parameters-builder.sd-strict-validation.sd-job-parameter.invalid:not(.sd-pristine) > .sd-job-parameter-name, #silver-decisions .sd-job-parameters-builder .sd-strict-validation .sd-job-parameter.invalid:not(.sd-pristine) > .sd-job-parameter-name, #silver-decisions .sd-job-parameters-builder .sd-strict-validation.sd-job-parameter.invalid:not(.sd-pristine) > .sd-job-parameter-name {
   color: red; }
 
-#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter .sd-job-parameter-value.invalid {
+#silver-decisions .sd-job-parameters-builder.sd-strict-validation .sd-job-parameter .sd-job-parameter-value.invalid:not(.sd-pristine), #silver-decisions .sd-job-parameters-builder.sd-strict-validation.sd-job-parameter .sd-job-parameter-value.invalid:not(.sd-pristine), #silver-decisions .sd-job-parameters-builder .sd-strict-validation .sd-job-parameter .sd-job-parameter-value.invalid:not(.sd-pristine), #silver-decisions .sd-job-parameters-builder .sd-strict-validation.sd-job-parameter .sd-job-parameter-value.invalid:not(.sd-pristine) {
   background-color: rgba(255, 0, 0, 0.11); }
 
 #silver-decisions .sd-job-parameters-builder:not(.sd-strict-validation) input.invalid, #silver-decisions .sd-job-parameters-builder:not(.sd-strict-validation) select.invalid {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
+
+#silver-decisions .sd-job-parameters-builder .sd-pristine input, #silver-decisions .sd-job-parameters-builder .sd-pristine select {
   border-bottom: 1px solid rgba(0, 0, 0, 0.12); }
 
 
