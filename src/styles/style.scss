@@ -1026,3 +1026,19 @@ div.sd-job-result-table{
     }
   }
 }
+
+.sd-combobox{
+  display: inline-block;
+  position: relative;
+  margin-right: 6px;
+  button.sd-combobox-toggle{
+    padding: 0;
+    position: absolute!important;
+    right: 0;
+    top: 0;
+  }
+}
+.sd-combobox-autocomplete{
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px;
+}

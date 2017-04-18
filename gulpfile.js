@@ -50,12 +50,20 @@ gulp.task('build-config', function() {
 });
 
 
-gulp.task('build-css', function () {
-    return buildCss(projectName, './dist');
+gulp.task('build-css', ['build-app-css', 'build-vendor-css'], function () {
+
 });
 
-function buildCss(fileName, dest) {
-    var pipe = gulp.src('./src/styles/*')
+gulp.task('build-app-css', function () {
+    return buildCss(projectName, './src/styles/*', './dist');
+});
+
+gulp.task('build-vendor-css', function () {
+    return buildCss(projectName+"-vendor", './vendor/css/*', './dist');
+});
+
+function buildCss(fileName, src, dest) {
+    var pipe = gulp.src(src)
         .pipe(plugins.plumber({errorHandler: onError}))
         .pipe(plugins.sass())
         .pipe(plugins.concat(fileName + '.css'))
@@ -149,7 +157,7 @@ gulp.task('build', ['build-css', 'build-app', 'build-core', 'build-vendor'], fun
 
 gulp.task('watch', function() {
     gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json'], ['build-app']);
-    gulp.watch(['./src/styles/*.*css'], ['build-css']);
+    gulp.watch(['./src/styles/*.*css'], ['build-app-css']);
     gulp.watch(['./node_modules/sd-computations/src/**/*.js', './node_modules/sd-model/src/**/*.js', './node_modules/sd-utils/src/**/*.js'], ['build-core']);
 });
 
@@ -238,7 +246,7 @@ function generateDocs(){
     var copyFiles = copyFilesToDocs(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'], basename);
     var coreBasename = "silver-decisions-core-"+p.version+'.min';
     var copyCoreFiles = copyFilesToDocs(['./dist/silver-decisions-core.min.js'], coreBasename);
-    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js'], "silver-decisions-vendor-"+p.version+'.min');
+    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js', './dist/silver-decisions-vendor.min.css'], "silver-decisions-vendor-"+p.version+'.min');
 
     var updateReferences = gulp.src('./docs/SilverDecisions.html')
         .pipe(plugins.replace(/"silver-decisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)\.min/g, '"silver-decisions$1'+p.version+'.min'))
@@ -248,7 +256,7 @@ function generateDocs(){
         .pipe(plugins.replace(/silver-decisions-core-(.*)\.min/g, coreBasename))
         .pipe(gulp.dest('./docs/'));
 
-    return merge(copyFiles,copyCoreFiles, updateReferences, updateWorkerReferences)
+    return merge(copyFiles,copyCoreFiles, copyVendorFiles, updateReferences, updateWorkerReferences)
 }
 
 function map_error(err) {

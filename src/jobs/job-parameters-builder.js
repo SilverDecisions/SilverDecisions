@@ -6,6 +6,7 @@ import {Utils} from "sd-utils";
 import {i18n} from "../i18n/i18n";
 import {AppUtils} from "../app-utils";
 import {Tooltip} from "../tooltip";
+import {Autocomplete} from "../autocomplete"
 
 export class JobParametersBuilder{
 
@@ -305,6 +306,11 @@ export class JobParametersBuilder{
             input = selection.append('select');
             var optionsSel = input.selectAll("option").data(options);
             optionsSel.enter().append("option").attr("value", d=>d).text(d=>d);
+
+            if(Utils.get(self.customParamsConfig, path+'.optionsAutocomplete', null)){
+                let autocomplete = new Autocomplete(input);
+                input = autocomplete.getInput();
+            }
         }else{
             input = selection.append('input').attr('type', inputType);
         }
@@ -322,6 +328,7 @@ export class JobParametersBuilder{
             }else{
                 d3.select(this).classed('invalid', false);
             }
+
             valueAccessor.set(value);
             if (d3.event.type == 'change') {
                 if (onChange) {

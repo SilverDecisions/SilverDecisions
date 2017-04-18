@@ -130,7 +130,8 @@
 
 #silver-decisions .sd-job-parameters-builder .sd-help-icon {
   opacity: 0.6;
-  cursor: help; }
+  cursor: help;
+  margin-left: 5px; }
   #silver-decisions .sd-job-parameters-builder .sd-help-icon:hover {
     opacity: 1; }
 
@@ -941,3 +942,17 @@ div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtTotalLabel, di
       color: black;
       text-decoration: none;
       cursor: pointer; }
+
+.sd-combobox {
+  display: inline-block;
+  position: relative;
+  margin-right: 6px; }
+  .sd-combobox button.sd-combobox-toggle {
+    padding: 0;
+    position: absolute !important;
+    right: 0;
+    top: 0; }
+
+.sd-combobox-autocomplete {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+  font-size: 13px; }

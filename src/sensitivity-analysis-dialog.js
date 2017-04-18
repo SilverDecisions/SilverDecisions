@@ -230,6 +230,10 @@ export class SensitivityAnalysisDialog extends Dialog {
                     name: {
                         options: this.getGlobalVariableNames()
                     },
+                    formula:{
+                        options: ExpressionEngine.randomMenuList,
+                        optionsAutocomplete: true
+                    },
                     customValidator: customVariablesValidator
                 }
             },
