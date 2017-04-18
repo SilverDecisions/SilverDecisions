@@ -10,13 +10,18 @@
       }
     }
 
+    .sd-nested-parameters{
+      display: flex;
+      align-items: center;
+    }
+
 
     .sd-job-parameter{
       .input-group{
         max-width: 150px;
 
         select{
-          padding-bottom: 4px;
+          padding: 4px;
         }
 
         &.sd-derived-value{

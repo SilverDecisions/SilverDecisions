@@ -135,10 +135,14 @@
   #silver-decisions .sd-job-parameters-builder .sd-help-icon:hover {
     opacity: 1; }
 
+#silver-decisions .sd-job-parameters-builder .sd-nested-parameters {
+  display: flex;
+  align-items: center; }
+
 #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group {
   max-width: 150px; }
   #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group select {
-    padding-bottom: 4px; }
+    padding: 4px; }
   #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group.sd-derived-value input {
     cursor: not-allowed; }
 
