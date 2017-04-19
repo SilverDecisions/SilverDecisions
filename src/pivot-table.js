@@ -42,7 +42,7 @@ try{
         object[key] = function(){
             var args1 = arguments;
             try{
-                let res1 = value(...args1);
+                let res1 = value.apply(this, args1);
                 return function(){
                     var res = res1(...arguments);
                     var format_ = res.format;

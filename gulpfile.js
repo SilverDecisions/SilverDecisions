@@ -107,7 +107,7 @@ function buildJsDependencies(jsFileName, moduleNames, dest){
 
 function finishBrowserifyBuild(b, jsFileName, dest){
     var pipe = b
-        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
+        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign", "transform-object-rest-spread", "transform-es2015-spread", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
         .bundle()
         .on('error', map_error)
         .pipe(plugins.plumber({ errorHandler: onError }))

@@ -226,6 +226,15 @@ export class AppUtils {
         return div.innerHTML;
     }
 
+    static dispatchHtmlEvent(element, name){
+        if ("createEvent" in document) {
+            var evt = document.createEvent("HTMLEvents");
+            evt.initEvent(name, false, true);
+            element.dispatchEvent(evt);
+        }
+        else
+            element.fireEvent("on"+name);
+    }
 
     static dispatchEvent(name, data){
         var event;

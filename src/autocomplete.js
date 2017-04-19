@@ -1,4 +1,5 @@
 import {Utils} from "sd-utils";
+import {AppUtils} from "./app-utils";
 var $ = require('jquery');
 Utils.getGlobalObject().jQuery = $; //FIXME
 require('jquery-ui/ui/data');
@@ -53,14 +54,11 @@ $( function() {
                         item: ui.item.option
                     });
 
-
-
-
                 },
 
                 autocompletechange: function(){
                     let inputD3 = d3.select($(input).get(0));
-                    inputD3.dispatch('change');
+                    AppUtils.dispatchHtmlEvent(inputD3.node(), "change");
                 }
             });
         },
