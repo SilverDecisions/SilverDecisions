@@ -147,30 +147,6 @@
         "largeParametersNumber": "Number of parameters larger than {{number}}. Sensitivity analysis display might fail or be very slow."
       }
     },
-    "tornado-diagram":{
-      "name": "Tornado diagram",
-      "param":{
-        "ruleName": "Rule name",
-        "variables": {
-          "label": "Variables",
-          "name": {
-            "label": "Name"
-          },
-          "min": {
-            "label": "Min"
-          },
-          "max": {
-            "label": "Max"
-          },
-          "length": {
-            "label": "Length"
-          }
-        }
-      },
-      "errors":{
-        "computations": "Error in sensitivity analysis computations for the following parameters:"
-      }
-    },
     "probabilistic-sensitivity-analysis":{
       "name": "Probabilistic sensitivity analysis",
       "param":{
@@ -188,7 +164,7 @@
           },
           "formula": {
             "label": "Formula",
-            "help": "Example: formula random() samples a random value from interval from 0 to 1"
+            "help": "Select formula temlplate from the menu or write custom code"
           }
         }
       },
