@@ -30,6 +30,7 @@
     "redo": "Ponów",
     "settings": "Ustawienia",
     "about": "Informacje",
+    "sensitivityAnalysis": "Analiza wrażliwości",
     "recompute": "Przelicz"
   },
   "node":{
@@ -76,6 +77,25 @@
       "delete": "Usuń"
     }
   },
+  "sensitivityAnalysisDialog":{
+    "title": "Analiza wrażliwości",
+    "jobSelect": "",
+    "buttons": {
+      "runJob": "Uruchom",
+      "stopJob": "Zatrzymaj",
+      "terminateJob": "Zakończ",
+      "resumeJob": "Wznów",
+      "downloadCsv": "Pobierz CSV",
+      "back": "Wstecz",
+      "clear": "Wyczyść"
+    }
+  },
+  "jobParametersBuilder": {
+    "buttons": {
+      "removeParameterValue": "Usuń",
+      "addParameterValue": "Dodaj"
+    }
+  },
   "jobResultTable":{
     "tooltip": {
       "multiplePoliciesInCell": "{{number}} polityk"
@@ -88,6 +108,75 @@
       "renderers":{
         "heatmap": "Mapa cieplna"
       }
+    },
+    "policyPreview": "podgląd polityki"
+  },
+  "job":{
+    "sensitivity-analysis":{
+      "name": "Analiza wrażliwości N-czynnikowa",
+      "param":{
+        "ruleName": "Nazwa reguły",
+        "extendedPolicyDescription": {
+          "label": "Rozszerzony opis polityki"
+        },
+        "variables": {
+          "label": "Zmienne",
+          "name": {
+            "label": "Nazwa"
+          },
+          "min": {
+            "label": "Minimum"
+          },
+          "max": {
+            "label": "Maksimum"
+          },
+          "length": {
+            "label": "Długość"
+          },
+          "step": {
+            "label": "Krok"
+          }
+        }
+      },
+      "errors":{
+        "computations": "Błąd w obliczeniach analizy wrażliwości dla następujących parametrów:"
+      },
+      "warnings": {
+        "largeScenariosNumber": "Liczba zdefiniowanych scenariuszy większa niż {{numberFormatted}}. Wyliczenie analizy wrażliwości może się nie powieść lub być bardzo powolne.",
+        "largeParametersNumber": "Liczba parametrów większa niż {{number}}. Wyświetlenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
+      }
+    },
+    "probabilistic-sensitivity-analysis":{
+      "name": "Probabilistyczna analiza wrażliwości",
+      "param":{
+        "ruleName": "Nazwa reguły",
+        "numberOfRuns": {
+          "label": "Liczba powtórzeń"
+        },
+        "extendedPolicyDescription": {
+          "label": "Rozszerzony opis reguły"
+        },
+        "variables": {
+          "label": "Zmienne",
+          "name": {
+            "label": "Nazwa"
+          },
+          "formula": {
+            "label": "Formuła",
+            "help": "Wybierz wzór formuły z menu lub wpisz własny kod"
+          }
+        }
+      },
+      "errors":{
+        "computations": "Błąd w obliczeniu analizy wrażliwości dla następujących parametrów:",
+        "param-computation": "Błąd w wyliczaniu wartości parametrów:"
+      },
+      "warnings": {
+        "largeScenariosNumber": "Liczba zdefiniowanych scenariuszy większa niż {{numberFormatted}}. Wyliczenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
+      }
+    },
+    "errors":{
+      "generic": "Błąd w obliczeniach analizy wrażliwości: {{message}}"
     }
   },
   "settingsDialog":{
