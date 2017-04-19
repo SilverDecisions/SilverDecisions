@@ -159,8 +159,6 @@ export class JobParametersBuilder{
 
         var paramValuesMerge = paramValuesEnter.merge(paramValues);
 
-        var temp = {};
-
         var indexToSelection = {};
 
         var customValidator = Utils.get(self.customParamsConfig, path+'.customValidator');
@@ -305,7 +303,7 @@ export class JobParametersBuilder{
         if(options && options.length){
             inputType = 'select';
             input = selection.append('select');
-            var optionsSel = input.selectAll("option").data(options);
+            var optionsSel = input.selectAll("option").data([null].concat(options));
             optionsSel.enter().append("option").attr("value", d=>d).text(d=>d);
 
             if(Utils.get(self.customParamsConfig, path+'.optionsAutocomplete', null)){
