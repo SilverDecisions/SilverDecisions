@@ -23,8 +23,35 @@ var chalk = require('chalk');
 var projectName= "silver-decisions";
 
 var dependencies = [];
+
+//FIXME automatize detection of nested "/" dependencies
+var nestedDependencies = [
+    'jquery-ui/ui/scroll-parent',
+    'jquery-ui/ui/widget',
+    'jquery-ui/ui/widgets/mouse',
+    'jquery-ui/ui/widgets/button',
+    'jquery-ui/ui/widgets/menu',
+    'jquery-ui/ui/widgets/sortable',
+    'jquery-ui/ui/unique-id',
+    'jquery-ui/ui/position',
+    'jquery-ui/ui/keycode',
+    'jquery-ui/ui/safe-active-element',
+    'jquery-ui/ui/widgets/autocomplete',
+    'pivottable/dist/pivot.it',
+    'pivottable/dist/pivot.de',
+    'pivottable/dist/pivot.fr',
+    'pivottable/dist/pivot.pl',
+
+];
+dependencies.push(...nestedDependencies);
+
+
 var vendorDependencies = [];
+vendorDependencies.push(...nestedDependencies);
+
 var sdDependencies = [];
+
+
 for(var k in p.dependencies){
     if(p.dependencies.hasOwnProperty(k)){
         dependencies.push(k);

@@ -10,7 +10,7 @@ require('jquery-ui/ui/widgets/menu');
 require('jquery-ui/ui/unique-id');
 require('jquery-ui/ui/position');
 require('jquery-ui/ui/keycode');
-require('jquery-ui/ui/safe-active-element.js');
+require('jquery-ui/ui/safe-active-element');
 require('jquery-ui/ui/widgets/autocomplete');
 import * as d3 from './d3'
 

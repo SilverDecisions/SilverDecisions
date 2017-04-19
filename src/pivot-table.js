@@ -33,6 +33,7 @@ try{
 require('pivottable/dist/pivot.it');
 require('pivottable/dist/pivot.de');
 require('pivottable/dist/pivot.fr');
+require('pivottable/dist/pivot.pl');
 
 // pivot show zero hack continuation
 try{
