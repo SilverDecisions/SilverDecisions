@@ -79,7 +79,6 @@
   },
   "sensitivityAnalysisDialog":{
     "title": "Analiza wrażliwości",
-    "jobSelect": "",
     "buttons": {
       "runJob": "Uruchom",
       "stopJob": "Zatrzymaj",

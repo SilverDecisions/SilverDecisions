@@ -80,7 +80,6 @@
   },
   "sensitivityAnalysisDialog":{
     "title": "Sensitivity analysis",
-    "jobSelect": "",
     "buttons": {
       "runJob": "Run",
       "stopJob": "Stop",

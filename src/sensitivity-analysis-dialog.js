@@ -284,7 +284,7 @@ export class SensitivityAnalysisDialog extends Dialog {
         var self = this;
         this.jobSelect = this.container.select(".sd-job-select-input-group").html(Templates.get("selectInputGroup", {
             id: Utils.guid(),
-            label: i18n.t("sensitivityAnalysisDialog.jobSelect"),
+            label: null,
             name: "sd-job-select",
             options: this.jobConfigurations.map(c=>({
                 label: i18n.t("job." + c.jobName + ".name"),
