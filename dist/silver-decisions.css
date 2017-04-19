@@ -686,7 +686,10 @@
     #silver-decisions .sd-sensitivity-analysis-dialog .sd-sensitivity-analysis-action-buttons button.sd-run-job-button {
       font-size: 16px; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-formula {
-    max-width: 200px; }
+    max-width: 215px;
+    width: 215px; }
+    #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-formula .sd-combobox {
+      width: 100%; }
   #silver-decisions button {
     background: rgba(158, 158, 158, 0.2);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -751,6 +754,8 @@
       background: none;
       box-shadow: none;
       transform: scale(0.65, 1.2); }
+    #silver-decisions .sd-combobox input.sd-combobox-input {
+      padding-right: 20px; }
 
 .sd-tooltip {
   position: absolute;
@@ -964,4 +969,11 @@ div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtTotalLabel, di
 
 .sd-combobox-autocomplete {
   font-family: Roboto, Helvetica, Arial, sans-serif;
-  font-size: 11px; }
+  font-size: 11px;
+  max-height: 150px;
+  overflow-y: auto; }
+  .sd-combobox-autocomplete .ui-menu-item-wrapper {
+    font-weight: normal; }
+    .sd-combobox-autocomplete .ui-menu-item-wrapper.ui-state-active {
+      font-weight: normal;
+      margin: 0; }

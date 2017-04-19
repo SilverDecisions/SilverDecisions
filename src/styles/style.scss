@@ -640,7 +640,13 @@
     }
     .sd-job-parameters-builder .sd-job-parameter{
       .sd-parameter-formula{
-        max-width: 200px;
+        max-width: 215px;
+        width: 215px;
+
+        .sd-combobox{
+          width: 100%;
+        }
+
       }
     }
 
@@ -730,6 +736,10 @@
       background: none;
       box-shadow: none;
       transform: scale(0.65,1.2);
+    }
+
+    input.sd-combobox-input{
+      padding-right: 20px;
     }
   }
 }
@@ -1054,4 +1064,14 @@ div.sd-job-result-table{
 .sd-combobox-autocomplete{
   font-family: Roboto, Helvetica, Arial, sans-serif;
   font-size: 11px;
+  max-height: 150px;
+  overflow-y: auto;
+
+  .ui-menu-item-wrapper{
+    font-weight: normal;
+    &.ui-state-active{
+      font-weight: normal;
+      margin: 0;
+    }
+  }
 }
