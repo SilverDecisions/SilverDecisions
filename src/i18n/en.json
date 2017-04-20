@@ -163,7 +163,7 @@
           },
           "formula": {
             "label": "Formula",
-            "help": "Select formula temlplate from the menu or write custom code"
+            "help": "Select formula template from the menu or write custom code"
           }
         }
       },

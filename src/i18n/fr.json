@@ -30,6 +30,7 @@
     "redo": "Refaire",
     "settings": "Parametres",
     "about": "A propos",
+    "sensitivityAnalysis": "Analyse de sensibilité",
     "recompute": "Recalculer"
   },
   "node":{
@@ -77,9 +78,27 @@
       "delete": "Effacer"
     }
   },
+  "sensitivityAnalysisDialog":{
+    "title": "Analyse de sensibilité",
+    "buttons": {
+      "runJob": "Exécuter",
+      "stopJob": "Arrêter",
+      "terminateJob": "Terminer",
+      "resumeJob": "Reprendre",
+      "downloadCsv": "Télécharger CSV",
+      "back": "Retourner",
+      "clear": "Effacer"
+    }
+  },
+  "jobParametersBuilder": {
+    "buttons": {
+      "removeParameterValue": "Effacer",
+      "addParameterValue": "Ajouter"
+    }
+  },
   "jobResultTable":{
     "tooltip": {
-      "multiplePoliciesInCell": "{{number}} policies"
+      "multiplePoliciesInCell": "{{number}} règles"
     },
     "pivot": {
       "aggregators":{
@@ -89,6 +108,75 @@
       "renderers":{
         "heatmap": "Carte de chaleur"
       }
+    },
+    "policyPreview": "Aperçu de la règle"
+  },
+  "job":{
+    "sensitivity-analysis":{
+      "name": "Analyse de sensibilité multivariée",
+      "param":{
+        "ruleName": "Nom de la règle",
+        "extendedPolicyDescription": {
+          "label": "Description détaillée de la règle"
+        },
+        "variables": {
+          "label": "Variables",
+          "name": {
+            "label": "Étiquette"
+          },
+          "min": {
+            "label": "Min"
+          },
+          "max": {
+            "label": "Max"
+          },
+          "length": {
+            "label": "Longueur"
+          },
+          "step": {
+            "label": "Étape"
+          }
+        }
+      },
+      "errors":{
+        "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:"
+      },
+      "warnings": {
+        "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente.",
+        "largeParametersNumber": "Nombre de paramètres est plus grand que {{number}}. Affichage de l'analyse de sensibilité pouvait échouer ou être très lente."
+      }
+    },
+    "probabilistic-sensitivity-analysis":{
+      "name": "Analyse de sensibilité probabiliste",
+      "param":{
+        "ruleName": "Nom de la règle",
+        "numberOfRuns": {
+          "label": "Nombre d'essais"
+        },
+        "extendedPolicyDescription": {
+          "label": "Description détaillée de la règle"
+        },
+        "variables": {
+          "label": "Variables",
+          "name": {
+            "label": "Étiquette"
+          },
+          "formula": {
+            "label": "Formule",
+            "help": "Sélectionner le modèle de la formule dans le menu ou écrire un code personnalisé."
+          }
+        }
+      },
+      "errors":{
+        "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:",
+        "param-computation": "Erreur de calcul des valeurs de paramètres:"
+      },
+      "warnings": {
+        "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente."
+      }
+    },
+    "errors":{
+      "generic": "Erreur de calcul d'analyse de sensibilité: {{message}}"
     }
   },
   "settingsDialog":{
@@ -241,7 +329,7 @@
     "keyboard": {
       "header":"Raccourcis clavier:",
       "list":{
-        "1": "Supprimer: effacer les nouds sélectionnés",
+        "1": "Del: effacer les nouds sélectionnés",
         "2": "Ctrl-C/X: copier/couper les nouds sélectionnés",
         "3": "Ctrl-V: coller les nouds copiés comme un sous-arbre d'un noud sélectionné",
         "4": "Ctrl-Y/Z: annuler/refaire",
