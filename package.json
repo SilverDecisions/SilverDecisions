@@ -106,8 +106,8 @@
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
     "pivottable": "^2.11.0",
-    "sd-computations": "latest",
-    "sd-model": "latest",
-    "sd-utils": "latest"
+    "sd-computations": "0.2.5",
+    "sd-model": "0.1.4",
+    "sd-utils": "0.1.6"
   }
 }
