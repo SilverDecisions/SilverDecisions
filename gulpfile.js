@@ -252,11 +252,37 @@ gulp.task('test', ['prepare-test'], function (done) {
 });
 
 gulp.task('docs-clean', function (cb) {
-    return del(['./docs/silver-decisions-*.min.*'], cb);
+    return del(['./docs/app/gen/**/*'], cb);
 });
 
-gulp.task('docs-gen', ['docs-clean'], function () {
-    return generateDocs();
+gulp.task('docs-gen', ['docs-copy-files'], function () {
+    var updateReferences = gulp.src('./docs/SilverDecisions.html')
+        .pipe(plugins.replace(/"\.\/app\/gen\/silver-decisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)\.min/g, '"./app/gen/silver-decisions$1'+p.version+'.min'))
+        .pipe(plugins.replace(/"\.\/app\/gen\/silverdecisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)/g, '"./app/gen/silverdecisions$1'+p.version))
+        .pipe(gulp.dest('./docs/'));
+
+    var coreBasename = "silver-decisions-core-"+p.version+'.min';
+    var updateWorkerReferences = gulp.src('./docs/app/gen/silverdecisions-job-worker-'+p.version+'.js')
+        .pipe(plugins.replace(/silver-decisions-core\.min/g, coreBasename))
+        .pipe(gulp.dest('./docs/app/gen/'));
+
+    var updateWorkerReferences2 = gulp.src('./docs/app/gen/silverdecisions-'+p.version+'.js')
+        .pipe(plugins.replace(/\.\/silverdecisions-job-worker.js/g, "./app/gen/silverdecisions-job-worker-"+p.version+'.js'))
+        .pipe(gulp.dest('./docs/app/gen/'));
+
+    return merge(updateReferences, updateWorkerReferences, updateWorkerReferences2)
+});
+
+gulp.task('docs-copy-files', ['docs-clean'], function () {
+    var basename = "silver-decisions-"+p.version+'.min';
+    var copyFiles = copyFilesToDocs(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'], basename);
+    var coreBasename = "silver-decisions-core-"+p.version+'.min';
+    var copyCoreFiles = copyFilesToDocs(['./dist/silver-decisions-core.min.js'], coreBasename);
+    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js', './dist/silver-decisions-vendor.min.css'], "silver-decisions-vendor-"+p.version+'.min');
+    var copyAppFiles = copyFilesToDocs(['./docs/app/src/silverdecisions.js', './docs/app/src/silverdecisions.css'], "silverdecisions-"+p.version+'');
+    var copyWorkerFiles = copyFilesToDocs(['./docs/app/src/silverdecisions-job-worker.js'], "silverdecisions-job-worker-"+p.version+'');
+
+    return merge(copyFiles,copyCoreFiles, copyVendorFiles, copyAppFiles, copyWorkerFiles)
 });
 
 function copyFilesToDocs(src, basename){
@@ -264,27 +290,9 @@ function copyFilesToDocs(src, basename){
         .pipe(plugins.rename({
             basename: basename
         }))
-        .pipe(gulp.dest('./docs'));
+        .pipe(gulp.dest('./docs/app/gen/'));
 }
 
-function generateDocs(){
-    gutil.log('generateDocs');
-    var basename = "silver-decisions-"+p.version+'.min';
-    var copyFiles = copyFilesToDocs(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'], basename);
-    var coreBasename = "silver-decisions-core-"+p.version+'.min';
-    var copyCoreFiles = copyFilesToDocs(['./dist/silver-decisions-core.min.js'], coreBasename);
-    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js', './dist/silver-decisions-vendor.min.css'], "silver-decisions-vendor-"+p.version+'.min');
-
-    var updateReferences = gulp.src('./docs/SilverDecisions.html')
-        .pipe(plugins.replace(/"silver-decisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)\.min/g, '"silver-decisions$1'+p.version+'.min'))
-        .pipe(gulp.dest('./docs/'));
-
-    var updateWorkerReferences = gulp.src('./docs/silverdecisions-job-worker.js')
-        .pipe(plugins.replace(/silver-decisions-core-(.*)\.min/g, coreBasename))
-        .pipe(gulp.dest('./docs/'));
-
-    return merge(copyFiles,copyCoreFiles, copyVendorFiles, updateReferences, updateWorkerReferences)
-}
 
 function map_error(err) {
     if (err.fileName) {
