@@ -30,6 +30,7 @@
     "redo": "Wiederholen",
     "settings": "Einstellungen",
     "about": "Über",
+    "sensitivityAnalysis": "Sensitivitätsanalyse",
     "recompute": "Neu Berechnen"
   },
   "node":{
@@ -75,6 +76,107 @@
     },
     "text":{
       "delete": "Löschen"
+    }
+  },
+  "sensitivityAnalysisDialog":{
+    "title": "Sensitivitätsanalyse",
+    "buttons": {
+      "runJob": "Lauf",
+      "stopJob": "Stop",
+      "terminateJob": "Beenden",
+      "resumeJob": "Fortsetzen",
+      "downloadCsv": "CSV Herunterladen",
+      "back": "Zurück",
+      "clear": "Löschen"
+    }
+  },
+  "jobParametersBuilder": {
+    "buttons": {
+      "removeParameterValue": "Entfernen",
+      "addParameterValue": "Hinzufügen"
+    }
+  },
+  "jobResultTable":{
+    "tooltip": {
+      "multiplePoliciesInCell": "{{number}} Grundregeln"
+    },
+    "pivot": {
+      "aggregators":{
+        "maximum": "Maximum",
+        "minimum": "Minimum"
+      },
+      "renderers":{
+        "heatmap": "Wärmekarte"
+      }
+    },
+    "policyPreview": "Grundregel Vorschau"
+  },
+  "job":{
+    "sensitivity-analysis":{
+      "name": "N-Wege-Sensitivitätsanalyse",
+      "param":{
+        "ruleName": "Regelname",
+        "extendedPolicyDescription": {
+          "label": "Erweiterte Grundregeln Beschreibung"
+        },
+        "variables": {
+          "label": "Variables",
+          "name": {
+            "label": "Name"
+          },
+          "min": {
+            "label": "Min"
+          },
+          "max": {
+            "label": "Max"
+          },
+          "length": {
+            "label": "Länge"
+          },
+          "step": {
+            "label": "Schritt"
+          }
+        }
+      },
+      "errors":{
+        "computations": "Fehler bei der Sensitivitätsanalyse für folgende Parameter:"
+      },
+      "warnings": {
+        "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam.",
+        "largeParametersNumber": "Anzahl der Parameter größer als {{number}}. Die Anzeige der Resultate der Sensitivitätsanalyse könnte fehlschlagen oder sehr langsam sein."
+      }
+    },
+    "probabilistic-sensitivity-analysis":{
+      "name": "Probabilistische Sensitivitätsanalyse",
+      "param":{
+        "ruleName": "Regelname",
+        "numberOfRuns": {
+          "label": "Anzahl der Läufe"
+        },
+        "extendedPolicyDescription": {
+          "label": "Erweiterte Grundregel Beschreibung"
+        },
+        "variables": {
+          "label": "Variablen",
+          "name": {
+            "label": "Name"
+          },
+          "formula": {
+            "label": "Formel",
+            "help": "Wählen Sie die Formelvorlage aus dem Menü aus oder schreiben Sie benutzerdefinierten Code"
+          }
+        }
+      },
+      "errors":{
+        "computations": "Berechnungsfehler der Sensitivitätsanalyse für folgende Parameter:",
+        "param-computation": "Fehler beim Berechnen von Parameterwerten:"
+      },
+      "warnings": {
+        "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam."
+      }
+    },
+    "errors":{
+      "generic": "Fehler bei der Sensitivitätsanalyse: {{message}}"
     }
   },
   "settingsDialog":{
