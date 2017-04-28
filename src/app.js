@@ -214,7 +214,7 @@ export class App {
     }
 
     isSensitivityAnalysisAvailable() {
-        return this.dataModel.getRoots().length===1 && this.computationsManager.isValid();
+        return !this.isMultipleCriteria() && this.dataModel.getRoots().length===1 && this.computationsManager.isValid();
     }
 
     initToolbar() {
@@ -324,6 +324,7 @@ export class App {
         this.toolbar.update();
         this.sidebar.updateLayoutOptions();
         this.sidebar.updateDiagramDetails();
+        this.sidebar.updateMultipleCriteria();
     }
 
     undo() {
@@ -380,15 +381,57 @@ export class App {
         });
     }
 
+    onMultiCriteriaUpdated(fieldName){
+        var self = this;
+        var p = Promise.resolve();
+        if(fieldName=='defaultWTP'){
+            p = p.then(()=>this.checkValidityAndRecomputeObjective());
+        }
+        return p.then(()=>{
+            setTimeout(function () {
+                self.treeDesigner.redraw(true);
+                self.sidebar.updateObjectPropertiesView(self.selectedObject);
+            },1);
+        });
+    }
+
     setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
+        let prevRule = this.computationsManager.getCurrentRule();
         this.computationsManager.setCurrentRuleByName(ruleName);
+        let currentRule = this.computationsManager.getCurrentRule();
+        let multiCriteria = currentRule.multiCriteria;
+        this.treeDesigner.config.maxPayoffsToDisplay = multiCriteria ? 2 : 1;
+
+        if(multiCriteria){
+            if(!this.dataModel.payoffNames.length){
+                this.dataModel.payoffNames.push(null, null);
+                this.dataModel.payoffNames[currentRule.minimizedPayoffIndex] = i18n.t('multipleCriteria.defaultMinimizedCriterionName');
+                this.dataModel.payoffNames[currentRule.maximizedPayoffIndex] = i18n.t('multipleCriteria.defaultMaximizedCriterionName');
+            }
+            this.treeDesigner.config.payoffNames = this.dataModel.payoffNames;
+        }else{
+            this.treeDesigner.config.payoffNames = [null, null];
+        }
         return this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric).then(()=>{
             if(updateView){
-                this.updateView(true);
+                this.updateView(false);
             }
         });
 
     }
+
+    isMultipleCriteria(){
+        return this.computationsManager.getCurrentRule().multiCriteria;
+    }
+
+    flipCriteria(){
+        this.computationsManager.flipCriteria().then(()=>{
+            this.updateView(false);
+        }).catch(e=>{
+            log.error(e);
+        })
+    }
+
 
     getCurrentObjectiveRule(){
         return this.computationsManager.getCurrentRule();
@@ -549,6 +592,12 @@ export class App {
                     trees: diagramData.trees,
                     texts: diagramData.texts
                 }
+            }
+
+            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, "0.8.0")<0){
+
+                dataModelObject.trees
+
             }
         }
 

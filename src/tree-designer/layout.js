@@ -177,10 +177,16 @@ export class Layout{
 
     nodeAggregatedPayoffPosition(selection) {
         var fontSize = 12;
-        return Layout.setHangingPosition(selection)
-            .attr('x', this.config.nodeSize / 2 + 7)
-            .attr('y', -Math.max(fontSize+ 5, this.config.nodeSize / 2)+ 5)
+        var x = this.config.nodeSize / 2 + 7;
+        Layout.setHangingPosition(selection)
+            .attr('x', x)
+            .attr('y', d=>{
+                let number = Utils.isArray(d.displayValue('aggregatedPayoff')) ? d.displayValue('aggregatedPayoff').length : 1;
+                return -Math.max(number*fontSize + number > 1 ? 0 : 5, this.config.nodeSize / 2)+ (number >  1 ? 2 : 5)
+            });
 
+        selection.selectAll('tspan').attr('x', x);
+        return selection;
             // .attr('text-anchor', 'middle')
             // .attr('dominant-baseline', 'hanging')
     }
@@ -232,9 +238,14 @@ export class Layout{
     }
 
     edgePayoffPosition(selection) {
-        return Layout.setHangingPosition(selection)
+        Layout.setHangingPosition(selection)
             .attr('x', d=>d.$linePoints[2][0] + 2)
-            .attr('y', d=>d.$linePoints[2][1] + 7)
+            .attr('y', d=>d.$linePoints[2][1] + 7);
+
+        selection.selectAll('tspan').attr('x', function(d){
+            return d3.select(this.parentNode).datum().$linePoints[2][0] + 2
+        });
+        return selection;
 
     }
 
@@ -249,13 +260,11 @@ export class Layout{
     edgeProbabilityPosition(selection) {
         return Layout.setHangingPosition(selection)
             .attr('x', function (d) {
-                var len = d3.select(this).node().getComputedTextLength();
-                var min = d.$linePoints[2][0] + 2 + d3.select(this.previousSibling).node().getBBox().width + 7 + len;
+                var len = this.getComputedTextLength();
+                var min = d.$linePoints[2][0] + 2 + this.previousSibling.childNodes[0].getBBox().width + 7 + len;
                 return Math.max(min, d.$linePoints[3][0] - 8);
             })
             .attr('y', d=>d.$linePoints[2][1] + 7)
-
-
     }
 
     getMinMarginBetweenNodes(){

@@ -4,6 +4,8 @@ import {i18n} from "./i18n/i18n";
 import {Templates} from "./templates";
 import {Utils} from "sd-utils";
 import {AppUtils} from "./app-utils";
+import {InputField} from "./form/input-field";
+import {PathValueAccessor} from "./form/path-value-accessor";
 
 export class SettingsDialog extends Dialog{
 
@@ -260,45 +262,6 @@ export class FormGroup{
         this.groups.push(group);
         return group;
     }
-}
-
-class PathValueAccessor {
-    sourceObject;
-    path;
-    constructor(sourceObject, path){
-        this.sourceObject=sourceObject;
-        this.path = path;
-    }
-
-    get(){
-        return Utils.get(this.sourceObject, this.path);
-    }
-
-    set(v){
-        return Utils.set(this.sourceObject, this.path, v);
-    }
-}
-
-class InputField{
-    name;
-    type;
-    validator;
-    valueAccessor;
-
-    id;
-    label;
-    valueUpdateCallback;
-
-    constructor(id, name, type, label, valueAccessor, validator, options){
-        this.name = name;
-        this.type = type;
-        this.valueAccessor = valueAccessor;
-        this.validator = validator;
-        this.id=id;
-        this.label = label;
-        this.options = options;
-    }
-
 }
 
 

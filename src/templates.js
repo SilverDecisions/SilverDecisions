@@ -16,6 +16,7 @@ export class Templates{
     static diagramDetailsBox = require('./templates/sidebar/diagram_details_box.html');
     static evaluatedVariables = require('./templates/evaluated_variables.html');
     static definitions = require('./templates/sidebar/definitions.html');
+    static multipleCriteria = require('./templates/sidebar/multiple_criteria.html');
     static sidebar = require('./templates/sidebar/sidebar.html');
     static settingsDialog = require('./templates/settings_dialog.html');
     static settingsDialogFormGroup = require('./templates/settings_dialog_form_group.html');

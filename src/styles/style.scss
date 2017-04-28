@@ -256,6 +256,53 @@
 
       }
 
+      #sd-multiple-criteria {
+        @include extendable-card-mixin();
+
+        .content {
+          font-size: 12px;
+          overflow: hidden;
+
+          input, textarea {
+            &.invalid {
+              border-color: red;
+              outline-color: red;
+            }
+          }
+        }
+
+        .sd-action-buttons {
+          margin-top: 7px;
+          button {
+            margin: 2px;
+
+            height: 1em;
+            width: 1em;
+            line-height: 1em;
+            padding: 0;
+
+          }
+          #sd-show-league-table-button {
+            float: left;
+            $font-size: 24px;
+            font-size: $font-size;
+            i {
+              font-size: $font-size;
+            }
+          }
+          #sd-flip-criteria-button {
+            float: right;
+            $font-size: 28px;
+            font-size: $font-size;
+            i {
+              font-size: $font-size;
+            }
+
+          }
+        }
+
+      }
+
       #object-properties {
         opacity: 0;
         @include card-mixin();
@@ -376,14 +423,14 @@
 
       .payoff {
         fill: #0000d7;
-        &.negative {
+        &.negative, .negative {
           //fill: #0000d7;
         }
       }
 
       .aggregated-payoff {
         fill: #006f00;
-        &.negative {
+        &.negative, .negative {
           fill: #b60000;
         }
       }
@@ -508,7 +555,7 @@
 
       .payoff {
         fill: #006f00;
-        &.negative {
+        &.negative, .negative {
           fill: #b60000;
         }
       }

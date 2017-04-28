@@ -1,18 +1,22 @@
-import * as d3 from './d3'
-import {i18n} from './i18n/i18n'
-import {Utils} from 'sd-utils'
-import {AppUtils} from './app-utils'
-import {domain as model} from 'sd-model'
-import {PayoffInputValidator} from './validation/payoff-input-validator'
-import {ProbabilityInputValidator} from './validation/probability-input-validator'
+import * as d3 from "./d3";
+import {i18n} from "./i18n/i18n";
+import {Utils} from "sd-utils";
+import {AppUtils} from "./app-utils";
+import {domain as model} from "sd-model";
+import {PayoffInputValidator} from "./validation/payoff-input-validator";
+import {ProbabilityInputValidator} from "./validation/probability-input-validator";
 import {Templates} from "./templates";
 import {Tooltip} from "./tooltip";
+import {InputField} from "./form/input-field";
+import {PathValueAccessor} from "./form/path-value-accessor";
+import {NumberInputValidator} from "./validation/number-input-validator";
+import {RequiredInputValidator} from "./validation/required-input-validator";
 
 export class Sidebar {
 
     app;
     container;
-    dispatch = d3.dispatch("recomputed", "object-updated");
+    dispatch = d3.dispatch("recomputed", "object-updated", "multi-criteria-updated");
 
 
     constructor(container, app) {
@@ -22,6 +26,7 @@ export class Sidebar {
         this.initLayoutOptions();
         this.initDiagramDetails();
         this.initDefinitions();
+        this.initMultipleCriteria();
         var self = this;
 
         document.addEventListener('SilverDecisionsRecomputedEvent', function (data) {
@@ -31,6 +36,7 @@ export class Sidebar {
         });
 
         self.dispatch.on("object-updated", Utils.debounce((object, fieldName)=> self.app.onObjectUpdated(object, fieldName), 350));
+        self.dispatch.on("multi-criteria-updated", Utils.debounce((fieldName)=> self.app.onMultiCriteriaUpdated(fieldName), 350));
 
     }
 
@@ -143,6 +149,85 @@ export class Sidebar {
         });
 
         AppUtils.elasticTextarea(this.definitionsCode);
+    }
+
+    initMultipleCriteria() {
+        var self = this;
+        this.multipleCriteriaContainer = this.container.select('#sd-multiple-criteria');
+        this.multipleCriteriaContainer.classed('sd-hidden', !this.app.isMultipleCriteria());
+
+        this.multipleCriteriaContainer.select('.toggle-button').on('click', () => {
+            this.multipleCriteriaContainer.classed('sd-extended', !this.multipleCriteriaContainer.classed('sd-extended'));
+        });
+
+
+        this.multipleCriteriaContainer.select('#sd-show-league-table-button').on('click', () => {
+            this.app.showLeagueTable();
+        });
+
+        this.multipleCriteriaContainer.select('#sd-flip-criteria-button').on('click', () => {
+            this.app.flipCriteria();
+        });
+
+
+        this.multipleCriteriaFields = [];
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion1', 'nameOfCriterion1', 'text', i18n.t('multipleCriteria.nameOfCriterion1'), new PathValueAccessor(self.app.dataModel, 'payoffNames[0]'), new RequiredInputValidator()));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion2', 'nameOfCriterion2', 'text', i18n.t('multipleCriteria.nameOfCriterion2'), new PathValueAccessor(self.app.dataModel, 'payoffNames[1]'), new RequiredInputValidator()));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultWTP', 'defaultWTP', 'text', i18n.t('multipleCriteria.defaultWTP'), new PathValueAccessor(self.app.dataModel, 'defaultWTP'), new NumberInputValidator(0)));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-minimumWTP', 'minimumWTP', 'text', i18n.t('multipleCriteria.minimumWTP'), new PathValueAccessor(self.app.dataModel, 'minimumWTP'), new NumberInputValidator(0)));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-maximumWTP', 'maximumWTP', 'text', i18n.t('multipleCriteria.maximumWTP'), new PathValueAccessor(self.app.dataModel, 'maximumWTP'), new NumberInputValidator(0)));
+
+        this.updateMultipleCriteria();
+    }
+
+    updateMultipleCriteria(){ //TODO refactor
+        var self = this;
+        var temp = {};
+        this.multipleCriteriaContainer.classed('sd-hidden', !this.app.isMultipleCriteria());
+        var inputGroups = this.multipleCriteriaContainer.select(".sd-multiple-criteria-properties").selectAll('div.input-group').data(this.multipleCriteriaFields);
+        inputGroups.exit().remove();
+        var inputGroupsEnter = inputGroups.enter().appendSelector('div.input-group').html(d=>d.type=='select'? Templates.get('selectInputGroup', d):Templates.get('inputGroup', d));
+        inputGroupsEnter.merge(inputGroups).select('.sd-input').on('change input', function (d, i) {
+            var prevValue = d.getValue();
+            var isValid = !d.validator || d.validator.validate(this.value);
+
+            d3.select(this).classed('invalid', !isValid);
+
+            if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
+                self.app.dataModel.saveStateFromSnapshot(temp[i].pristineStateSnapshot);
+                if (d.onChange) {
+                    d.onChange(object, this.value, temp[i].pristineVal);
+                }
+            }
+
+            if((prevValue+"")==this.value){
+                return;
+            }
+
+            AppUtils.updateInputClass(d3.select(this));
+            d.setValue(this.value);
+            self.dispatch.call("multi-criteria-updated", self, d.name);
+
+        })
+            .on('focus', function(d,i){
+                temp[i].pristineVal = this.value;
+
+                temp[i].pristineStateSnapshot = self.app.dataModel.createStateSnapshot();
+            })
+            .each(function (d, i) {
+                this.value = d.getValue();
+                temp[i] = {};
+                if (d.validator && !d.validator.validate(this.value)) {
+                    d3.select(this).classed('invalid', true);
+                }
+
+                AppUtils.updateInputClass(d3.select(this));
+                if (d.type == 'textarea') {
+                    AppUtils.elasticTextarea(d3.select(this));
+                    AppUtils.autoResizeTextarea(d3.select(this).node())
+                }
+
+            });
     }
 
     updateDefinitions(definitionsSourceObject, readOnly, changeCallback) {
@@ -259,49 +344,60 @@ export class Sidebar {
         return [];
     }
 
-
     getFieldListForObject(object) {
         var self = this;
+
         if (object instanceof model.Node) {
-            return [{
-                name: 'name',
-                type: 'textarea'
-            },
-                /* {
-                 name: 'code',
-                 type: 'textarea',
-                 onChange: (object, newVal, oldVal)=> object.$codeDirty = true,
-                 customOnInput: (object, newVal, oldVal)=> object.code = newVal
-                 }*/
+            return [
+                new ObjectInputField(object, {
+                    name: 'name',
+                    type: 'textarea'
+                })
             ]
         }
         if (object instanceof model.Edge) {
+            let multipleCriteria = this.app.isMultipleCriteria();
             var list = [
-                {
+                new ObjectInputField(object, {
                     name: 'name',
                     type: 'textarea'
-                },
-                {
+                }),
+                new ObjectInputField(object, {
                     name: 'payoff',
+                    path: 'payoff[0]',
+                    label: multipleCriteria ? self.app.dataModel.payoffNames[0] : undefined,
                     type: 'text',
                     validator: new PayoffInputValidator(self.app.expressionEngine)
-                }
+                })
+
+
             ];
+
+            if(multipleCriteria) {
+                list.push(new ObjectInputField(object, {
+                    name: 'payoff2',
+                    path: 'payoff[1]',
+                    label: self.app.dataModel.payoffNames[1],
+                    type: 'text',
+                    validator: new PayoffInputValidator(self.app.expressionEngine)
+                }));
+            }
+
             if (object.parentNode instanceof model.ChanceNode) {
-                list.push({
+                list.push(new ObjectInputField(object, {
                     name: 'probability',
                     type: 'text',
                     validator: new ProbabilityInputValidator(self.app.expressionEngine)
-                })
+                }))
             }
             return list;
 
         }
         if (object instanceof model.Text) {
-            return [{
+            return [new ObjectInputField(object, {
                 name: 'value',
                 type: 'textarea'
-            }]
+            })]
         }
 
         return [];
@@ -309,10 +405,6 @@ export class Sidebar {
 
     updateObjectFields(object, fieldList, container) {
         var self = this;
-
-
-        var objectType = object instanceof model.Node ? 'node' : object instanceof model.Edge ? 'edge' : 'text';
-        var getFieldId = d=>'object-' + object.$id + '-field-' + d.name;
 
         var fields = container.selectAll('div.object-field').data(fieldList);
         var temp = {};
@@ -337,22 +429,20 @@ export class Sidebar {
         });
 
         fieldsMerge.select('label')
-            .attr('for', getFieldId)
-            .html(d=>i18n.t(objectType + '.' + d.name));
+            .attr('for', d=>d.id)
+            .html(d=>d.label);
         fieldsMerge.select('.sd-input')
             .attr('type', d=>d.type == 'textarea' ? undefined : d.type)
             .attr('name', d=>d.name)
-            .attr('id', getFieldId)
+            .attr('id', d=>d.id)
             .on('change keyup', function (d, i) {
-                var prevValue = object[d.name];
-                var isValid = !d.validator || d.validator.validate(this.value, object, d.name);
-                // console.log(d.name, this.value, isValid);
-                object.setSyntaxValidity(d.name, isValid);
+                var prevValue = d.getValue();
+                var isValid = !d.validator || d.validator.validate(this.value, object, d.path);
+                object.setSyntaxValidity(d.path, isValid);
 
-                d3.select(this).classed('invalid', !object.isFieldValid(d.name));
+                d3.select(this).classed('invalid', !object.isFieldValid(d.path));
 
                 if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
-                    // object[d.name] = temp[i].pristineVal;
                     self.app.dataModel.saveStateFromSnapshot(temp[i].pristineStateSnapshot);
                     if (d.onChange) {
                         d.onChange(object, this.value, temp[i].pristineVal);
@@ -367,8 +457,8 @@ export class Sidebar {
                 if (d.customOnInput) {
                     d.customOnInput(object, this.value, temp[i].pristineVal)
                 } else {
-                    object[d.name] = this.value;
-                    self.dispatch.call("object-updated", self, object, d.name);
+                    d.setValue(this.value);
+                    self.dispatch.call("object-updated", self, object, d.path);
                 }
             })
             .on('focus', function(d,i){
@@ -376,22 +466,22 @@ export class Sidebar {
                 temp[i].pristineStateSnapshot = self.app.dataModel.createStateSnapshot();
             })
             .each(function (d, i) {
-                this.value = object[d.name];
+                this.value = d.getValue();
                 temp[i] = {};
-                if (d.validator && !d.validator.validate(this.value, object, d.name)) {
+                if (d.validator && !d.validator.validate(this.value, object, d.path)) {
                     d3.select(this).classed('invalid', true);
-                    object.setSyntaxValidity(d.name, false);
+                    object.setSyntaxValidity(d.path, false);
                 }else{
-                    object.setSyntaxValidity(d.name, true);
+                    object.setSyntaxValidity(d.path, true);
                 }
 
                 var _this = this;
                 var checkFieldStatus = () => {
-                    d3.select(_this).classed('invalid', !object.isFieldValid(d.name));
+                    d3.select(_this).classed('invalid', !object.isFieldValid(d.path));
                 };
                 checkFieldStatus();
 
-                self.dispatch.on("recomputed."+object.$id+"."+d.name, checkFieldStatus);
+                self.dispatch.on("recomputed."+object.$id+"."+d.path, checkFieldStatus);
 
                 AppUtils.updateInputClass(d3.select(this));
                 if (d.type == 'textarea') {
@@ -404,3 +494,14 @@ export class Sidebar {
         fields.exit().remove();
     }
 }
+
+class ObjectInputField extends InputField{
+    //config object with fields: name, path, type, validator, options
+    constructor(object, config) {
+        super('object-' + object.$id + '-field-' + config.name, config.name, config.type, config.label ? config.label : i18n.t(Sidebar.getObjectType(object) + '.' + config.name),
+            new PathValueAccessor(object, config.path || config.name), config.validator, config.options);
+        this.path = config.path || config.name;
+        this.onChange = config.onChange;
+    }
+}
+

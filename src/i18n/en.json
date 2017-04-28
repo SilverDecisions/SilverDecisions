@@ -23,7 +23,9 @@
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max",
         "mini-min":"mini-min",
-        "mini-max":"mini-max"
+        "mini-max":"mini-max",
+        "min-max":"min-max",
+        "max-min":"max-min"
       }
     },
     "undo": "Undo",
@@ -355,6 +357,21 @@
     },
     "evaluatedVariables": "Evaluated variables"
   },
+  "multipleCriteria":{
+    "header": "Multiple criteria",
+    "defaultMaximizedCriterionName": "Effect",
+    "defaultMinimizedCriterionName": "Cost",
+    "nameOfCriterion1": "Name for criterion 1",
+    "nameOfCriterion2": "Name for criterion 2",
+    "defaultWTP": "Default value of WTP",
+    "minimumWTP": "Minimum range for WTP",
+    "maximumWTP": "Maximum range for WTP",
+    "buttons":{
+      "openDialog" : "Open dialog",
+      "recalculate": "Recalculate"
+    },
+    "evaluatedVariables": "Evaluated variables"
+  },
   "layoutOptions":{
     "header": "Layout",
     "marginHorizontal": "Horizontal Margin",
@@ -400,12 +417,21 @@
   },
   "tooltip":{
     "node":{
-      "payoff": "Payoff",
-      "aggregatedPayoff": "Aggregated Payoff",
+      "payoff": {
+        "default": "Payoff {{number}}",
+        "named": "{{name}}"
+      },
+      "aggregatedPayoff": {
+        "default": "Aggregated Payoff {{number}}",
+        "named": "Aggregated {{name}}"
+      },
       "probabilityToEnter": "Probability to enter"
     },
     "edge":{
-      "payoff": "Payoff: {{value}}",
+      "payoff": {
+        "default": "Payoff {{number}}: {{value}}",
+        "named": "{{name}}: {{value}}"
+      },
       "probability": "Probability: {{value}}"
     }
   },

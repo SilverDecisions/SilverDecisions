@@ -1,4 +1,4 @@
-<select id="<%= id %>" name="<%= name %>">
+<select id="<%= id %>" name="<%= name %>" class="sd-input">
     <% for(i=0; i<options.length; ++i) { %>
     <option value="<% if (options[i].value !== undefined){ %><%= options[i].value %><%} else { %><%= options[i] %><%}%>"><% if (options[i].label !== undefined){ %><%= options[i].label %><%} else { %><%= options[i] %><%}%></option>
     <% } %>

@@ -1,19 +1,18 @@
-import * as d3 from '../d3'
-
-import {Utils} from 'sd-utils'
-import {AppUtils} from '../app-utils'
-import {domain as model} from 'sd-model'
-import {ContextMenu} from './context-menu'
-import {MainContextMenu} from './main-context-menu'
-import {NodeContextMenu} from './node-context-menu'
-import {Layout} from './layout'
-import {NodeDragHandler} from './node-drag-handler'
-import {Tooltip} from '../tooltip'
+import * as d3 from "../d3";
+import {Utils} from "sd-utils";
+import {AppUtils} from "../app-utils";
+import {domain as model} from "sd-model";
+import {ContextMenu} from "./context-menu";
+import {MainContextMenu} from "./main-context-menu";
+import {NodeContextMenu} from "./node-context-menu";
+import {Layout} from "./layout";
+import {NodeDragHandler} from "./node-drag-handler";
+import {Tooltip} from "../tooltip";
 import {Templates} from "../templates";
 import {TextDragHandler} from "./text-drag-handler";
 import {TextContextMenu} from "./text-context-menu";
 import {EdgeContextMenu} from "./edge-context-menu";
-import * as Hammer from "hammerjs"
+import * as Hammer from "hammerjs";
 import {i18n} from "../i18n/i18n";
 
 export class TreeDesignerConfig {
@@ -151,6 +150,8 @@ export class TreeDesignerConfig {
 
     operationsForObject = (o) => [];
 
+    payoffNames = [null, null];
+    maxPayoffsToDisplay = 1;
 
     constructor(custom) {
         if (custom) {
@@ -413,19 +414,30 @@ export class TreeDesigner {
         this.layout.nodeLabelPosition(labelMergeT)
             .attr('text-anchor', 'middle')
 
-        var payoff = nodesMerge.select('text.payoff')
+        var payoff = nodesMerge.select('text.payoff');
+
+        var payoffTspans = payoff.selectAll('tspan').data(d=>{
+            let item = d.displayValue('childrenPayoff');
+            return Utils.isArray(item) ? item : [item]
+        });
+        payoffTspans.exit().remove();
+
+        var payoffTspansM = payoffTspans.enter().append('tspan').merge(payoffTspans);
+        payoffTspansM
             // .attr('dominant-baseline', 'hanging')
+            .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
+            .attr('x', '0')
             .classed('negative', d=> {
-                var val = d.displayValue('childrenPayoff');
-                return val!==null && val<0;
+                return d!==null && d<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
             .text(d=> {
-                var val = d.displayValue('childrenPayoff');
+                var val = d
+
                 return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
             });
+        this.attachPayoffTooltip(payoffTspansM);
 
-        Tooltip.attach(payoff, d=>i18n.t('tooltip.node.payoff',{value: d.payoff}));
 
         var payoffT = payoff;
         if(this.transition){
@@ -435,18 +447,23 @@ export class TreeDesigner {
         this.layout.nodePayoffPosition(payoffEnter);
         this.layout.nodePayoffPosition(payoffT);
 
-        var aggregatedPayoff = nodesMerge.select('text.aggregated-payoff')
+        var aggregatedPayoff = nodesMerge.select('text.aggregated-payoff');
+        var aggregatedPayoffTspans = aggregatedPayoff.selectAll('tspan').data(d=>{
+            let item = d.displayValue('aggregatedPayoff');
+            return Utils.isArray(item) ? item : [item]
+        });
+        aggregatedPayoffTspans.exit().remove();
+        var aggregatedPayoffTspansM = aggregatedPayoffTspans.enter().append('tspan').merge(aggregatedPayoffTspans)
+            .attr('dy', (d,i)=>i>0 ? '0.95em': undefined)
             .classed('negative', d=> {
-                var val = d.displayValue('aggregatedPayoff');
-                return val!==null && val<0;
+                return d!==null && d<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
-            .text(d=> {
-                var val = d.displayValue('aggregatedPayoff');
+            .text(val=> {
                 return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
             });
-        Tooltip.attach(aggregatedPayoff, i18n.t('tooltip.node.aggregatedPayoff'));
 
+        this.attachPayoffTooltip(aggregatedPayoffTspansM, 'aggregatedPayoff');
 
         var aggregatedPayoffT = aggregatedPayoff;
         if(this.transition){
@@ -496,6 +513,16 @@ export class TreeDesigner {
                 }
             })
         })
+    }
+
+    attachPayoffTooltip(selection, payoffFiledName = 'payoff', object='node'){
+        var self = this;
+        Tooltip.attach(selection, (d, i)=>{
+            if(self.config.payoffNames.length>i && self.config.payoffNames[i] !== null){
+                return i18n.t('tooltip.'+object+'.'+payoffFiledName+'.named',{value: d.payoff, number: i+1, name: self.config.payoffNames[i]})
+            }
+            return i18n.t('tooltip.'+object+'.'+payoffFiledName+'.default',{value: d.payoff, number: self.config.maxPayoffsToDisplay < 2 ? '' : i+1})
+        });
     }
 
     updateTextLines(d){ //helper method for splitting text to tspans
@@ -555,7 +582,7 @@ export class TreeDesigner {
             .attr("marker-end", function(d) {
                 var suffix = d3.select(this.parentNode).classed('selected') ? '-selected' : (self.isOptimal(d)?'-optimal':'');
                 return "url(#arrow"+ suffix+")"
-            })
+            });
             // .attr("shape-rendering", "optimizeQuality")
 
 
@@ -571,39 +598,62 @@ export class TreeDesigner {
         this.layout.edgeLabelPosition(labelMergeT);
             // .text(d=>d.name);
 
-        var payoffText = edgesMerge.select('text.payoff')
+        var payoff = edgesMerge.select('text.payoff');
+
+        var payoffTspans = payoff.selectAll('tspan').data(d => {
+            let item = d.displayValue('payoff');
+            return Utils.isArray(item) ? item.slice(0, Math.min(item.length, self.config.maxPayoffsToDisplay)).map(_=>d) : [d];
+        });
+        payoffTspans.exit().remove();
+
+        var payoffTspansM = payoffTspans.enter().append('tspan').merge(payoffTspans);
+        payoffTspansM
+        // .attr('dominant-baseline', 'hanging')
+            .attr('dy', (d,i)=>i>0 ? '1.1em': undefined)
+            // .attr('x', '0')
+
             // .attr('dominant-baseline', 'hanging')
-            .classed('negative', d=> {
-                var val = d.displayPayoff();
+            .classed('negative', (d, i)=> {
+                var val = d.displayPayoff(undefined, i);
                 return val!==null && val<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs)
             // .text(d=> isNaN(d.payoff) ? d.payoff : self.config.payoffNumberFormatter(d.payoff))
-            .text(d=>{
+            .text((d, i)=>{
                 if(this.config.raw){
-                    return d.payoff;
+                    return d.payoff[i];
                 }
 
-                var val = d.displayPayoff();
-                if(val!==null){
-                    if(!isNaN(val)){
+                let item = d.displayValue('payoff');
+                let items = Utils.isArray(item) ? item : [item];
+
+                let val = items[i];
+                if (val !== null) {
+                    if (!isNaN(val)) {
                         return self.config.payoffNumberFormatter(val);
                     }
-                    if(Utils.isString(val)){
+                    if (Utils.isString(val)) {
                         return val;
                     }
                 }
 
-                if(d.payoff!==null && !isNaN(d.payoff))
-                    return self.config.payoffNumberFormatter(d.payoff);
+                if (d.payoff[i] !== null && !isNaN(d.payoff[i]))
+                    return self.config.payoffNumberFormatter(d.payoff[i]);
 
-                return d.payoff;
+                return d.payoff[i];
+
             });
-        Tooltip.attach(payoffText, d=>i18n.t('tooltip.edge.payoff',{value: d.payoff}));
 
-        var payoffTextT = payoffText;
+        Tooltip.attach(payoffTspansM, (d, i)=>{
+            if(self.config.payoffNames.length>i && self.config.payoffNames[i] !== null){
+                return i18n.t('tooltip.edge.payoff.named',{value: d.payoff[i], number: i+1, name: self.config.payoffNames[i]})
+            }
+            return i18n.t('tooltip.edge.payoff.default',{value: d.payoff[i], number: self.config.maxPayoffsToDisplay < 2 ? '' : i+1})
+        });
+
+        var payoffTextT = payoff;
         if(this.transition){
-            payoffTextT = payoffText.transition();
+            payoffTextT = payoff.transition();
         }
         this.layout.edgePayoffPosition(payoffEnter);
         this.layout.edgePayoffPosition(payoffTextT);
@@ -643,8 +693,11 @@ export class TreeDesigner {
         this.layout.edgeProbabilityPosition(probabilityEnter);
         this.layout.edgeProbabilityPosition(probabilityMergeT);
 
+
+        edgesContainer.selectAll('.edge.'+optimalClassName).raise();
+
         edgesMerge.on('contextmenu', this.edgeContextMenu);
-        edgesMerge.on('dblclick', this.edgeContextMenu)
+        edgesMerge.on('dblclick', this.edgeContextMenu);
         edgesMerge.each(function(d, i){
             var elem = this;
             var mc = new Hammer.Manager(elem);

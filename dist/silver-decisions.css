@@ -484,6 +484,60 @@
             border-radius: 28px; }
             #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .sd-action-buttons #sd-sidebar-definitions-recalculate-button i {
               font-size: 28px; }
+      #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria {
+        border: 1px solid #bfbfbf;
+        border-radius: 2px;
+        background: white;
+        box-sizing: border-box;
+        box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+        margin: 0 0 5px 0;
+        padding: 0 7px 0; }
+        #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria.sd-extended {
+          padding: 0 7px 7px; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria.sd-extended .header {
+            border-bottom: 1px solid rgba(0, 0, 0, 0.3); }
+            #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria.sd-extended .header .toggle-button .icon-arrow-up {
+              display: block; }
+            #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria.sd-extended .header .toggle-button .icon-arrow-down {
+              display: none; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria.sd-extended .content {
+            display: block; }
+        #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .header {
+          font-weight: bold;
+          padding: 7px 0; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .header .toggle-button {
+            cursor: pointer;
+            float: right; }
+            #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .header .toggle-button .icon-arrow-up {
+              display: none; }
+            #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .header .toggle-button .icon-arrow-down {
+              display: block; }
+        #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .content {
+          display: none; }
+        #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .content {
+          font-size: 12px;
+          overflow: hidden; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .content input.invalid, #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .content textarea.invalid {
+            border-color: red;
+            outline-color: red; }
+        #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .sd-action-buttons {
+          margin-top: 7px; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .sd-action-buttons button {
+            margin: 2px;
+            height: 1em;
+            width: 1em;
+            line-height: 1em;
+            padding: 0; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .sd-action-buttons #sd-show-league-table-button {
+            float: left;
+            font-size: 24px; }
+            #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .sd-action-buttons #sd-show-league-table-button i {
+              font-size: 24px; }
+          #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .sd-action-buttons #sd-flip-criteria-button {
+            float: right;
+            font-size: 28px; }
+            #silver-decisions #main-region #sd-sidebar #sd-multiple-criteria .sd-action-buttons #sd-flip-criteria-button i {
+              font-size: 28px; }
       #silver-decisions #main-region #sd-sidebar #object-properties {
         opacity: 0;
         border: 1px solid #bfbfbf;
@@ -566,7 +620,7 @@
         fill: #0000d7; }
       #silver-decisions svg.tree-designer .node .aggregated-payoff {
         fill: #006f00; }
-        #silver-decisions svg.tree-designer .node .aggregated-payoff.negative {
+        #silver-decisions svg.tree-designer .node .aggregated-payoff.negative, #silver-decisions svg.tree-designer .node .aggregated-payoff .negative {
           fill: #b60000; }
       #silver-decisions svg.tree-designer .node .probability-to-enter {
         fill: #0000d7; }
@@ -623,7 +677,7 @@
         font-size: 1em; }
       #silver-decisions svg.tree-designer .edge .payoff {
         fill: #006f00; }
-        #silver-decisions svg.tree-designer .edge .payoff.negative {
+        #silver-decisions svg.tree-designer .edge .payoff.negative, #silver-decisions svg.tree-designer .edge .payoff .negative {
           fill: #b60000; }
       #silver-decisions svg.tree-designer .edge .probability {
         fill: #0000d7; }

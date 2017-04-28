@@ -39,10 +39,10 @@ export class Tooltip {
     }
 
     static attach(target, htmlOrFn, xOffset, yOffset) {
-        target.on('mouseover', function (d) {
+        target.on('mouseover', function (d, i) {
             var html = null;
             if (Utils.isFunction(htmlOrFn)) {
-                html = htmlOrFn(d);
+                html = htmlOrFn(d, i);
             } else {
                 html = htmlOrFn;
             }
