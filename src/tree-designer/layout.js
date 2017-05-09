@@ -261,7 +261,7 @@ export class Layout{
         return Layout.setHangingPosition(selection)
             .attr('x', function (d) {
                 var len = this.getComputedTextLength();
-                var min = d.$linePoints[2][0] + 2 + this.previousSibling.childNodes[0].getBBox().width + 7 + len;
+                var min = d.$linePoints[2][0] + 2 + this.previousSibling.childNodes[0].getComputedTextLength() + 7 + len;
                 return Math.max(min, d.$linePoints[3][0] - 8);
             })
             .attr('y', d=>d.$linePoints[2][1] + 7)
