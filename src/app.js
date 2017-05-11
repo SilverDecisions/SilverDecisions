@@ -15,7 +15,7 @@ import {DefinitionsDialog} from "./definitions-dialog";
 import {ComputationsManager} from "sd-computations";
 import {SensitivityAnalysisDialog} from "./sensitivity-analysis-dialog";
 import {LoadingIndicator} from "./loading-indicator";
-
+import {LeagueTableDialog} from "./league-table/league-table-dialog";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -112,6 +112,7 @@ export class App {
         this.initAboutDialog();
         this.initDefinitionsDialog();
         this.initSensitivityAnalysisDialog();
+        this.initLeagueTableDialog();
         this.initOnBeforeUnload();
         this.initKeyCodes();
         p.then(()=>{
@@ -206,6 +207,10 @@ export class App {
         this.definitionsDialog = new DefinitionsDialog(this);
         this.definitionsDialog.onClosed = ()=> this.recompute(true, true);
 
+    }
+
+    initLeagueTableDialog() {
+        this.leagueTableDialog = new LeagueTableDialog(this);
     }
 
     initSensitivityAnalysisDialog() {
@@ -441,6 +446,9 @@ export class App {
         return this.computationsManager.getObjectiveRules();
     }
 
+    showLeagueTable(){
+        this.leagueTableDialog.open();
+    }
 
     openSensitivityAnalysis(){
         this.sensitivityAnalysisDialog.open();
@@ -662,6 +670,7 @@ export class App {
             errors.push('error.diagramDrawingFailure');
             alert(i18n.t('error.diagramDrawingFailure'));
             this.clear();
+            this.updateView(false);
             return errors
         });
     }

@@ -1,0 +1,24 @@
+<div class="sd-modal sd-league-table-dialog">
+    <div class="sd-modal-content">
+        <div class="sd-modal-header">
+            <span class="sd-modal-button sd-close-modal"><i class="material-icons">close</i></span>
+            <span class="sd-modal-button sd-extend-modal"><i class="material-icons">fullscreen</i></span>
+            <span class="sd-modal-button sd-shrink-modal"><i class="material-icons">fullscreen_exit</i></span>
+
+            <h2><%= i18n.t("leagueTableDialog.title")%></h2>
+        </div>
+        <div class="sd-modal-body">
+            <div class="sd-league-table-warnings">
+
+            </div>
+            <div class="sd-job-progress-bar-container sd-progress-bar-container sd-hidden"><div class="sd-progress-bar"></div></div>
+            <div class="sd-league-table-job-results sd-hidden">
+                <div class="sd-job-result-table-container">
+                </div>
+            </div>
+            <div class="sd-league-table-action-buttons">
+                <button class="sd-download-csv-button sd-hidden"><%= i18n.t('leagueTableDialog.buttons.downloadCsv')%></button>
+            </div>
+        </div>
+    </div>
+</div>

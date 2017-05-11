@@ -80,6 +80,24 @@
       "delete": "Delete"
     }
   },
+  "leagueTableDialog":{
+    "title": "League table",
+    "buttons": {
+      "downloadCsv": "Download CSV"
+    }
+  },
+  "leagueTable": {
+    "headers":{
+      "policyNo": "Policy #",
+      "policy": "Policy",
+      "comment": "Comment"
+    },
+    "comment":{
+      "dominatedBy": "dominated (by #{{policy}})",
+      "extendedDominatedBy": "extended-dominated (by #{{policy1}} and #{{policy2}})",
+      "icer": "ICER={{icer}}"
+    }
+  },
   "sensitivityAnalysisDialog":{
     "title": "Sensitivity analysis",
     "buttons": {
@@ -367,10 +385,9 @@
     "minimumWTP": "Minimum range for WTP",
     "maximumWTP": "Maximum range for WTP",
     "buttons":{
-      "openDialog" : "Open dialog",
-      "recalculate": "Recalculate"
-    },
-    "evaluatedVariables": "Evaluated variables"
+      "showLeagueTable" : "Show league table",
+      "flip": "Flip"
+    }
   },
   "layoutOptions":{
     "header": "Layout",

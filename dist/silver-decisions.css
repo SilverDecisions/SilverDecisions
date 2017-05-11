@@ -746,6 +746,19 @@
       width: 100%; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-extendedPolicyDescription {
     max-width: 250px; }
+  #silver-decisions .sd-league-table-dialog.sd-job-error .sd-job-progress-bar-container {
+    background-color: #edc9cb; }
+    #silver-decisions .sd-league-table-dialog.sd-job-error .sd-job-progress-bar-container .sd-progress-bar {
+      background-color: red; }
+  #silver-decisions .sd-league-table-dialog .sd-job-select-input-group {
+    display: inline-block; }
+  #silver-decisions .sd-league-table-dialog .sd-league-table-warning:first-of-type {
+    margin-top: 15px; }
+  #silver-decisions .sd-league-table-dialog .sd-league-table-action-buttons {
+    margin-top: 25px;
+    float: right; }
+    #silver-decisions .sd-league-table-dialog .sd-league-table-action-buttons button {
+      margin-left: 7px; }
   #silver-decisions button {
     background: rgba(158, 158, 158, 0.2);
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
@@ -985,6 +998,32 @@ div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtUnused {
 
 div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtTotalLabel, div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtGrandTotal, div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtRenderer, div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtCols {
   display: none; }
+
+.sd-league-table {
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12); }
+  .sd-league-table, .sd-league-table tr, .sd-league-table td, .sd-league-table th {
+    border: 1px solid #CDCDCD;
+    border-collapse: collapse; }
+  .sd-league-table th {
+    border-bottom-width: 2px;
+    text-align: left; }
+  .sd-league-table td {
+    white-space: pre; }
+  .sd-league-table td, .sd-league-table th {
+    border-left-width: 0;
+    border-right-width: 0;
+    padding: 5px 9px; }
+  .sd-league-table tr {
+    /*&:hover{
+      background-color: #eee;
+    }*/ }
+    .sd-league-table tr.sd-selected {
+      background-color: rgba(30, 144, 255, 0.35); }
+    .sd-league-table tr.sd-highlighted {
+      background-color: rgba(136, 223, 121, 0.35);
+      /* &:hover{
+        background-color: rgba(136, 223, 121, 0.55);
+      }*/ }
 
 .sd-fullscreen-popup {
   position: fixed;
