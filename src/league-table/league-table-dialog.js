@@ -79,8 +79,7 @@ export class LeagueTableDialog extends Dialog {
         this.disableActionButtonsAndShowLoadingIndicator();
 
         this.jobParameters = this.job.createJobParameters({
-            ruleName: this.computationsManager.getCurrentRule().name,
-            nameOfCriterion1: this.app.dataModel.nameOfCriterion1
+            ruleName: this.computationsManager.getCurrentRule().name
         });
         this.computationsManager.runJobWithInstanceManager(this.job.name, this.jobParameters.values, {
             onJobStarted: this.onJobStarted,
@@ -237,7 +236,7 @@ export class LeagueTableDialog extends Dialog {
     }
 
     downloadCSV() {
-        Exporter.saveAsCSV(this.getRows())
+        Exporter.saveAsCSV(this.getRows(), 'leaguetable')
     }
 
     getRows() {

@@ -164,8 +164,7 @@ export class Exporter {
     }
 
     //decisiontree@yyyy.mm.dd_hh.mm.ss
-    static getExportFileName(ext) {
-        var name = 'decisiontree';
+    static getExportFileName(ext, name='decisiontree') {
         var format = d3.timeFormat("%Y.%m.%d_%H.%M.%S");
         var date = new Date();
         name += '@' + format(date);
@@ -398,7 +397,7 @@ export class Exporter {
 
     }
 
-    static saveAsCSV(rows) {
+    static saveAsCSV(rows, name='decisiontree') {
         var csvRows = [];
         rows.forEach(row => {
             csvRows.push(row.map(r=>Exporter.escapeCsvField(r)).join(','))
@@ -406,7 +405,7 @@ export class Exporter {
         var csvString = csvRows.join("\r\n");
 
         var blob = new Blob([csvString], {type: "text/csv"});
-        Exporter.saveAs(blob, Exporter.getExportFileName('csv'));
+        Exporter.saveAs(blob, Exporter.getExportFileName('csv', name));
 
     }
 

@@ -551,11 +551,13 @@ export class App {
 
     clear() {
         this.dataModel.clear();
+        this.computationsManager.setCurrentRuleByName(this.computationsManager.getObjectiveRules()[0].name);
         this.setDiagramTitle('', true);
         this.setDiagramDescription('', true);
         this.treeDesigner.setConfig(Utils.deepExtend(this.getTreeDesignerInitialConfig()));
         this.onSelectionCleared();
         this.sensitivityAnalysisDialog.clear(true)
+
     }
 
     openDiagram(diagramData) {
@@ -600,12 +602,6 @@ export class App {
                     trees: diagramData.trees,
                     texts: diagramData.texts
                 }
-            }
-
-            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, "0.8.0")<0){
-
-                dataModelObject.trees
-
             }
         }
 
