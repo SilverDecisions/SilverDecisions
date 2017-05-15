@@ -81,6 +81,7 @@
     "karma-jasmine": "^1.0.2",
     "karma-phantomjs-launcher": "^1.0.2",
     "merge-stream": "^1.0.0",
+    "odc-d3": "^1.1.2",
     "phantomjs": "^2.1.7",
     "stringify": "^5.1.0",
     "svg2pdf.js": "^0.11.4",

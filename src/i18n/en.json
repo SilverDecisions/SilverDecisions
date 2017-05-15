@@ -96,6 +96,14 @@
       "dominatedBy": "dominated (by #{{policy}})",
       "extendedDominatedBy": "extended-dominated (by #{{policy1}} and #{{policy2}})",
       "icer": "ICER={{icer}}"
+    },
+    "plot":{
+      "groups":{
+        "highlighted": "Highlighted",
+        "extended-dominated" : "Extended-dominated",
+        "dominated": "Dominated",
+        "default": "Other"
+      }
     }
   },
   "sensitivityAnalysisDialog":{
@@ -321,6 +329,17 @@
         "fontStyle": "Font style",
         "color": "Color",
         "marginTop": "Margin top"
+      }
+    },
+    "leagueTable": {
+      "title": "League Table",
+      "plot": {
+        "title": "Plot",
+        "maxWidth": "Max width",
+        "highlightedColor": "Highlighted policy color",
+        "extendedDominatedColor": "Extended dominated policy color",
+        "dominatedColor": "Dominated policy color",
+        "defaultColor": "Other policies color"
       }
     },
     "other":{

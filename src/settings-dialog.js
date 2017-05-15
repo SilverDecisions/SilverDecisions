@@ -140,6 +140,22 @@ export class SettingsDialog extends Dialog{
 
         this.formGroups.push(titleGroup);
 
+
+
+        var leagueTableGroup = new FormGroup('leagueTable');
+        leagueTableGroup
+            .addGroup('plot')
+            .addField('maxWidth', 'text', app, 'config.leagueTable.plot.maxWidth')
+            .addField('highlightedColor', 'color', app, 'config.leagueTable.plot.groups.highlighted.color')
+            .addField('extendedDominatedColor', 'color', app, 'config.leagueTable.plot.groups.extended-dominated.color')
+            .addField('dominatedColor', 'color', app, 'config.leagueTable.plot.groups.dominated.color')
+            .addField('defaultColor', 'color', app, 'config.leagueTable.plot.groups.default.color');
+
+        this.formGroups.push(leagueTableGroup);
+
+
+
+
         var otherGroup = new FormGroup('other', ()=>app.treeDesigner.redraw());
         otherGroup
             .addField('disableAnimations', 'checkbox', app.treeDesigner, 'config.disableAnimations')

@@ -6,6 +6,7 @@ import {AppUtils} from "../app-utils";
 import {LoadingIndicator} from "../loading-indicator";
 import {Exporter} from "../exporter";
 import {LeagueTable} from "./league-table";
+import {LeagueTablePlot} from "./league-table-plot";
 import {Policy} from "sd-computations/src/policies/policy";
 
 export class LeagueTableDialog extends Dialog {
@@ -63,6 +64,57 @@ export class LeagueTableDialog extends Dialog {
         this.resultTable = new LeagueTable(this.jobResultsContainer.select(".sd-job-result-table-container"), config);
         this.resultTable.setData(result, this.app.dataModel);
         this.resultTable.show();
+    }
+
+
+    initResultPlot(result) {
+        let self = this;
+        let config = {
+            maxWidth: self.app.config.leagueTable.plot.maxWidth,
+            minimumWTP: self.app.dataModel.minimumWTP,
+            maximumWTP: self.app.dataModel.maximumWTP,
+            x: {
+                value: (d, key) => d.payoffs[result.maximizedPayoffIndex],
+                title: result.payoffNames[result.maximizedPayoffIndex]
+            },
+            y: {
+                value: (d, key) => d.payoffs[result.minimizedPayoffIndex],
+                title: result.payoffNames[result.minimizedPayoffIndex]
+            },
+            color: function (group) {
+                let groupsConf = self.app.config.leagueTable.plot.groups;
+                let groupConf = groupsConf[group.key];
+                if (groupConf) {
+                    return groupConf.color;
+                }
+                return 'black'
+            },
+            groups: {
+                value: function (r) {
+                    if (r.ICER !== null && r.ICER >= self.app.dataModel.minimumWTP && r.ICER <= self.app.dataModel.maximumWTP) {
+                        return 'highlighted'
+                    } else if (r.dominatedBy !== null) {
+                        return 'dominated'
+                    } else if (r.extendedDominatedBy !== null) {
+                        return 'extended-dominated'
+                    }
+
+                    return "default";
+                },
+                displayValue: (groupKey) => i18n.t("leagueTable.plot.groups."+groupKey)
+            }
+        };
+
+        this.resultPlot = new LeagueTablePlot(this.jobResultsContainer.select(".sd-job-result-plot-container").node(), result.rows, config);
+        setTimeout(function () {
+            self.resultPlot.init()
+        }, 100)
+    }
+
+    onResized() {
+        if (this.resultPlot) {
+            this.resultPlot.init();
+        }
     }
 
     disableActionButtonsAndShowLoadingIndicator(disable = true) {
@@ -155,6 +207,8 @@ export class LeagueTableDialog extends Dialog {
         this.result = result;
         this.initResultTable(result);
 
+        this.initResultPlot(result);
+
     }
 
     terminateJob() {
@@ -244,4 +298,6 @@ export class LeagueTableDialog extends Dialog {
         params.extendedPolicyDescription = false;
         return this.job.jobResultToCsvRows(this.result, this.job.createJobParameters(params));
     }
+
+
 }

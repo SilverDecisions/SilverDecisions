@@ -71,6 +71,25 @@ export class AppConfig {
     title = '';
     description = '';
     treeDesigner = {};
+    leagueTable = {
+        plot:{
+            maxWidth: "800px",
+            groups:{
+                'highlighted':{
+                    color: '#008000'
+                },
+                'extended-dominated':{
+                    color: '#ffa500'
+                },
+                'dominated':{
+                    color: '#ff0000'
+                },
+                'default': {
+                    color: '#000000'
+                }
+            }
+        }
+    };
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
 

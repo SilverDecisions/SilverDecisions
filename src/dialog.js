@@ -26,12 +26,18 @@ export class Dialog{
         this.onClosed();
     }
 
+    setFullScreen(fullScreen=true){
+        let self = this;
+        this.container.classed('sd-full-screen', fullScreen);
+        setTimeout(function(){ self.onResized() }, 10)
+    }
+
     extend(){
-        this.container.classed('sd-full-screen', true);
+        this.setFullScreen();
     }
 
     shrink(){
-        this.container.classed('sd-full-screen', false);
+        this.setFullScreen(false);
     }
 
     isVisible(){
@@ -43,6 +49,10 @@ export class Dialog{
     }
 
     onOpen(){
+
+    }
+
+    onResized(){
 
     }
 }
