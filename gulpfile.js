@@ -41,6 +41,7 @@ var nestedDependencies = [
     'pivottable/dist/pivot.de',
     'pivottable/dist/pivot.fr',
     'pivottable/dist/pivot.pl',
+    'odc-d3/src/scatterplot'
 
 ];
 dependencies.push(...nestedDependencies);

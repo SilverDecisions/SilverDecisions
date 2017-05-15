@@ -1,6 +1,6 @@
 import {ScatterPlot, ScatterPlotConfig} from "odc-d3/src/scatterplot";
 import {Utils} from "sd-utils";
-import * as d3 from '../d3'
+import * as d3 from "../d3";
 
 export class LeagueTablePlotConfig extends ScatterPlotConfig {
     maxWidth = undefined;
@@ -41,7 +41,7 @@ export class LeagueTablePlot extends ScatterPlot {
         super.initPlot();
     }
 
-    update(newData){
+    update(newData) {
         super.update(newData);
         this.updateIcerLines();
         this.updateDotLabels();
@@ -49,12 +49,12 @@ export class LeagueTablePlot extends ScatterPlot {
     };
 
     updateIcerLines() {
-        let self  = this;
+        let self = this;
         var linesContainerClass = this.prefixClass("lines-container");
-        var linesContainerSelector = "g."+linesContainerClass;
-        var linesContainer = self.svgG.selectOrInsert(linesContainerSelector, "."+self.dotsContainerClass);
+        var linesContainerSelector = "g." + linesContainerClass;
+        var linesContainer = self.svgG.selectOrInsert(linesContainerSelector, "." + self.dotsContainerClass);
 
-        var clipPathId = self.prefixClass("clip-"+Utils.guid());
+        var clipPathId = self.prefixClass("clip-" + Utils.guid());
         var linesContainerClip = linesContainer.selectOrAppend("clipPath").attr("id", clipPathId);
 
         linesContainerClip.selectOrAppend('rect')
@@ -64,7 +64,7 @@ export class LeagueTablePlot extends ScatterPlot {
             .attr('x', 0)
             .attr('y', 0);
 
-        linesContainer.attr("clip-path", (d,i) => "url(#"+clipPathId+")");
+        linesContainer.attr("clip-path", (d, i) => "url(#" + clipPathId + ")");
 
         var line = d3.line()
             .x(this.plot.x.map)
@@ -72,9 +72,9 @@ export class LeagueTablePlot extends ScatterPlot {
 
 
         let linePoints = this.plot.data.filter(d=>d.ICER !== null).sort(this.plot.x.map);
-        let highlightedPoints = this.plot.data.filter(d=>this.plot.groupValue(d) === 'highlighted').sort((a,b) => this.plot.x.map(a) - this.plot.x.map(b));
+        let highlightedPoints = this.plot.data.filter(d=>this.plot.groupValue(d) === 'highlighted').sort((a, b) => this.plot.x.map(a) - this.plot.x.map(b));
 
-        linesContainer.selectOrAppend("path."+this.prefixClass('middle-icer'))
+        linesContainer.selectOrAppend("path." + this.prefixClass('middle-icer'))
             .attr("shape-rendering", "optimizeQuality")
             .attr("fill", "none")
             .attr("stroke-width", 1)
@@ -82,7 +82,7 @@ export class LeagueTablePlot extends ScatterPlot {
             .attr("d", line(highlightedPoints));
 
 
-        if(!highlightedPoints.length){
+        if (!highlightedPoints.length) {
             return;
         }
 
@@ -96,27 +96,27 @@ export class LeagueTablePlot extends ScatterPlot {
         let yAxisExtent = [this.plot.y.scale.invert(this.plot.height), this.plot.y.scale.invert(0)];
 
 
-        if(this.config.minimumWTP === Infinity){
-            lowPoint = [this.plot.x.map(minPoint), this.plot.height ];
-        }else{
-            lowPoint = [this.plot.x.scale(xAxisExtent[0]), this.plot.y.scale(this.config.minimumWTP * xAxisExtent[0] + this.plot.y.value(minPoint)) ];
+        if (this.config.minimumWTP === Infinity) {
+            lowPoint = [this.plot.x.map(minPoint), this.plot.height];
+        } else {
+            lowPoint = [this.plot.x.scale(xAxisExtent[0]), this.plot.y.scale(-this.config.minimumWTP * (this.plot.x.value(minPoint) - xAxisExtent[0]) + this.plot.y.value(minPoint))];
         }
 
-        if(this.config.maximumWTP === Infinity){
+        if (this.config.maximumWTP === Infinity) {
             highPoint = [this.plot.x.map(maxPoint), 0]
-        }else{
-            highPoint = [this.plot.x.scale(xAxisExtent[1]), this.plot.y.scale(this.config.maximumWTP * xAxisExtent[1] + this.plot.y.value(maxPoint)) ];
+        } else {
+            highPoint = [this.plot.x.scale(xAxisExtent[1]), this.plot.y.scale(this.config.maximumWTP * (xAxisExtent[1] - this.plot.x.value(maxPoint)) + this.plot.y.value(maxPoint))];
         }
 
 
-        linesContainer.selectOrAppend("path."+this.prefixClass('low-icer'))
+        linesContainer.selectOrAppend("path." + this.prefixClass('low-icer'))
             .attr("shape-rendering", "optimizeQuality")
             .attr("fill", "none")
             .attr("stroke-width", 2)
             .attr("stroke", 'black')
             .attr("d", d3.line()([lowPoint, [this.plot.x.map(minPoint), this.plot.y.map(minPoint)]]))
 
-        linesContainer.selectOrAppend("path."+this.prefixClass('high-icer'))
+        linesContainer.selectOrAppend("path." + this.prefixClass('high-icer'))
             .attr("shape-rendering", "optimizeQuality")
             .attr("fill", "none")
             .attr("stroke-width", 2)
@@ -125,13 +125,13 @@ export class LeagueTablePlot extends ScatterPlot {
 
     }
 
-    updateDotLabels(){
+    updateDotLabels() {
         var self = this;
         var labelsContainerClass = this.prefixClass("dot-labels-container");
-        var labelsContainerSelector = "g."+labelsContainerClass;
-        var labelsContainer = self.svgG.selectOrAppend(labelsContainerSelector, "."+self.dotsContainerClass);
+        var labelsContainerSelector = "g." + labelsContainerClass;
+        var labelsContainer = self.svgG.selectOrAppend(labelsContainerSelector, "." + self.dotsContainerClass);
 
-        var labels = labelsContainer.selectAll("text."+this.prefixClass("dot-label")).data(this.plot.data);
+        var labels = labelsContainer.selectAll("text." + this.prefixClass("dot-label")).data(this.plot.data);
         labels.exit().remove();
         labels.enter().append('text')
             .attr('class', this.prefixClass("dot-label"))
