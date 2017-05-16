@@ -48,6 +48,8 @@ export class Layout{
         }
         if(node){
             this.moveNodeToEmptyPlace(node);
+        }else{
+            this.treeDesigner.redraw(true);
         }
     }
 
