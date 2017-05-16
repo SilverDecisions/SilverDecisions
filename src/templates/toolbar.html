@@ -16,6 +16,13 @@
         <button id="treeAutoLayoutButton"><%= i18n.t("toolbar.layout.tree")%></button>
         <button id="clusterAutoLayoutButton"><%= i18n.t("toolbar.layout.cluster")%></button>
     </div>
+    <div id="view-mode-toolbar-group" class="toolbar-group">
+        <label for="view-mode-select"><%= i18n.t("toolbar.viewMode.label")%></label>
+        <div class="input-group no-floating-label" style="display: inline-block">
+            <select id="view-mode-select"></select>
+            <span class="bar"></span>
+        </div>
+    </div>
     <div id="objective-rule-toolbar-group" class="toolbar-group">
         <label for="objective-rule-select"><%= i18n.t("toolbar.objectiveRule.label")%></label>
         <div class="input-group no-floating-label" style="display: inline-block">

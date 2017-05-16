@@ -183,7 +183,8 @@ export class Layout{
         Layout.setHangingPosition(selection)
             .attr('x', x)
             .attr('y', d=>{
-                let number = Utils.isArray(d.displayValue('aggregatedPayoff')) ? d.displayValue('aggregatedPayoff').length : 1;
+                let items = d.displayValue('aggregatedPayoff');
+                let number = Utils.isArray(items) ? items.filter(it=>it !== undefined).length : 1;
                 return -Math.max(number*fontSize + number > 1 ? 0 : 5, this.config.nodeSize / 2)+ (number >  1 ? 2 : 5)
             });
 

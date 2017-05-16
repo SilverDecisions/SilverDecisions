@@ -15,6 +15,14 @@
       "tree": "Tree",
       "cluster": "Cluster"
     },
+    "viewMode": {
+      "label": "View",
+      "options": {
+        "criterion1":"Criterion 1",
+        "criterion2":"Criterion 2",
+        "twoCriteria":"Two criteria"
+      }
+    },
     "objectiveRule":{
       "label": "Rule",
       "options": {

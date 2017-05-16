@@ -364,7 +364,7 @@ export class Sidebar {
                 }),
                 new ObjectInputField(object, {
                     name: 'payoff',
-                    path: 'payoff[0]',
+                    path: 'payoff[' + (self.app.currentViewMode.payoffIndex || 0) + ']',
                     label: multipleCriteria ? self.app.dataModel.payoffNames[0] : undefined,
                     type: 'text',
                     validator: new PayoffInputValidator(self.app.expressionEngine)

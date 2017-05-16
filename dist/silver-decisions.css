@@ -317,6 +317,12 @@
       #silver-decisions #sd-toolbar #objective-rule-toolbar-group .input-group select {
         font-size: .9em;
         padding: 2px; }
+    #silver-decisions #sd-toolbar #view-mode-toolbar-group .input-group {
+      margin-top: 0;
+      margin-bottom: 0; }
+      #silver-decisions #sd-toolbar #view-mode-toolbar-group .input-group select {
+        font-size: .9em;
+        padding: 2px; }
   #silver-decisions #main-region {
     display: flex;
     flex: 1;

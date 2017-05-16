@@ -418,7 +418,7 @@ export class TreeDesigner {
 
         var payoffTspans = payoff.selectAll('tspan').data(d=>{
             let item = d.displayValue('childrenPayoff');
-            return Utils.isArray(item) ? item : [item]
+            return Utils.isArray(item) ? item.filter(i=>i !== undefined) : [item]
         });
         payoffTspans.exit().remove();
 
@@ -450,7 +450,7 @@ export class TreeDesigner {
         var aggregatedPayoff = nodesMerge.select('text.aggregated-payoff');
         var aggregatedPayoffTspans = aggregatedPayoff.selectAll('tspan').data(d=>{
             let item = d.displayValue('aggregatedPayoff');
-            return Utils.isArray(item) ? item : [item]
+            return Utils.isArray(item) ? item.filter(i=>i !== undefined) : [item]
         });
         aggregatedPayoffTspans.exit().remove();
         var aggregatedPayoffTspansM = aggregatedPayoffTspans.enter().append('tspan').merge(aggregatedPayoffTspans)

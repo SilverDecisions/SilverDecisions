@@ -20,6 +20,7 @@ export class Toolbar{
         this.initAboutButton();
         this.initSensitivityAnalysisButton();
         this.initRecomputeButton();
+        this.initViewModeToolbarGroup();
         this.initObjectiveRuleToolbarGroup();
     }
 
@@ -154,6 +155,8 @@ export class Toolbar{
         this.updateUndoRedoButtons();
         this.updateSensitivityAnalysisButton();
         this.updateLayoutButtons();
+        this.updateViewModeValue();
+        this.updateObjectiveRuleOptions();
         this.updateObjectiveRuleValue();
     }
 
@@ -191,14 +194,8 @@ export class Toolbar{
     initObjectiveRuleToolbarGroup() {
         var self = this;
         this.objectiveRuleSelect = this.container.select('#objective-rule-select');
-        var rules = this.app.getObjectiveRules();
-        var options = this.objectiveRuleSelect.selectAll('option').data(rules);
-        options.enter()
-            .append('option')
-            .merge(options)
-            .attr('value', d=>d.name)
-            .text(d=>i18n.t('toolbar.objectiveRule.options.'+d.name));
 
+        this.updateObjectiveRuleOptions()
         this.updateObjectiveRuleValue();
 
         this.objectiveRuleSelect.on('change', function(){
@@ -206,7 +203,40 @@ export class Toolbar{
         })
     }
 
+    updateObjectiveRuleOptions(){
+        var rules = this.app.getObjectiveRules();
+        var options = this.objectiveRuleSelect.selectAll('option').data(rules);
+        options.exit().remove();
+        options.enter()
+            .append('option')
+            .merge(options)
+            .attr('value', d=>d.name)
+            .text(d=>i18n.t('toolbar.objectiveRule.options.'+d.name));
+    }
+
     updateObjectiveRuleValue(){
         this.objectiveRuleSelect.node().value = this.app.getCurrentObjectiveRule().name;
+    }
+
+    initViewModeToolbarGroup() {
+        var self = this;
+        this.viewModeSelect = this.container.select('#view-mode-select');
+        var rules = this.app.getViewModes();
+        var options = this.viewModeSelect.selectAll('option').data(rules);
+        options.enter()
+            .append('option')
+            .merge(options)
+            .attr('value', d=>d.name)
+            .text(d=>i18n.t('toolbar.viewMode.options.'+d.name));
+
+        this.updateViewModeValue();
+
+        this.viewModeSelect.on('change', function(){
+            self.app.setViewModeByName(this.value);
+        })
+    }
+
+    updateViewModeValue(){
+        this.viewModeSelect.node().value = this.app.getCurrentViewMode().name;
     }
 }

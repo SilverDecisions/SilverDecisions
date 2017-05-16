@@ -1,14 +1,13 @@
-import * as d3 from './d3'
-import {i18n} from './i18n/i18n'
-import {Utils, log} from 'sd-utils'
-import {AppUtils} from './app-utils'
-import * as model from 'sd-model'
-
-import {TreeDesigner, TreeDesignerConfig} from './tree-designer/tree-designer'
-import {Templates} from './templates'
-import {Sidebar} from './sidebar'
-import {Toolbar} from './toolbar'
-import {SettingsDialog} from './settings-dialog'
+import * as d3 from "./d3";
+import {i18n} from "./i18n/i18n";
+import {Utils, log} from "sd-utils";
+import {AppUtils} from "./app-utils";
+import * as model from "sd-model";
+import {TreeDesigner} from "./tree-designer/tree-designer";
+import {Templates} from "./templates";
+import {Sidebar} from "./sidebar";
+import {Toolbar} from "./toolbar";
+import {SettingsDialog} from "./settings-dialog";
 import {AboutDialog} from "./about-dialog";
 import {Exporter} from "./exporter";
 import {DefinitionsDialog} from "./definitions-dialog";
@@ -72,16 +71,16 @@ export class AppConfig {
     description = '';
     treeDesigner = {};
     leagueTable = {
-        plot:{
+        plot: {
             maxWidth: "800px",
-            groups:{
-                'highlighted':{
+            groups: {
+                'highlighted': {
                     color: '#008000'
                 },
-                'extended-dominated':{
+                'extended-dominated': {
                     color: '#ffa500'
                 },
-                'dominated':{
+                'dominated': {
                     color: '#ff0000'
                 },
                 'default': {
@@ -115,12 +114,15 @@ export class App {
     treeDesigner;
     toolbar;
     sidebar;
+    viewModes = [];
+    currentViewMode;
 
     constructor(containerIdOrElem, config, diagramData) {
         var p = Promise.resolve();
         this.setConfig(config);
         this.initI18n();
         this.initContainer(containerIdOrElem);
+        this.initViewModes();
         this.initDataModel();
         p = this.initComputationsManager();
         this.initProbabilityNumberFormat();
@@ -134,14 +136,14 @@ export class App {
         this.initLeagueTableDialog();
         this.initOnBeforeUnload();
         this.initKeyCodes();
-        p.then(()=>{
+        p.then(()=> {
             this.initToolbar();
             if (diagramData) {
                 this.openDiagram(diagramData);
-            }else{
+            } else {
                 this.updateView();
             }
-        }).catch(e=>{
+        }).catch(e=> {
             log.error(e);
         });
     }
@@ -156,11 +158,11 @@ export class App {
         return this;
     }
 
-    static growl(){
+    static growl() {
         return AppUtils.growl(arguments)
     }
 
-    setLogLevel(level){
+    setLogLevel(level) {
         log.setLevel(level)
     }
 
@@ -177,7 +179,11 @@ export class App {
             this.container = d3.select(containerIdOrElem);
         }
         var self = this;
-        this.container.html(Templates.get('main', {version: App.version, buildTimestamp: App.buildTimestamp, 'lng': self.config.lng}));
+        this.container.html(Templates.get('main', {
+            version: App.version,
+            buildTimestamp: App.buildTimestamp,
+            'lng': self.config.lng
+        }));
         this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
 
@@ -198,13 +204,13 @@ export class App {
     initComputationsManager() {
         this.computationsManager = new ComputationsManager({
             ruleName: this.config.ruleName,
-            worker:{
+            worker: {
                 url: this.config.workerUrl,
             },
             jobRepositoryType: this.config.jobRepositoryType,
             clearRepository: this.config.clearRepository
         }, this.dataModel);
-        this.expressionEngine =  this.computationsManager.expressionEngine;
+        this.expressionEngine = this.computationsManager.expressionEngine;
         return this.checkValidityAndRecomputeObjective(false, false, false);
 
     }
@@ -238,7 +244,7 @@ export class App {
     }
 
     isSensitivityAnalysisAvailable() {
-        return !this.isMultipleCriteria() && this.dataModel.getRoots().length===1 && this.computationsManager.isValid();
+        return !this.isMultipleCriteria() && this.dataModel.getRoots().length === 1 && this.computationsManager.isValid();
     }
 
     initToolbar() {
@@ -340,7 +346,7 @@ export class App {
         });
     }
 
-    updateView(withTransitions=true) {
+    updateView(withTransitions = true) {
         // console.log('_updateView');
         this.treeDesigner.redraw(withTransitions);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
@@ -357,7 +363,7 @@ export class App {
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
-        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=>{
+        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=> {
             self.updateView();
         })
 
@@ -370,14 +376,14 @@ export class App {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
 
-        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=>{
+        return this.checkValidityAndRecomputeObjective(false, false, false).then(()=> {
             self.updateView();
         })
     }
 
     onNodeAddedOrRemoved() {
         var self = this;
-        return this.checkValidityAndRecomputeObjective().then(()=>{
+        return this.checkValidityAndRecomputeObjective().then(()=> {
             self.updateView();
         });
 
@@ -394,102 +400,186 @@ export class App {
     onObjectUpdated(object, fieldName) {
         var self = this;
         var p = Promise.resolve();
-        if(!(object instanceof model.domain.Text) && fieldName!=='name'){
+        if (!(object instanceof model.domain.Text) && fieldName !== 'name') {
             p = p.then(()=>this.checkValidityAndRecomputeObjective());
         }
         // this.sidebar.updateObjectPropertiesView(this.selectedObject);
-        return p.then(()=>{
+        return p.then(()=> {
             setTimeout(function () {
                 self.treeDesigner.redraw(true);
-            },1);
+            }, 1);
         });
     }
 
-    onMultiCriteriaUpdated(fieldName){
+    onMultiCriteriaUpdated(fieldName) {
         var self = this;
         var p = Promise.resolve();
-        if(fieldName=='defaultWTP'){
+        if (fieldName == 'defaultWTP') {
             p = p.then(()=>this.checkValidityAndRecomputeObjective());
         }
-        return p.then(()=>{
+        return p.then(()=> {
             setTimeout(function () {
                 self.treeDesigner.redraw(true);
                 self.sidebar.updateObjectPropertiesView(self.selectedObject);
-            },1);
+            }, 1);
         });
     }
 
-    setObjectiveRule(ruleName, evalCode=false, evalNumeric=false, updateView=true) {
+    setObjectiveRule(ruleName, evalCode = false, evalNumeric = false, updateView = true, recompute = true) {
         let prevRule = this.computationsManager.getCurrentRule();
         this.computationsManager.setCurrentRuleByName(ruleName);
         let currentRule = this.computationsManager.getCurrentRule();
         let multiCriteria = currentRule.multiCriteria;
         this.treeDesigner.config.maxPayoffsToDisplay = multiCriteria ? 2 : 1;
 
-        if(multiCriteria){
-            if(!this.dataModel.payoffNames.length){
+        if (multiCriteria) {
+            if (!this.dataModel.payoffNames.length) {
                 this.dataModel.payoffNames.push(null, null);
-                this.dataModel.payoffNames[currentRule.minimizedPayoffIndex] = i18n.t('multipleCriteria.defaultMinimizedCriterionName');
-                this.dataModel.payoffNames[currentRule.maximizedPayoffIndex] = i18n.t('multipleCriteria.defaultMaximizedCriterionName');
+                this.dataModel.payoffNames[0] = i18n.t('multipleCriteria.defaultMinimizedCriterionName');
+                this.dataModel.payoffNames[1] = i18n.t('multipleCriteria.defaultMaximizedCriterionName');
             }
             this.treeDesigner.config.payoffNames = this.dataModel.payoffNames;
-        }else{
+        } else {
             this.treeDesigner.config.payoffNames = [null, null];
         }
-        return this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric).then(()=>{
-            if(updateView){
+        if (!recompute) {
+            return Promise.resolve();
+        }
+
+        return this.checkValidityAndRecomputeObjective(false, evalCode, evalNumeric).then(()=> {
+            if (updateView) {
                 this.updateView(false);
             }
         });
 
     }
 
-    isMultipleCriteria(){
+    isMultipleCriteria() {
         return this.computationsManager.getCurrentRule().multiCriteria;
     }
 
-    flipCriteria(){
-        this.computationsManager.flipCriteria().then(()=>{
+    flipCriteria() {
+        this.computationsManager.flipCriteria().then(()=> {
             this.updateView(false);
-        }).catch(e=>{
+        }).catch(e=> {
             log.error(e);
         })
     }
 
 
-    getCurrentObjectiveRule(){
+    getCurrentObjectiveRule() {
         return this.computationsManager.getCurrentRule();
     }
 
-    getObjectiveRules(){
-        return this.computationsManager.getObjectiveRules();
+    getObjectiveRules() {
+        return this.computationsManager.getObjectiveRules().filter(rule=>rule.multiCriteria === this.currentViewMode.multiCriteria);
     }
 
-    showLeagueTable(){
+
+    initViewModes() {
+        this.viewModes.push({
+            name: "criterion1",
+            multiCriteria: false,
+            payoffIndex: 0,
+            maximization: true
+        });
+
+        this.viewModes.push({
+            name: "criterion2",
+            multiCriteria: false,
+            payoffIndex: 1,
+            maximization: false
+        });
+
+        this.viewModes.push({
+            name: "twoCriteria",
+            multiCriteria: true,
+            payoffIndex: null,
+            maximization: false
+        });
+        this.currentViewMode = this.viewModes[0];
+    }
+
+    getCurrentViewMode() {
+        return this.currentViewMode;
+    }
+
+    setViewModeByName(name, recompute = true, updateView = true) {
+        return this.setViewMode(Utils.find(this.viewModes, mode=>mode.name === name), recompute, updateView)
+    }
+
+    setViewMode(mode, recompute = true, updateView = true) {
+        let prevMode = this.currentViewMode;
+        this.currentViewMode = mode;
+
+        if(this.currentViewMode.payoffIndex !== null){
+            this.computationsManager.objectiveRulesManager.setPayoffIndex(this.currentViewMode.payoffIndex);
+        }
+
+        if (!recompute) {
+            return Promise.resolve();
+        }
+        let rules = this.getObjectiveRules();
+        let prevRule = this.computationsManager.getCurrentRule();
+        let newRule = rules[0];
+        if (this.currentViewMode.name === "criterion1") {
+            if (prevMode.multiCriteria) {
+                newRule = Utils.find(rules, r=> r.maximization == prevRule.minimizedPayoffIndex)
+            } else {
+                newRule = Utils.find(rules, r=>r.maximization)
+            }
+        } else if (this.currentViewMode.name === "criterion2") {
+            if (prevMode.multiCriteria) {
+                newRule = Utils.find(rules, r=> r.maximization == prevRule.maximizedPayoffIndex)
+            } else {
+                newRule = Utils.find(rules, r=>!r.maximization)
+            }
+        } else {
+            newRule = Utils.find(rules, r=>{
+                if(prevMode.name === "criterion1"){
+                    return  prevRule.maximization == r.minimizedPayoffIndex
+                }
+                return  prevRule.maximization == r.maximizedPayoffIndex
+            })
+        }
+
+        this.setObjectiveRule(newRule.name, false, false, updateView, recompute)
+
+    }
+
+    setDefaultViewModeForRule(rule, recompute = true, updateView = true) {
+        return this.setViewMode(Utils.find(this.viewModes, mode=>mode.multiCriteria === rule.multiCriteria), recompute, updateView)
+    }
+
+    getViewModes() {
+        return this.viewModes;
+    }
+
+    showLeagueTable() {
         this.leagueTableDialog.open();
     }
 
-    openSensitivityAnalysis(){
+    openSensitivityAnalysis() {
         this.sensitivityAnalysisDialog.open();
     }
 
-    showTreePreview(dataDTO, closeCallback, autoLayout=true){
+    showTreePreview(dataDTO, closeCallback, autoLayout = true) {
         var self = this;
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
-        this.dataModel.loadFromDTO(dataDTO,  this.computationsManager.expressionEngine.getJsonReviver());
+        this.dataModel.loadFromDTO(dataDTO, this.computationsManager.expressionEngine.getJsonReviver());
         this.computationsManager.updateDisplayValues(this.dataModel);
         this.updateView(false);
-        setTimeout(function(){
+        setTimeout(function () {
             self.updateView(false);
-            setTimeout(function(){
+            setTimeout(function () {
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node());
-                AppUtils.showFullScreenPopup('', svgString, ()=>{
-                    if(closeCallback) {
+                AppUtils.showFullScreenPopup('', svgString, ()=> {
+                    if (closeCallback) {
                         self.dataModel._setNewState(self.originalDataModelSnapshot);
                         self.updateView(false);
 
                         closeCallback();
-                        setTimeout(function(){
+                        setTimeout(function () {
                             self.updateView(false);
                         }, 1)
                     }
@@ -499,28 +589,28 @@ export class App {
 
     }
 
-    showPolicyPreview(title, policy, closeCallback){
+    showPolicyPreview(title, policy, closeCallback) {
         var self = this;
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
         this.computationsManager.displayPolicy(policy);
         this.updateView(false);
         AppUtils.showFullScreenPopup(title, '');
         LoadingIndicator.show();
-        setTimeout(function(){
+        setTimeout(function () {
             self.updateView(false);
-            setTimeout(function(){
+            setTimeout(function () {
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node(), true);
                 LoadingIndicator.hide();
-                AppUtils.showFullScreenPopup(title, svgString, ()=>{
+                AppUtils.showFullScreenPopup(title, svgString, ()=> {
 
                     self.dataModel._setNewState(self.originalDataModelSnapshot);
 
                     // self.computationsManager.updateDisplayValues(self.dataModel);
                     self.updateView(false);
-                    if(closeCallback) {
+                    if (closeCallback) {
                         closeCallback();
                     }
-                    setTimeout(function(){
+                    setTimeout(function () {
                         self.updateView(false);
                     }, 1)
                 });
@@ -530,15 +620,15 @@ export class App {
 
 
     recompute(updateView = true, debounce = false) {
-        if(debounce){
-            if(!this.debouncedRecompute){
+        if (debounce) {
+            if (!this.debouncedRecompute) {
                 this.debouncedRecompute = Utils.debounce((updateView)=>this.recompute(updateView, false), 200);
             }
             this.debouncedRecompute(updateView);
             return;
         }
 
-        return this.checkValidityAndRecomputeObjective(false, true).then(()=>{
+        return this.checkValidityAndRecomputeObjective(false, true).then(()=> {
             if (updateView) {
                 this.updateView();
             }
@@ -546,11 +636,11 @@ export class App {
 
     }
 
-    checkValidityAndRecomputeObjective(allRules, evalCode=false, evalNumeric=true) {
-        return this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric).then(()=>{
+    checkValidityAndRecomputeObjective(allRules, evalCode = false, evalNumeric = true) {
+        return this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric).then(()=> {
             this.updateValidationMessages();
             AppUtils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
-        }).catch(e=>{
+        }).catch(e=> {
             log.error(e);
         });
 
@@ -584,10 +674,10 @@ export class App {
         var self = this;
         var errors = [];
 
-        if(Utils.isString(diagramData)){
-            try{
+        if (Utils.isString(diagramData)) {
+            try {
                 diagramData = JSON.parse(diagramData, self.computationsManager.expressionEngine.getJsonReviver());
-            }catch (e){
+            } catch (e) {
                 errors.push('error.jsonParse');
                 alert(i18n.t('error.jsonParse'));
                 log.error(e);
@@ -604,18 +694,18 @@ export class App {
             return Promise.resolve(errors);
         }
 
-        if(!Utils.isValidVersionString(diagramData.SilverDecisions)){
+        if (!Utils.isValidVersionString(diagramData.SilverDecisions)) {
             errors.push('error.incorrectVersionFormat');
             alert(i18n.t('error.incorrectVersionFormat'));
-        }else{
+        } else {
             //Check if version in file is newer than version of application
-            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, App.version)>0){
+            if (Utils.compareVersionNumbers(diagramData.SilverDecisions, App.version) > 0) {
                 errors.push('error.fileVersionNewerThanApplicationVersion');
                 alert(i18n.t('error.fileVersionNewerThanApplicationVersion'));
             }
 
-            if(Utils.compareVersionNumbers(diagramData.SilverDecisions, "0.7.0")<0){
-                dataModelObject ={
+            if (Utils.compareVersionNumbers(diagramData.SilverDecisions, "0.7.0") < 0) {
+                dataModelObject = {
                     code: diagramData.code,
                     expressionScope: diagramData.expressionScope,
                     trees: diagramData.trees,
@@ -628,6 +718,7 @@ export class App {
             if (diagramData.lng) {
                 this.config.lng = diagramData.lng;
             }
+
             if (diagramData.rule) {
                 if (this.computationsManager.isRuleName(diagramData.rule)) {
                     this.config.rule = diagramData.rule;
@@ -635,6 +726,13 @@ export class App {
                     delete this.config.rule;
                 }
             }
+
+            if (diagramData.viewMode) {
+                this.setViewModeByName(diagramData.viewMode)
+            } else {
+                this.setDefaultViewModeForRule(this.computationsManager.getObjectiveRuleByName(this.config.rule), false, false);
+            }
+
             if (diagramData.format) {
                 this.config.format = diagramData.format;
             }
@@ -649,8 +747,8 @@ export class App {
             this.setDiagramTitle(diagramData.title || '', true);
             this.setDiagramDescription(diagramData.description || '', true);
 
-            if(diagramData.sensitivityAnalysis){
-                this.sensitivityAnalysisDialog.loadSavedParamValues(diagramData.sensitivityAnalysis) ;
+            if (diagramData.sensitivityAnalysis) {
+                this.sensitivityAnalysisDialog.loadSavedParamValues(diagramData.sensitivityAnalysis);
             }
 
         } catch (e) {
@@ -671,16 +769,16 @@ export class App {
             this.setConfig(this.config);
             this.updateNumberFormats(false);
         }
-        return this.setObjectiveRule(this.config.rule, false, true, false).catch(e=>{
+        return this.setObjectiveRule(this.config.rule, false, true, false).catch(e=> {
             log.error('diagramDrawingFailure', e);
             errors.push('error.diagramDrawingFailure');
             alert(i18n.t('error.diagramDrawingFailure'));
             this.clear();
             return errors
-        }).then(()=>{
+        }).then(()=> {
             this.updateView(false);
             return errors;
-        }).catch(e=>{
+        }).catch(e=> {
             log.error('diagramDrawingFailure', e);
             errors.push('error.diagramDrawingFailure');
             alert(i18n.t('error.diagramDrawingFailure'));
@@ -692,12 +790,13 @@ export class App {
 
     serialize(filterLocation, filterComputed) {
         var self = this;
-        return self.checkValidityAndRecomputeObjective(true, false, false).then(()=>{
+        return self.checkValidityAndRecomputeObjective(true, false, false).then(()=> {
             var obj = {
                 SilverDecisions: App.version,
                 buildTimestamp: App.buildTimestamp,
                 savetime: d3.isoFormat(new Date()),
                 lng: self.config.lng,
+                viewMode: self.currentViewMode.name,
                 rule: self.computationsManager.getCurrentRule().name,
                 title: self.config.title,
                 description: self.config.description,
@@ -713,25 +812,25 @@ export class App {
 
     }
 
-    updateNumberFormats(updateView=true) {
+    updateNumberFormats(updateView = true) {
         this.initPayoffNumberFormat();
         this.initProbabilityNumberFormat();
-        if(updateView){
+        if (updateView) {
             this.updateView();
         }
     }
 
-    updatePayoffNumberFormat(updateView=true) {
+    updatePayoffNumberFormat(updateView = true) {
         this.initPayoffNumberFormat();
-        if(updateView){
+        if (updateView) {
             this.updateView();
         }
 
     }
 
-    updateProbabilityNumberFormat(updateView=true) {
+    updateProbabilityNumberFormat(updateView = true) {
         this.initProbabilityNumberFormat();
-        if(updateView){
+        if (updateView) {
             this.updateView();
         }
     }
