@@ -537,9 +537,8 @@ export class App {
         let prevMode = this.currentViewMode;
         this.currentViewMode = mode;
 
-        if (this.currentViewMode.payoffIndex !== null) {
-            this.computationsManager.objectiveRulesManager.setPayoffIndex(this.currentViewMode.payoffIndex);
-        }
+        this.computationsManager.objectiveRulesManager.setPayoffIndex(this.currentViewMode.payoffIndex);
+
 
         if (!recompute) {
             return Promise.resolve();
