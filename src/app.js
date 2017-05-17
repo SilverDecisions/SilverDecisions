@@ -51,8 +51,17 @@ export class AppConfig {
     lng = 'en';
     format = {// NumberFormat  options
         locales: 'en',
-        payoff: {
+        payoff1: {
             style: 'currency',
+            currency: 'USD',
+            currencyDisplay: 'symbol',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+            // minimumSignificantDigits: 1,
+            useGrouping: true
+        },
+        payoff2: {
+            style: 'decimal',
             currency: 'USD',
             currencyDisplay: 'symbol',
             minimumFractionDigits: 0,
@@ -254,7 +263,11 @@ export class App {
 
     initPayoffNumberFormat() {
 
-        this.payoffNumberFormat = new Intl.NumberFormat(this.config.format.locales, this.config.format.payoff);
+        this.payoffNumberFormat = [
+            new Intl.NumberFormat(this.config.format.locales, this.config.format.payoff1),
+            new Intl.NumberFormat(this.config.format.locales, this.config.format.payoff2)
+        ]
+
     }
 
     initProbabilityNumberFormat() {
@@ -283,7 +296,14 @@ export class App {
             onSelectionCleared: function () {
                 self.onSelectionCleared();
             },
-            payoffNumberFormatter: (v) => self.payoffNumberFormat.format(v),
+            payoffNumberFormatter: (v, i) => {
+                let prefix = '';
+                if(self.currentViewMode.multiCriteria){
+                    prefix =  self.dataModel.payoffNames[i].charAt(0) + ': ';
+                }
+
+                return prefix + self.payoffNumberFormat[i || self.currentViewMode.payoffIndex || 0].format(v)
+            },
             probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v),
             operationsForObject: (o) => self.computationsManager.operationsForObject(o)
         }, self.config.treeDesigner);
@@ -459,6 +479,11 @@ export class App {
     }
 
     flipCriteria() {
+        let tmp = this.config.format.payoff1;
+        this.config.format.payoff1 = this.config.format.payoff2;
+        this.config.format.payoff2 = tmp;
+        this.initPayoffNumberFormat();
+
         this.computationsManager.flipCriteria().then(()=> {
             this.updateView(false);
         }).catch(e=> {
@@ -512,7 +537,7 @@ export class App {
         let prevMode = this.currentViewMode;
         this.currentViewMode = mode;
 
-        if(this.currentViewMode.payoffIndex !== null){
+        if (this.currentViewMode.payoffIndex !== null) {
             this.computationsManager.objectiveRulesManager.setPayoffIndex(this.currentViewMode.payoffIndex);
         }
 
@@ -535,11 +560,11 @@ export class App {
                 newRule = Utils.find(rules, r=>!r.maximization)
             }
         } else {
-            newRule = Utils.find(rules, r=>{
-                if(prevMode.name === "criterion1"){
-                    return  prevRule.maximization == r.minimizedPayoffIndex
+            newRule = Utils.find(rules, r=> {
+                if (prevMode.name === "criterion1") {
+                    return prevRule.maximization == r.minimizedPayoffIndex
                 }
-                return  prevRule.maximization == r.maximizedPayoffIndex
+                return prevRule.maximization == r.maximizedPayoffIndex
             })
         }
 

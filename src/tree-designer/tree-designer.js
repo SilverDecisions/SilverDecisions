@@ -140,7 +140,7 @@ export class TreeDesignerConfig {
     raw=false;
 
 
-    payoffNumberFormatter = (v)=> v;
+    payoffNumberFormatter = (v, i)=> v;
     probabilityNumberFormatter  = (v)=> v;
 
     onNodeSelected = (node) => {};
@@ -431,10 +431,10 @@ export class TreeDesigner {
                 return d!==null && d<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
-            .text(d=> {
+            .text((d, i)=> {
                 var val = d
 
-                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
+                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val, i)): ''
             });
         this.attachPayoffTooltip(payoffTspansM);
 
@@ -459,8 +459,8 @@ export class TreeDesigner {
                 return d!==null && d<0;
             })
             .classed('sd-hidden', this.config.hidePayoffs || this.config.raw)
-            .text(val=> {
-                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val)): ''
+            .text((val, i)=> {
+                return val!==null ? (isNaN(val) ? val : self.config.payoffNumberFormatter(val, i)): ''
             });
 
         this.attachPayoffTooltip(aggregatedPayoffTspansM, 'aggregatedPayoff');
@@ -630,7 +630,7 @@ export class TreeDesigner {
                 let val = items[i];
                 if (val !== null) {
                     if (!isNaN(val)) {
-                        return self.config.payoffNumberFormatter(val);
+                        return self.config.payoffNumberFormatter(val, i);
                     }
                     if (Utils.isString(val)) {
                         return val;
@@ -638,7 +638,7 @@ export class TreeDesigner {
                 }
 
                 if (d.payoff[i] !== null && !isNaN(d.payoff[i]))
-                    return self.config.payoffNumberFormatter(d.payoff[i]);
+                    return self.config.payoffNumberFormatter(d.payoff[i], i);
 
                 return d.payoff[i];
 

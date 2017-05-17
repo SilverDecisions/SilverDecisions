@@ -190,8 +190,17 @@
             "fontStyle": "Stile font",
             "numberFormatLocale": "Formato numero locale"
         },
-        "payoff":{
-            "title": "Formato saldo",
+        "payoff1":{
+            "title": "Formato saldo 1",
+            "currency": "Valuta",
+            "currencyDisplay": "Visualizzazione valuta",
+            "style": "Stile",
+            "minimumFractionDigits": "Numero minimo cifre frazione",
+            "maximumFractionDigits": "Numero massimo cifre frazione",
+            "useGrouping": "Usa separatori di gruppo"
+        },
+        "payoff2":{
+            "title": "Formato saldo 2",
             "currency": "Valuta",
             "currencyDisplay": "Visualizzazione valuta",
             "style": "Stile",

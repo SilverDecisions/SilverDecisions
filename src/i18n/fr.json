@@ -189,8 +189,17 @@
       "fontStyle": "Style de police",
       "numberFormatLocale": "format local de numérotation"
     },
-    "payoff":{
-      "title": "Format de la numérotation des avantages",
+    "payoff1":{
+      "title": "Format de la numérotation des avantages 1",
+      "currency": "Devise",
+      "currencyDisplay": "Affichage de la devise",
+      "style": "Style",
+      "minimumFractionDigits": "Nombre minimum de fractions",
+      "maximumFractionDigits": "Nombre maximum de fractions",
+      "useGrouping": "Utiliser des séparateurs de regroupement"
+    },
+    "payoff2":{
+      "title": "Format de la numérotation des avantages 2",
       "currency": "Devise",
       "currencyDisplay": "Affichage de la devise",
       "style": "Style",

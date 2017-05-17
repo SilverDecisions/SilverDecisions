@@ -188,8 +188,17 @@
       "fontStyle": "Styl czcionki",
       "numberFormatLocale": "Kod lokalizacji językowej liczb"
     },
-    "payoff":{
-      "title": "Format wypłaty",
+    "payoff1":{
+      "title": "Format wypłaty 1",
+      "currency": "Waluta",
+      "currencyDisplay": "Wyświetlanie waluty",
+      "style": "Styl",
+      "minimumFractionDigits": "Minimalna liczba miejsc po przecinku",
+      "maximumFractionDigits": "Maksymalna liczba miejsc po przecinku",
+      "useGrouping": "Separatory grupowania"
+    },
+    "payoff2":{
+      "title": "Format wypłaty 2",
       "currency": "Waluta",
       "currencyDisplay": "Wyświetlanie waluty",
       "style": "Styl",

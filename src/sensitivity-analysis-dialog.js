@@ -43,7 +43,7 @@ export class SensitivityAnalysisDialog extends Dialog {
             this.initJobSelect();
         }
 
-        let payoffConf = Utils.cloneDeep(this.app.config.format.payoff);
+        let payoffConf = Utils.cloneDeep(this.app.config.format.payoff1);
         payoffConf.style = 'decimal';
         payoffConf.useGrouping = false;
         this.payoffNumberFormat = new Intl.NumberFormat('en', payoffConf);

@@ -30,16 +30,28 @@ export class SettingsDialog extends Dialog{
         this.formGroups.push(group);
 
 
-        var payoffGroup = new FormGroup('payoff', ()=>app.updatePayoffNumberFormat());
+        var payoffGroup = new FormGroup('payoff1', ()=>app.updatePayoffNumberFormat());
         payoffGroup
-            .addSelectField('style', app, 'config.format.payoff.style', ['currency', 'decimal'])
-            .addSelectField('currencyDisplay', app, 'config.format.payoff.currencyDisplay', ['symbol', 'code', 'name'])
-            .addField('currency', 'text', app, 'config.format.payoff.currency', {validate: (v)=>{try{new Intl.NumberFormat([], {currency:v}); return true;}catch (e){return false}}})
-            .addField('minimumFractionDigits', 'number', app, 'config.format.payoff.minimumFractionDigits' , {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:v, maximumFractionDigits:app.config.format.payoff.maximumFractionDigits}); return true;}catch (e){return false}}})
-            .addField('maximumFractionDigits', 'number', app, 'config.format.payoff.maximumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:app.config.format.payoff.minimumFractionDigits, maximumFractionDigits:v}); return true;}catch (e){return false}}})
-            .addField('useGrouping', 'checkbox', app, 'config.format.payoff.useGrouping')
+            .addSelectField('style', app, 'config.format.payoff1.style', ['currency', 'decimal'])
+            .addSelectField('currencyDisplay', app, 'config.format.payoff1.currencyDisplay', ['symbol', 'code', 'name'])
+            .addField('currency', 'text', app, 'config.format.payoff1.currency', {validate: (v)=>{try{new Intl.NumberFormat([], {currency:v}); return true;}catch (e){return false}}})
+            .addField('minimumFractionDigits', 'number', app, 'config.format.payoff1.minimumFractionDigits' , {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:v, maximumFractionDigits:app.config.format.payoff1.maximumFractionDigits}); return true;}catch (e){return false}}})
+            .addField('maximumFractionDigits', 'number', app, 'config.format.payoff1.maximumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:app.config.format.payoff1.minimumFractionDigits, maximumFractionDigits:v}); return true;}catch (e){return false}}})
+            .addField('useGrouping', 'checkbox', app, 'config.format.payoff1.useGrouping')
 
         this.formGroups.push(payoffGroup);
+
+        var payoff2Group = new FormGroup('payoff2', ()=>app.updatePayoffNumberFormat());
+        payoff2Group
+            .addSelectField('style', app, 'config.format.payoff2.style', ['currency', 'decimal'])
+            .addSelectField('currencyDisplay', app, 'config.format.payoff2.currencyDisplay', ['symbol', 'code', 'name'])
+            .addField('currency', 'text', app, 'config.format.payoff2.currency', {validate: (v)=>{try{new Intl.NumberFormat([], {currency:v}); return true;}catch (e){return false}}})
+            .addField('minimumFractionDigits', 'number', app, 'config.format.payoff2.minimumFractionDigits' , {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:v, maximumFractionDigits:app.config.format.payoff2.maximumFractionDigits}); return true;}catch (e){return false}}})
+            .addField('maximumFractionDigits', 'number', app, 'config.format.payoff2.maximumFractionDigits', {validate: (v)=>{try{new Intl.NumberFormat([], {minimumFractionDigits:app.config.format.payoff2.minimumFractionDigits, maximumFractionDigits:v}); return true;}catch (e){return false}}})
+            .addField('useGrouping', 'checkbox', app, 'config.format.payoff2.useGrouping')
+
+        this.formGroups.push(payoff2Group);
+
 
         group = new FormGroup('probability', ()=>{
             app.updateProbabilityNumberFormat();

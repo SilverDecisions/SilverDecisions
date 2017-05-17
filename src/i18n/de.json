@@ -189,8 +189,17 @@
       "fontStyle": "Schriftstil",
       "numberFormatLocale": "Zahlenformat Gebietsschema"
     },
-    "payoff":{
-      "title": "Auszahlung Zahlenformat",
+    "payoff1":{
+      "title": "Auszahlung 1 Zahlenformat",
+      "currency": "Währung",
+      "currencyDisplay": "Währungsanzeige",
+      "style": "Stil",
+      "minimumFractionDigits": "Minimale Bruchzahlen",
+      "maximumFractionDigits": "Maximale Bruchzahlen",
+      "useGrouping": "Gruppierung Separatoren verwenden"
+    },
+    "payoff2":{
+      "title": "Auszahlung 2 Zahlenformat",
       "currency": "Währung",
       "currencyDisplay": "Währungsanzeige",
       "style": "Stil",

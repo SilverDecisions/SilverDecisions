@@ -225,8 +225,17 @@
       "fontStyle": "Font style",
       "numberFormatLocale": "Number format locale"
     },
-    "payoff":{
-      "title": "Payoff number format",
+    "payoff1":{
+      "title": "Payoff 1 number format",
+      "currency": "Currency",
+      "currencyDisplay": "Currency display",
+      "style": "Style",
+      "minimumFractionDigits": "Minimum fraction digits",
+      "maximumFractionDigits": "Maximum fraction digits",
+      "useGrouping": "Use grouping separators"
+    },
+    "payoff2":{
+      "title": "Payoff 2 number format",
       "currency": "Currency",
       "currencyDisplay": "Currency display",
       "style": "Style",
