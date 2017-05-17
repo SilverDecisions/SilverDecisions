@@ -418,8 +418,8 @@
     "nameOfCriterion1": "Name for criterion 1",
     "nameOfCriterion2": "Name for criterion 2",
     "defaultWTP": "Default value of WTP",
-    "minimumWTP": "Minimum range for WTP",
-    "maximumWTP": "Maximum range for WTP",
+    "minimumWTP": "WTP lower bound",
+    "maximumWTP": "WTP upper bound",
     "buttons":{
       "showLeagueTable" : "Show league table",
       "flip": "Flip"
