@@ -417,9 +417,9 @@
     "defaultMinimizedCriterionName": "Cost",
     "nameOfCriterion1": "Name for criterion 1",
     "nameOfCriterion2": "Name for criterion 2",
-    "defaultWTP": "Default value of WTP",
-    "minimumWTP": "WTP lower bound",
-    "maximumWTP": "WTP upper bound",
+    "defaultWTP": "Default criterion 1 weight",
+    "minimumWTP": "Weight lower bound",
+    "maximumWTP": "Weight upper bound",
     "buttons":{
       "showLeagueTable" : "Show league table",
       "flip": "Flip"
