@@ -103,7 +103,7 @@
     "comment":{
       "dominatedBy": "dominated (by #{{policy}})",
       "extendedDominatedBy": "extended-dominated (by #{{policy1}} and #{{policy2}})",
-      "icer": "ICER={{icer}}"
+      "icer": "incremental ratio={{icer}}"
     },
     "plot":{
       "groups":{
