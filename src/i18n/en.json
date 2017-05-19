@@ -417,7 +417,7 @@
     "defaultMinimizedCriterionName": "Cost",
     "nameOfCriterion1": "Name for criterion 1",
     "nameOfCriterion2": "Name for criterion 2",
-    "defaultWTP": "Default criterion 1 weight",
+    "defaultWTP": "Default 1st criterion weight",
     "minimumWTP": "Weight lower bound",
     "maximumWTP": "Weight upper bound",
     "buttons":{
