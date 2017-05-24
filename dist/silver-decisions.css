@@ -178,13 +178,13 @@
 
 .sd-league-table-plot .odc-gradient-arrow {
   stroke-width: 4;
-  stroke: red;
-  fill: red;
-  opacity: 0.65; }
+  stroke: #424242;
+  fill: #424242;
+  opacity: 0.55; }
 
 .sd-league-table-plot .arrowHead {
-  stroke: red;
-  fill: red; }
+  stroke: #424242;
+  fill: #424242; }
 
 
 /* The Modal (background) */
