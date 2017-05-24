@@ -7,7 +7,8 @@ export class LeagueTableConfig {
     onRowSelected = (row) => {
     };
     extendedPolicyDescription = true;
-
+    onRowHover = (d, i) => {};
+    onRowHoverOut = (d, i) => {};
 
     constructor(custom) {
         if (custom) {
@@ -38,8 +39,8 @@ export class LeagueTable {
         this.drawHeaders([
             i18n.t('leagueTable.headers.policyNo'),
             i18n.t('leagueTable.headers.policy'),
-            dataModel.payoffNames[jobResult.maximizedPayoffIndex],
-            dataModel.payoffNames[jobResult.minimizedPayoffIndex],
+            dataModel.payoffNames[0],
+            dataModel.payoffNames[1],
             i18n.t('leagueTable.headers.comment')
         ]);
         this.drawRows(jobResult.rows)
@@ -74,11 +75,11 @@ export class LeagueTable {
                                 rowspan: 1
                             },
                             {
-                                data: d.payoffs[this.jobResult.maximizedPayoffIndex],
+                                data: d.payoffs[0],
                                 rowspan: d.policies.length
                             },
                             {
-                                data: d.payoffs[this.jobResult.minimizedPayoffIndex],
+                                data: d.payoffs[1],
                                 rowspan: d.policies.length
                             },
                             {
@@ -106,14 +107,19 @@ export class LeagueTable {
 
         var rows = this.resultTableBody.selectAll("tr").data(data);
 
-
         var rowsEnter = rows.enter().append("tr");
         var rowsMerge = rowsEnter.merge(rows);
         rowsMerge
             .on('click', function (d, i) {
-            // d3.select(this).classed('sd-selected', true);
-            self.config.onRowSelected(d, i)
-        }).classed('sd-highlighted', d=>d.row.ICER !==null && d.row.ICER >= this.dataModel.minimumWTP && d.row.ICER <= this.dataModel.maximumWTP)
+                // d3.select(this).classed('sd-selected', true);
+                self.config.onRowSelected(d, i)
+            })
+            .classed('sd-highlighted', d=>d.row.optimal)
+            .attr('id', d => 'sd-league-table-row-'+d.row.id);
+
+        rowsMerge.on("mouseover.onRowHover", this.config.onRowHover);
+        rowsMerge.on("mouseout.onRowHoverOut", this.config.onRowHoverOut);
+
         rows.exit().remove();
 
         var cells = rowsMerge.selectAll("td").data(d=>d.cells);
@@ -142,8 +148,8 @@ export class LeagueTable {
     }
 
     getRowComment(row) {
-        if(row.ICER !== null){
-            return i18n.t('leagueTable.comment.icer', {icer: row.ICER});
+        if(row.incratio !== null){
+            return i18n.t('leagueTable.comment.incratio', {incratio: row.incratio});
         }
         if(row.dominatedBy !== null){
             return i18n.t('leagueTable.comment.dominatedBy', {policy: row.dominatedBy});
@@ -152,5 +158,10 @@ export class LeagueTable {
             return i18n.t('leagueTable.comment.extendedDominatedBy', {policy1: row.extendedDominatedBy[0], policy2: row.extendedDominatedBy[1]});
         }
         return '';
+    }
+
+
+    emphasize(row, emphasize=true){
+        this.resultTableBody.selectAll('#sd-league-table-row-'+row.id).classed('sd-emphasized', emphasize);
     }
 }

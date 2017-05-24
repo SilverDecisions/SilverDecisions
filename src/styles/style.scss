@@ -1134,10 +1134,12 @@ div.sd-job-result-table{
     border-right-width: 0;
     padding: 5px 9px;
   }
-  tr{
-    /*&:hover{
-      background-color: #eee;
-    }*/
+  tbody tr{
+    &:hover{
+      border-left: 3px solid #2b2b2b;
+      border-right: 3px solid #2b2b2b;
+      color: black;
+    }
     &.sd-selected{
       background-color: rgba(30, 144, 255, 0.35);
     }
@@ -1147,6 +1149,12 @@ div.sd-job-result-table{
      /* &:hover{
         background-color: rgba(136, 223, 121, 0.55);
       }*/
+    }
+
+    &.sd-emphasized{
+      border-left: 3px solid #2b2b2b;
+      border-right: 3px solid #2b2b2b;
+      color: black;
     }
   }
 }

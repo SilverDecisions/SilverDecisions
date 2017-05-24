@@ -53,6 +53,8 @@ export class LeagueTableDialog extends Dialog {
     initResultTable(result) {
         let config = {
             onRowSelected: (row, i)=> this.onResultRowSelected(row, i),
+            onRowHover: (row, i)=> this.resultPlot.emphasize(row.row, true),
+            onRowHoverOut: (row, i)=> this.resultPlot.emphasize(row.row, false),
         };
 
         if (this.resultTable) {
@@ -71,16 +73,22 @@ export class LeagueTableDialog extends Dialog {
         let self = this;
         let config = {
             maxWidth: self.app.config.leagueTable.plot.maxWidth,
-            minimumWTP: self.app.dataModel.minimumWTP,
-            maximumWTP: self.app.dataModel.maximumWTP,
+            weightLowerBound: self.app.dataModel.weightLowerBound,
+            weightUpperBound: self.app.dataModel.weightUpperBound,
+            payoffCoeffs: result.payoffCoeffs,
+            payoffNames: result.payoffNames,
             x: {
-                value: (d, key) => d.payoffs[result.maximizedPayoffIndex],
-                title: result.payoffNames[result.maximizedPayoffIndex]
+                value: (d, key) => d.payoffs[0],
+                title: result.payoffNames[0]
             },
             y: {
-                value: (d, key) => d.payoffs[result.minimizedPayoffIndex],
-                title: result.payoffNames[result.minimizedPayoffIndex]
+                value: (d, key) => d.payoffs[1],
+                title: result.payoffNames[1]
             },
+            onDotHover: (d, i) => this.resultTable.emphasize(d, true),
+            onDotHoverOut: (d, i) => this.resultTable.emphasize(d, false),
+
+
             color: function (group) {
                 let groupsConf = self.app.config.leagueTable.plot.groups;
                 let groupConf = groupsConf[group.key];
@@ -91,7 +99,7 @@ export class LeagueTableDialog extends Dialog {
             },
             groups: {
                 value: function (r) {
-                    if (r.ICER !== null && r.ICER >= self.app.dataModel.minimumWTP && r.ICER <= self.app.dataModel.maximumWTP) {
+                    if (r.optimal) {
                         return 'highlighted'
                     } else if (r.dominatedBy !== null) {
                         return 'dominated'

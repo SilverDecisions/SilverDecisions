@@ -173,9 +173,9 @@ export class Sidebar {
         this.multipleCriteriaFields = [];
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion1', 'nameOfCriterion1', 'text', i18n.t('multipleCriteria.nameOfCriterion1'), new PathValueAccessor(self.app.dataModel, 'payoffNames[0]'), new RequiredInputValidator()));
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion2', 'nameOfCriterion2', 'text', i18n.t('multipleCriteria.nameOfCriterion2'), new PathValueAccessor(self.app.dataModel, 'payoffNames[1]'), new RequiredInputValidator()));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultWTP', 'defaultWTP', 'text', i18n.t('multipleCriteria.defaultWTP'), new PathValueAccessor(self.app.dataModel, 'defaultWTP'), new NumberInputValidator(0)));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-minimumWTP', 'minimumWTP', 'text', i18n.t('multipleCriteria.minimumWTP'), new PathValueAccessor(self.app.dataModel, 'minimumWTP'), new NumberInputValidator(0)));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-maximumWTP', 'maximumWTP', 'text', i18n.t('multipleCriteria.maximumWTP'), new PathValueAccessor(self.app.dataModel, 'maximumWTP'), new NumberInputValidator(0)));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'), new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'), new NumberInputValidator(0)));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightLowerBound', 'weightLowerBound', 'text', i18n.t('multipleCriteria.weightLowerBound'), new PathValueAccessor(self.app.dataModel, 'weightLowerBound'), new NumberInputValidator(0)));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightUpperBound', 'weightUpperBound', 'text', i18n.t('multipleCriteria.weightUpperBound'), new PathValueAccessor(self.app.dataModel, 'weightUpperBound'), new NumberInputValidator(0)));
 
         this.updateMultipleCriteria();
     }

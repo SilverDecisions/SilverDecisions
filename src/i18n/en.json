@@ -33,7 +33,9 @@
         "mini-min":"mini-min",
         "mini-max":"mini-max",
         "min-max":"min-max",
-        "max-min":"max-min"
+        "max-min":"max-min",
+        "min-min": "min-min",
+        "max-max": "max-max"
       }
     },
     "undo": "Undo",
@@ -103,7 +105,7 @@
     "comment":{
       "dominatedBy": "dominated (by #{{policy}})",
       "extendedDominatedBy": "extended-dominated (by #{{policy1}} and #{{policy2}})",
-      "icer": "incremental ratio={{icer}}"
+      "incratio": "incremental ratio={{incratio}}"
     },
     "plot":{
       "groups":{
@@ -111,6 +113,11 @@
         "extended-dominated" : "Extended-dominated",
         "dominated": "Dominated",
         "default": "Other"
+      },
+      "tooltip":{
+        "gradientArrow1": "Direction of {{name}} optimization",
+        "gradientArrow2": "Direction of {{name}} optimization",
+        "dominatedRegion": "Dominated region"
       }
     }
   },
@@ -417,9 +424,9 @@
     "defaultMinimizedCriterionName": "Cost",
     "nameOfCriterion1": "Name for criterion 1",
     "nameOfCriterion2": "Name for criterion 2",
-    "defaultWTP": "Default 1st criterion weight",
-    "minimumWTP": "Weight lower bound",
-    "maximumWTP": "Weight upper bound",
+    "defaultCriterion1Weight": "Default 1st criterion weight",
+    "weightLowerBound": "Weight lower bound",
+    "weightUpperBound": "Weight upper bound",
     "buttons":{
       "showLeagueTable" : "Show league table",
       "flip": "Flip"

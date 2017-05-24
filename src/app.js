@@ -126,6 +126,8 @@ export class App {
     viewModes = [];
     currentViewMode;
 
+    payoffsMaximization=[true, false];
+
     constructor(containerIdOrElem, config, diagramData) {
         var p = Promise.resolve();
         this.setConfig(config);
@@ -434,7 +436,7 @@ export class App {
     onMultiCriteriaUpdated(fieldName) {
         var self = this;
         var p = Promise.resolve();
-        if (fieldName == 'defaultWTP') {
+        if (fieldName == 'defaultCriterion1Weight') {
             p = p.then(()=>this.checkValidityAndRecomputeObjective());
         }
         return p.then(()=> {
@@ -453,6 +455,8 @@ export class App {
         this.treeDesigner.config.maxPayoffsToDisplay = multiCriteria ? 2 : 1;
 
         if (multiCriteria) {
+            this.payoffsMaximization = currentRule.payoffCoeffs.map(c=>c>0);
+
             if (!this.dataModel.payoffNames.length) {
                 this.dataModel.payoffNames.push(null, null);
                 this.dataModel.payoffNames[0] = i18n.t('multipleCriteria.defaultMinimizedCriterionName');
@@ -460,6 +464,7 @@ export class App {
             }
             this.treeDesigner.config.payoffNames = this.dataModel.payoffNames;
         } else {
+            this.payoffsMaximization[this.currentViewMode.payoffIndex] = currentRule.maximization;
             this.treeDesigner.config.payoffNames = [null, null];
         }
         if (!recompute) {
@@ -506,21 +511,18 @@ export class App {
             name: "criterion1",
             multiCriteria: false,
             payoffIndex: 0,
-            maximization: true
         });
 
         this.viewModes.push({
             name: "criterion2",
             multiCriteria: false,
             payoffIndex: 1,
-            maximization: false
         });
 
         this.viewModes.push({
             name: "twoCriteria",
             multiCriteria: true,
             payoffIndex: null,
-            maximization: false
         });
         this.currentViewMode = this.viewModes[0];
     }
@@ -546,29 +548,15 @@ export class App {
         let rules = this.getObjectiveRules();
         let prevRule = this.computationsManager.getCurrentRule();
         let newRule = rules[0];
-        if (this.currentViewMode.name === "criterion1") {
-            if (prevMode.multiCriteria) {
-                newRule = Utils.find(rules, r=> r.maximization == prevRule.minimizedPayoffIndex)
-            } else {
-                newRule = Utils.find(rules, r=>r.maximization)
-            }
-        } else if (this.currentViewMode.name === "criterion2") {
-            if (prevMode.multiCriteria) {
-                newRule = Utils.find(rules, r=> r.maximization == prevRule.maximizedPayoffIndex)
-            } else {
-                newRule = Utils.find(rules, r=>!r.maximization)
-            }
-        } else {
-            newRule = Utils.find(rules, r=> {
-                if (prevMode.name === "criterion1") {
-                    return prevRule.maximization == r.minimizedPayoffIndex
-                }
-                return prevRule.maximization == r.maximizedPayoffIndex
-            })
+
+
+        if(this.currentViewMode.payoffIndex !== null){
+            newRule = Utils.find(rules, r => r.maximization == this.payoffsMaximization[this.currentViewMode.payoffIndex])
+        }else{
+            newRule = Utils.find(rules, r => r.payoffCoeffs.map(c=>c>0).every((max, i)=> this.payoffsMaximization[i] === max))
         }
 
         this.setObjectiveRule(newRule.name, false, false, updateView, recompute)
-
     }
 
     setDefaultViewModeForRule(rule, recompute = true, updateView = true) {
@@ -684,6 +672,7 @@ export class App {
 
     clear() {
         this.dataModel.clear();
+        this.currentViewMode = this.viewModes[0];
         this.computationsManager.setCurrentRuleByName(this.computationsManager.getObjectiveRules()[0].name);
         this.setDiagramTitle('', true);
         this.setDiagramDescription('', true);
