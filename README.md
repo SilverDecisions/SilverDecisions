@@ -2,6 +2,10 @@
 
 Software for creating and analyzing decision trees.
 
+Citation: 
+B. Kamiński, M. Jakubczyk, P. Szufel: A framework for sensitivity analysis of decision trees, Central European Journal of Operations Research (2017).
+[doi:10.1007/s10100-017-0479-6](https://link.springer.com/article/10.1007/s10100-017-0479-6")
+
 If you are a SilverDecisions user please visit project [website](http://www.silverdecisions.pl) or [Wiki](https://github.com/SilverDecisions/SilverDecisions/wiki).
 
 Basic technical information about SilverDecisions is provided in [Developer's Guide](https://github.com/SilverDecisions/SilverDecisions/wiki/Developer%27s-guide)
