@@ -899,7 +899,9 @@ export class App {
     initKeyCodes() {
 
         this.container.on("keyup", (d)=> {
-            if (d3.event.srcElement && ['INPUT', 'TEXTAREA'].indexOf(d3.event.srcElement.nodeName.toUpperCase()) > -1) { //ignore events from input and textarea elements
+            let srcElement = d3.event.target || d3.event.srcElement;
+
+            if (srcElement && ['INPUT', 'TEXTAREA'].indexOf(srcElement.nodeName.toUpperCase()) > -1) { //ignore events from input and textarea elements
                 return;
             }
 
