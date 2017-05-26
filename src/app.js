@@ -819,7 +819,7 @@ export class App {
                 sensitivityAnalysis: this.sensitivityAnalysisDialog.jobNameToParamValues
             };
 
-            return Utils.stringify(obj, [self.dataModel.getJsonReplacer(filterLocation, filterComputed, self.computationsManager.expressionEngine.getJsonReplacer())]);
+            return Utils.stringify(obj, self.dataModel.getJsonReplacer(filterLocation, filterComputed, self.computationsManager.expressionEngine.getJsonReplacer()));
         });
 
 
