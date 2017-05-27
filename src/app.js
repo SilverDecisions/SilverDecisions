@@ -249,6 +249,10 @@ export class App {
         this.leagueTableDialog = new LeagueTableDialog(this);
     }
 
+    isLeagueTableAvailable() {
+        return this.isMultipleCriteria() && this.dataModel.getRoots().length === 1 && this.computationsManager.isValid() && this.leagueTableDialog.validateParams();
+    }
+
     initSensitivityAnalysisDialog() {
         this.sensitivityAnalysisDialog = new SensitivityAnalysisDialog(this);
 
@@ -438,6 +442,8 @@ export class App {
         var p = Promise.resolve();
         if (fieldName == 'defaultCriterion1Weight') {
             p = p.then(()=>this.checkValidityAndRecomputeObjective());
+        }else{
+            this.sidebar.updateMultipleCriteria();
         }
         return p.then(()=> {
             setTimeout(function () {

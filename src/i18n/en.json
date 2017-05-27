@@ -218,8 +218,12 @@
         "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow."
       }
     },
+    "league-table":{
+      "name": "League table"
+    },
     "errors":{
-      "generic": "Error in sensitivity analysis computations: {{message}}"
+      "generic": "Error in {{jobName}} computations: {{message}}",
+      "params": "Incorrect {{jobName}} parameters"
     }
   },
   "settingsDialog":{

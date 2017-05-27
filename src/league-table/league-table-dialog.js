@@ -69,17 +69,13 @@ export class LeagueTableDialog extends Dialog {
     }
 
 
-    computeWeight(w){
-        let ee = this.app.expressionEngine.constructor;
-        return w !== Infinity ? ee.toFloat(ee.toNumber(w)) : w;
-    }
 
     initResultPlot(result) {
         let self = this;
         let config = {
             maxWidth: self.app.config.leagueTable.plot.maxWidth,
-            weightLowerBound: self.computeWeight(self.app.dataModel.weightLowerBound),
-            weightUpperBound: self.computeWeight(self.app.dataModel.weightUpperBound),
+            weightLowerBound: result.weightLowerBound,
+            weightUpperBound: result.weightUpperBound,
             payoffCoeffs: result.payoffCoeffs,
             payoffNames: result.payoffNames,
             x: {
@@ -139,13 +135,31 @@ export class LeagueTableDialog extends Dialog {
         this.container.select('.sd-league-table-action-buttons').selectAll('button').attr('disabled', disable ? 'disabled' : undefined)
     }
 
+
+    initJobParams(){
+        this.jobParameters = this.job.createJobParameters({
+            ruleName: this.computationsManager.getCurrentRule().name,
+            weightLowerBound: this.app.dataModel.weightLowerBound,
+            weightUpperBound: this.app.dataModel.weightUpperBound,
+
+        });
+    }
+
+    validateParams(){
+        this.initJobParams();
+        return this.jobParameters.validate();
+    }
+
     runJob() {
 
-        this.disableActionButtonsAndShowLoadingIndicator();
 
-        this.jobParameters = this.job.createJobParameters({
-            ruleName: this.computationsManager.getCurrentRule().name
-        });
+        this.initJobParams();
+
+        if(!this.validateParams()){
+            alert(i18n.t("job.errors.params", {"jobName": i18n.t("job.league-table.name")}))
+            return;
+        }
+        this.disableActionButtonsAndShowLoadingIndicator();
         this.computationsManager.runJobWithInstanceManager(this.job.name, this.jobParameters.values, {
             onJobStarted: this.onJobStarted,
             onJobCompleted: this.onJobCompleted,
@@ -244,6 +258,7 @@ export class LeagueTableDialog extends Dialog {
                 let msgKeyBase = "job." + self.job.name + ".errors.";
                 let msgKey = msgKeyBase + e.message;
                 let msg = i18n.t(msgKey, e.data);
+                e.jobName = i18n.t("job.league-table.name");
                 if (msg === msgKey) {
                     msg = i18n.t("job.errors.generic", e);
                 }

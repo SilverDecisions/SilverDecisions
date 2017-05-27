@@ -161,7 +161,7 @@ export class Sidebar {
         });
 
 
-        this.multipleCriteriaContainer.select('#sd-show-league-table-button').on('click', () => {
+        this.showLeagueTableButton = this.multipleCriteriaContainer.select('#sd-show-league-table-button').on('click', () => {
             this.app.showLeagueTable();
         });
 
@@ -187,6 +187,10 @@ export class Sidebar {
         var self = this;
         var temp = {};
         this.multipleCriteriaContainer.classed('sd-hidden', !this.app.isMultipleCriteria());
+
+        this.showLeagueTableButton.attr("disabled", this.app.isLeagueTableAvailable() ? undefined : "disabled")
+
+
         var inputGroups = this.multipleCriteriaContainer.select(".sd-multiple-criteria-properties").selectAll('div.input-group').data(this.multipleCriteriaFields);
         inputGroups.exit().remove();
         var inputGroupsEnter = inputGroups.enter().appendSelector('div.input-group').html(d=>d.type=='select'? Templates.get('selectInputGroup', d):Templates.get('inputGroup', d));

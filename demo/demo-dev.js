@@ -1,7 +1,7 @@
 var lng = getParameterByName('lang') || 'en';
 var app;
 
-var data = SilverDecisions.App.appUtils.getJSON("./data/mcdm.json", function(data, err){
+var data = SilverDecisions.App.appUtils.getJSON("./data/mcdm3.json", function(data, err){
     app = new SilverDecisions.App('app-container', {
         lng: lng,
         readOnly: false,
@@ -23,7 +23,7 @@ var data = SilverDecisions.App.appUtils.getJSON("./data/mcdm.json", function(dat
                 show: true
             }
         }
-    }, data);
+    });
 
 });
 
