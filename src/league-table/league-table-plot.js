@@ -142,21 +142,25 @@ export class LeagueTablePlot extends ScatterPlot {
 
         let sign = (this.config.payoffCoeffs[0] * this.config.payoffCoeffs[1]) > 0 ? 1 : -1;
 
-        if (this.config.weightLowerBound == Infinity) {
-            let y = this.config.payoffCoeffs[0] > 0 ? this.plot.height: 0;
-            if(sign > 0){
-                y = this.config.payoffCoeffs[0] < 0 ? this.plot.height: 0;
-            }
+        let infLowY = this.config.payoffCoeffs[0] > 0 ? this.plot.height: 0;
+        if(sign > 0){
+            infLowY = this.config.payoffCoeffs[0] < 0 ? this.plot.height: 0;
+        }
+        let infLowPoint = [this.plot.x.map(minPoint), infLowY];
 
-            lowPoint = [this.plot.x.map(minPoint), y];
+        if (this.config.weightLowerBound == Infinity) {
+            lowPoint = infLowPoint
         } else {
             let x = this.config.payoffCoeffs[0] > 0 ? xAxisExtent[0] : xAxisExtent[1];
             lowPoint = [this.plot.x.scale(x), this.plot.y.scale(sign * this.config.weightLowerBound * (this.plot.x.value(minPoint) - x) + this.plot.y.value(minPoint))];
+            if(Math.abs(lowPoint[1]) > 1000000){
+                lowPoint = infLowPoint
+            }
         }
 
+        let infHighPoint =  [this.plot.x.map(maxPoint), this.config.payoffCoeffs[1] > 0 ? this.plot.height: 0];
         if (this.config.weightUpperBound == Infinity) {
-            let y = this.config.payoffCoeffs[1] > 0 ? this.plot.height: 0;
-            highPoint = [this.plot.x.map(maxPoint), y]
+            highPoint = infHighPoint
         } else {
 
             let x = this.config.payoffCoeffs[1] > 0 ? xAxisExtent[0] : xAxisExtent[1];
@@ -166,12 +170,14 @@ export class LeagueTablePlot extends ScatterPlot {
             }
 
             highPoint = [this.plot.x.scale(x), this.plot.y.scale(-sign * this.config.weightUpperBound * (x - this.plot.x.value(maxPoint)) + this.plot.y.value(maxPoint))];
+            // highPoint = [this.plot.x.scale(x), this.plot.y.scale(EE.toFloat(EE.multiply(-sign, EE.multiply(this.config.weightUpperBound, (x - this.plot.x.value(maxPoint))))) + this.plot.y.value(maxPoint))];
+            if(Math.abs(highPoint[1]) > 1000000){
+                highPoint = infHighPoint
+            }
         }
 
         this.dominatedRegionPoints.unshift(lowPoint);
         this.dominatedRegionPoints.push(highPoint);
-
-
 
 
         linesContainer.selectOrAppend("path." + this.prefixClass('low-incratio'))

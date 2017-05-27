@@ -8,7 +8,7 @@ export class InputField{
     label;
     valueUpdateCallback;
 
-    constructor(id, name, type, label, valueAccessor, validator, options){
+    constructor(id, name, type, label, valueAccessor, validator, options, parser){
         this.name = name;
         this.type = type;
         this.valueAccessor = valueAccessor;
@@ -16,6 +16,7 @@ export class InputField{
         this.id=id;
         this.label = label;
         this.options = options;
+        this.parser = parser;
     }
 
     getValue(){
@@ -24,5 +25,12 @@ export class InputField{
 
     setValue(val){
         return this.valueAccessor.set(val);
+    }
+
+    parse(val){
+        if(this.parser){
+            return this.parser(val)
+        }
+        return val;
     }
 }

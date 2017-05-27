@@ -69,12 +69,17 @@ export class LeagueTableDialog extends Dialog {
     }
 
 
+    computeWeight(w){
+        let ee = this.app.expressionEngine.constructor;
+        return w !== Infinity ? ee.toFloat(ee.toNumber(w)) : w;
+    }
+
     initResultPlot(result) {
         let self = this;
         let config = {
             maxWidth: self.app.config.leagueTable.plot.maxWidth,
-            weightLowerBound: self.app.dataModel.weightLowerBound,
-            weightUpperBound: self.app.dataModel.weightUpperBound,
+            weightLowerBound: self.computeWeight(self.app.dataModel.weightLowerBound),
+            weightUpperBound: self.computeWeight(self.app.dataModel.weightUpperBound),
             payoffCoeffs: result.payoffCoeffs,
             payoffNames: result.payoffNames,
             x: {

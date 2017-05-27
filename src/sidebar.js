@@ -169,13 +169,16 @@ export class Sidebar {
             this.app.flipCriteria();
         });
 
+         let weightParser = (w) => {
+             return parseFloat(w) === Infinity ? Infinity : w;
+        };
 
         this.multipleCriteriaFields = [];
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion1', 'nameOfCriterion1', 'text', i18n.t('multipleCriteria.nameOfCriterion1'), new PathValueAccessor(self.app.dataModel, 'payoffNames[0]'), new RequiredInputValidator()));
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion2', 'nameOfCriterion2', 'text', i18n.t('multipleCriteria.nameOfCriterion2'), new PathValueAccessor(self.app.dataModel, 'payoffNames[1]'), new RequiredInputValidator()));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'), new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'), new NumberInputValidator(0)));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightLowerBound', 'weightLowerBound', 'text', i18n.t('multipleCriteria.weightLowerBound'), new PathValueAccessor(self.app.dataModel, 'weightLowerBound'), new NumberInputValidator(0)));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightUpperBound', 'weightUpperBound', 'text', i18n.t('multipleCriteria.weightUpperBound'), new PathValueAccessor(self.app.dataModel, 'weightUpperBound'), new NumberInputValidator(0)));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'), new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'), new NumberInputValidator(0), null, weightParser));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightLowerBound', 'weightLowerBound', 'text', i18n.t('multipleCriteria.weightLowerBound'), new PathValueAccessor(self.app.dataModel, 'weightLowerBound'), new NumberInputValidator(0), null, weightParser));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightUpperBound', 'weightUpperBound', 'text', i18n.t('multipleCriteria.weightUpperBound'), new PathValueAccessor(self.app.dataModel, 'weightUpperBound'), new NumberInputValidator(0), null, weightParser));
 
         this.updateMultipleCriteria();
     }
@@ -205,7 +208,7 @@ export class Sidebar {
             }
 
             AppUtils.updateInputClass(d3.select(this));
-            d.setValue(this.value);
+            d.setValue(d.parse(this.value));
             self.dispatch.call("multi-criteria-updated", self, d.name);
 
         })
