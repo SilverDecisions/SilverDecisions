@@ -15,6 +15,14 @@
       "tree": "Drzewo",
       "cluster": "Zgrupowany"
     },
+    "viewMode": {
+      "label": "Widok",
+      "options": {
+        "criterion1":"Kryterium 1",
+        "criterion2":"Kryterium 2",
+        "twoCriteria":"Dwa kryteria"
+      }
+    },
     "objectiveRule":{
       "label": "Reguła",
       "options": {
@@ -23,7 +31,12 @@
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max",
         "mini-min":"mini-min",
-        "mini-max":"mini-max"
+        "mini-max":"mini-max",
+        "min-max":"min-max",
+        "max-min":"max-min",
+        "min-min": "min-min",
+        "max-max": "max-max"
+
       }
     },
     "undo": "Cofnij",
@@ -75,6 +88,41 @@
     },
     "text":{
       "delete": "Usuń"
+    }
+  },
+  "leagueTableDialog":{
+    "title": "Tabela ligowa",
+    "buttons": {
+      "downloadCsv": "Pobierz CSV"
+    }
+  },
+  "leagueTable": {
+    "headers":{
+      "policyNo": "Nr polityki",
+      "policy": "Polityka",
+      "comment": "Komentarz"
+    },
+    "comment":{
+      "dominatedBy": "zdominowana (przez #{{policy}})",
+      "extendedDominatedBy": "zdominowana rozszerzenie (przez #{{policy1}} i #{{policy2}})",
+      "incratio": "inkrementalny iloraz={{incratio}}"
+    },
+    "plot":{
+      "groups":{
+        "highlighted": "Podświetlony",
+        "extended-dominated" : "Zdominowana rozszerzenie",
+        "dominated": "Zdominowana",
+        "default": "Inne"
+      },
+      "tooltip":{
+        "gradientArrow1": "Kierunek optymalizacji {{name}}",
+        "gradientArrow2": "Kierunek optymalizacji {{name}}",
+        "dominatedRegion": "Obszar zdominowany"
+      },
+      "legend":{
+        "dominatedRegion": "Szary region oznacza obszar zdominowany",
+        "gradientArrows": "Strzałki wskazują kierunek poprawy"
+      }
     }
   },
   "sensitivityAnalysisDialog":{
@@ -174,8 +222,12 @@
         "largeScenariosNumber": "Liczba zdefiniowanych scenariuszy większa niż {{numberFormatted}}. Wyliczenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
       }
     },
+    "league-table":{
+      "name": "Tabela ligowa"
+    },
     "errors":{
-      "generic": "Błąd w obliczeniach analizy wrażliwości: {{message}}"
+      "generic": "Błąd w obliczeniach analizy wrażliwości: {{message}}",
+      "params": "Błędne parametry w {{jobName}}"
     }
   },
   "settingsDialog":{
@@ -311,6 +363,17 @@
         "marginTop": "Margines górny"
       }
     },
+    "leagueTable": {
+      "title": "Tabela ligowa",
+      "plot": {
+        "title": "Wykres",
+        "maxWidth": "Maksymalna szerokość",
+        "highlightedColor": "Kolor podświetlonej polityki",
+        "extendedDominatedColor": "Kolog polityki zdominowanej rozszerzenie",
+        "dominatedColor": "Kolor polityki zdominowanej",
+        "defaultColor": "Kolor innych polityk"
+      }
+    },
     "other":{
       "title": "Inne",
       "disableAnimations": "Wyłącz animacje",
@@ -363,6 +426,20 @@
     },
     "evaluatedVariables": "Wartości zmiennych"
   },
+  "multipleCriteria":{
+    "header": "Wiele kryteriów",
+    "defaultMaximizedCriterionName": "Efekt",
+    "defaultMinimizedCriterionName": "Koszt",
+    "nameOfCriterion1": "Nazwa kryterium 1",
+    "nameOfCriterion2": "Nazwa kryterium 2",
+    "defaultCriterion1Weight": "Domyślna waga kryerium 1",
+    "weightLowerBound": "Dolna granica wagi",
+    "weightUpperBound": "Górna granica wagi",
+    "buttons":{
+      "showLeagueTable" : "Pokaż tabelę ligową",
+      "flip": "Zamień"
+    }
+  },
   "layoutOptions":{
     "header": "Układ",
     "marginHorizontal": "Margines w poziomie",
@@ -408,12 +485,21 @@
   },
   "tooltip":{
     "node":{
-      "payoff": "Wypłata",
-      "aggregatedPayoff": "Zagregowana Wypłata",
+      "payoff": {
+        "default": "Wypłata {{number}}",
+        "named": "{{name}}"
+      },
+      "aggregatedPayoff": {
+        "default": "Zagregowana wypłata {{number}}",
+        "named": "Zagregowana {{name}}"
+      },
       "probabilityToEnter": "Prawdopodobieństwo wejścia"
     },
     "edge":{
-      "payoff": "Wypłata: {{value}}",
+      "payoff": {
+        "default": "Wypłata {{number}}: {{value}}",
+        "named": "{{name}}: {{value}}"
+      },
       "probability": "Prawdopodobieństwo: {{value}}"
     }
   },
