@@ -118,6 +118,10 @@
         "gradientArrow1": "Direction of {{name}} optimization",
         "gradientArrow2": "Direction of {{name}} optimization",
         "dominatedRegion": "Dominated region"
+      },
+      "legend":{
+        "dominatedRegion": "Grey area highlights dominated region",
+        "gradientArrows": "Arrows indicate improvement direction"
       }
     }
   },
