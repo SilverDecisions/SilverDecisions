@@ -219,12 +219,19 @@ export class LeagueTablePlot extends ScatterPlot {
 
         //draw dominated region
 
+
         let worstPoint = [
             this.config.payoffCoeffs[0] < 0 ? self.plot.width : 0,
             this.config.payoffCoeffs[1] < 0 ? 0 : self.plot.height
         ];
 
         this.dominatedRegionPoints.push(worstPoint);
+
+        if (this.config.weightLowerBound == this.config.weightUpperBound &&  this.config.weightUpperBound  == Infinity) {
+            this.dominatedRegionPoints.push([worstPoint[0], worstPoint[1] ? 0 : self.plot.height]);
+        }
+
+
 
         this.dominatedRegionPoints.sort((a, b)=> (a[0] - b[0]));
         this.dominatedRegionPoints = this.dominatedRegionPoints.reduce((prev, curr)=>{
