@@ -11,6 +11,7 @@ import {InputField} from "./form/input-field";
 import {PathValueAccessor} from "./form/path-value-accessor";
 import {NumberInputValidator} from "./validation/number-input-validator";
 import {RequiredInputValidator} from "./validation/required-input-validator";
+import {McdmWeightValueValidator} from "sd-computations/src/validation/mcdm-weight-value-validator";
 
 export class Sidebar {
 
@@ -165,7 +166,7 @@ export class Sidebar {
             this.app.showLeagueTable();
         });
 
-        this.multipleCriteriaContainer.select('#sd-flip-criteria-button').on('click', () => {
+        this.flipCriteriaButton = this.multipleCriteriaContainer.select('#sd-flip-criteria-button').on('click', () => {
             this.app.flipCriteria();
         });
 
@@ -173,32 +174,61 @@ export class Sidebar {
              return parseFloat(w) === Infinity ? Infinity : w;
         };
 
+
+
         this.multipleCriteriaFields = [];
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion1', 'nameOfCriterion1', 'text', i18n.t('multipleCriteria.nameOfCriterion1'), new PathValueAccessor(self.app.dataModel, 'payoffNames[0]'), new RequiredInputValidator()));
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion2', 'nameOfCriterion2', 'text', i18n.t('multipleCriteria.nameOfCriterion2'), new PathValueAccessor(self.app.dataModel, 'payoffNames[1]'), new RequiredInputValidator()));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'), new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'), new NumberInputValidator(0), null, weightParser));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightLowerBound', 'weightLowerBound', 'text', i18n.t('multipleCriteria.weightLowerBound'), new PathValueAccessor(self.app.dataModel, 'weightLowerBound'), new NumberInputValidator(0), null, weightParser));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightUpperBound', 'weightUpperBound', 'text', i18n.t('multipleCriteria.weightUpperBound'), new PathValueAccessor(self.app.dataModel, 'weightUpperBound'), new NumberInputValidator(0), null, weightParser));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'), new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'), new McdmWeightValueValidator(), null, weightParser));
+        let lowerBoundValueAccessor = new PathValueAccessor(self.app.dataModel, 'weightLowerBound');
+        let upperBoundValueAccessor = new PathValueAccessor(self.app.dataModel, 'weightUpperBound');
+        let weightValueValidator = new McdmWeightValueValidator();
+        var ee = this.app.expressionEngine.constructor;
+
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightLowerBound', 'weightLowerBound', 'text', i18n.t('multipleCriteria.weightLowerBound'), lowerBoundValueAccessor,
+            new McdmWeightValueValidator(v => {
+                let upper = upperBoundValueAccessor.get();
+                return weightValueValidator.validate(upper) ? ee.compare(v, upper) <= 0 : true
+            }), null, weightParser));
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightUpperBound', 'weightUpperBound', 'text', i18n.t('multipleCriteria.weightUpperBound'), upperBoundValueAccessor,
+            new McdmWeightValueValidator(v => {
+                let lower = lowerBoundValueAccessor.get();
+                return weightValueValidator.validate(lower) ? ee.compare(v, lower) >= 0 : true
+            }), null, weightParser));
 
         this.updateMultipleCriteria();
     }
 
-    updateMultipleCriteria(){ //TODO refactor
+
+    updateMultipleCriteria(updateInputs = true){ //TODO refactor
+        var ee = this.app.expressionEngine;
+
         var self = this;
         var temp = {};
         this.multipleCriteriaContainer.classed('sd-hidden', !this.app.isMultipleCriteria());
 
-        this.showLeagueTableButton.attr("disabled", this.app.isLeagueTableAvailable() ? undefined : "disabled")
+        let leagueTableAvailable = this.app.isLeagueTableAvailable();
+        this.showLeagueTableButton.attr("disabled", leagueTableAvailable ? undefined : "disabled");
+        this.flipCriteriaButton.attr("disabled", leagueTableAvailable ? undefined : "disabled");
+        this.multipleCriteriaContainer.classed('sd-invalid-league-table-params', !leagueTableAvailable);
 
+        if(!updateInputs){
+            return;
+        }
 
         var inputGroups = this.multipleCriteriaContainer.select(".sd-multiple-criteria-properties").selectAll('div.input-group').data(this.multipleCriteriaFields);
         inputGroups.exit().remove();
         var inputGroupsEnter = inputGroups.enter().appendSelector('div.input-group').html(d=>d.type=='select'? Templates.get('selectInputGroup', d):Templates.get('inputGroup', d));
         inputGroupsEnter.merge(inputGroups).select('.sd-input').on('change input', function (d, i) {
             var prevValue = d.getValue();
+
             var isValid = !d.validator || d.validator.validate(this.value);
 
-            d3.select(this).classed('invalid', !isValid);
+            let selection = d3.select(this);
+            selection.classed('invalid', !isValid);
+            if(d.styleClass){
+                selection.classed(d.styleClass, true);
+            }
 
             if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
                 self.app.dataModel.saveStateFromSnapshot(temp[i].pristineStateSnapshot);
@@ -211,7 +241,7 @@ export class Sidebar {
                 return;
             }
 
-            AppUtils.updateInputClass(d3.select(this));
+            AppUtils.updateInputClass(selection);
             d.setValue(d.parse(this.value));
             self.dispatch.call("multi-criteria-updated", self, d.name);
 
@@ -222,11 +252,11 @@ export class Sidebar {
                 temp[i].pristineStateSnapshot = self.app.dataModel.createStateSnapshot();
             })
             .each(function (d, i) {
-                this.value = d.getValue();
+                let value = d.getValue();
+
+                this.value = value;
                 temp[i] = {};
-                if (d.validator && !d.validator.validate(this.value)) {
-                    d3.select(this).classed('invalid', true);
-                }
+                d3.select(this).classed('invalid', d.validator && !d.validator.validate(this.value));
 
                 AppUtils.updateInputClass(d3.select(this));
                 if (d.type == 'textarea') {

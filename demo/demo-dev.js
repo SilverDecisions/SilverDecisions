@@ -23,7 +23,7 @@ var data = SilverDecisions.App.appUtils.getJSON("./data/mcdm3.json", function(da
                 show: true
             }
         }
-    });
+    }, data);
 
 });
 

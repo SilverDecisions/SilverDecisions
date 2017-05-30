@@ -41,7 +41,8 @@ var nestedDependencies = [
     'pivottable/dist/pivot.de',
     'pivottable/dist/pivot.fr',
     'pivottable/dist/pivot.pl',
-    'odc-d3/src/scatterplot'
+    'odc-d3/src/scatterplot',
+    'sd-computations/src/validation/mcdm-weight-value-validator'
 
 ];
 dependencies.push(...nestedDependencies);
