@@ -23,7 +23,11 @@
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max",
         "mini-min":"mini-min",
-        "mini-max":"mini-max"
+        "mini-max":"mini-max",
+        "min-max":"min-max",
+        "max-min":"max-min",
+        "min-min": "min-min",
+        "max-max": "max-max"
       }
     },
     "undo": "Rückgängig machen",
@@ -409,12 +413,21 @@
   },
   "tooltip":{
     "node":{
-      "payoff": "Auszahlung",
-      "aggregatedPayoff": "Aggregierte Auszahlung",
+      "payoff": {
+        "default": "Auszahlung {{number}}",
+        "named": "{{name}}"
+      },
+      "aggregatedPayoff": {
+        "default": "Aggregierte Auszahlung {{number}}",
+        "named": "Aggregierte {{name}}"
+      },
       "probabilityToEnter": "Wahrscheinlichkeit"
     },
     "edge":{
-      "payoff": "Auszahlung: {{value}}",
+      "payoff": {
+        "default": "Auszahlung {{number}}: {{value}}",
+        "named": "{{name}}: {{value}}"
+      },
       "probability": "Wahrscheinlichkeit: {{value}}"
     }
   },

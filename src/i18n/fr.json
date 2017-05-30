@@ -23,7 +23,11 @@
         "maxi-min":"maxi-min",
         "maxi-max":"maxi-max",
 	"mini-min":"mini-min",
-        "mini-max":"mini-max"
+        "mini-max":"mini-max",
+        "min-max":"min-max",
+        "max-min":"max-min",
+        "min-min": "min-min",
+        "max-max": "max-max"
       }
     },
     "undo": "Annuler",
@@ -409,12 +413,21 @@
   },
   "tooltip":{
     "node":{
-      "payoff": "Avantage",
-      "aggregatedPayoff": "Avantage agrégé",
+      "payoff": {
+        "default": "Avantage {{number}}",
+        "named": "{{name}}"
+      },
+      "aggregatedPayoff": {
+        "default": "Avantage agrégé {{number}}",
+        "named": "Agrégé  {{name}}"
+      },
       "probabilityToEnter": "Probabilité d'entrée"
     },
     "edge":{
-      "payoff": "Avantage: {{value}}",
+      "payoff": {
+        "default": "Avantage {{number}}: {{value}}",
+        "named": "{{name}}: {{value}}"
+      },
       "probability": "Probabilité: {{value}}"
     }
   },

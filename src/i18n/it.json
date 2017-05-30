@@ -23,7 +23,11 @@
                 "maxi-min":"max-min",
                 "maxi-max":"max-max",
                 "mini-min":"min-min",
-                "mini-max":"min-max"
+                "mini-max":"min-max",
+                "min-max":"min-max",
+                "max-min":"max-min",
+                "min-min": "min-min",
+                "max-max": "max-max"
             }
         },
         "undo": "Ripristina",
@@ -410,12 +414,21 @@
     },
     "tooltip":{
         "node":{
-            "payoff": "Saldo",
-            "aggregatedPayoff": "Saldo aggregato",
+      "payoff": {
+        "default": "Saldo {{number}}",
+        "named": "{{name}}"
+      },
+            "aggregatedPayoff": {
+                "default": "Saldo aggregato {{number}}",
+                "named": "Aggregato {{name}}"
+            },
             "probabilityToEnter": "Probabilità da inserire"
         },
         "edge":{
-            "payoff": "Saldo: {{value}}",
+      "payoff": {
+        "default": "Saldo {{number}}: {{value}}",
+        "named": "{{name}}: {{value}}"
+      },
             "probability": "Probabilità: {{value}}"
         }
     },
