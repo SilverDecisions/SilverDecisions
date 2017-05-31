@@ -15,6 +15,14 @@
       "tree": "Baum",
       "cluster": "Cluster"
     },
+    "viewMode": {
+      "label": "Aussicht",
+      "options": {
+        "criterion1":"Kriterium 1",
+        "criterion2":"Kriterium 2",
+        "twoCriteria":"Zwei Kriterien"
+      }
+    },
     "objectiveRule":{
       "label": "Regel",
       "options": {
@@ -80,6 +88,41 @@
     },
     "text":{
       "delete": "Löschen"
+    }
+  },
+  "leagueTableDialog":{
+    "title": "Rangliste",
+    "buttons": {
+      "downloadCsv": "CSV Herunterladen"
+    }
+  },
+  "leagueTable": {
+    "headers":{
+      "policyNo": "Regel #",
+      "policy": "Regel",
+      "comment": "Kommentar"
+    },
+    "comment":{
+      "dominatedBy": "Dominiert (durch#{{policy}})",
+      "extendedDominatedBy": "Erweitert-dominiert (durch #{{policy1}} und #{{policy2}})",
+      "incratio": "Inkrementelles Verhältnis={{incratio}}"
+    },
+    "plot":{
+      "groups":{
+        "highlighted": "Markiert",
+        "extended-dominated" : "Erweitert-dominiert",
+        "dominated": "Dominiert",
+        "default": "Andere"
+      },
+      "tooltip":{
+        "gradientArrow1": "Richtung von{{name}} Optimierung",
+        "gradientArrow2": "Richtung von {{name}} Optimierung",
+        "dominatedRegion": "Dominierte Region"
+      },
+      "legend":{
+        "dominatedRegion": "Graumarkiert Bereich stellt dominierte Region dar",
+        "gradientArrows": "Pfeile zeigen Verbesserungsrichtung an"
+      }
     }
   },
   "sensitivityAnalysisDialog":{
@@ -179,8 +222,12 @@
         "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam."
       }
     },
+    "league-table":{
+      "name": "Rangliste"
+    },
     "errors":{
-      "generic": "Fehler bei der Sensitivitätsanalyse: {{message}}"
+      "generic": "Fehler bei der Sensitivitätsanalyse: {{message}}",
+      "params": "Inkorrekte {{jobName}} Parametern"
     }
   },
   "settingsDialog":{
@@ -316,6 +363,17 @@
         "marginTop": "Rand Oben"
       }
     },
+    "leagueTable": {
+      "title": "Rangliste",
+      "plot": {
+        "title": "Plot",
+        "maxWidth": "Max Breite",
+        "highlightedColor": "Farbe der markierten Regel",
+        "extendedDominatedColor": "Farbe der erweitert-dominierten Regel",
+        "dominatedColor": "Farbe der dominierten Regel",
+        "defaultColor": "Farbe der anderen Regeln"
+      }
+    },
     "other":{
       "title": "Weitere",
       "disableAnimations": "Animationen Deaktivieren",
@@ -367,6 +425,20 @@
       "recalculate": "Neu berechnen"
     },
     "evaluatedVariables": "Ausgewertete Variablen"
+  },
+  "multipleCriteria":{
+    "header": "Mehrere Kriterien",
+    "defaultMaximizedCriterionName": "Effekt",
+    "defaultMinimizedCriterionName": "Kosten",
+    "nameOfCriterion1": "Name des Kriteriums 1",
+    "nameOfCriterion2": "Name des Kriteriums 2",
+    "defaultCriterion1Weight": "Default 1. Kriterium Gewicht",
+    "weightLowerBound": "Gewicht untere Grenze",
+    "weightUpperBound": "Gewicht obere Grenze",
+    "buttons":{
+      "showLeagueTable" : "Rangliste anzeigen",
+      "flip": "Flip"
+    }
   },
   "layoutOptions":{
     "header": "Layout",
