@@ -15,6 +15,8 @@ export class LeagueTablePlotConfig extends ScatterPlotConfig {
     extremeWeightThreshold = 9999999;
 
     showLegend = true;
+    forceLegend = true;
+
     legend = {
         width: 125,
     };
