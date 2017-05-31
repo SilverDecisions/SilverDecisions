@@ -12,6 +12,7 @@ export class LeagueTablePlotConfig extends ScatterPlotConfig {
     gradientArrowOffset = 10;
     payoffCoeffs = [1, 1];
     payoffNames = [];
+    extremeWeightThreshold = 9999999;
 
     showLegend = true;
     legend = {
@@ -227,11 +228,10 @@ export class LeagueTablePlot extends ScatterPlot {
 
         this.dominatedRegionPoints.push(worstPoint);
 
-        if (this.config.weightLowerBound == this.config.weightUpperBound &&  this.config.weightUpperBound  == Infinity) {
+        //TODO maybe change to some more precise check
+        if (this.config.weightLowerBound >= this.config.extremeWeightThreshold &&  this.config.weightUpperBound  >= this.config.extremeWeightThreshold) {
             this.dominatedRegionPoints.push([worstPoint[0], worstPoint[1] ? 0 : self.plot.height]);
         }
-
-
 
         this.dominatedRegionPoints.sort((a, b)=> (a[0] - b[0]));
         this.dominatedRegionPoints = this.dominatedRegionPoints.reduce((prev, curr)=>{
