@@ -353,7 +353,6 @@ export class LeagueTablePlot extends ScatterPlot {
     updateLegend() {
         super.updateLegend();
         var plot = this.plot;
-        console.log('update legend');
 
         let container = plot.legend.container.selectOrAppend("g.sd-additional-items")
         let legendCells = plot.legend.container.select(".legendCells");
@@ -370,10 +369,7 @@ export class LeagueTablePlot extends ScatterPlot {
             .enter().append("text")
             .text(d=>d)
             .attr('dy', "0")
-            .attr('x', "0")
-
-
-
+            .attr('x', "0");
 
         container.selectAll("text").call(wrap, d=>d, this.config.legend.width);
 
@@ -409,8 +405,6 @@ export class LeagueTablePlot extends ScatterPlot {
                 }
             });
         }
-
-
     }
 
 
