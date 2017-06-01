@@ -29,7 +29,7 @@ describe("Objective rules", function () {
         describe(ruleName, function () {
             it("should be computed correctly", function () {
                 result.data.trees.forEach(function (root, index) {
-                    compare(ruleName, root, json.trees[index]);
+                    compare(ruleName, root, json.data.trees[index]);
                 })
             })
         })
