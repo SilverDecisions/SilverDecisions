@@ -109,6 +109,6 @@
     "pivottable": "^2.11.0",
     "sd-computations": "0.3.0",
     "sd-model": "0.2.0",
-    "sd-utils": "0.1.6"
+    "sd-utils": "0.1.7"
   }
 }
