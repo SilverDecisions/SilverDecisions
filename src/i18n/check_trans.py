@@ -19,6 +19,8 @@ def list_differences(a, b, path=""):
                     if strict:
                         if val_a == val_b:
                             print("\tmissing translation: " + path + "/" + key)
+                            print("\t\toriginal:    " + val_a)
+                            print("\t\ttranslation: " + val_a)
                             allok = False
         else:
             print("\tmissing key: " + path + "/" + key)
@@ -66,6 +68,8 @@ with open("en.json") as data_file:
     ref = json.load(data_file)
 
 for fname in fname_list:
+    if fname == "en.json":
+        continue
     with open(fname) as data_file:
         test = json.load(data_file)
         print("Testing language file:", fname)
