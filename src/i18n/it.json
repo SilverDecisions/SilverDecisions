@@ -44,7 +44,6 @@
         "name": "Eticehtta",
         "payoff": "Saldo",
         "probability": "Probabilità"
-
     },
     "text":{
         "value": "Testo"
@@ -69,9 +68,7 @@
                 "decision": "Come Decision Node",
                 "chance": "Come Chance Node",
                 "terminal": "Come Terminal Node"
-
             },
-
             "selectSubtree": "Seleziona Sotto-albero",
             "flipSubtree": "Ribalta sotto-albero"
         },
@@ -458,4 +455,3 @@
         "serverSideExportRequestFailure": "Richiesta di export fallita lato server !"
     }
 }
-

@@ -36,7 +36,6 @@
         "max-min":"max-min",
         "min-min": "min-min",
         "max-max": "max-max"
-
       }
     },
     "undo": "Cofnij",
@@ -53,7 +52,6 @@
     "name": "Etykieta",
     "payoff": "Wypłata",
     "probability": "Prawdopodobieństwo"
-
   },
   "text":{
     "value": "Tekst"

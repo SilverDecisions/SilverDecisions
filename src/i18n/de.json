@@ -52,7 +52,6 @@
     "name": "Beschreibung",
     "payoff": "Auszahlung",
     "probability": "Wahrscheinlichkeit"
-
   },
   "text":{
     "value": "Text"
@@ -77,7 +76,6 @@
         "decision": "Als Entscheidungsknoten",
         "chance": "Als Zufall Knoten",
         "terminal": "Als Endknoten"
-
       },
       "selectSubtree": "Teilbaum wählen",
       "flipSubtree": "Teilbaum umdrehen"
