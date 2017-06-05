@@ -15,6 +15,14 @@
       "tree": "Arbre",
       "cluster": "Grappe"
     },
+    "viewMode": {
+      "label": "Vue",
+      "options": {
+        "criterion1":"Critère 1",
+        "criterion2":"Critère 2",
+        "twoCriteria":"Deux critères"
+      }
+    },
     "objectiveRule":{
       "label": "Regle",
       "options": {
@@ -44,416 +52,478 @@
     "name": "Étiquette",
     "payoff": "Avantage",
     "probability": "Probabilité"
-
   },
   "text":{
-    "value": "Texte"
+      "value": "Texte"
   },
   "contextMenu":{
-    "main":{
-      "addDecisionNode": "Ajouter noud de décision",
-      "addChanceNode": "Ajouter noud aléatoire",
-      "addText": "Ajouter du texte",
-      "paste": "Coller",
-      "selectAllNodes": "Sélectionner tous les nouds"
-    },
-    "node":{
-      "copy": "Copie",
-      "cut": "Couper",
-      "paste": "Coller",
-      "delete": "Effacer",
-      "addDecisionNode": "Ajouter noud de décision",
-      "addChanceNode": "Ajouter noud aléatoire",
-      "addTerminalNode": "Ajouter un noeud terminal",
-      "convert":{
-        "decision": "Comme noud de décision",
-        "chance": "Comme noud aléatoire",
-        "terminal": "Comme un noeud terminal"
-
+      "main":{
+          "addDecisionNode": "Ajouter noud de décision",
+          "addChanceNode": "Ajouter noud aléatoire",
+          "addText": "Ajouter du texte",
+          "paste": "Coller",
+          "selectAllNodes": "Sélectionner tous les nouds"
       },
-      "selectSubtree": "Sélectionner une sous-arborescence",
-      "flipSubtree": "Basculer sous-arbre"
-    },
-    "edge":{
-      "injectDecisionNode": "Injecter un noeud de décision",
-      "injectChanceNode": "Injecter un noeud de chance"
-    },
-    "text":{
-      "delete": "Effacer"
-    }
+      "node":{
+          "copy": "Copie",
+          "cut": "Couper",
+          "paste": "Coller",
+          "delete": "Effacer",
+          "addDecisionNode": "Ajouter noud de décision",
+          "addChanceNode": "Ajouter noud aléatoire",
+          "addTerminalNode": "Ajouter un noeud terminal",
+          "convert":{
+              "decision": "Comme noud de décision",
+              "chance": "Comme noud aléatoire",
+              "terminal": "Comme un noeud terminal"
+          },
+          "selectSubtree": "Sélectionner une sous-arborescence",
+          "flipSubtree": "Basculer sous-arbre"
+      },
+      "edge":{
+          "injectDecisionNode": "Injecter un noeud de décision",
+          "injectChanceNode": "Injecter un noeud de chance"
+      },
+      "text":{
+          "delete": "Effacer"
+      }
+  },
+  "leagueTableDialog":{
+      "title": "Classement",
+      "buttons": {
+          "downloadCsv": "Télécharger CSV"
+      }
+  },
+  "leagueTable": {
+      "headers":{
+          "policyNo": "Règle #",
+          "policy": "Règle",
+          "comment": "Commentaire"
+      },
+      "comment":{
+          "dominatedBy": "Dominé (par #{{policy}})",
+          "extendedDominatedBy": "Étendu-dominé (par #{{policy1}} et #{{policy2}})",
+          "incratio": "Ratio incrémental={{incratio}}"
+      },
+      "plot":{
+          "groups":{
+              "highlighted": "Surligné",
+              "extended-dominated" : "Étendu-dominé",
+              "dominated": "Dominé",
+              "default": "Autre"
+          },
+          "tooltip":{
+              "gradientArrow1": "La direction de {{name}} optimisation",
+              "gradientArrow2": "La direction de {{name}} optimisation",
+              "dominatedRegion": "Région dominée"
+          },
+          "legend":{
+              "dominatedRegion": "La région grise surligne la région dominée",
+              "gradientArrows": "Les flèches indiquent une direction d'amélioration"
+          }
+      }
   },
   "sensitivityAnalysisDialog":{
-    "title": "Analyse de sensibilité",
-    "buttons": {
-      "runJob": "Exécuter",
-      "stopJob": "Arrêter",
-      "terminateJob": "Terminer",
-      "resumeJob": "Reprendre",
-      "downloadCsv": "Télécharger CSV",
-      "back": "Retourner",
-      "clear": "Effacer"
-    }
+      "title": "Analyse de sensibilité",
+      "buttons": {
+          "runJob": "Exécuter",
+          "stopJob": "Arrêter",
+          "terminateJob": "Terminer",
+          "resumeJob": "Reprendre",
+          "downloadCsv": "Télécharger CSV",
+          "back": "Retourner",
+          "clear": "Effacer"
+      }
   },
   "jobParametersBuilder": {
-    "buttons": {
-      "removeParameterValue": "Effacer",
-      "addParameterValue": "Ajouter"
-    }
+      "buttons": {
+          "removeParameterValue": "Effacer",
+          "addParameterValue": "Ajouter"
+      }
   },
   "jobResultTable":{
-    "tooltip": {
-      "multiplePoliciesInCell": "{{number}} règles"
-    },
-    "pivot": {
-      "aggregators":{
-        "maximum": "Maximum",
-        "minimum": "Minimum"
+      "tooltip": {
+          "multiplePoliciesInCell": "{{number}} règles"
       },
-      "renderers":{
-        "heatmap": "Carte de chaleur"
-      }
-    },
-    "policyPreview": "Aperçu de la règle"
+      "pivot": {
+          "aggregators":{
+              "maximum": "Maximum",
+              "minimum": "Minimum"
+          },
+          "renderers":{
+              "heatmap": "Carte de chaleur"
+          }
+      },
+      "policyPreview": "Aperçu de la règle"
   },
   "job":{
-    "sensitivity-analysis":{
-      "name": "Analyse de sensibilité multivariée",
-      "param":{
-        "ruleName": "Nom de la règle",
-        "extendedPolicyDescription": {
-          "label": "Description détaillée de la règle"
-        },
-        "variables": {
-          "label": "Variables",
-          "name": {
-            "label": "Étiquette"
+      "sensitivity-analysis":{
+          "name": "Analyse de sensibilité multivariée",
+          "param":{
+              "ruleName": "Nom de la règle",
+              "extendedPolicyDescription": {
+                  "label": "Description détaillée de la règle"
+              },
+              "variables": {
+                  "label": "Variables",
+                  "name": {
+                      "label": "Étiquette"
+                  },
+                  "min": {
+                      "label": "Min"
+                  },
+                  "max": {
+                      "label": "Max"
+                  },
+                  "length": {
+                      "label": "Longueur"
+                  },
+                  "step": {
+                      "label": "Étape"
+                  }
+              }
           },
-          "min": {
-            "label": "Min"
+          "errors":{
+              "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:"
           },
-          "max": {
-            "label": "Max"
-          },
-          "length": {
-            "label": "Longueur"
-          },
-          "step": {
-            "label": "Étape"
+          "warnings": {
+              "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente.",
+              "largeParametersNumber": "Nombre de paramètres est plus grand que {{number}}. Affichage de l'analyse de sensibilité pouvait échouer ou être très lente."
           }
-        }
+      },
+      "probabilistic-sensitivity-analysis":{
+          "name": "Analyse de sensibilité probabiliste",
+          "param":{
+              "ruleName": "Nom de la règle",
+              "numberOfRuns": {
+                  "label": "Nombre d'essais"
+              },
+              "extendedPolicyDescription": {
+                  "label": "Description détaillée de la règle"
+              },
+              "variables": {
+                  "label": "Variables",
+                  "name": {
+                      "label": "Étiquette"
+                  },
+                  "formula": {
+                      "label": "Formule",
+                      "help": "Sélectionner le modèle de la formule dans le menu ou écrire un code personnalisé."
+                  }
+              }
+          },
+          "errors":{
+              "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:",
+              "param-computation": "Erreur de calcul des valeurs de paramètres:"
+          },
+          "warnings": {
+              "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente."
+          }
+      },
+      "league-table":{
+          "name": "Classement"
       },
       "errors":{
-        "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:"
-      },
-      "warnings": {
-        "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente.",
-        "largeParametersNumber": "Nombre de paramètres est plus grand que {{number}}. Affichage de l'analyse de sensibilité pouvait échouer ou être très lente."
+          "generic": "Erreur de calcul d'analyse de sensibilité: {{message}}",
+          "params": "Paramètres du {{jobName}} sont incorrect"
       }
-    },
-    "probabilistic-sensitivity-analysis":{
-      "name": "Analyse de sensibilité probabiliste",
-      "param":{
-        "ruleName": "Nom de la règle",
-        "numberOfRuns": {
-          "label": "Nombre d'essais"
-        },
-        "extendedPolicyDescription": {
-          "label": "Description détaillée de la règle"
-        },
-        "variables": {
-          "label": "Variables",
-          "name": {
-            "label": "Étiquette"
-          },
-          "formula": {
-            "label": "Formule",
-            "help": "Sélectionner le modèle de la formule dans le menu ou écrire un code personnalisé."
-          }
-        }
-      },
-      "errors":{
-        "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:",
-        "param-computation": "Erreur de calcul des valeurs de paramètres:"
-      },
-      "warnings": {
-        "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente."
-      }
-    },
-    "errors":{
-      "generic": "Erreur de calcul d'analyse de sensibilité: {{message}}"
-    }
   },
   "settingsDialog":{
-    "title": "Parametres",
-    "general":{
-      "title": "Général",
-      "fontSize": "Taille de la police",
-      "fontFamily": "Famille de police",
-      "fontWeight": "Poid de la police",
-      "fontStyle": "Style de police",
-      "numberFormatLocale": "format local de numérotation"
-    },
-    "payoff1":{
-      "title": "Format de la numérotation des avantages 1",
-      "currency": "Devise",
-      "currencyDisplay": "Affichage de la devise",
-      "style": "Style",
-      "minimumFractionDigits": "Nombre minimum de fractions",
-      "maximumFractionDigits": "Nombre maximum de fractions",
-      "useGrouping": "Utiliser des séparateurs de regroupement"
-    },
-    "payoff2":{
-      "title": "Format de la numérotation des avantages 2",
-      "currency": "Devise",
-      "currencyDisplay": "Affichage de la devise",
-      "style": "Style",
-      "minimumFractionDigits": "Nombre minimum de fractions",
-      "maximumFractionDigits": "Nombre maximum de fractions",
-      "useGrouping": "Utiliser des séparateurs de regroupement"
-    },
-    "probability":{
-      "title": "Format de la numérotatio des probabilités",
-      "style": "Style",
-      "minimumFractionDigits": "Nombre minimum de fractions",
-      "maximumFractionDigits": "Nombre maximum de fractions",
-      "fontSize": "Taille de police",
-      "color": "Couleur"
-    },
-    "node":{
-      "title": "Noud",
-      "strokeWidth": "Largeur de trait",
-      "optimal":{
-        "title": "Optimal",
-        "stroke": "Couleur",
-        "strokeWidth": "Largeur de trait"
-      },
-      "label": {
-        "title": "Étiquette",
-        "fontSize": "Taille de la police de l'étiquette",
-        "color": "Couleur de l'étiquette"
-      },
-      "payoff": {
-        "title": "Avantage",
-        "fontSize": "Taille de la police",
-        "color": "Couleur",
-        "negativeColor": "Négatif couleur"
-      },
-      "decision": {
-        "title": "Noeud décisionnel",
-        "fill": "La couleur de remplissage",
-        "stroke": "Couleur de trait",
-        "selected": {
-          "fill": "Couleur de remplissage sélectionnée"
-        }
-      },
-      "chance": {
-        "title": "Noud aléatoire",
-        "fill": "La couleur de remplissage",
-        "stroke": "Couleur de course",
-        "selected": {
-          "fill": "Couleur de remplissage sélectionné"
-        }
-      },
-      "terminal":{
-        "title": "Noeud terminal",
-        "fill": "Couleur de remplissage",
-        "stroke": "Couleur de course",
-        "selected": {
-          "fill": "Couleur de remplissage sélectionné"
-        },
-        "payoff": {
-          "title": "Avantage",
+      "title": "Parametres",
+      "general":{
+          "title": "Général",
           "fontSize": "Taille de la police",
+          "fontFamily": "Famille de police",
+          "fontWeight": "Poid de la police",
+          "fontStyle": "Style de police",
+          "numberFormatLocale": "format local de numérotation"
+      },
+      "payoff1":{
+          "title": "Format de la numérotation des avantages 1",
+          "currency": "Devise",
+          "currencyDisplay": "Affichage de la devise",
+          "style": "Style",
+          "minimumFractionDigits": "Nombre minimum de fractions",
+          "maximumFractionDigits": "Nombre maximum de fractions",
+          "useGrouping": "Utiliser des séparateurs de regroupement"
+      },
+      "payoff2":{
+          "title": "Format de la numérotation des avantages 2",
+          "currency": "Devise",
+          "currencyDisplay": "Affichage de la devise",
+          "style": "Style",
+          "minimumFractionDigits": "Nombre minimum de fractions",
+          "maximumFractionDigits": "Nombre maximum de fractions",
+          "useGrouping": "Utiliser des séparateurs de regroupement"
+      },
+      "probability":{
+          "title": "Format de la numérotatio des probabilités",
+          "style": "Style",
+          "minimumFractionDigits": "Nombre minimum de fractions",
+          "maximumFractionDigits": "Nombre maximum de fractions",
+          "fontSize": "Taille de police",
+          "color": "Couleur"
+      },
+      "node":{
+          "title": "Noud",
+          "strokeWidth": "Largeur de trait",
+          "optimal":{
+              "title": "Optimal",
+              "stroke": "Couleur",
+              "strokeWidth": "Largeur de trait"
+          },
+          "label": {
+              "title": "Étiquette",
+              "fontSize": "Taille de la police de l'étiquette",
+              "color": "Couleur de l'étiquette"
+          },
+          "payoff": {
+              "title": "Avantage",
+              "fontSize": "Taille de la police",
+              "color": "Couleur",
+              "negativeColor": "Négatif couleur"
+          },
+          "decision": {
+              "title": "Noeud décisionnel",
+              "fill": "La couleur de remplissage",
+              "stroke": "Couleur de trait",
+              "selected": {
+                  "fill": "Couleur de remplissage sélectionnée"
+              }
+          },
+          "chance": {
+              "title": "Noud aléatoire",
+              "fill": "La couleur de remplissage",
+              "stroke": "Couleur de course",
+              "selected": {
+                  "fill": "Couleur de remplissage sélectionné"
+              }
+          },
+          "terminal":{
+              "title": "Noeud terminal",
+              "fill": "Couleur de remplissage",
+              "stroke": "Couleur de course",
+              "selected": {
+                  "fill": "Couleur de remplissage sélectionné"
+              },
+              "payoff": {
+                  "title": "Avantage",
+                  "fontSize": "Taille de la police",
+                  "color": "Couleur",
+                  "negativeColor": "Négatif couleur"
+              }
+          }
+      },
+      "edge":{
+          "title": "Bord",
+          "stroke": "Couleur",
+          "strokeWidth": "Largeur de trait",
+          "optimal":{
+              "title": "Optimal",
+              "stroke": "Couleur",
+              "strokeWidth": "Largeur de trait"
+          },
+          "selected":{
+              "title": "Choisi",
+              "stroke": "Couleur",
+              "strokeWidth": "Largeur de trait"
+          },
+          "label": {
+              "title": "Étiquette",
+              "fontSize": "Taille de la police",
+              "color": "Couleur"
+          },
+          "payoff":{
+              "title": "Avantage",
+              "fontSize": "Taille de la police",
+              "color": "Couleur",
+              "negativeColor": "Négatif couleur"
+          }
+      },
+      "diagramTitle":{
+          "title": "Titre du diagramme",
+          "fontSize": "Taille de la police",
+          "fontWeight": "Poids de la police",
+          "fontStyle": "Style de la police",
           "color": "Couleur",
-          "negativeColor": "Négatif couleur"
-        }
+          "margin":{
+              "title": "Marge",
+              "top": "Haut du diagramme",
+              "bottom": "Bas du diagramme"
+          },
+          "description":{
+              "title": "Sous-titre (description du diagramme)",
+              "show": "Afficher",
+              "fontSize": "Taille de la police",
+              "fontWeight": "Poids de la police",
+              "fontStyle": "Style de police",
+              "color": "Couleur",
+              "marginTop": "Haut du marge"
+          }
+      },
+      "leagueTable": {
+          "title": "Classement",
+          "plot": {
+              "title": "Le graphe",
+              "maxWidth": "Largeur maximale",
+              "highlightedColor": "Couleur de la règle soulignée",
+              "extendedDominatedColor": "Couleur de la règle étendu-dominée",
+              "dominatedColor": "Couleur de la règle dominée",
+              "defaultColor": "Couleur des autres règles"
+          }
+      },
+      "other":{
+          "title": "Autre",
+          "disableAnimations": "Désactiver les animations",
+          "forceFullEdgeRedraw": "Forcer le redessinage complet des bords",
+          "hideLabels": "Masquer les étiquettes",
+          "hidePayoffs": "Masquer les paiements",
+          "hideProbabilities": "Masquer les probabilités",
+          "raw": "Brut"
       }
-    },
-    "edge":{
-      "title": "Bord",
-      "stroke": "Couleur",
-      "strokeWidth": "Largeur de trait",
-      "optimal":{
-        "title": "Optimal",
-        "stroke": "Couleur",
-        "strokeWidth": "Largeur de trait"
-      },
-      "selected":{
-        "title": "Choisi",
-        "stroke": "Couleur",
-        "strokeWidth": "Largeur de trait"
-      },
-      "label": {
-        "title": "Étiquette",
-        "fontSize": "Taille de la police",
-        "color": "Couleur"
-      },
-      "payoff":{
-        "title": "Avantage",
-        "fontSize": "Taille de la police",
-        "color": "Couleur",
-        "negativeColor": "Négatif couleur"
-      }
-    },
-    "diagramTitle":{
-      "title": "Titre du diagramme",
-      "fontSize": "Taille de la police",
-      "fontWeight": "Poids de la police",
-      "fontStyle": "Style de la police",
-      "color": "Couleur",
-      "margin":{
-        "title": "Marge",
-        "top": "Haut du diagramme",
-        "bottom": "Bas du diagramme"
-      },
-      "description":{
-        "title": "Sous-titre (description du diagramme)",
-        "show": "Afficher",
-        "fontSize": "Taille de la police",
-        "fontWeight": "Poids de la police",
-        "fontStyle": "Style de police",
-        "color": "Couleur",
-        "marginTop": "Haut du marge"
-      }
-    },
-    "other":{
-      "title": "Autre",
-      "disableAnimations": "Désactiver les animations",
-      "forceFullEdgeRedraw": "Forcer le redessinage complet des bords",
-      "hideLabels": "Masquer les étiquettes",
-      "hidePayoffs": "Masquer les paiements",
-      "hideProbabilities": "Masquer les probabilités",
-      "raw": "Brut"
-    }
   },
   "aboutDialog":{
-    "title": "A propos"
+      "title": "A propos"
   },
   "help":{
-    "header": "Aide",
-    "mouse": {
-      "header":"Actions de la souris:",
-      "list":{
-        "1": "Bouton gauche de la souris: sélection du noud/bord",
-        "2": "Bouton droit de la souris: menu contextuel (ajout/manipulation des nouds)",
-        "3": "Double clic gauche de la souris: menu contextuel"
-      }
-    },
-    "keyboard": {
-      "header":"Raccourcis clavier:",
-      "list":{
-        "1": "Del: effacer les nouds sélectionnés",
-        "2": "Ctrl-C/X: copier/couper les nouds sélectionnés",
-        "3": "Ctrl-V: coller les nouds copiés comme un sous-arbre d'un noud sélectionné",
-        "4": "Ctrl-Y/Z: annuler/refaire",
-        "5": "Ctrl-Alt-D/C/T: ajouter un nouveau sous-noud de décision/aléatoire/terminal d'un <strong>noud sélectionné</strong>",
-        "6": "Ctrl-Alt-D/C: injecter un nouveau noeud de décision/aléatoire dans un <strong>bord sélectionné</strong>"
-      }
-    },
-    "docs": "La documentation de SilverDecisions est disponible  <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">ici</a>"
+      "header": "Aide",
+      "mouse": {
+          "header":"Actions de la souris:",
+          "list":{
+              "1": "Bouton gauche de la souris: sélection du noud/bord",
+              "2": "Bouton droit de la souris: menu contextuel (ajout/manipulation des nouds)",
+              "3": "Double clic gauche de la souris: menu contextuel"
+          }
+      },
+      "keyboard": {
+          "header":"Raccourcis clavier:",
+          "list":{
+              "1": "Del: effacer les nouds sélectionnés",
+              "2": "Ctrl-C/X: copier/couper les nouds sélectionnés",
+              "3": "Ctrl-V: coller les nouds copiés comme un sous-arbre d'un noud sélectionné",
+              "4": "Ctrl-Y/Z: annuler/refaire",
+              "5": "Ctrl-Alt-D/C/T: ajouter un nouveau sous-noud de décision/aléatoire/terminal d'un <strong>noud sélectionné</strong>",
+              "6": "Ctrl-Alt-D/C: injecter un nouveau noeud de décision/aléatoire dans un <strong>bord sélectionné</strong>"
+          }
+      },
+      "docs": "La documentation de SilverDecisions est disponible  <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">ici</a>"
   },
   "definitionsDialog":{
-    "title": "Définitions des variables",
-    "buttons":{
-      "recalculate": "Recalculer"
-    },
-    "evaluatedVariables": "Variables évaluées"
+      "title": "Définitions des variables",
+      "buttons":{
+          "recalculate": "Recalculer"
+      },
+      "evaluatedVariables": "Variables évaluées"
   },
   "sidebarDefinitions":{
-    "header": "Variables",
-    "code": "Code",
+      "header": "Variables",
+      "code": "Code",
+      "buttons":{
+          "openDialog" : "Ouvrir la boîte de dialogue",
+          "recalculate": "Recalculer"
+      },
+      "evaluatedVariables": "Variables évaluées"
+  },
+  "multipleCriteria":{
+    "header": "Critères multiples",
+    "defaultMaximizedCriterionName": "Effet",
+    "defaultMinimizedCriterionName": "Coût",
+    "nameOfCriterion1": "Le nome de critère 1",
+    "nameOfCriterion2": "Le nome de critère 2",
+    "defaultCriterion1Weight": "Par défaut poid du 1er critère",
+    "weightLowerBound": "Poid de la limite inférieure",
+    "weightUpperBound": "Poid de la limite supérieure",
     "buttons":{
-      "openDialog" : "Ouvrir la boîte de dialogue",
-      "recalculate": "Recalculer"
-    },
-    "evaluatedVariables": "Variables évaluées"
+      "showLeagueTable" : "Montrer classement",
+      "flip": "Basculer"
+    }
   },
   "layoutOptions":{
-    "header": "Disposition",
-    "marginHorizontal": "Marge horizontale",
-    "marginVertical": "Marge verticale",
-    "nodeSize": "Taille du noeud",
-    "edgeSlantWidthMax": "Inclinaison du bord (max.)",
-    "gridWidth": "Largeur",
-    "gridHeight": "Taille"
+      "header": "Disposition",
+      "marginHorizontal": "Marge horizontale",
+      "marginVertical": "Marge verticale",
+      "nodeSize": "Taille du noeud",
+      "edgeSlantWidthMax": "Inclinaison du bord (max.)",
+      "gridWidth": "Largeur",
+      "gridHeight": "Taille"
   },
   "diagramDetails":{
-    "header": "Détails",
-    "title" : "Titre",
-    "description" : "Description"
+      "header": "Détails",
+      "title" : "Titre",
+      "description" : "Description"
   },
   "objectProperties":{
-    "header":{
-      "node":{
-        "decision":"Noeud de décision",
-        "chance":"Noud aléatoire",
-        "terminal":"Noeud terminal"
+      "header":{
+          "node":{
+              "decision":"Noeud de décision",
+              "chance":"Noud aléatoire",
+              "terminal":"Noeud terminal"
+          },
+          "edge": "Bord",
+          "text": "Texte flottant"
       },
-      "edge": "Bord",
-      "text": "Texte flottant"
-    },
-    "childrenProperties":{
-      "node":{
-        "header": "Les connexions",
-        "child": {
-          "header": "Bord #{{number}}"
-        }
+      "childrenProperties":{
+          "node":{
+              "header": "Les connexions",
+              "child": {
+                  "header": "Bord #{{number}}"
+              }
+          }
       }
-    }
   },
   "validation":{
-    "incompletePath": "Parcours non terminé par noeud terminal",
-    "probabilityDoNotSumUpTo1": "La somme des probabilités n'est pas 1 ou plus",
-    "invalidProbability": "Probabilité invalide - le bord #{{number}}",
-    "invalidPayoff": "Avantage invalide - le bord #{{number}}"
+      "incompletePath": "Parcours non terminé par noeud terminal",
+      "probabilityDoNotSumUpTo1": "La somme des probabilités n'est pas 1 ou plus",
+      "invalidProbability": "Probabilité invalide - le bord #{{number}}",
+      "invalidPayoff": "Avantage invalide - le bord #{{number}}"
   },
   "growl":{
-    "brushDisabled": "Brosse de sélection désactivée",
-    "brushEnabled": "Brosse de sélection activée"
+      "brushDisabled": "Brosse de sélection désactivée",
+      "brushEnabled": "Brosse de sélection activée"
   },
   "tooltip":{
-    "node":{
-      "payoff": {
-        "default": "Avantage {{number}}",
-        "named": "{{name}}"
+      "node":{
+          "payoff": {
+              "default": "Avantage {{number}}",
+              "named": "{{name}}"
+          },
+          "aggregatedPayoff": {
+              "default": "Avantage agrégé {{number}}",
+              "named": "Agrégé  {{name}}"
+          },
+          "probabilityToEnter": "Probabilité d'entrée"
       },
-      "aggregatedPayoff": {
-        "default": "Avantage agrégé {{number}}",
-        "named": "Agrégé  {{name}}"
-      },
-      "probabilityToEnter": "Probabilité d'entrée"
-    },
-    "edge":{
-      "payoff": {
-        "default": "Avantage {{number}}: {{value}}",
-        "named": "{{name}}: {{value}}"
-      },
-      "probability": "Probabilité: {{value}}"
-    }
+      "edge":{
+          "payoff": {
+              "default": "Avantage {{number}}: {{value}}",
+              "named": "{{name}}: {{value}}"
+          },
+          "probability": "Probabilité: {{value}}"
+      }
   },
   "confirm":{
-    "newDiagram": "Voulez-vous vraiment effacer le diagramme actuel? Toutes les données non enregistrées seront perdues.",
-    "openDiagram": "Etes-vous sur? Toutes les données de diagramme non enregistrées seront perdues.",
-    "beforeunload": "Voulez-vous vraiment fermer SilverDecisions? Toutes les données de diagramme non enregistrées seront perdues."
+      "newDiagram": "Voulez-vous vraiment effacer le diagramme actuel? Toutes les données non enregistrées seront perdues.",
+      "openDiagram": "Etes-vous sur? Toutes les données de diagramme non enregistrées seront perdues.",
+      "beforeunload": "Voulez-vous vraiment fermer SilverDecisions? Toutes les données de diagramme non enregistrées seront perdues."
   },
   "error":{
-    "jsonParse": "Erreur lors de l'analyse du fichier!",
-    "fileApiNotSupported":"L'API du fichier n'est pas encore prise en charge sur ce navigateur.",
-    "inputFilesProperty":"Votre navigateur ne semble pas prendre en charge la propriété `fichiers`.",
-    "notSilverDecisionsFile":"Pas de fichiers SilverDecisions!",
-    "incorrectVersionFormat": "Format incorrect de la chaîne de version!",
-    "fileVersionNewerThanApplicationVersion": "La version dans le fichier est plus récente que la version de l'application. Certaines fonctionnalités peuvent être manquantes.",
-    "objectiveComputationFailure": "Erreur en calculant l'objectif!",
-    "diagramDrawingFailure": "Erreur lors du dessin diagramme!",
-    "malformedData":"Erreur lors de la lecture des données arborescentes!",
-    "pngExportNotSupported": "L'exportation vers PNG n'est pas prise en charge dans votre navigateur.",
-    "pngExportNotSupportedIE": "Exporter vers PNG n'est pas pris en charge dans Internet Explorer.",
-    "svgExportNotSupported": "L'exportation vers SVG n'est pas prise en charge par votre navigateur.",
-    "pdfExportNotSupported": "L'exportation au format PDF n'est pas prise en charge par votre navigateur.",
-    "incorrectPayoffNumberFormatOptions": "L'option de format de numérotation des avantages chiosie est incorrecte.",
-    "incorrectProbabilityNumberFormatOptions": "L'option de format de numérotation des probabilités chiosie est incorrecte.",
-    "incorrectNumberFormatOptions": "L'option de format de numérotation choisie est incorrecte.",
-    "jsPDFisNotIncluded": "JsPDF n'est pas inclus!",
-    "serverSideExportRequestFailure": "La demande de téléchargement au serveur a échoué!"
+      "jsonParse": "Erreur lors de l'analyse du fichier!",
+      "fileApiNotSupported":"L'API du fichier n'est pas encore prise en charge sur ce navigateur.",
+      "inputFilesProperty":"Votre navigateur ne semble pas prendre en charge la propriété `fichiers`.",
+      "notSilverDecisionsFile":"Pas de fichiers SilverDecisions!",
+      "incorrectVersionFormat": "Format incorrect de la chaîne de version!",
+      "fileVersionNewerThanApplicationVersion": "La version dans le fichier est plus récente que la version de l'application. Certaines fonctionnalités peuvent être manquantes.",
+      "objectiveComputationFailure": "Erreur en calculant l'objectif!",
+      "diagramDrawingFailure": "Erreur lors du dessin diagramme!",
+      "malformedData":"Erreur lors de la lecture des données arborescentes!",
+      "pngExportNotSupported": "L'exportation vers PNG n'est pas prise en charge dans votre navigateur.",
+      "pngExportNotSupportedIE": "Exporter vers PNG n'est pas pris en charge dans Internet Explorer.",
+      "svgExportNotSupported": "L'exportation vers SVG n'est pas prise en charge par votre navigateur.",
+      "pdfExportNotSupported": "L'exportation au format PDF n'est pas prise en charge par votre navigateur.",
+      "incorrectPayoffNumberFormatOptions": "L'option de format de numérotation des avantages chiosie est incorrecte.",
+      "incorrectProbabilityNumberFormatOptions": "L'option de format de numérotation des probabilités chiosie est incorrecte.",
+      "incorrectNumberFormatOptions": "L'option de format de numérotation choisie est incorrecte.",
+      "jsPDFisNotIncluded": "JsPDF n'est pas inclus!",
+      "serverSideExportRequestFailure": "La demande de téléchargement au serveur a échoué!"
   }
 }

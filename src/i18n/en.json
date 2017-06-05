@@ -52,7 +52,6 @@
     "name": "Label",
     "payoff": "Payoff",
     "probability": "Probability"
-
   },
   "text":{
     "value": "Text"
@@ -77,7 +76,6 @@
         "decision": "As Decision Node",
         "chance": "As Chance Node",
         "terminal": "As Terminal Node"
-
       },
       "selectSubtree": "Select subtree",
       "flipSubtree": "Flip subtree"
