@@ -1,529 +1,529 @@
 {
-  "toolbar": {
-    "newDiagram": "New diagram",
-    "openDiagram": "Open existing diagram",
-    "saveDiagram": "Save current diagram",
-    "export":{
-      "label": "Export to",
-      "png": "Png",
-      "svg": "Svg",
-      "pdf": "Pdf"
-    },
-    "layout":{
-      "label": "Layout",
-      "manual": "Manual",
-      "tree": "Tree",
-      "cluster": "Cluster"
-    },
-    "viewMode": {
-      "label": "View",
-      "options": {
-        "criterion1":"Criterion 1",
-        "criterion2":"Criterion 2",
-        "twoCriteria":"Two criteria"
-      }
-    },
-    "objectiveRule":{
-      "label": "Rule",
-      "options": {
-        "expected-value-maximization":"max",
-        "expected-value-minimization":"min",
-        "maxi-min":"maxi-min",
-        "maxi-max":"maxi-max",
-        "mini-min":"mini-min",
-        "mini-max":"mini-max",
-        "min-max":"min-max",
-        "max-min":"max-min",
-        "min-min": "min-min",
-        "max-max": "max-max"
-      }
-    },
-    "undo": "Undo",
-    "redo": "Redo",
-    "settings": "Settings",
-    "about": "About",
-    "sensitivityAnalysis": "Sensitivity analysis",
-    "recompute": "Recompute"
-  },
-  "node":{
-    "name": "Label"
-  },
-  "edge":{
-    "name": "Label",
-    "payoff": "Payoff",
-    "probability": "Probability"
-  },
-  "text":{
-    "value": "Text"
-  },
-  "contextMenu":{
-    "main":{
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addText": "Add Text",
-      "paste": "Paste",
-      "selectAllNodes": "Select all nodes"
+    "toolbar": {
+        "newDiagram": "New diagram",
+        "openDiagram": "Open existing diagram",
+        "saveDiagram": "Save current diagram",
+        "export":{
+            "label": "Export to",
+            "png": "Png",
+            "svg": "Svg",
+            "pdf": "Pdf"
+        },
+        "layout":{
+            "label": "Layout",
+            "manual": "Manual",
+            "tree": "Tree",
+            "cluster": "Cluster"
+        },
+        "viewMode": {
+            "label": "View",
+            "options": {
+                "criterion1":"Criterion 1",
+                "criterion2":"Criterion 2",
+                "twoCriteria":"Two criteria"
+            }
+        },
+        "objectiveRule":{
+            "label": "Rule",
+            "options": {
+                "expected-value-maximization":"max",
+                "expected-value-minimization":"min",
+                "maxi-min":"maxi-min",
+                "maxi-max":"maxi-max",
+                "mini-min":"mini-min",
+                "mini-max":"mini-max",
+                "min-max":"min-max",
+                "max-min":"max-min",
+                "min-min": "min-min",
+                "max-max": "max-max"
+            }
+        },
+        "undo": "Undo",
+        "redo": "Redo",
+        "settings": "Settings",
+        "about": "About",
+        "sensitivityAnalysis": "Sensitivity analysis",
+        "recompute": "Recompute"
     },
     "node":{
-      "copy": "Copy",
-      "cut": "Cut",
-      "paste": "Paste",
-      "delete": "Delete",
-      "addDecisionNode": "Add Decision Node",
-      "addChanceNode": "Add Chance Node",
-      "addTerminalNode": "Add Terminal Node",
-      "convert":{
-        "decision": "As Decision Node",
-        "chance": "As Chance Node",
-        "terminal": "As Terminal Node"
-      },
-      "selectSubtree": "Select subtree",
-      "flipSubtree": "Flip subtree"
+        "name": "Label"
     },
     "edge":{
-      "injectDecisionNode": "Inject Decision Node",
-      "injectChanceNode": "Inject Chance Node"
+        "name": "Label",
+        "payoff": "Payoff",
+        "probability": "Probability"
     },
     "text":{
-      "delete": "Delete"
-    }
-  },
-  "leagueTableDialog":{
-    "title": "League table",
-    "buttons": {
-      "downloadCsv": "Download CSV"
-    }
-  },
-  "leagueTable": {
-    "headers":{
-      "policyNo": "Policy #",
-      "policy": "Policy",
-      "comment": "Comment"
+        "value": "Text"
     },
-    "comment":{
-      "dominatedBy": "dominated (by #{{policy}})",
-      "extendedDominatedBy": "extended-dominated (by #{{policy1}} and #{{policy2}})",
-      "incratio": "incremental ratio={{incratio}}"
-    },
-    "plot":{
-      "groups":{
-        "highlighted": "Highlighted",
-        "extended-dominated" : "Extended-dominated",
-        "dominated": "Dominated",
-        "default": "Other"
-      },
-      "tooltip":{
-        "gradientArrow1": "Direction of {{name}} optimization",
-        "gradientArrow2": "Direction of {{name}} optimization",
-        "dominatedRegion": "Dominated region"
-      },
-      "legend":{
-        "dominatedRegion": "Grey area highlights dominated region",
-        "gradientArrows": "Arrows indicate improvement direction"
-      }
-    }
-  },
-  "sensitivityAnalysisDialog":{
-    "title": "Sensitivity analysis",
-    "buttons": {
-      "runJob": "Run",
-      "stopJob": "Stop",
-      "terminateJob": "Terminate",
-      "resumeJob": "Resume",
-      "downloadCsv": "Download CSV",
-      "back": "Back",
-      "clear": "Clear"
-    }
-  },
-  "jobParametersBuilder": {
-    "buttons": {
-      "removeParameterValue": "Remove",
-      "addParameterValue": "Add"
-    }
-  },
-  "jobResultTable":{
-    "tooltip": {
-      "multiplePoliciesInCell": "{{number}} policies"
-    },
-    "pivot": {
-      "aggregators":{
-        "maximum": "Maximum",
-        "minimum": "Minimum"
-      },
-      "renderers":{
-        "heatmap": "Heatmap"
-      }
-    },
-    "policyPreview": "policy preview"
-  },
-  "job":{
-    "sensitivity-analysis":{
-      "name": "N-way sensitivity analysis",
-      "param":{
-        "ruleName": "Rule name",
-        "extendedPolicyDescription": {
-          "label": "Extended policy description"
+    "contextMenu":{
+        "main":{
+            "addDecisionNode": "Add Decision Node",
+            "addChanceNode": "Add Chance Node",
+            "addText": "Add Text",
+            "paste": "Paste",
+            "selectAllNodes": "Select all nodes"
         },
-        "variables": {
-          "label": "Variables",
-          "name": {
-            "label": "Name"
-          },
-          "min": {
-            "label": "Min"
-          },
-          "max": {
-            "label": "Max"
-          },
-          "length": {
-            "label": "Length"
-          },
-          "step": {
-            "label": "Step"
-          }
-        }
-      },
-      "errors":{
-        "computations": "Error in sensitivity analysis computations for the following parameters:"
-      },
-      "warnings": {
-        "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow.",
-        "largeParametersNumber": "Number of parameters larger than {{number}}. Sensitivity analysis display might fail or be very slow."
-      }
-    },
-    "probabilistic-sensitivity-analysis":{
-      "name": "Probabilistic sensitivity analysis",
-      "param":{
-        "ruleName": "Rule name",
-        "numberOfRuns": {
-          "label": "Number of runs"
+        "node":{
+            "copy": "Copy",
+            "cut": "Cut",
+            "paste": "Paste",
+            "delete": "Delete",
+            "addDecisionNode": "Add Decision Node",
+            "addChanceNode": "Add Chance Node",
+            "addTerminalNode": "Add Terminal Node",
+            "convert":{
+                "decision": "As Decision Node",
+                "chance": "As Chance Node",
+                "terminal": "As Terminal Node"
+            },
+            "selectSubtree": "Select subtree",
+            "flipSubtree": "Flip subtree"
         },
-        "extendedPolicyDescription": {
-          "label": "Extended policy description"
+        "edge":{
+            "injectDecisionNode": "Inject Decision Node",
+            "injectChanceNode": "Inject Chance Node"
         },
-        "variables": {
-          "label": "Variables",
-          "name": {
-            "label": "Name"
-          },
-          "formula": {
-            "label": "Formula",
-            "help": "Select formula template from the menu or write custom code"
-          }
+        "text":{
+            "delete": "Delete"
         }
-      },
-      "errors":{
-        "computations": "Error in sensitivity analysis computations for the following parameters:",
-        "param-computation": "Error computing parameter values:"
-      },
-      "warnings": {
-        "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow."
-      }
     },
-    "league-table":{
-      "name": "League table"
-    },
-    "errors":{
-      "generic": "Error in {{jobName}} computations: {{message}}",
-      "params": "Incorrect {{jobName}} parameters"
-    }
-  },
-  "settingsDialog":{
-    "title": "Settings",
-    "general":{
-      "title": "General",
-      "fontSize": "Font size",
-      "fontFamily": "Font family",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "numberFormatLocale": "Number format locale"
-    },
-    "payoff1":{
-      "title": "Payoff 1 number format",
-      "currency": "Currency",
-      "currencyDisplay": "Currency display",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "useGrouping": "Use grouping separators"
-    },
-    "payoff2":{
-      "title": "Payoff 2 number format",
-      "currency": "Currency",
-      "currencyDisplay": "Currency display",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "useGrouping": "Use grouping separators"
-    },
-    "probability":{
-      "title": "Probability number format",
-      "style": "Style",
-      "minimumFractionDigits": "Minimum fraction digits",
-      "maximumFractionDigits": "Maximum fraction digits",
-      "fontSize": "Font size",
-      "color": "Color"
-    },
-    "node":{
-      "title": "Node",
-      "strokeWidth": "Stroke width",
-      "optimal":{
-        "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
-      },
-      "label": {
-        "title": "Label",
-        "fontSize": "Label font size",
-        "color": "Label color"
-      },
-      "payoff": {
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
-      },
-      "decision": {
-        "title": "Decision Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
-        "selected": {
-          "fill": "Selected fill color"
+    "leagueTableDialog":{
+        "title": "League table",
+        "buttons": {
+            "downloadCsv": "Download CSV"
         }
-      },
-      "chance": {
-        "title": "Chance Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
-        "selected": {
-          "fill": "Selected fill color"
-        }
-      },
-      "terminal":{
-        "title": "Terminal Node",
-        "fill": "Fill color",
-        "stroke": "Stroke color",
-        "selected": {
-          "fill": "Selected fill color"
-        },
-        "payoff": {
-          "title": "Payoff",
-          "fontSize": "Font size",
-          "color": "Color",
-          "negativeColor": "Negative color"
-        }
-      }
-    },
-    "edge":{
-      "title": "Edge",
-      "stroke": "Color",
-      "strokeWidth": "Stroke width",
-      "optimal":{
-        "title": "Optimal",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
-      },
-      "selected":{
-        "title": "Selected",
-        "stroke": "Color",
-        "strokeWidth": "Stroke width"
-      },
-      "label": {
-        "title": "Label",
-        "fontSize": "Font size",
-        "color": "Color"
-      },
-      "payoff":{
-        "title": "Payoff",
-        "fontSize": "Font size",
-        "color": "Color",
-        "negativeColor": "Negative color"
-      }
-    },
-    "diagramTitle":{
-      "title": "Diagram title",
-      "fontSize": "Font size",
-      "fontWeight": "Font weight",
-      "fontStyle": "Font style",
-      "color": "Color",
-      "margin":{
-        "title": "Margin",
-        "top": "Top",
-        "bottom": "Bottom"
-      },
-      "description":{
-        "title": "Subtitle (diagram description)",
-        "show": "Show",
-        "fontSize": "Font size",
-        "fontWeight": "Font weight",
-        "fontStyle": "Font style",
-        "color": "Color",
-        "marginTop": "Margin top"
-      }
     },
     "leagueTable": {
-      "title": "League Table",
-      "plot": {
-        "title": "Plot",
-        "maxWidth": "Max width",
-        "highlightedColor": "Highlighted policy color",
-        "extendedDominatedColor": "Extended dominated policy color",
-        "dominatedColor": "Dominated policy color",
-        "defaultColor": "Other policies color"
-      }
-    },
-    "other":{
-      "title": "Other",
-      "disableAnimations": "Disable animations",
-      "forceFullEdgeRedraw": "Force full redraw of edges",
-      "hideLabels": "Hide labels",
-      "hidePayoffs": "Hide payoffs",
-      "hideProbabilities": "Hide probabilities",
-      "raw": "Raw"
-    }
-  },
-  "aboutDialog":{
-    "title": "About"
-  },
-  "help":{
-    "header": "Help",
-    "mouse": {
-      "header":"Mouse actions:",
-      "list":{
-        "1": "left mouse button: node/edge selection",
-        "2": "right mouse button: context menu (adding/manipulating nodes)",
-        "3": "left mouse dbclick: context menu"
-      }
-    },
-    "keyboard": {
-      "header":"Keyboard:",
-      "list":{
-        "1": "Del: delete selected nodes",
-        "2": "Ctrl-C/X: copy/cut selected nodes",
-        "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
-        "4": "Ctrl-Y/Z: undo/redo",
-        "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
-        "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
-      }
-    },
-    "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
-  },
-  "definitionsDialog":{
-    "title": "Variable definitions",
-    "buttons":{
-      "recalculate": "Recalculate"
-    },
-    "evaluatedVariables": "Evaluated variables"
-  },
-  "sidebarDefinitions":{
-    "header": "Variables",
-    "code": "Code",
-    "buttons":{
-      "openDialog" : "Open dialog",
-      "recalculate": "Recalculate"
-    },
-    "evaluatedVariables": "Evaluated variables"
-  },
-  "multipleCriteria":{
-    "header": "Multiple criteria",
-    "defaultMaximizedCriterionName": "Effect",
-    "defaultMinimizedCriterionName": "Cost",
-    "nameOfCriterion1": "Name for criterion 1",
-    "nameOfCriterion2": "Name for criterion 2",
-    "defaultCriterion1Weight": "Default 1st criterion weight",
-    "weightLowerBound": "Weight lower bound",
-    "weightUpperBound": "Weight upper bound",
-    "buttons":{
-      "showLeagueTable" : "Show league table",
-      "flip": "Flip"
-    }
-  },
-  "layoutOptions":{
-    "header": "Layout",
-    "marginHorizontal": "Horizontal Margin",
-    "marginVertical": "Vertical Margin",
-    "nodeSize": "Node size",
-    "edgeSlantWidthMax": "Edge slant (max)",
-    "gridWidth": "Width",
-    "gridHeight": "Height"
-  },
-  "diagramDetails":{
-    "header": "Details",
-    "title" : "Title",
-    "description" : "Description"
-  },
-  "objectProperties":{
-    "header":{
-      "node":{
-        "decision":"Decision Node",
-        "chance":"Chance Node",
-        "terminal":"Terminal Node"
-      },
-      "edge": "Edge",
-      "text": "Floating text"
-    },
-    "childrenProperties":{
-      "node":{
-        "header": "Connections",
-        "child": {
-          "header": "Edge #{{number}}"
+        "headers":{
+            "policyNo": "Policy #",
+            "policy": "Policy",
+            "comment": "Comment"
+        },
+        "comment":{
+            "dominatedBy": "dominated (by #{{policy}})",
+            "extendedDominatedBy": "extended-dominated (by #{{policy1}} and #{{policy2}})",
+            "incratio": "incremental ratio={{incratio}}"
+        },
+        "plot":{
+            "groups":{
+                "highlighted": "Highlighted",
+                "extended-dominated" : "Extended-dominated",
+                "dominated": "Dominated",
+                "default": "Other"
+            },
+            "tooltip":{
+                "gradientArrow1": "Direction of {{name}} optimization",
+                "gradientArrow2": "Direction of {{name}} optimization",
+                "dominatedRegion": "Dominated region"
+            },
+            "legend":{
+                "dominatedRegion": "Grey area highlights dominated region",
+                "gradientArrows": "Arrows indicate improvement direction"
+            }
         }
-      }
-    }
-  },
-  "validation":{
-    "incompletePath": "Path not ending with terminal node",
-    "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
-    "invalidProbability": "Invalid probability in edge #{{number}}",
-    "invalidPayoff": "Invalid payoff in edge #{{number}}"
-  },
-  "growl":{
-    "brushDisabled": "Selection brush disabled",
-    "brushEnabled": "Selection brush enabled"
-  },
-  "tooltip":{
-    "node":{
-      "payoff": {
-        "default": "Payoff {{number}}",
-        "named": "{{name}}"
-      },
-      "aggregatedPayoff": {
-        "default": "Aggregated Payoff {{number}}",
-        "named": "Aggregated {{name}}"
-      },
-      "probabilityToEnter": "Probability to enter"
     },
-    "edge":{
-      "payoff": {
-        "default": "Payoff {{number}}: {{value}}",
-        "named": "{{name}}: {{value}}"
-      },
-      "probability": "Probability: {{value}}"
+    "sensitivityAnalysisDialog":{
+        "title": "Sensitivity analysis",
+        "buttons": {
+            "runJob": "Run",
+            "stopJob": "Stop",
+            "terminateJob": "Terminate",
+            "resumeJob": "Resume",
+            "downloadCsv": "Download CSV",
+            "back": "Back",
+            "clear": "Clear"
+        }
+    },
+    "jobParametersBuilder": {
+        "buttons": {
+            "removeParameterValue": "Remove",
+            "addParameterValue": "Add"
+        }
+    },
+    "jobResultTable":{
+        "tooltip": {
+            "multiplePoliciesInCell": "{{number}} policies"
+        },
+        "pivot": {
+            "aggregators":{
+                "maximum": "Maximum",
+                "minimum": "Minimum"
+            },
+            "renderers":{
+                "heatmap": "Heatmap"
+            }
+        },
+        "policyPreview": "policy preview"
+    },
+    "job":{
+        "sensitivity-analysis":{
+            "name": "N-way sensitivity analysis",
+            "param":{
+                "ruleName": "Rule name",
+                "extendedPolicyDescription": {
+                    "label": "Extended policy description"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "min": {
+                        "label": "Min"
+                    },
+                    "max": {
+                        "label": "Max"
+                    },
+                    "length": {
+                        "label": "Length"
+                    },
+                    "step": {
+                        "label": "Step"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Error in sensitivity analysis computations for the following parameters:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow.",
+                "largeParametersNumber": "Number of parameters larger than {{number}}. Sensitivity analysis display might fail or be very slow."
+            }
+        },
+        "probabilistic-sensitivity-analysis":{
+            "name": "Probabilistic sensitivity analysis",
+            "param":{
+                "ruleName": "Rule name",
+                "numberOfRuns": {
+                    "label": "Number of runs"
+                },
+                "extendedPolicyDescription": {
+                    "label": "Extended policy description"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "formula": {
+                        "label": "Formula",
+                        "help": "Select formula template from the menu or write custom code"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Error in sensitivity analysis computations for the following parameters:",
+                "param-computation": "Error computing parameter values:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow."
+            }
+        },
+        "league-table":{
+            "name": "League table"
+        },
+        "errors":{
+            "generic": "Error in {{jobName}} computations: {{message}}",
+            "params": "Incorrect {{jobName}} parameters"
+        }
+    },
+    "settingsDialog":{
+        "title": "Settings",
+        "general":{
+            "title": "General",
+            "fontSize": "Font size",
+            "fontFamily": "Font family",
+            "fontWeight": "Font weight",
+            "fontStyle": "Font style",
+            "numberFormatLocale": "Number format locale"
+        },
+        "payoff1":{
+            "title": "Payoff 1 number format",
+            "currency": "Currency",
+            "currencyDisplay": "Currency display",
+            "style": "Style",
+            "minimumFractionDigits": "Minimum fraction digits",
+            "maximumFractionDigits": "Maximum fraction digits",
+            "useGrouping": "Use grouping separators"
+        },
+        "payoff2":{
+            "title": "Payoff 2 number format",
+            "currency": "Currency",
+            "currencyDisplay": "Currency display",
+            "style": "Style",
+            "minimumFractionDigits": "Minimum fraction digits",
+            "maximumFractionDigits": "Maximum fraction digits",
+            "useGrouping": "Use grouping separators"
+        },
+        "probability":{
+            "title": "Probability number format",
+            "style": "Style",
+            "minimumFractionDigits": "Minimum fraction digits",
+            "maximumFractionDigits": "Maximum fraction digits",
+            "fontSize": "Font size",
+            "color": "Color"
+        },
+        "node":{
+            "title": "Node",
+            "strokeWidth": "Stroke width",
+            "optimal":{
+                "title": "Optimal",
+                "stroke": "Color",
+                "strokeWidth": "Stroke width"
+            },
+            "label": {
+                "title": "Label",
+                "fontSize": "Label font size",
+                "color": "Label color"
+            },
+            "payoff": {
+                "title": "Payoff",
+                "fontSize": "Font size",
+                "color": "Color",
+                "negativeColor": "Negative color"
+            },
+            "decision": {
+                "title": "Decision Node",
+                "fill": "Fill color",
+                "stroke": "Stroke color",
+                "selected": {
+                    "fill": "Selected fill color"
+                }
+            },
+            "chance": {
+                "title": "Chance Node",
+                "fill": "Fill color",
+                "stroke": "Stroke color",
+                "selected": {
+                    "fill": "Selected fill color"
+                }
+            },
+            "terminal":{
+                "title": "Terminal Node",
+                "fill": "Fill color",
+                "stroke": "Stroke color",
+                "selected": {
+                    "fill": "Selected fill color"
+                },
+                "payoff": {
+                    "title": "Payoff",
+                    "fontSize": "Font size",
+                    "color": "Color",
+                    "negativeColor": "Negative color"
+                }
+            }
+        },
+        "edge":{
+            "title": "Edge",
+            "stroke": "Color",
+            "strokeWidth": "Stroke width",
+            "optimal":{
+                "title": "Optimal",
+                "stroke": "Color",
+                "strokeWidth": "Stroke width"
+            },
+            "selected":{
+                "title": "Selected",
+                "stroke": "Color",
+                "strokeWidth": "Stroke width"
+            },
+            "label": {
+                "title": "Label",
+                "fontSize": "Font size",
+                "color": "Color"
+            },
+            "payoff":{
+                "title": "Payoff",
+                "fontSize": "Font size",
+                "color": "Color",
+                "negativeColor": "Negative color"
+            }
+        },
+        "diagramTitle":{
+            "title": "Diagram title",
+            "fontSize": "Font size",
+            "fontWeight": "Font weight",
+            "fontStyle": "Font style",
+            "color": "Color",
+            "margin":{
+                "title": "Margin",
+                "top": "Top",
+                "bottom": "Bottom"
+            },
+            "description":{
+                "title": "Subtitle (diagram description)",
+                "show": "Show",
+                "fontSize": "Font size",
+                "fontWeight": "Font weight",
+                "fontStyle": "Font style",
+                "color": "Color",
+                "marginTop": "Margin top"
+            }
+        },
+        "leagueTable": {
+            "title": "League Table",
+            "plot": {
+                "title": "Plot",
+                "maxWidth": "Max width",
+                "highlightedColor": "Highlighted policy color",
+                "extendedDominatedColor": "Extended dominated policy color",
+                "dominatedColor": "Dominated policy color",
+                "defaultColor": "Other policies color"
+            }
+        },
+        "other":{
+            "title": "Other",
+            "disableAnimations": "Disable animations",
+            "forceFullEdgeRedraw": "Force full redraw of edges",
+            "hideLabels": "Hide labels",
+            "hidePayoffs": "Hide payoffs",
+            "hideProbabilities": "Hide probabilities",
+            "raw": "Raw"
+        }
+    },
+    "aboutDialog":{
+        "title": "About"
+    },
+    "help":{
+        "header": "Help",
+        "mouse": {
+            "header":"Mouse actions:",
+            "list":{
+                "1": "left mouse button: node/edge selection",
+                "2": "right mouse button: context menu (adding/manipulating nodes)",
+                "3": "left mouse dbclick: context menu"
+            }
+        },
+        "keyboard": {
+            "header":"Keyboard:",
+            "list":{
+                "1": "Del: delete selected nodes",
+                "2": "Ctrl-C/X: copy/cut selected nodes",
+                "3": "Ctrl-V: paste copied nodes as a subtree of a selected node",
+                "4": "Ctrl-Y/Z: undo/redo",
+                "5": "Ctrl-Alt-D/C/T: add new Decision/Chance/Terminal subnode of a <strong>selected node</strong>",
+                "6": "Ctrl-Alt-D/C: inject new Decision/Chance node into a <strong>selected edge</strong>"
+            }
+        },
+        "docs": "Documentation of SilverDecisions is available <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a>"
+    },
+    "definitionsDialog":{
+        "title": "Variable definitions",
+        "buttons":{
+            "recalculate": "Recalculate"
+        },
+        "evaluatedVariables": "Evaluated variables"
+    },
+    "sidebarDefinitions":{
+        "header": "Variables",
+        "code": "Code",
+        "buttons":{
+            "openDialog" : "Open dialog",
+            "recalculate": "Recalculate"
+        },
+        "evaluatedVariables": "Evaluated variables"
+    },
+    "multipleCriteria":{
+        "header": "Multiple criteria",
+        "defaultMaximizedCriterionName": "Effect",
+        "defaultMinimizedCriterionName": "Cost",
+        "nameOfCriterion1": "Name for criterion 1",
+        "nameOfCriterion2": "Name for criterion 2",
+        "defaultCriterion1Weight": "Default 1st criterion weight",
+        "weightLowerBound": "Weight lower bound",
+        "weightUpperBound": "Weight upper bound",
+        "buttons":{
+            "showLeagueTable" : "Show league table",
+            "flip": "Flip"
+        }
+    },
+    "layoutOptions":{
+        "header": "Layout",
+        "marginHorizontal": "Horizontal Margin",
+        "marginVertical": "Vertical Margin",
+        "nodeSize": "Node size",
+        "edgeSlantWidthMax": "Edge slant (max)",
+        "gridWidth": "Width",
+        "gridHeight": "Height"
+    },
+    "diagramDetails":{
+        "header": "Details",
+        "title" : "Title",
+        "description" : "Description"
+    },
+    "objectProperties":{
+        "header":{
+            "node":{
+                "decision":"Decision Node",
+                "chance":"Chance Node",
+                "terminal":"Terminal Node"
+            },
+            "edge": "Edge",
+            "text": "Floating text"
+        },
+        "childrenProperties":{
+            "node":{
+                "header": "Connections",
+                "child": {
+                    "header": "Edge #{{number}}"
+                }
+            }
+        }
+    },
+    "validation":{
+        "incompletePath": "Path not ending with terminal node",
+        "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
+        "invalidProbability": "Invalid probability in edge #{{number}}",
+        "invalidPayoff": "Invalid payoff in edge #{{number}}"
+    },
+    "growl":{
+        "brushDisabled": "Selection brush disabled",
+        "brushEnabled": "Selection brush enabled"
+    },
+    "tooltip":{
+        "node":{
+            "payoff": {
+                "default": "Payoff {{number}}",
+                "named": "{{name}}"
+            },
+            "aggregatedPayoff": {
+                "default": "Aggregated Payoff {{number}}",
+                "named": "Aggregated {{name}}"
+            },
+            "probabilityToEnter": "Probability to enter"
+        },
+        "edge":{
+            "payoff": {
+                "default": "Payoff {{number}}: {{value}}",
+                "named": "{{name}}: {{value}}"
+            },
+            "probability": "Probability: {{value}}"
+        }
+    },
+    "confirm":{
+        "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
+        "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
+        "beforeunload": "Are you sure you want to close SilverDecisions? All unsaved diagram data will be lost."
+    },
+    "error":{
+        "jsonParse": "Error parsing file!",
+        "fileApiNotSupported":"The file API isn't supported on this browser yet.",
+        "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
+        "notSilverDecisionsFile":"Not a SilverDecisions file!",
+        "incorrectVersionFormat": "Incorrect format of version string!",
+        "fileVersionNewerThanApplicationVersion": "Version in file is newer than version of the application. Some features may be missing.",
+        "objectiveComputationFailure": "Error while computing objective!",
+        "diagramDrawingFailure": "Error while drawing diagram!",
+        "malformedData":"Error reading tree data!",
+        "pngExportNotSupported": "Export to PNG is not supported in your browser.",
+        "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
+        "svgExportNotSupported": "Export to SVG is not supported in your browser.",
+        "pdfExportNotSupported": "Export to PDF is not supported in your browser.",
+        "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
+        "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
+        "incorrectNumberFormatOptions": "Incorrect number format options, using default.",
+        "jsPDFisNotIncluded": "jsPDF is not included!",
+        "serverSideExportRequestFailure": "Export Server request failed!"
     }
-  },
-  "confirm":{
-    "newDiagram": "Do you really want to clear current diagram? All unsaved data will be lost.",
-    "openDiagram": "Are you sure? All unsaved diagram data will be lost.",
-    "beforeunload": "Are you sure you want to close SilverDecisions? All unsaved diagram data will be lost."
-  },
-  "error":{
-    "jsonParse": "Error parsing file!",
-    "fileApiNotSupported":"The file API isn't supported on this browser yet.",
-    "inputFilesProperty":"Your browser doesn't seem to support the `files` property of file inputs.",
-    "notSilverDecisionsFile":"Not a SilverDecisions file!",
-    "incorrectVersionFormat": "Incorrect format of version string!",
-    "fileVersionNewerThanApplicationVersion": "Version in file is newer than version of the application. Some features may be missing.",
-    "objectiveComputationFailure": "Error while computing objective!",
-    "diagramDrawingFailure": "Error while drawing diagram!",
-    "malformedData":"Error reading tree data!",
-    "pngExportNotSupported": "Export to PNG is not supported in your browser.",
-    "pngExportNotSupportedIE": "Export to PNG not supported in Internet Explorer.",
-    "svgExportNotSupported": "Export to SVG is not supported in your browser.",
-    "pdfExportNotSupported": "Export to PDF is not supported in your browser.",
-    "incorrectPayoffNumberFormatOptions": "Incorrect payoff number format options",
-    "incorrectProbabilityNumberFormatOptions": "Incorrect probability number format options",
-    "incorrectNumberFormatOptions": "Incorrect number format options, using default.",
-    "jsPDFisNotIncluded": "jsPDF is not included!",
-    "serverSideExportRequestFailure": "Export Server request failed!"
-  }
 }

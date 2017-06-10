@@ -1,529 +1,529 @@
 {
-  "toolbar": {
-    "newDiagram": "Neues Diagramm",
-    "openDiagram": "Diagramm öffnen",
-    "saveDiagram": "Aktuelles Diagramm speichern",
-    "export":{
-      "label": "Exportieren nach",
-      "png": "Png",
-      "svg": "Svg",
-      "pdf": "Pdf"
-    },
-    "layout":{
-      "label": "Layout",
-      "manual": "Manual",
-      "tree": "Baum",
-      "cluster": "Cluster"
-    },
-    "viewMode": {
-      "label": "Aussicht",
-      "options": {
-        "criterion1":"Kriterium 1",
-        "criterion2":"Kriterium 2",
-        "twoCriteria":"Zwei Kriterien"
-      }
-    },
-    "objectiveRule":{
-      "label": "Regel",
-      "options": {
-        "expected-value-maximization":"max",
-        "expected-value-minimization":"min",
-        "maxi-min":"maxi-min",
-        "maxi-max":"maxi-max",
-        "mini-min":"mini-min",
-        "mini-max":"mini-max",
-        "min-max":"min-max",
-        "max-min":"max-min",
-        "min-min": "min-min",
-        "max-max": "max-max"
-      }
-    },
-    "undo": "Rückgängig machen",
-    "redo": "Wiederholen",
-    "settings": "Einstellungen",
-    "about": "Über",
-    "sensitivityAnalysis": "Sensitivitätsanalyse",
-    "recompute": "Neu Berechnen"
-  },
-  "node":{
-    "name": "Beschreibung"
-  },
-  "edge":{
-    "name": "Beschreibung",
-    "payoff": "Auszahlung",
-    "probability": "Wahrscheinlichkeit"
-  },
-  "text":{
-    "value": "Text"
-  },
-  "contextMenu":{
-    "main":{
-      "addDecisionNode": "Entscheidungsknoten hinzufügen",
-      "addChanceNode": "Zufall Knoten hinzufügen",
-      "addText": "Text hinzufügen ",
-      "paste": "Einfügen",
-      "selectAllNodes": "Alle Knoten auswählen"
+    "toolbar": {
+        "newDiagram": "Neues Diagramm",
+        "openDiagram": "Diagramm öffnen",
+        "saveDiagram": "Aktuelles Diagramm speichern",
+        "export":{
+            "label": "Exportieren nach",
+            "png": "Png",
+            "svg": "Svg",
+            "pdf": "Pdf"
+        },
+        "layout":{
+            "label": "Layout",
+            "manual": "Manual",
+            "tree": "Baum",
+            "cluster": "Cluster"
+        },
+        "viewMode": {
+            "label": "Aussicht",
+            "options": {
+                "criterion1":"Kriterium 1",
+                "criterion2":"Kriterium 2",
+                "twoCriteria":"Zwei Kriterien"
+            }
+        },
+        "objectiveRule":{
+            "label": "Regel",
+            "options": {
+                "expected-value-maximization":"max",
+                "expected-value-minimization":"min",
+                "maxi-min":"maxi-min",
+                "maxi-max":"maxi-max",
+                "mini-min":"mini-min",
+                "mini-max":"mini-max",
+                "min-max":"min-max",
+                "max-min":"max-min",
+                "min-min": "min-min",
+                "max-max": "max-max"
+            }
+        },
+        "undo": "Rückgängig machen",
+        "redo": "Wiederholen",
+        "settings": "Einstellungen",
+        "about": "Über",
+        "sensitivityAnalysis": "Sensitivitätsanalyse",
+        "recompute": "Neu Berechnen"
     },
     "node":{
-      "copy": "Kopieren",
-      "cut": "Ausschneiden",
-      "paste": "Einfügen",
-      "delete": "Löschen",
-      "addDecisionNode": "Entscheidungsknoten hinzufügen",
-      "addChanceNode": "Zufall Knoten hinzufügen",
-      "addTerminalNode": "Endknotten hinzufügen",
-      "convert":{
-        "decision": "Als Entscheidungsknoten",
-        "chance": "Als Zufall Knoten",
-        "terminal": "Als Endknoten"
-      },
-      "selectSubtree": "Teilbaum wählen",
-      "flipSubtree": "Teilbaum umdrehen"
+        "name": "Beschreibung"
     },
     "edge":{
-      "injectDecisionNode": "Entscheidungsknoten Injizieren",
-      "injectChanceNode": "Zufall Knoten Injizieren"
+        "name": "Beschreibung",
+        "payoff": "Auszahlung",
+        "probability": "Wahrscheinlichkeit"
     },
     "text":{
-      "delete": "Löschen"
-    }
-  },
-  "leagueTableDialog":{
-    "title": "Rangliste",
-    "buttons": {
-      "downloadCsv": "CSV Herunterladen"
-    }
-  },
-  "leagueTable": {
-    "headers":{
-      "policyNo": "Regel #",
-      "policy": "Regel",
-      "comment": "Kommentar"
+        "value": "Text"
     },
-    "comment":{
-      "dominatedBy": "Dominiert (durch#{{policy}})",
-      "extendedDominatedBy": "Erweitert-dominiert (durch #{{policy1}} und #{{policy2}})",
-      "incratio": "Inkrementelles Verhältnis={{incratio}}"
-    },
-    "plot":{
-      "groups":{
-        "highlighted": "Markiert",
-        "extended-dominated" : "Erweitert-dominiert",
-        "dominated": "Dominiert",
-        "default": "Andere"
-      },
-      "tooltip":{
-        "gradientArrow1": "Richtung von{{name}} Optimierung",
-        "gradientArrow2": "Richtung von {{name}} Optimierung",
-        "dominatedRegion": "Dominierte Region"
-      },
-      "legend":{
-        "dominatedRegion": "Graumarkiert Bereich stellt dominierte Region dar",
-        "gradientArrows": "Pfeile zeigen Verbesserungsrichtung an"
-      }
-    }
-  },
-  "sensitivityAnalysisDialog":{
-    "title": "Sensitivitätsanalyse",
-    "buttons": {
-      "runJob": "Lauf",
-      "stopJob": "Stop",
-      "terminateJob": "Beenden",
-      "resumeJob": "Fortsetzen",
-      "downloadCsv": "CSV Herunterladen",
-      "back": "Zurück",
-      "clear": "Löschen"
-    }
-  },
-  "jobParametersBuilder": {
-    "buttons": {
-      "removeParameterValue": "Entfernen",
-      "addParameterValue": "Hinzufügen"
-    }
-  },
-  "jobResultTable":{
-    "tooltip": {
-      "multiplePoliciesInCell": "{{number}} Grundregeln"
-    },
-    "pivot": {
-      "aggregators":{
-        "maximum": "Maximum",
-        "minimum": "Minimum"
-      },
-      "renderers":{
-        "heatmap": "Wärmekarte"
-      }
-    },
-    "policyPreview": "Grundregel Vorschau"
-  },
-  "job":{
-    "sensitivity-analysis":{
-      "name": "N-Wege-Sensitivitätsanalyse",
-      "param":{
-        "ruleName": "Regelname",
-        "extendedPolicyDescription": {
-          "label": "Erweiterte Grundregeln Beschreibung"
+    "contextMenu":{
+        "main":{
+            "addDecisionNode": "Entscheidungsknoten hinzufügen",
+            "addChanceNode": "Zufall Knoten hinzufügen",
+            "addText": "Text hinzufügen ",
+            "paste": "Einfügen",
+            "selectAllNodes": "Alle Knoten auswählen"
         },
-        "variables": {
-          "label": "Variables",
-          "name": {
-            "label": "Name"
-          },
-          "min": {
-            "label": "Min"
-          },
-          "max": {
-            "label": "Max"
-          },
-          "length": {
-            "label": "Länge"
-          },
-          "step": {
-            "label": "Schritt"
-          }
-        }
-      },
-      "errors":{
-        "computations": "Fehler bei der Sensitivitätsanalyse für folgende Parameter:"
-      },
-      "warnings": {
-        "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam.",
-        "largeParametersNumber": "Anzahl der Parameter größer als {{number}}. Die Anzeige der Resultate der Sensitivitätsanalyse könnte fehlschlagen oder sehr langsam sein."
-      }
-    },
-    "probabilistic-sensitivity-analysis":{
-      "name": "Probabilistische Sensitivitätsanalyse",
-      "param":{
-        "ruleName": "Regelname",
-        "numberOfRuns": {
-          "label": "Anzahl der Läufe"
+        "node":{
+            "copy": "Kopieren",
+            "cut": "Ausschneiden",
+            "paste": "Einfügen",
+            "delete": "Löschen",
+            "addDecisionNode": "Entscheidungsknoten hinzufügen",
+            "addChanceNode": "Zufall Knoten hinzufügen",
+            "addTerminalNode": "Endknotten hinzufügen",
+            "convert":{
+                "decision": "Als Entscheidungsknoten",
+                "chance": "Als Zufall Knoten",
+                "terminal": "Als Endknoten"
+            },
+            "selectSubtree": "Teilbaum wählen",
+            "flipSubtree": "Teilbaum umdrehen"
         },
-        "extendedPolicyDescription": {
-          "label": "Erweiterte Grundregel Beschreibung"
+        "edge":{
+            "injectDecisionNode": "Entscheidungsknoten Injizieren",
+            "injectChanceNode": "Zufall Knoten Injizieren"
         },
-        "variables": {
-          "label": "Variablen",
-          "name": {
-            "label": "Name"
-          },
-          "formula": {
-            "label": "Formel",
-            "help": "Wählen Sie die Formelvorlage aus dem Menü aus oder schreiben Sie benutzerdefinierten Code"
-          }
+        "text":{
+            "delete": "Löschen"
         }
-      },
-      "errors":{
-        "computations": "Berechnungsfehler der Sensitivitätsanalyse für folgende Parameter:",
-        "param-computation": "Fehler beim Berechnen von Parameterwerten:"
-      },
-      "warnings": {
-        "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam."
-      }
     },
-    "league-table":{
-      "name": "Rangliste"
-    },
-    "errors":{
-      "generic": "Fehler bei der Sensitivitätsanalyse: {{message}}",
-      "params": "Inkorrekte {{jobName}} Parametern"
-    }
-  },
-  "settingsDialog":{
-    "title": "Einstellungen",
-    "general":{
-      "title": "Allgemein",
-      "fontSize": "Schriftgröße",
-      "fontFamily": "Schriftfamilie",
-      "fontWeight": "Schriftgewicht",
-      "fontStyle": "Schriftstil",
-      "numberFormatLocale": "Zahlenformat Gebietsschema"
-    },
-    "payoff1":{
-      "title": "Auszahlung 1 Zahlenformat",
-      "currency": "Währung",
-      "currencyDisplay": "Währungsanzeige",
-      "style": "Stil",
-      "minimumFractionDigits": "Minimale Bruchzahlen",
-      "maximumFractionDigits": "Maximale Bruchzahlen",
-      "useGrouping": "Gruppierung Separatoren verwenden"
-    },
-    "payoff2":{
-      "title": "Auszahlung 2 Zahlenformat",
-      "currency": "Währung",
-      "currencyDisplay": "Währungsanzeige",
-      "style": "Stil",
-      "minimumFractionDigits": "Minimale Bruchzahlen",
-      "maximumFractionDigits": "Maximale Bruchzahlen",
-      "useGrouping": "Gruppierung Separatoren verwenden"
-    },
-    "probability":{
-      "title": "Wahrscheinlichkeit Zahlenformat",
-      "style": "Stil",
-      "minimumFractionDigits": "Minimale Bruchzahlen",
-      "maximumFractionDigits": "Maximale Bruchzahlen",
-      "fontSize": "Schriftgröße",
-      "color": "Farbe"
-    },
-    "node":{
-      "title": "Knoten",
-      "strokeWidth": "Strichbreite",
-      "optimal":{
-        "title": "Optimal",
-        "stroke": "Farbe",
-        "strokeWidth": "Strichbreite"
-      },
-      "label": {
-        "title": "Beschreibung",
-        "fontSize": "Beschreibung Schriftgröße",
-        "color": "Beschreibungsfarbe"
-      },
-      "payoff": {
-        "title": "Auszahlung",
-        "fontSize": "Schriftgröße",
-        "color": "Farbe",
-        "negativeColor": "Negative Farbe"
-      },
-      "decision": {
-        "title": "Entscheidungsknoten",
-        "fill": "Füllfarbe",
-        "stroke": "Strichfarbe",
-        "selected": {
-          "fill": "Ausgewählte Füllfarbe"
+    "leagueTableDialog":{
+        "title": "Rangliste",
+        "buttons": {
+            "downloadCsv": "CSV Herunterladen"
         }
-      },
-      "chance": {
-        "title": "Zufall Knoten",
-        "fill": "Füllfarbe",
-        "stroke": "Strichfarbe",
-        "selected": {
-          "fill": "Ausgewählte Füllfarbe"
-        }
-      },
-      "terminal":{
-        "title": "Endknoten",
-        "fill": "Füllfarbe",
-        "stroke": "Strichfarbe",
-        "selected": {
-          "fill": "Ausgewählte Füllfarbe"
-        },
-        "payoff": {
-          "title": "Auszahlung",
-          "fontSize": "Schriftgröße",
-          "color": "Farbe",
-          "negativeColor": "Negative Farbe"
-        }
-      }
-    },
-    "edge":{
-      "title": " Zweig",
-      "stroke": "Farbe",
-      "strokeWidth": "Strichbreite",
-      "optimal":{
-        "title": "Optimal",
-        "stroke": "Farbe",
-        "strokeWidth": "Strichbreite"
-      },
-      "selected":{
-        "title": "Ausgewählt",
-        "stroke": "Farbe",
-        "strokeWidth": "Strichbreite"
-      },
-      "label": {
-        "title": "Beschreibung",
-        "fontSize": "Schriftgröße",
-        "color": "Farbe"
-      },
-      "payoff":{
-        "title": "Auszahlung",
-        "fontSize": "Schriftgröße",
-        "color": "Farbe",
-        "negativeColor": "Negative Farbe"
-      }
-    },
-    "diagramTitle":{
-      "title": "Diagrammtitel",
-      "fontSize": "Schriftgröße",
-      "fontWeight": "Schriftgewicht",
-      "fontStyle": "Schriftstil",
-      "color": "Farbe",
-      "margin":{
-        "title": "Rand",
-        "top": "Oben",
-        "bottom": "Unten"
-      },
-      "description":{
-        "title": "Untertitel (Diagrammbeschreibung)",
-        "show": "Anzeigen",
-        "fontSize": "Schriftgröße",
-        "fontWeight": "Schriftgewicht",
-        "fontStyle": "Schriftstil",
-        "color": "Farbe",
-        "marginTop": "Rand Oben"
-      }
     },
     "leagueTable": {
-      "title": "Rangliste",
-      "plot": {
-        "title": "Plot",
-        "maxWidth": "Max Breite",
-        "highlightedColor": "Farbe der markierten Regel",
-        "extendedDominatedColor": "Farbe der erweitert-dominierten Regel",
-        "dominatedColor": "Farbe der dominierten Regel",
-        "defaultColor": "Farbe der anderen Regeln"
-      }
-    },
-    "other":{
-      "title": "Weitere",
-      "disableAnimations": "Animationen Deaktivieren",
-      "forceFullEdgeRedraw": "Erzwingt vollständige Neuzeichnung der Zweige",
-      "hideLabels": "Verstecke Beschreibung",
-      "hidePayoffs": "Verstecke Auszahlungen",
-      "hideProbabilities": "Verstecke Wahrscheinlichkeiten",
-      "raw": "Rau"
-    }
-  },
-  "aboutDialog":{
-    "title": "Über"
-  },
-  "help":{
-    "header": "Hilfe",
-    "mouse": {
-      "header":"Mausaktionen:",
-      "list":{
-        "1": "Linke Maustaste: Knoten/Zweig Auswahl",
-        "2": "Rechte Maustaste: Kontextmenü (Hinzufügen / Manipulieren von Knoten)",
-        "3": "Linke Maus Doppelklick: Kontextmenü"
-      }
-    },
-    "keyboard": {
-      "header":"Tastatur:",
-      "list":{
-        "1": "Del: ausgewählte Knoten Löschen",
-        "2": "Ctrl-C/X: ausgewählte Knoten Kopieren/Ausschneiden",
-        "3": "Ctrl-V: kopierte Knoten als Teilbaum ausgewähltes Knotens einfügen",
-        "4": "Ctrl-Y/Z: Rückgängig/Wiederholen",
-        "5": "Ctrl-Alt-D/C/T: Neue Entscheidungs/Zufall/Endsknoten als Unterknoten von <strong>ausgewähltem Knoten</strong>",
-        "6": "Ctrl-Alt-D/C: Neue Entscheidungs/Zufall Knoten in <strong>ausgewählten Zweig </strong> Injizieren"
-      }
-    },
-    "docs": "Die Dokumentation von SilverDecisions ist unter <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a> verfügbar"
-  },
-  "definitionsDialog":{
-    "title": "Variablendefinitionen",
-    "buttons":{
-      "recalculate": "Neu berechnen"
-    },
-    "evaluatedVariables": "Ausgewertete Variablen"
-  },
-  "sidebarDefinitions":{
-    "header": "Variablen",
-    "code": "Code",
-    "buttons":{
-      "openDialog" : "Dialog Öffnen",
-      "recalculate": "Neu berechnen"
-    },
-    "evaluatedVariables": "Ausgewertete Variablen"
-  },
-  "multipleCriteria":{
-    "header": "Mehrere Kriterien",
-    "defaultMaximizedCriterionName": "Effekt",
-    "defaultMinimizedCriterionName": "Kosten",
-    "nameOfCriterion1": "Name des Kriteriums 1",
-    "nameOfCriterion2": "Name des Kriteriums 2",
-    "defaultCriterion1Weight": "Default 1. Kriterium Gewicht",
-    "weightLowerBound": "Gewicht untere Grenze",
-    "weightUpperBound": "Gewicht obere Grenze",
-    "buttons":{
-      "showLeagueTable" : "Rangliste anzeigen",
-      "flip": "Flip"
-    }
-  },
-  "layoutOptions":{
-    "header": "Layout",
-    "marginHorizontal": "Horizontaler Rand",
-    "marginVertical": "Vertikaler Rand",
-    "nodeSize": "Knotengröße",
-    "edgeSlantWidthMax": "Kantenschräge (max)",
-    "gridWidth": "Breite",
-    "gridHeight": "Höhe"
-  },
-  "diagramDetails":{
-    "header": "Einzelheiten",
-    "title" : "Titel",
-    "description" : "Beschreibung"
-  },
-  "objectProperties":{
-    "header":{
-      "node":{
-        "decision":"Entscheidungsknoten",
-        "chance":"Zufall Knoten",
-        "terminal":"Endknoten"
-      },
-      "edge": "Zweig",
-      "text": "Schwimmender Text"
-    },
-    "childrenProperties":{
-      "node":{
-        "header": "Verbindungen",
-        "child": {
-          "header": "Zweig #{{number}}"
+        "headers":{
+            "policyNo": "Regel #",
+            "policy": "Regel",
+            "comment": "Kommentar"
+        },
+        "comment":{
+            "dominatedBy": "Dominiert (durch#{{policy}})",
+            "extendedDominatedBy": "Erweitert-dominiert (durch #{{policy1}} und #{{policy2}})",
+            "incratio": "Inkrementelles Verhältnis={{incratio}}"
+        },
+        "plot":{
+            "groups":{
+                "highlighted": "Markiert",
+                "extended-dominated" : "Erweitert-dominiert",
+                "dominated": "Dominiert",
+                "default": "Andere"
+            },
+            "tooltip":{
+                "gradientArrow1": "Richtung von{{name}} Optimierung",
+                "gradientArrow2": "Richtung von {{name}} Optimierung",
+                "dominatedRegion": "Dominierte Region"
+            },
+            "legend":{
+                "dominatedRegion": "Graumarkiert Bereich stellt dominierte Region dar",
+                "gradientArrows": "Pfeile zeigen Verbesserungsrichtung an"
+            }
         }
-      }
-    }
-  },
-  "validation":{
-    "incompletePath": "Pfad, der nicht mit dem Endknoten endet",
-    "probabilityDoNotSumUpTo1": "Die Summe der Wahrscheinlichkeiten ist nicht gleich 1",
-    "invalidProbability": "Ungültige Wahrscheinlichkeit im Zweig #{{number}}",
-    "invalidPayoff": "Ungültige Auszahlung in Zweig #{{number}}"
-  },
-  "growl":{
-    "brushDisabled": "Auswahlbürste deaktiviert",
-    "brushEnabled": "Auswahlbürste aktiviert"
-  },
-  "tooltip":{
-    "node":{
-      "payoff": {
-        "default": "Auszahlung {{number}}",
-        "named": "{{name}}"
-      },
-      "aggregatedPayoff": {
-        "default": "Aggregierte Auszahlung {{number}}",
-        "named": "Aggregierte {{name}}"
-      },
-      "probabilityToEnter": "Wahrscheinlichkeit"
     },
-    "edge":{
-      "payoff": {
-        "default": "Auszahlung {{number}}: {{value}}",
-        "named": "{{name}}: {{value}}"
-      },
-      "probability": "Wahrscheinlichkeit: {{value}}"
+    "sensitivityAnalysisDialog":{
+        "title": "Sensitivitätsanalyse",
+        "buttons": {
+            "runJob": "Lauf",
+            "stopJob": "Stop",
+            "terminateJob": "Beenden",
+            "resumeJob": "Fortsetzen",
+            "downloadCsv": "CSV Herunterladen",
+            "back": "Zurück",
+            "clear": "Löschen"
+        }
+    },
+    "jobParametersBuilder": {
+        "buttons": {
+            "removeParameterValue": "Entfernen",
+            "addParameterValue": "Hinzufügen"
+        }
+    },
+    "jobResultTable":{
+        "tooltip": {
+            "multiplePoliciesInCell": "{{number}} Grundregeln"
+        },
+        "pivot": {
+            "aggregators":{
+                "maximum": "Maximum",
+                "minimum": "Minimum"
+            },
+            "renderers":{
+                "heatmap": "Wärmekarte"
+            }
+        },
+        "policyPreview": "Grundregel Vorschau"
+    },
+    "job":{
+        "sensitivity-analysis":{
+            "name": "N-Wege-Sensitivitätsanalyse",
+            "param":{
+                "ruleName": "Regelname",
+                "extendedPolicyDescription": {
+                    "label": "Erweiterte Grundregeln Beschreibung"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "min": {
+                        "label": "Min"
+                    },
+                    "max": {
+                        "label": "Max"
+                    },
+                    "length": {
+                        "label": "Länge"
+                    },
+                    "step": {
+                        "label": "Schritt"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Fehler bei der Sensitivitätsanalyse für folgende Parameter:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam.",
+                "largeParametersNumber": "Anzahl der Parameter größer als {{number}}. Die Anzeige der Resultate der Sensitivitätsanalyse könnte fehlschlagen oder sehr langsam sein."
+            }
+        },
+        "probabilistic-sensitivity-analysis":{
+            "name": "Probabilistische Sensitivitätsanalyse",
+            "param":{
+                "ruleName": "Regelname",
+                "numberOfRuns": {
+                    "label": "Anzahl der Läufe"
+                },
+                "extendedPolicyDescription": {
+                    "label": "Erweiterte Grundregel Beschreibung"
+                },
+                "variables": {
+                    "label": "Variablen",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "formula": {
+                        "label": "Formel",
+                        "help": "Wählen Sie die Formelvorlage aus dem Menü aus oder schreiben Sie benutzerdefinierten Code"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Berechnungsfehler der Sensitivitätsanalyse für folgende Parameter:",
+                "param-computation": "Fehler beim Berechnen von Parameterwerten:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam."
+            }
+        },
+        "league-table":{
+            "name": "Rangliste"
+        },
+        "errors":{
+            "generic": "Fehler bei der Sensitivitätsanalyse: {{message}}",
+            "params": "Inkorrekte {{jobName}} Parametern"
+        }
+    },
+    "settingsDialog":{
+        "title": "Einstellungen",
+        "general":{
+            "title": "Allgemein",
+            "fontSize": "Schriftgröße",
+            "fontFamily": "Schriftfamilie",
+            "fontWeight": "Schriftgewicht",
+            "fontStyle": "Schriftstil",
+            "numberFormatLocale": "Zahlenformat Gebietsschema"
+        },
+        "payoff1":{
+            "title": "Auszahlung 1 Zahlenformat",
+            "currency": "Währung",
+            "currencyDisplay": "Währungsanzeige",
+            "style": "Stil",
+            "minimumFractionDigits": "Minimale Bruchzahlen",
+            "maximumFractionDigits": "Maximale Bruchzahlen",
+            "useGrouping": "Gruppierung Separatoren verwenden"
+        },
+        "payoff2":{
+            "title": "Auszahlung 2 Zahlenformat",
+            "currency": "Währung",
+            "currencyDisplay": "Währungsanzeige",
+            "style": "Stil",
+            "minimumFractionDigits": "Minimale Bruchzahlen",
+            "maximumFractionDigits": "Maximale Bruchzahlen",
+            "useGrouping": "Gruppierung Separatoren verwenden"
+        },
+        "probability":{
+            "title": "Wahrscheinlichkeit Zahlenformat",
+            "style": "Stil",
+            "minimumFractionDigits": "Minimale Bruchzahlen",
+            "maximumFractionDigits": "Maximale Bruchzahlen",
+            "fontSize": "Schriftgröße",
+            "color": "Farbe"
+        },
+        "node":{
+            "title": "Knoten",
+            "strokeWidth": "Strichbreite",
+            "optimal":{
+                "title": "Optimal",
+                "stroke": "Farbe",
+                "strokeWidth": "Strichbreite"
+            },
+            "label": {
+                "title": "Beschreibung",
+                "fontSize": "Beschreibung Schriftgröße",
+                "color": "Beschreibungsfarbe"
+            },
+            "payoff": {
+                "title": "Auszahlung",
+                "fontSize": "Schriftgröße",
+                "color": "Farbe",
+                "negativeColor": "Negative Farbe"
+            },
+            "decision": {
+                "title": "Entscheidungsknoten",
+                "fill": "Füllfarbe",
+                "stroke": "Strichfarbe",
+                "selected": {
+                    "fill": "Ausgewählte Füllfarbe"
+                }
+            },
+            "chance": {
+                "title": "Zufall Knoten",
+                "fill": "Füllfarbe",
+                "stroke": "Strichfarbe",
+                "selected": {
+                    "fill": "Ausgewählte Füllfarbe"
+                }
+            },
+            "terminal":{
+                "title": "Endknoten",
+                "fill": "Füllfarbe",
+                "stroke": "Strichfarbe",
+                "selected": {
+                    "fill": "Ausgewählte Füllfarbe"
+                },
+                "payoff": {
+                    "title": "Auszahlung",
+                    "fontSize": "Schriftgröße",
+                    "color": "Farbe",
+                    "negativeColor": "Negative Farbe"
+                }
+            }
+        },
+        "edge":{
+            "title": " Zweig",
+            "stroke": "Farbe",
+            "strokeWidth": "Strichbreite",
+            "optimal":{
+                "title": "Optimal",
+                "stroke": "Farbe",
+                "strokeWidth": "Strichbreite"
+            },
+            "selected":{
+                "title": "Ausgewählt",
+                "stroke": "Farbe",
+                "strokeWidth": "Strichbreite"
+            },
+            "label": {
+                "title": "Beschreibung",
+                "fontSize": "Schriftgröße",
+                "color": "Farbe"
+            },
+            "payoff":{
+                "title": "Auszahlung",
+                "fontSize": "Schriftgröße",
+                "color": "Farbe",
+                "negativeColor": "Negative Farbe"
+            }
+        },
+        "diagramTitle":{
+            "title": "Diagrammtitel",
+            "fontSize": "Schriftgröße",
+            "fontWeight": "Schriftgewicht",
+            "fontStyle": "Schriftstil",
+            "color": "Farbe",
+            "margin":{
+                "title": "Rand",
+                "top": "Oben",
+                "bottom": "Unten"
+            },
+            "description":{
+                "title": "Untertitel (Diagrammbeschreibung)",
+                "show": "Anzeigen",
+                "fontSize": "Schriftgröße",
+                "fontWeight": "Schriftgewicht",
+                "fontStyle": "Schriftstil",
+                "color": "Farbe",
+                "marginTop": "Rand Oben"
+            }
+        },
+        "leagueTable": {
+            "title": "Rangliste",
+            "plot": {
+                "title": "Plot",
+                "maxWidth": "Max Breite",
+                "highlightedColor": "Farbe der markierten Regel",
+                "extendedDominatedColor": "Farbe der erweitert-dominierten Regel",
+                "dominatedColor": "Farbe der dominierten Regel",
+                "defaultColor": "Farbe der anderen Regeln"
+            }
+        },
+        "other":{
+            "title": "Weitere",
+            "disableAnimations": "Animationen Deaktivieren",
+            "forceFullEdgeRedraw": "Erzwingt vollständige Neuzeichnung der Zweige",
+            "hideLabels": "Verstecke Beschreibung",
+            "hidePayoffs": "Verstecke Auszahlungen",
+            "hideProbabilities": "Verstecke Wahrscheinlichkeiten",
+            "raw": "Rau"
+        }
+    },
+    "aboutDialog":{
+        "title": "Über"
+    },
+    "help":{
+        "header": "Hilfe",
+        "mouse": {
+            "header":"Mausaktionen:",
+            "list":{
+                "1": "Linke Maustaste: Knoten/Zweig Auswahl",
+                "2": "Rechte Maustaste: Kontextmenü (Hinzufügen / Manipulieren von Knoten)",
+                "3": "Linke Maus Doppelklick: Kontextmenü"
+            }
+        },
+        "keyboard": {
+            "header":"Tastatur:",
+            "list":{
+                "1": "Del: ausgewählte Knoten Löschen",
+                "2": "Ctrl-C/X: ausgewählte Knoten Kopieren/Ausschneiden",
+                "3": "Ctrl-V: kopierte Knoten als Teilbaum ausgewähltes Knotens einfügen",
+                "4": "Ctrl-Y/Z: Rückgängig/Wiederholen",
+                "5": "Ctrl-Alt-D/C/T: Neue Entscheidungs/Zufall/Endsknoten als Unterknoten von <strong>ausgewähltem Knoten</strong>",
+                "6": "Ctrl-Alt-D/C: Neue Entscheidungs/Zufall Knoten in <strong>ausgewählten Zweig </strong> Injizieren"
+            }
+        },
+        "docs": "Die Dokumentation von SilverDecisions ist unter <a href=\"https://github.com/SilverDecisions/SilverDecisions/wiki/Documentation\" target=\"_blank\">here</a> verfügbar"
+    },
+    "definitionsDialog":{
+        "title": "Variablendefinitionen",
+        "buttons":{
+            "recalculate": "Neu berechnen"
+        },
+        "evaluatedVariables": "Ausgewertete Variablen"
+    },
+    "sidebarDefinitions":{
+        "header": "Variablen",
+        "code": "Code",
+        "buttons":{
+            "openDialog" : "Dialog Öffnen",
+            "recalculate": "Neu berechnen"
+        },
+        "evaluatedVariables": "Ausgewertete Variablen"
+    },
+    "multipleCriteria":{
+        "header": "Mehrere Kriterien",
+        "defaultMaximizedCriterionName": "Effekt",
+        "defaultMinimizedCriterionName": "Kosten",
+        "nameOfCriterion1": "Name des Kriteriums 1",
+        "nameOfCriterion2": "Name des Kriteriums 2",
+        "defaultCriterion1Weight": "Default 1. Kriterium Gewicht",
+        "weightLowerBound": "Gewicht untere Grenze",
+        "weightUpperBound": "Gewicht obere Grenze",
+        "buttons":{
+            "showLeagueTable" : "Rangliste anzeigen",
+            "flip": "Flip"
+        }
+    },
+    "layoutOptions":{
+        "header": "Layout",
+        "marginHorizontal": "Horizontaler Rand",
+        "marginVertical": "Vertikaler Rand",
+        "nodeSize": "Knotengröße",
+        "edgeSlantWidthMax": "Kantenschräge (max)",
+        "gridWidth": "Breite",
+        "gridHeight": "Höhe"
+    },
+    "diagramDetails":{
+        "header": "Einzelheiten",
+        "title" : "Titel",
+        "description" : "Beschreibung"
+    },
+    "objectProperties":{
+        "header":{
+            "node":{
+                "decision":"Entscheidungsknoten",
+                "chance":"Zufall Knoten",
+                "terminal":"Endknoten"
+            },
+            "edge": "Zweig",
+            "text": "Schwimmender Text"
+        },
+        "childrenProperties":{
+            "node":{
+                "header": "Verbindungen",
+                "child": {
+                    "header": "Zweig #{{number}}"
+                }
+            }
+        }
+    },
+    "validation":{
+        "incompletePath": "Pfad, der nicht mit dem Endknoten endet",
+        "probabilityDoNotSumUpTo1": "Die Summe der Wahrscheinlichkeiten ist nicht gleich 1",
+        "invalidProbability": "Ungültige Wahrscheinlichkeit im Zweig #{{number}}",
+        "invalidPayoff": "Ungültige Auszahlung in Zweig #{{number}}"
+    },
+    "growl":{
+        "brushDisabled": "Auswahlbürste deaktiviert",
+        "brushEnabled": "Auswahlbürste aktiviert"
+    },
+    "tooltip":{
+        "node":{
+            "payoff": {
+                "default": "Auszahlung {{number}}",
+                "named": "{{name}}"
+            },
+            "aggregatedPayoff": {
+                "default": "Aggregierte Auszahlung {{number}}",
+                "named": "Aggregierte {{name}}"
+            },
+            "probabilityToEnter": "Wahrscheinlichkeit"
+        },
+        "edge":{
+            "payoff": {
+                "default": "Auszahlung {{number}}: {{value}}",
+                "named": "{{name}}: {{value}}"
+            },
+            "probability": "Wahrscheinlichkeit: {{value}}"
+        }
+    },
+    "confirm":{
+        "newDiagram": "Möchten Sie das aktuelle Diagramm wirklich löschen? Alle nicht gespeicherten Daten werden verloren.",
+        "openDiagram": "Sind Sie sicher? Alle nicht gespeicherten Diagrammdaten werden verloren.",
+        "beforeunload": "Sind Sie sicher, dass Sie SilverDecisions schließen möchten? Alle nicht gespeicherten Diagrammdaten werden verloren."
+    },
+    "error":{
+        "jsonParse": "Fehler beim Analysieren der Datei!",
+        "fileApiNotSupported":"Die Datei-API wird in diesem Browser noch nicht unterstützt.",
+        "inputFilesProperty":"Ihr Browser scheint die `files`-Eigenschaft der Dateieingaben nicht zu unterstützen.",
+        "notSilverDecisionsFile":"Keine SilverDecisions-Datei!",
+        "incorrectVersionFormat": "Falsches Format der Versionszeichenfolge!",
+        "fileVersionNewerThanApplicationVersion": "Version der Datei ist neuer als Version des Softwares. Einige Funktionen möglicherweise fehlen.",
+        "objectiveComputationFailure": "Fehler beim Berechnen von Objektiven!",
+        "diagramDrawingFailure": "Fehler beim Zeichnen des Diagramms!",
+        "malformedData":"Fehler beim Lesen der Baumdaten!",
+        "pngExportNotSupported": "Der Export nach PNG wird in Ihrem Browser nicht unterstützt.",
+        "pngExportNotSupportedIE": "Der Export nach PNG wird in Internet Explorer nicht unterstützt.",
+        "svgExportNotSupported": "Der Export nach SVG wird in Ihrem Browser nicht unterstützt.",
+        "pdfExportNotSupported": "Der Export nach PDF wird in Ihrem Browser nicht unterstützt.",
+        "incorrectPayoffNumberFormatOptions": "Falsche Auszahlungsformat Optionen",
+        "incorrectProbabilityNumberFormatOptions": "Falsche Wahrscheinlichkeitsformat Optionen",
+        "incorrectNumberFormatOptions": "Falsche Zahlenformat, die Standardeinstellungen angewendet.",
+        "jsPDFisNotIncluded": "jsPDF ist nicht enthalten!",
+        "serverSideExportRequestFailure": "Export Server Anfrage fehlgeschlagen!"
     }
-  },
-  "confirm":{
-    "newDiagram": "Möchten Sie das aktuelle Diagramm wirklich löschen? Alle nicht gespeicherten Daten werden verloren.",
-    "openDiagram": "Sind Sie sicher? Alle nicht gespeicherten Diagrammdaten werden verloren.",
-    "beforeunload": "Sind Sie sicher, dass Sie SilverDecisions schließen möchten? Alle nicht gespeicherten Diagrammdaten werden verloren."
-  },
-  "error":{
-    "jsonParse": "Fehler beim Analysieren der Datei!",
-    "fileApiNotSupported":"Die Datei-API wird in diesem Browser noch nicht unterstützt.",
-    "inputFilesProperty":"Ihr Browser scheint die `files`-Eigenschaft der Dateieingaben nicht zu unterstützen.",
-    "notSilverDecisionsFile":"Keine SilverDecisions-Datei!",
-    "incorrectVersionFormat": "Falsches Format der Versionszeichenfolge!",
-    "fileVersionNewerThanApplicationVersion": "Version der Datei ist neuer als Version des Softwares. Einige Funktionen möglicherweise fehlen.",
-    "objectiveComputationFailure": "Fehler beim Berechnen von Objektiven!",
-    "diagramDrawingFailure": "Fehler beim Zeichnen des Diagramms!",
-    "malformedData":"Fehler beim Lesen der Baumdaten!",
-    "pngExportNotSupported": "Der Export nach PNG wird in Ihrem Browser nicht unterstützt.",
-    "pngExportNotSupportedIE": "Der Export nach PNG wird in Internet Explorer nicht unterstützt.",
-    "svgExportNotSupported": "Der Export nach SVG wird in Ihrem Browser nicht unterstützt.",
-    "pdfExportNotSupported": "Der Export nach PDF wird in Ihrem Browser nicht unterstützt.",
-    "incorrectPayoffNumberFormatOptions": "Falsche Auszahlungsformat Optionen",
-    "incorrectProbabilityNumberFormatOptions": "Falsche Wahrscheinlichkeitsformat Optionen",
-    "incorrectNumberFormatOptions": "Falsche Zahlenformat, die Standardeinstellungen angewendet.",
-    "jsPDFisNotIncluded": "jsPDF ist nicht enthalten!",
-    "serverSideExportRequestFailure": "Export Server Anfrage fehlgeschlagen!"
-  }
 }

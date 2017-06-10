@@ -15,6 +15,14 @@
             "tree": "Albero",
             "cluster": "Grappolo"
         },
+        "viewMode": {
+            "label": "Vista",
+            "options": {
+                "criterion1":"Criterio 1",
+                "criterion2":"Criterio 2",
+                "twoCriteria":"Due criteri"
+            }
+        },
         "objectiveRule":{
             "label": "Regola",
             "options": {
@@ -78,6 +86,41 @@
         },
         "text":{
             "delete": "Cancella"
+        }
+    },
+    "leagueTableDialog":{
+        "title": "Classifica",
+        "buttons": {
+            "downloadCsv": "Scarica CSV"
+        }
+    },
+    "leagueTable": {
+        "headers":{
+            "policyNo": "Regola #",
+            "policy": "Regola",
+            "comment": "Commento"
+        },
+        "comment":{
+            "dominatedBy": "dominata (da #{{policy}})",
+            "extendedDominatedBy": "estesa-dominata (da #{{policy1}} e #{{policy2}})",
+            "incratio": "rapporto incrementale={{incratio}}"
+        },
+        "plot":{
+            "groups":{
+                "highlighted": "Evidenziato",
+                "extended-dominated" : "Estesa-dominata",
+                "dominated": "Dominata",
+                "default": "Altro"
+            },
+            "tooltip":{
+                "gradientArrow1": "Direzione di {{name}} ottimizzazione",
+                "gradientArrow2": "Direzione di {{name}} ottimizzazione",
+                "dominatedRegion": "Regione dominata"
+            },
+            "legend":{
+                "dominatedRegion": "L'area grigia evidenzia la regione dominata",
+                "gradientArrows": "Le frecce indicano la direzione di miglioramento"
+            }
         }
     },
     "sensitivityAnalysisDialog":{
@@ -177,8 +220,12 @@
                 "largeScenariosNumber": "Numero di scenari definiti più grandi di {{numberFormatted}}. Analisi di sensibilità potrebbe non riuscire o essere molto lenta."
             }
         },
+        "league-table":{
+            "name": "Classifica"
+        },
         "errors":{
-            "generic": "Errore nei calcoli di analisi di sensibilità: {{message}}"
+            "generic": "Errore nei calcoli di analisi di sensibilità: {{message}}",
+            "params": "{{jobName}} parameteri errati"
         }
     },
     "settingsDialog":{
@@ -314,6 +361,17 @@
                 "marginTop": "Margine superiore"
             }
         },
+        "leagueTable": {
+            "title": "Classifica",
+            "plot": {
+                "title": "Grafico",
+                "maxWidth": "Larghezza massima",
+                "highlightedColor": "Colore evidenziato della regola",
+                "extendedDominatedColor": "Colori della regola dominata estesa",
+                "dominatedColor": "Colore della denominata regola",
+                "defaultColor": "Altri criteri colore"
+            }
+        },
         "other":{
             "title": "Altro",
             "disableAnimations": "Disabilita animazione",
@@ -366,6 +424,20 @@
         },
         "evaluatedVariables": "Variabili valutate"
     },
+    "multipleCriteria":{
+        "header": "Criteri multipli",
+        "defaultMaximizedCriterionName": "Effetto",
+        "defaultMinimizedCriterionName": "Costo",
+        "nameOfCriterion1": "Nome del criterio 1",
+        "nameOfCriterion2": "Nome del criterio 2",
+        "defaultCriterion1Weight": "Predefinito 1° peso criterio",
+        "weightLowerBound": "Peso inferiore limitato",
+        "weightUpperBound": "Peso superiore del limite",
+        "buttons":{
+            "showLeagueTable" : "Mostra la classifica",
+            "flip": "Ribalta"
+        }
+    },
     "layoutOptions":{
         "header": "Disposizione",
         "marginHorizontal": "Margine orizzontale",
@@ -411,10 +483,10 @@
     },
     "tooltip":{
         "node":{
-      "payoff": {
-        "default": "Saldo {{number}}",
-        "named": "{{name}}"
-      },
+            "payoff": {
+                "default": "Saldo {{number}}",
+                "named": "{{name}}"
+            },
             "aggregatedPayoff": {
                 "default": "Saldo aggregato {{number}}",
                 "named": "Aggregato {{name}}"
@@ -422,10 +494,10 @@
             "probabilityToEnter": "Probabilità da inserire"
         },
         "edge":{
-      "payoff": {
-        "default": "Saldo {{number}}: {{value}}",
-        "named": "{{name}}: {{value}}"
-      },
+            "payoff": {
+                "default": "Saldo {{number}}: {{value}}",
+                "named": "{{name}}: {{value}}"
+            },
             "probability": "Probabilità: {{value}}"
         }
     },
