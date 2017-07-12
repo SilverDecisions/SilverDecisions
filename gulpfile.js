@@ -15,6 +15,7 @@ var p = require('./package.json'),
 stringify = require('stringify');
 
 var Server = require('karma').Server;
+var runSequence = require('run-sequence');
 
 /* nicer browserify errors */
 var gutil = require('gulp-util');
@@ -53,7 +54,6 @@ vendorDependencies.push(...nestedDependencies);
 
 var sdDependencies = [];
 
-
 for(var k in p.dependencies){
     if(p.dependencies.hasOwnProperty(k)){
         dependencies.push(k);
@@ -91,20 +91,23 @@ gulp.task('build-vendor-css', function () {
     return buildCss(projectName+"-vendor", './vendor/css/*', './dist');
 });
 
-function buildCss(fileName, src, dest) {
-    var pipe = gulp.src(src)
-        .pipe(plugins.plumber({errorHandler: onError}))
+function buildCss(fileName, src, dest, failOnError) {
+    var pipe = gulp.src(src);
+
+    if(!failOnError){
+        pipe = pipe.pipe(plugins.plumber({ errorHandler: onError }))
+    }
+
+    return pipe.pipe(plugins.plumber({errorHandler: (err)=>onError(err,failOnError)}))
         .pipe(plugins.sass())
         .pipe(plugins.concat(fileName + '.css'))
         .pipe(gulp.dest(dest))
         .pipe(plugins.minifyCss())
         .pipe(plugins.rename({extname: '.min.css'}))
         .pipe(gulp.dest(dest));
-
-    return pipe;
 }
 
-function buildJs(src, standaloneName,  jsFileName, dest, external) {
+function buildJs(src, standaloneName,  jsFileName, dest, external, failOnError) {
     if(!external){
         external = []
     }
@@ -122,30 +125,34 @@ function buildJs(src, standaloneName,  jsFileName, dest, external) {
         // .plugin(resolutions, '*')
         .external(external)
 
-    return finishBrowserifyBuild(b,jsFileName, dest)
+    return finishBrowserifyBuild(b,jsFileName, dest, failOnError)
 }
 
-function buildJsDependencies(jsFileName, moduleNames, dest){
+function buildJsDependencies(jsFileName, moduleNames, dest, failOnError){
     var b = browserify({
         debug: true,
         require: [moduleNames]
     })
 
-    return finishBrowserifyBuild(b, jsFileName, dest)
+    return finishBrowserifyBuild(b, jsFileName, dest, failOnError)
 }
 
-function finishBrowserifyBuild(b, jsFileName, dest){
+function finishBrowserifyBuild(b, jsFileName, dest, failOnError){
     var pipe = b
         .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign", "transform-object-rest-spread", "transform-es2015-spread", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
-        .bundle()
-        .on('error', map_error)
-        .pipe(plugins.plumber({ errorHandler: onError }))
-        .pipe(source(jsFileName+'.js'))
+        .bundle();
+
+    if(!failOnError){
+        pipe = pipe.on('error', map_error )
+            .pipe(plugins.plumber({ errorHandler: onError }))
+    }
+
+    pipe = pipe.pipe(source(jsFileName+'.js'))
         .pipe(gulp.dest(dest))
         .pipe(buffer());
     var development = (argv.dev === undefined) ? false : true;
     if(!development){
-        pipe.pipe(sourcemaps.init({loadMaps: true}))
+        pipe = pipe.pipe(sourcemaps.init({loadMaps: true}))
         // .pipe(plugins.stripDebug())
             .pipe(plugins.uglify({
                 compress: {
@@ -161,9 +168,17 @@ function finishBrowserifyBuild(b, jsFileName, dest){
 }
 
 gulp.task('build-app', ['build-config'], function () {
-    var jsFileName =  projectName;
-    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist", dependencies)
+    return buildApp(true)
 });
+
+gulp.task('build-app-watch', ['build-config'], function () {
+    return buildApp(false)
+});
+
+function buildApp(failOnError){
+    var jsFileName =  projectName;
+    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist", dependencies, failOnError)
+}
 
 gulp.task('build-core', function () {
     return buildJsDependencies("silver-decisions-core", sdDependencies, "dist")
@@ -173,24 +188,22 @@ gulp.task('build-vendor', function () {
     return buildJsDependencies("silver-decisions-vendor", vendorDependencies, "dist")
 });
 
-gulp.task('build-clean', ['clean'], function () {
-    return gulp.start('build');
+gulp.task('build-clean', function (cb) {
+    return runSequence('clean', 'build', cb);
 });
 
 gulp.task('build', ['build-css', 'build-app', 'build-core', 'build-vendor'], function () {
-    // var development = (argv.dev === undefined) ? false : true;
-    // if(!development){
-    //     return generateDocs();
-    // }
+
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json'], ['build-app']);
+    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json'], ['build-app-watch']);
     gulp.watch(['./src/styles/*.*css'], ['build-app-css']);
     gulp.watch(['./node_modules/sd-computations/src/**/*.js', './node_modules/sd-model/src/**/*.js', './node_modules/sd-utils/src/**/*.js'], ['build-core']);
 });
 
-gulp.task('default', ['build-clean'],  function() {
+gulp.task('default',  function(cb) {
+    return runSequence('build-clean', 'docs-gen', 'test', cb);
 });
 
 gulp.task('build-templates', function () {
