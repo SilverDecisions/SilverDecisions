@@ -637,7 +637,7 @@ export class App {
     }
 
 
-    recompute(updateView = true, debounce = false) {
+    recompute(updateView = true, debounce = false, forceWhenAutoIsDisabled=true) {
         if (debounce) {
             if (!this.debouncedRecompute) {
                 this.debouncedRecompute = Utils.debounce((updateView)=>this.recompute(updateView, false), 200);
@@ -646,12 +646,20 @@ export class App {
             return;
         }
 
-        return this.checkValidityAndRecomputeObjective(false, true, true, true).then(()=> {
+        return this.checkValidityAndRecomputeObjective(false, true, true, forceWhenAutoIsDisabled).then(()=> {
             if (updateView) {
                 this.updateView();
             }
         });
 
+    }
+
+    onRawOptionChanged(){
+        if(this.isAutoRecalculationEnabled()){
+            return this.checkValidityAndRecomputeObjective(false, false).then(()=> {
+                this.updateView();
+            })
+        }
     }
 
     isAutoRecalculationEnabled(){

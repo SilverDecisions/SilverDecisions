@@ -167,7 +167,6 @@ export class SettingsDialog extends Dialog{
 
 
 
-
         var otherGroup = new FormGroup('other', ()=>app.treeDesigner.redraw());
         otherGroup
             .addField('disableAnimations', 'checkbox', app.treeDesigner, 'config.disableAnimations')
@@ -175,7 +174,13 @@ export class SettingsDialog extends Dialog{
             .addField('hideLabels', 'checkbox', app.treeDesigner, 'config.hideLabels')
             .addField('hidePayoffs', 'checkbox', app.treeDesigner, 'config.hidePayoffs')
             .addField('hideProbabilities', 'checkbox', app.treeDesigner, 'config.hideProbabilities')
-            .addField('raw', 'checkbox', app.treeDesigner, 'config.raw');
+            .addField({
+                name: 'raw',
+                type: 'checkbox',
+                config: app.treeDesigner,
+                path: 'config.raw',
+                valueUpdateCallback: ()=>app.onRawOptionChanged()
+            });
 
         this.formGroups.push(otherGroup);
 
@@ -274,12 +279,28 @@ export class FormGroup{
         return this;
     }
 
+    addField(fieldConfig){
+        if(arguments.length>1){
+            return this._addField(...arguments);
+        }
 
-    addField(name, type, config, path, validator, options){
+        return this._addField(fieldConfig['name'], fieldConfig['type'], fieldConfig['config'], fieldConfig['path'], fieldConfig['validator'],
+                                fieldConfig['options'], fieldConfig['valueUpdateCallback'])
+    }
+
+    _addField(name, type, config, path, validator, options, valueUpdateCallback){
         var fieldId = this.name+"-"+name;
         var label = i18n.t("settingsDialog."+this.name+"."+name);
         var configInputField = new ConfigInputField(fieldId,fieldId, type,label, config, path, validator, options);
-        configInputField.valueUpdateCallback = this.valueUpdateCallback;
+        if(valueUpdateCallback){
+            configInputField.valueUpdateCallback =  ()=>{
+                this.valueUpdateCallback();
+                valueUpdateCallback();
+            };
+        }else{
+            configInputField.valueUpdateCallback =  this.valueUpdateCallback;
+        }
+
         this.fields.push(configInputField);
         return this;
     }
