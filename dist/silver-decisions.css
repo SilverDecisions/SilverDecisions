@@ -345,9 +345,11 @@
       min-width: 200px;
       max-width: 200px;
       overflow: hidden;
-      padding: 5px 0; }
+      padding: 5px 0;
+      display: flex; }
       #silver-decisions #main-region #sd-sidebar #sd-sidebar-inner {
-        height: 100%;
+        height: inherit;
+        width: 100%;
         overflow: auto;
         padding: 0 5px; }
         #silver-decisions #main-region #sd-sidebar #sd-sidebar-inner::-webkit-scrollbar {

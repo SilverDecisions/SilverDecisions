@@ -105,9 +105,11 @@
       max-width: $sidebar-width;
       overflow: hidden;
       padding: 5px 0;
+      display: flex;
 
       #sd-sidebar-inner {
-        height: 100%;
+        height: inherit;
+        width: 100%;
         overflow: auto;
         @include scrollbar-mixin();
         padding: 0 5px;
