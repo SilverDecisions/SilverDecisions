@@ -208,6 +208,8 @@ export class LeagueTablePlot extends ScatterPlot {
                 .attr("stroke-width", 2)
                 .attr("stroke", 'black')
                 .attr("d", d3.line()([defLowPoint, defHighPoint]))
+        } else{
+            linesContainer.select("path." + this.prefixClass('default-incratio')).remove()
         }
 
 
