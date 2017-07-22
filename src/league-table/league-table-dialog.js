@@ -75,6 +75,7 @@ export class LeagueTableDialog extends Dialog {
         let config = {
             maxWidth: self.app.config.leagueTable.plot.maxWidth,
             weightLowerBound: result.weightLowerBound,
+            defaultWeight: result.defaultWeight,
             weightUpperBound: result.weightUpperBound,
             payoffCoeffs: result.payoffCoeffs,
             payoffNames: result.payoffNames,
@@ -98,11 +99,21 @@ export class LeagueTableDialog extends Dialog {
                 }
                 return 'black'
             },
+            groupOrdering: {
+                'dominated': 0,
+                'extended-dominated': 1,
+                'highlighted': 2,
+                'highlighted-default': 3,
+                'default': 4
+
+            },
             groups: {
                 value: function (r) {
-                    if (r.optimal) {
+                    if (r.optimalForDefaultWeight) {
+                        return 'highlighted-default'
+                    } else if (r.optimal) {
                         return 'highlighted'
-                    } else if (r.dominatedBy !== null) {
+                    }  else if (r.dominatedBy !== null) {
                         return 'dominated'
                     } else if (r.extendedDominatedBy !== null) {
                         return 'extended-dominated'
@@ -140,6 +151,7 @@ export class LeagueTableDialog extends Dialog {
         this.jobParameters = this.job.createJobParameters({
             ruleName: this.computationsManager.getCurrentRule().name,
             weightLowerBound: this.app.dataModel.weightLowerBound,
+            defaultWeight: this.app.dataModel.defaultCriterion1Weight,
             weightUpperBound: this.app.dataModel.weightUpperBound,
 
         });

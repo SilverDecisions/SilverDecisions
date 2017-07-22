@@ -1170,6 +1170,10 @@ div.sd-job-result-table{
       }*/
     }
 
+    &.sd-highlighted-default{
+      background-color: rgba(136, 223, 121, 0.22);
+    }
+
     &.sd-emphasized{
       border-left: 3px solid #2b2b2b;
       border-right: 3px solid #2b2b2b;

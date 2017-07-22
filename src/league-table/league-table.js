@@ -115,6 +115,7 @@ export class LeagueTable {
                 self.config.onRowSelected(d, i)
             })
             .classed('sd-highlighted', d=>d.row.optimal)
+            .classed('sd-highlighted-default', d=>d.row.optimalForDefaultWeight)
             .attr('id', d => 'sd-league-table-row-'+d.row.id);
 
         rowsMerge.on("mouseover.onRowHover", this.config.onRowHover);

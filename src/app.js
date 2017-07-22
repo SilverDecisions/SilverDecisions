@@ -86,6 +86,9 @@ export class AppConfig {
                 'highlighted': {
                     color: '#008000'
                 },
+                'highlighted-default': {
+                    color: '#00bd00'
+                },
                 'extended-dominated': {
                     color: '#ffa500'
                 },
@@ -442,9 +445,9 @@ export class App {
         var p = Promise.resolve();
         if (fieldName === 'defaultCriterion1Weight') {
             p = p.then(()=>this.checkValidityAndRecomputeObjective());
-        }else{
-            this.sidebar.updateMultipleCriteria();
         }
+        this.sidebar.updateMultipleCriteria();
+
         return p.then(()=> {
             setTimeout(function () {
                 self.treeDesigner.redraw(true);

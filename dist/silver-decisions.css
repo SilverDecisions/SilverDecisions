@@ -186,6 +186,9 @@
   stroke: #424242;
   fill: #424242; }
 
+.sd-league-table-plot .odc-middle-incratio, .sd-league-table-plot .odc-low-incratio, .sd-league-table-plot .odc-high-incratio {
+  stroke-dasharray: 5 3; }
+
 
 /* The Modal (background) */
 .sd-modal {
@@ -1060,6 +1063,8 @@ div.sd-job-result-table.sd-probabilistic-sensitivity-analysis .pvtTotalLabel, di
     /* &:hover{
         background-color: rgba(136, 223, 121, 0.55);
       }*/ }
+  .sd-league-table tbody tr.sd-highlighted-default {
+    background-color: rgba(136, 223, 121, 0.22); }
   .sd-league-table tbody tr.sd-emphasized {
     border-left: 3px solid #2b2b2b;
     border-right: 3px solid #2b2b2b;

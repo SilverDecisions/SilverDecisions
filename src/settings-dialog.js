@@ -159,6 +159,7 @@ export class SettingsDialog extends Dialog{
             .addGroup('plot')
             .addField('maxWidth', 'text', app, 'config.leagueTable.plot.maxWidth')
             .addField('highlightedColor', 'color', app, 'config.leagueTable.plot.groups.highlighted.color')
+            .addField('highlightedDefaultColor', 'color', app, 'config.leagueTable.plot.groups.highlighted-default.color')
             .addField('extendedDominatedColor', 'color', app, 'config.leagueTable.plot.groups.extended-dominated.color')
             .addField('dominatedColor', 'color', app, 'config.leagueTable.plot.groups.dominated.color')
             .addField('defaultColor', 'color', app, 'config.leagueTable.plot.groups.default.color');
