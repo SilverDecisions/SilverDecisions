@@ -10,6 +10,7 @@ import {Exporter} from "./exporter";
 import {SensitivityAnalysisJobResultTable} from "./jobs/sensitivity-analysis-result-table";
 import {ProbabilisticSensitivityAnalysisJobResultTable} from "./jobs/probabilistic-sensitivity-analysis-result-table";
 import {Policy} from "sd-computations/src/policies/policy";
+import {TornadoDiagramPlot} from "./jobs/tornado-diagram-plot";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;
@@ -30,6 +31,7 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.progressBarContainer = this.container.select(".sd-job-progress-bar-container");
         this.progressBar = this.progressBarContainer.select(".sd-progress-bar");
         this.jobResultsContainer = this.container.select(".sd-sensitivity-analysis-job-results");
+        this.jobResultPlotContainer = this.jobResultsContainer.select(".sd-job-result-plot-container");
 
         this.debouncedCheckWarnings = Utils.debounce(()=>this.checkWarnings(), 200);
 
@@ -127,6 +129,17 @@ export class SensitivityAnalysisDialog extends Dialog {
             return isValidArray;
         };
 
+        let largeScenariosNumberWarning = {
+            name: 'largeScenariosNumber',
+            data: {
+                number: 10000,
+                numberFormatted: "10,000"
+            },
+            check: function (jobParameters) { // called with this set to warning config object
+                let combinations = jobParameters.values.variables.map(v => v.length).reduce((a, b) => a * (b || 1), 1);
+                return combinations > this.data.number
+            }
+        };
         this.jobConfigurations.push({
             jobName: 'sensitivity-analysis',
             customParamsConfig: {
@@ -177,17 +190,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                 }
             },
             warnings: [
-                {
-                    name: 'largeScenariosNumber',
-                    data: {
-                        number: 10000,
-                        numberFormatted: "10,000"
-                    },
-                    check: function (jobParameters) { // called with this set to warning config object
-                        let combinations = jobParameters.values.variables.map(v => v.length).reduce((a, b) => a * (b || 1), 1);
-                        return combinations > this.data.number
-                    }
-                },
+                largeScenariosNumberWarning,
                 {
                     name: 'largeParametersNumber',
                     data: {
@@ -199,18 +202,57 @@ export class SensitivityAnalysisDialog extends Dialog {
                 }
             ]
         });
-        /*this.jobConfigurations.push({
-         jobName: 'tornado-diagram',
-         customParamsConfig: {
-         'id': {
-         hidden: true
-         },
-         'ruleName': {
-         value: this.computationsManager.getCurrentRule().name,
-         hidden: true
-         }
-         }
-         });*/
+        this.jobConfigurations.push({
+            jobName: 'tornado-diagram',
+            customParamsConfig: {
+                'id': {
+                    // value: undefined, //leave default,
+                    hidden: true
+                },
+                'failOnInvalidTree': {
+                    value: true,
+                    hidden: true
+                },
+                'ruleName': {
+                    value: this.computationsManager.getCurrentRule().name,
+                    hidden: true
+                },
+                variables: {
+                    name: {
+                        options: this.getGlobalVariableNames()
+                    },
+                    _derivedValues:[
+                        {
+                            name: "step",
+                            value: (variable)=>{
+                                if(variable.max == undefined || variable.max==null) {
+                                    return "";
+                                }
+                                if(variable.min == undefined || variable.min==null) {
+                                    return "";
+                                }
+                                if(variable.length == undefined || variable.length==null || variable.length < 2) {
+                                    return "";
+                                }
+                                if(variable.min > variable.max){
+                                    return ""
+                                }
+
+                                try{
+                                    return ExpressionEngine.toFloat(ExpressionEngine.divide(ExpressionEngine.subtract(variable.max, variable.min), variable.length-1))
+                                }catch(e){
+                                    return "";
+                                }
+                            }
+                        }
+
+                    ],
+                    customValidator: customVariablesValidator
+
+                }
+            },
+            warnings: [largeScenariosNumberWarning]
+        });
 
         this.jobConfigurations.push({
             jobName: 'probabilistic-sensitivity-analysis',
@@ -237,18 +279,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                     customValidator: customVariablesValidator
                 }
             },
-            warnings: [
-                {
-                    name: 'largeScenariosNumber',
-                    data: {
-                        number: 10000,
-                        numberFormatted: "10,000"
-                    },
-                    check: function (jobParameters) { // called with this set to warning config object
-                        return jobParameters.values.numberOfRuns > this.data.number
-                    }
-                }
-            ]
+            warnings: [largeScenariosNumberWarning]
         });
 
     }
@@ -442,7 +473,10 @@ export class SensitivityAnalysisDialog extends Dialog {
             this.resultTable.hide();
 
         }
-
+        if(this.resultPlots){
+            this.resultPlots.forEach(p=>p.destroy())
+            this.jobResultPlotContainer.selectAll("*").remove();
+        }
     }
 
     onJobStarted() {
@@ -481,7 +515,43 @@ export class SensitivityAnalysisDialog extends Dialog {
         log.debug(result);
         this.result = result;
         this.initResultTable(result);
+        if (this.job.name === "tornado-diagram") {
+            this.initResultPlot(result);
+        }
 
+
+    }
+
+    initResultPlot(result) {
+        let self = this;
+        this.resultPlots = [];
+
+        result.policies.forEach((policy, index) => {
+
+            let container = this.jobResultPlotContainer.selectOrAppend("div.sd-result-plot-container-"+index);
+
+            let config = {
+                policyIndex: index,
+                maxWidth: self.app.config.leagueTable.plot.maxWidth,
+            };
+
+            let resultPlot = new TornadoDiagramPlot(container.node(), result, config);
+            this.resultPlots.push(resultPlot);
+
+            setTimeout(function () {
+                resultPlot.init()
+            }, 100)
+        });
+
+
+
+    }
+
+    onResized() {
+        if (this.resultPlots) {
+            this.resultPlots.forEach(p=>p.init());
+
+        }
     }
 
     terminateJob() {

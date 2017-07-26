@@ -192,6 +192,40 @@
                 "largeParametersNumber": "Number of parameters larger than {{number}}. Sensitivity analysis display might fail or be very slow."
             }
         },
+        "tornado-diagram":{
+            "name": "Tornado diagram",
+            "param":{
+                "ruleName": "Rule name",
+                "extendedPolicyDescription": {
+                    "label": "Extended policy description"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "min": {
+                        "label": "Min"
+                    },
+                    "max": {
+                        "label": "Max"
+                    },
+                    "length": {
+                        "label": "Length"
+                    },
+                    "step": {
+                        "label": "Step"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Error in sensitivity analysis computations for the following parameters:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow.",
+                "largeParametersNumber": "Number of parameters larger than {{number}}. Sensitivity analysis display might fail or be very slow."
+            }
+        },
         "probabilistic-sensitivity-analysis":{
             "name": "Probabilistic sensitivity analysis",
             "param":{

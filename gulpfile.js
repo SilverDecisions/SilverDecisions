@@ -43,6 +43,7 @@ var nestedDependencies = [
     'pivottable/dist/pivot.fr',
     'pivottable/dist/pivot.pl',
     'odc-d3/src/scatterplot',
+    'odc-d3/src/diverging-stacked-bar-chart',
     'sd-computations/src/validation/mcdm-weight-value-validator'
 
 ];

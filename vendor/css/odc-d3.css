@@ -88,6 +88,22 @@
 .odc-correlation-matrix .odc-legend text {
   font-size: 11px; }
 
+.odc-diverging-stacked-bar-chart {
+  background-color: white;
+  font-size: 11px;
+  height: 100%; }
+  .odc-diverging-stacked-bar-chart .odc-axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges; }
+  .odc-diverging-stacked-bar-chart .odc-axis line {
+    shape-rendering: crispEdges;
+    stroke: #eaeaea; }
+  .odc-diverging-stacked-bar-chart .odc-axis.odc-no-guides line {
+    stroke: #a1a1a1; }
+  .odc-diverging-stacked-bar-chart .odc-middle-line {
+    stroke: black; }
+
 .odc-heatmap .odc-label {
   font-size: 11px; }
 
