@@ -11,7 +11,7 @@ export class TornadoDiagramPlotConfig extends DivergingStackedBarChartConfig {
     showLegend = true;
     forceLegend = true;
 
-    categoryNames = ["Low", "High"];
+    categoryNames = [i18n.t("job.tornado-diagram.plot.legend.low"), i18n.t("job.tornado-diagram.plot.legend.high")];
     colorRange = ["#4f81bd", "#9bbb59"];
     policyIndex = 0;
 
@@ -46,13 +46,13 @@ export class TornadoDiagramPlot extends DivergingStackedBarChart {
         this.config.middleValue = data.defaultPayoff;
         this.config.title = Policy.toPolicyString(data.policies[this.config.policyIndex]);
         return super.setData(data.rows.map(r=>{
-
             return {
                 key: r.variableName,
                 values: [
                     data.defaultPayoff - r.extents[this.config.policyIndex][0],
                     r.extents[this.config.policyIndex][1] - data.defaultPayoff
-                ]
+                ],
+                categories: r.extentVariableValues[this.config.policyIndex][0] <= r.extentVariableValues[this.config.policyIndex][1] ? [0, 1] : [1, 0]
             }
         }))
     }

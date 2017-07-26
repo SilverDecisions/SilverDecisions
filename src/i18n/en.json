@@ -224,6 +224,12 @@
             "warnings": {
                 "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow.",
                 "largeParametersNumber": "Number of parameters larger than {{number}}. Sensitivity analysis display might fail or be very slow."
+            },
+            "plot":{
+                "legend":{
+                    "low": "Low",
+                    "high": "High"
+                }
             }
         },
         "probabilistic-sensitivity-analysis":{

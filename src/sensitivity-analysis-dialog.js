@@ -202,6 +202,8 @@ export class SensitivityAnalysisDialog extends Dialog {
                 }
             ]
         });
+
+
         this.jobConfigurations.push({
             jobName: 'tornado-diagram',
             customParamsConfig: {
@@ -251,7 +253,17 @@ export class SensitivityAnalysisDialog extends Dialog {
 
                 }
             },
-            warnings: [largeScenariosNumberWarning]
+            warnings: [{
+                name: 'largeScenariosNumber',
+                data: {
+                    number: 10000,
+                    numberFormatted: "10,000"
+                },
+                check: function (jobParameters) { // called with this set to warning config object
+                    let combinations = jobParameters.values.variables.map(v => v.length).reduce((a, b) => a + b, 0);
+                    return combinations > this.data.number
+                }
+            }]
         });
 
         this.jobConfigurations.push({
