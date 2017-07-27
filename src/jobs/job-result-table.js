@@ -66,14 +66,20 @@ export class JobResultTable {
                 },
                 heatmap: {
                     colorScaleGenerator: function (values) {
-                        var extent = d3.extent(values)
-                        var domain = [];
-                        var min = Math.min(0, extent[0] || 0);
-                        var max = Math.max(0, extent[1] || 0);
+                        let extent = d3.extent(values);
+                        let domain = [];
+                        let range = [];
+                        if (extent[0] * extent[1] >= 0) {
+                            range = ["#FFF", "#FF0000"];
+                            domain = extent;
+                        } else {
+                            range = ["#4b53ff", "#FFF", "#FF0000"];
+                            domain = [extent[0], 0, extent[1]];
+                        }
 
                         return d3.scaleLinear()
-                            .domain([min, 0, max])
-                            .range(["#4b53ff", "#FFF", "#FF0000"])
+                            .domain(domain)
+                            .range(range)
                     }
                 }
             },
