@@ -105,9 +105,11 @@
       max-width: $sidebar-width;
       overflow: hidden;
       padding: 5px 0;
+      display: flex;
 
       #sd-sidebar-inner {
-        height: 100%;
+        height: inherit;
+        width: 100%;
         overflow: auto;
         @include scrollbar-mixin();
         padding: 0 5px;
@@ -1166,6 +1168,10 @@ div.sd-job-result-table{
      /* &:hover{
         background-color: rgba(136, 223, 121, 0.55);
       }*/
+    }
+
+    &.sd-highlighted-default{
+      background-color: rgba(136, 223, 121, 0.22);
     }
 
     &.sd-emphasized{

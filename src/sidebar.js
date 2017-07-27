@@ -179,7 +179,6 @@ export class Sidebar {
         this.multipleCriteriaFields = [];
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion1', 'nameOfCriterion1', 'text', i18n.t('multipleCriteria.nameOfCriterion1'), new PathValueAccessor(self.app.dataModel, 'payoffNames[0]'), new RequiredInputValidator()));
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-nameOfCriterion2', 'nameOfCriterion2', 'text', i18n.t('multipleCriteria.nameOfCriterion2'), new PathValueAccessor(self.app.dataModel, 'payoffNames[1]'), new RequiredInputValidator()));
-        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'), new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'), new McdmWeightValueValidator(), null, weightParser));
         let lowerBoundValueAccessor = new PathValueAccessor(self.app.dataModel, 'weightLowerBound');
         let upperBoundValueAccessor = new PathValueAccessor(self.app.dataModel, 'weightUpperBound');
         let weightValueValidator = new McdmWeightValueValidator();
@@ -190,6 +189,15 @@ export class Sidebar {
                 let upper = upperBoundValueAccessor.get();
                 return weightValueValidator.validate(upper) ? ee.compare(v, upper) <= 0 : true
             }), null, weightParser));
+
+        this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-defaultCriterion1Weight', 'defaultCriterion1Weight', 'text', i18n.t('multipleCriteria.defaultCriterion1Weight'),
+            new PathValueAccessor(self.app.dataModel, 'defaultCriterion1Weight'),
+            new McdmWeightValueValidator(v => {
+                let upper = upperBoundValueAccessor.get();
+                let lower = lowerBoundValueAccessor.get();
+                return (weightValueValidator.validate(lower) ? ee.compare(v, lower) >= 0 : true) && (weightValueValidator.validate(upper) ? ee.compare(v, upper) <= 0 : true)
+            }), null, weightParser));
+
         this.multipleCriteriaFields.push(new InputField('sd-multiple-criteria-weightUpperBound', 'weightUpperBound', 'text', i18n.t('multipleCriteria.weightUpperBound'), upperBoundValueAccessor,
             new McdmWeightValueValidator(v => {
                 let lower = lowerBoundValueAccessor.get();

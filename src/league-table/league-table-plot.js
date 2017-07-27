@@ -12,7 +12,6 @@ export class LeagueTablePlotConfig extends ScatterPlotConfig {
     gradientArrowOffset = 10;
     payoffCoeffs = [1, 1];
     payoffNames = [];
-    extremeWeightThreshold = 9999999;
 
     showLegend = true;
     forceLegend = true;
@@ -51,7 +50,7 @@ export class LeagueTablePlot extends ScatterPlot {
 
     init(){
         super.init();
-        this.svg.classed('sd-league-table-plot', true)
+        this.svg.classed('sd-league-table-plot', true);
         this.initArrowMarker("triangle");
     }
 
@@ -73,10 +72,22 @@ export class LeagueTablePlot extends ScatterPlot {
 
     initPlot() {
         d3.select(this.baseContainer).style('max-width', this.config.maxWidth);
+        this.checkOrdering();
         super.initPlot();
     }
 
+    checkOrdering(){
+        if(this.config.groupOrdering){
+            let getOrdering  = d => {
+                let g = this.config.groups.value(d);
+                return this.config.groupOrdering[g] === undefined ? 999 : this.config.groupOrdering[g];
+            };
+            this.data.sort((a, b)=>getOrdering(a) - getOrdering(b));
+        }
+    }
+
     update(newData) {
+        this.checkOrdering();
         super.update(newData);
 
         this.updateIcerLines();
@@ -113,12 +124,10 @@ export class LeagueTablePlot extends ScatterPlot {
 
 
         let linePoints = this.plot.data.filter(d=>d.incratio !== null).sort(this.plot.x.map);
-        let highlightedPoints = this.plot.data.filter(d=>this.plot.groupValue(d) === 'highlighted').sort((a, b) => this.plot.x.map(a) - this.plot.x.map(b));
+        let highlightedPoints = this.plot.data.filter(d=>["highlighted", "highlighted-default"].indexOf(this.plot.groupValue(d)) !== -1).sort((a, b) => this.plot.x.map(a) - this.plot.x.map(b));
+        let highlightedDefaultPoints = highlightedPoints.filter(d=>["highlighted-default"].indexOf(this.plot.groupValue(d)) !== -1);
 
         this.dominatedRegionPoints = highlightedPoints.map(d=>[this.plot.x.map(d), this.plot.y.map(d)]);
-
-
-
 
         if (!highlightedPoints.length) {
             linesContainer.selectAll("*").remove();
@@ -179,6 +188,30 @@ export class LeagueTablePlot extends ScatterPlot {
             }
         }
 
+        if(highlightedDefaultPoints.length){
+            let defaultPoint = highlightedDefaultPoints[0];
+            let defLowPoint = infLowPoint;
+            let defHighPoint = infHighPoint;
+            if (this.config.defaultWeight !== Infinity) {
+                let x = this.config.payoffCoeffs[0] > 0 ? xAxisExtent[0] : xAxisExtent[1];
+                defLowPoint = [this.plot.x.scale(x), this.plot.y.scale(sign * this.config.defaultWeight * (this.plot.x.value(defaultPoint) - x) + this.plot.y.value(defaultPoint))];
+                x = this.config.payoffCoeffs[1] > 0 ? xAxisExtent[0] : xAxisExtent[1];
+                if(sign > 0){
+                    x = this.config.payoffCoeffs[1] < 0 ? xAxisExtent[0] : xAxisExtent[1];
+                }
+                defHighPoint = [this.plot.x.scale(x), this.plot.y.scale(-sign * this.config.defaultWeight * (x - this.plot.x.value(defaultPoint)) + this.plot.y.value(defaultPoint))];
+            }
+            linesContainer.selectOrAppend("path." + this.prefixClass('default-incratio'))
+                .attr("shape-rendering", "optimizeQuality")
+                .attr("fill", "none")
+                .attr("stroke-width", 2)
+                .attr("stroke", 'black')
+                .attr("d", d3.line()([defLowPoint, defHighPoint]))
+        } else{
+            linesContainer.select("path." + this.prefixClass('default-incratio')).remove()
+        }
+
+
         this.dominatedRegionPoints.unshift(lowPoint);
         this.dominatedRegionPoints.push(highPoint);
 
@@ -222,7 +255,6 @@ export class LeagueTablePlot extends ScatterPlot {
 
         //draw dominated region
 
-
         let worstPoint = [
             this.config.payoffCoeffs[0] < 0 ? self.plot.width : 0,
             this.config.payoffCoeffs[1] < 0 ? 0 : self.plot.height
@@ -230,8 +262,7 @@ export class LeagueTablePlot extends ScatterPlot {
 
         this.dominatedRegionPoints.push(worstPoint);
 
-        //TODO maybe change to some more precise check
-        if (this.config.weightLowerBound >= this.config.extremeWeightThreshold &&  this.config.weightUpperBound  >= this.config.extremeWeightThreshold) {
+        if(this.dominatedRegionPoints.some(p=>worstPoint[1] ? p[1] <=0 : p[1] >= self.plot.height)){
             this.dominatedRegionPoints.push([worstPoint[0], worstPoint[1] ? 0 : self.plot.height]);
         }
 

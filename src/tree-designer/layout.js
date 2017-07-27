@@ -3,6 +3,7 @@ import {domain as model} from 'sd-model'
 import * as d3 from '../d3'
 import circleSymbol from './symbols/circle'
 import triangleSymbol from './symbols/triangle'
+import {AppUtils} from "../app-utils";
 
 /*Tree layout manager*/
 export class Layout{
@@ -538,6 +539,12 @@ export class Layout{
         //         d3.select(this).attr('dy', h);
         //     });
         // },0);
+
+        if(AppUtils.isHidden(selection.node())){ // setting hanging position of hidden elements fails on firefox
+            return selection;
+        }
+
+
         selection.each(function(){
             var h =  this.getBBox().height;
             d3.select(this).attr('dy', '0.75em');

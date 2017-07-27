@@ -86,6 +86,9 @@ export class AppConfig {
                 'highlighted': {
                     color: '#008000'
                 },
+                'highlighted-default': {
+                    color: '#00bd00'
+                },
                 'extended-dominated': {
                     color: '#ffa500'
                 },
@@ -222,7 +225,7 @@ export class App {
             clearRepository: this.config.clearRepository
         }, this.dataModel);
         this.expressionEngine = this.computationsManager.expressionEngine;
-        return this.checkValidityAndRecomputeObjective(false, false, false);
+        return this.checkValidityAndRecomputeObjective(false, false, false, true);
 
     }
 
@@ -440,11 +443,11 @@ export class App {
     onMultiCriteriaUpdated(fieldName) {
         var self = this;
         var p = Promise.resolve();
-        if (fieldName == 'defaultCriterion1Weight') {
+        if (fieldName === 'defaultCriterion1Weight') {
             p = p.then(()=>this.checkValidityAndRecomputeObjective());
-        }else{
-            this.sidebar.updateMultipleCriteria();
         }
+        this.sidebar.updateMultipleCriteria();
+
         return p.then(()=> {
             setTimeout(function () {
                 self.treeDesigner.redraw(true);
@@ -637,7 +640,7 @@ export class App {
     }
 
 
-    recompute(updateView = true, debounce = false) {
+    recompute(updateView = true, debounce = false, forceWhenAutoIsDisabled=true) {
         if (debounce) {
             if (!this.debouncedRecompute) {
                 this.debouncedRecompute = Utils.debounce((updateView)=>this.recompute(updateView, false), 200);
@@ -646,7 +649,7 @@ export class App {
             return;
         }
 
-        return this.checkValidityAndRecomputeObjective(false, true).then(()=> {
+        return this.checkValidityAndRecomputeObjective(false, true, true, forceWhenAutoIsDisabled).then(()=> {
             if (updateView) {
                 this.updateView();
             }
@@ -654,7 +657,23 @@ export class App {
 
     }
 
-    checkValidityAndRecomputeObjective(allRules, evalCode = false, evalNumeric = true) {
+    onRawOptionChanged(){
+        if(this.isAutoRecalculationEnabled()){
+            return this.checkValidityAndRecomputeObjective(false, false).then(()=> {
+                this.updateView();
+            })
+        }
+    }
+
+    isAutoRecalculationEnabled(){
+        return !this.treeDesigner.config.raw;
+    }
+
+    checkValidityAndRecomputeObjective(allRules, evalCode = false, evalNumeric = true, forceWhenAutoIsDisabled=false) {
+        if(!forceWhenAutoIsDisabled && !this.isAutoRecalculationEnabled()){
+            return Promise.resolve();
+        }
+
         return this.computationsManager.checkValidityAndRecomputeObjective(allRules, evalCode, evalNumeric).then(()=> {
             this.updateValidationMessages();
             AppUtils.dispatchEvent('SilverDecisionsRecomputedEvent', this);
@@ -809,7 +828,7 @@ export class App {
 
     serialize(filterLocation, filterComputed) {
         var self = this;
-        return self.checkValidityAndRecomputeObjective(true, false, false).then(()=> {
+        return self.checkValidityAndRecomputeObjective(true, false, false, true).then(()=> {
             var obj = {
                 SilverDecisions: App.version,
                 buildTimestamp: App.buildTimestamp,

@@ -107,7 +107,8 @@
         },
         "plot":{
             "groups":{
-                "highlighted": "Highlighted",
+                "highlighted": "Recommended (for some WTP in range)",
+                "highlighted-default": "Recommended (for default WTP)",
                 "extended-dominated" : "Extended-dominated",
                 "dominated": "Dominated",
                 "default": "Other"
@@ -115,10 +116,10 @@
             "tooltip":{
                 "gradientArrow1": "Direction of {{name}} optimization",
                 "gradientArrow2": "Direction of {{name}} optimization",
-                "dominatedRegion": "Dominated region"
+                "dominatedRegion": "Not recommended region"
             },
             "legend":{
-                "dominatedRegion": "Grey area highlights dominated region",
+                "dominatedRegion": "Grey area highlights not recommended region",
                 "gradientArrows": "Arrows indicate improvement direction"
             }
         }
@@ -366,7 +367,8 @@
             "plot": {
                 "title": "Plot",
                 "maxWidth": "Max width",
-                "highlightedColor": "Highlighted policy color",
+                "highlightedColor": "Recommended (for some WTP in range) policy color",
+                "highlightedDefaultColor": "Recommended (for default WTP) policy color",
                 "extendedDominatedColor": "Extended dominated policy color",
                 "dominatedColor": "Dominated policy color",
                 "defaultColor": "Other policies color"

@@ -288,4 +288,15 @@ export class AppUtils {
         };
         xhr.send();
     }
+
+    static isHidden(el, exact = true) {
+        if(!el){
+            return true;
+        }
+        if(exact){
+            var style = window.getComputedStyle(el);
+            return (style.display === 'none')
+        }
+        return (el.offsetParent === null)
+    }
 }

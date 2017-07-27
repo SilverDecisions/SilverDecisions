@@ -15,4 +15,8 @@
     stroke: $arrowColor;
     fill: $arrowColor;
   }
+
+  .odc-middle-incratio, .odc-low-incratio, .odc-high-incratio{
+    stroke-dasharray: 5 3;
+  }
 }
