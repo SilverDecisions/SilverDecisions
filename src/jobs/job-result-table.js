@@ -67,19 +67,9 @@ export class JobResultTable {
                 heatmap: {
                     colorScaleGenerator: function (values) {
                         let extent = d3.extent(values);
-                        let domain = [];
-                        let range = [];
-                        if (extent[0] * extent[1] >= 0) {
-                            range = ["#FFF", "#FF0000"];
-                            domain = extent;
-                        } else {
-                            range = ["#4b53ff", "#FFF", "#FF0000"];
-                            domain = [extent[0], 0, extent[1]];
-                        }
 
-                        return d3.scaleLinear()
-                            .domain(domain)
-                            .range(range)
+                        return d3.scaleSequential(d3.interpolatePlasma)
+                            .domain(extent)
                     }
                 }
             },
