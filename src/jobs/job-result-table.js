@@ -68,8 +68,9 @@ export class JobResultTable {
                     colorScaleGenerator: function (values) {
                         let extent = d3.extent(values);
 
-                        return d3.scaleSequential(d3.interpolatePlasma)
-                            .domain(extent)
+                    return d3.scaleLinear()
+                        .domain([extent[0], (extent[0]+extent[1])/2,extent[1]])
+                        .range(["#4b53ff", "#FFF", "#FF0000"])
                     }
                 }
             },
