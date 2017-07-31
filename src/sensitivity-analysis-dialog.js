@@ -11,6 +11,7 @@ import {SensitivityAnalysisJobResultTable} from "./jobs/sensitivity-analysis-res
 import {ProbabilisticSensitivityAnalysisJobResultTable} from "./jobs/probabilistic-sensitivity-analysis-result-table";
 import {Policy} from "sd-computations/src/policies/policy";
 import {TornadoDiagramPlot} from "./jobs/tornado-diagram-plot";
+import {SpiderPlot} from "./jobs/spider-plot";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;
@@ -294,6 +295,41 @@ export class SensitivityAnalysisDialog extends Dialog {
             warnings: [largeScenariosNumberWarning]
         });
 
+        this.jobConfigurations.push({
+            jobName: 'spider-plot',
+            customParamsConfig: {
+                'id': {
+                    // value: undefined, //leave default,
+                    hidden: true
+                },
+                'failOnInvalidTree': {
+                    value: true,
+                    hidden: true
+                },
+                'ruleName': {
+                    value: this.computationsManager.getCurrentRule().name,
+                    hidden: true
+                },
+                variables: {
+                    name: {
+                        options: this.getGlobalVariableNames()
+                    },
+                    customValidator: customVariablesValidator
+                }
+            },
+            warnings: [{
+                name: 'largeScenariosNumber',
+                data: {
+                    number: 10000,
+                    numberFormatted: "10,000"
+                },
+                check: function (jobParameters) { // called with this set to warning config object
+                    let combinations = jobParameters.values.length * jobParameters.values.variables.length;
+                    return combinations > this.data.number
+                }
+            }]
+        });
+
     }
 
 
@@ -527,21 +563,33 @@ export class SensitivityAnalysisDialog extends Dialog {
         log.debug(result);
         this.result = result;
         this.initResultTable(result);
-        if (this.job.name === "tornado-diagram") {
-            this.initResultPlot(result);
-        }
+
+        this.initResultPlots(result);
+
 
 
     }
 
-    initResultPlot(result) {
+    initResultPlots(result) {
+
+
+        if (this.job.name === "tornado-diagram") {
+            this.initTornadoResultPlots(result);
+        } else if (this.job.name === "spider-plot") {
+            this.initSpiderResultPlots(result);
+        }
+
+
+
+    }
+
+    initTornadoResultPlots(result) {
         let self = this;
         this.resultPlots = [];
 
         result.policies.forEach((policy, index) => {
 
             let container = this.jobResultPlotContainer.selectOrAppend("div.sd-result-plot-container-"+index);
-
             let config = {
                 policyIndex: index,
                 maxWidth: self.app.config.leagueTable.plot.maxWidth,
@@ -555,7 +603,27 @@ export class SensitivityAnalysisDialog extends Dialog {
             }, 100)
         });
 
+    }
 
+    initSpiderResultPlots(result) {
+        let self = this;
+        this.resultPlots = [];
+
+        result.policies.forEach((policy, index) => {
+
+            let container = this.jobResultPlotContainer.selectOrAppend("div.sd-result-plot-container-"+index);
+            let config = {
+                policyIndex: index,
+                maxWidth: self.app.config.leagueTable.plot.maxWidth,
+            };
+
+            let resultPlot = new SpiderPlot(container.node(), result, config);
+            this.resultPlots.push(resultPlot);
+
+            setTimeout(function () {
+                resultPlot.init()
+            }, 100)
+        });
 
     }
 

@@ -137,6 +137,20 @@
   .odc-histogram .odc-axis.odc-no-guides line {
     stroke: #a1a1a1; }
 
+.odc-line-chart {
+  background-color: white;
+  font-size: 11px;
+  height: 100%; }
+  .odc-line-chart .odc-axis path {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges; }
+  .odc-line-chart .odc-axis line {
+    shape-rendering: crispEdges;
+    stroke: #eaeaea; }
+  .odc-line-chart .odc-axis.odc-no-guides line {
+    stroke: #a1a1a1; }
+
 .odc-selectable {
   cursor: pointer; }
 

@@ -768,6 +768,8 @@
     width: 215px; }
     #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-formula .sd-combobox {
       width: 100%; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-percentageChangeRange {
+    max-width: 200px; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-extendedPolicyDescription {
     max-width: 250px; }
   #silver-decisions .sd-league-table-dialog {

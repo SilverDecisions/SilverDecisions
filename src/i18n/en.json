@@ -261,6 +261,36 @@
                 "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow."
             }
         },
+        "spider-plot": {
+            "name": "Spider plot",
+            "param": {
+                "ruleName": "Rule name",
+                "extendedPolicyDescription": {
+                    "label": "Extended policy description"
+                },
+                "percentageChangeRange": {
+                    "label": "Range of percentage change"
+                },
+                "length": {
+                    "label": "Range length"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Name"
+                    }
+                }
+            },
+            "errors": {
+                "computations": "Error in sensitivity analysis computations for the following parameters:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow."
+            },
+            "plot": {
+                "legend": {}
+            }
+        },
         "league-table":{
             "name": "League table"
         },
