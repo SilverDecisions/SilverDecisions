@@ -288,7 +288,8 @@
                 "largeScenariosNumber": "Number of defined scenarios larger than {{numberFormatted}}. Sensitivity analysis might fail to compute or be very slow."
             },
             "plot": {
-                "legend": {}
+                "legend": {},
+                "xAxisTitle": "Percentage change"
             }
         },
         "league-table":{

@@ -13,14 +13,14 @@ export class SpiderPlotConfig extends LineChartConfig {
     guides = true;
 
     x={// X axis config
-        title: '', // axis label
+        title: i18n.t('job.spider-plot.plot.xAxisTitle'), // axis label
         key: 0,
         domainMargin: 0
     };
     y={// Y axis config
         title: '', // axis label,
         key: 1,
-        domainMargin: 0
+        domainMargin: 0.1
     };
     series = true;
     dotRadius = 3;
