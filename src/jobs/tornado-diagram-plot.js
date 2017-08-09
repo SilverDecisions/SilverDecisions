@@ -7,6 +7,10 @@ import {Policy} from "sd-computations/src/policies/policy";
 
 export class TornadoDiagramPlotConfig extends DivergingStackedBarChartConfig {
     maxWidth = undefined;
+    margin={
+        left: 150,
+        top: 70
+    };
 
     showLegend = true;
     forceLegend = true;
@@ -16,7 +20,12 @@ export class TornadoDiagramPlotConfig extends DivergingStackedBarChartConfig {
     policyIndex = 0;
 
     guides = true;
-    middleValue = 1000
+    middleValue = 1000;
+    showBarValues = false;
+
+    x={// X axis config
+        title: i18n.t('job.tornado-diagram.plot.xAxisTitle'), // axis label
+    };
 
     constructor(custom) {
         super();
@@ -45,12 +54,13 @@ export class TornadoDiagramPlot extends DivergingStackedBarChart {
     setData(data){
         this.config.middleValue = data.defaultPayoff;
         this.config.title = Policy.toPolicyString(data.policies[this.config.policyIndex]);
-        return super.setData(data.rows.map(r=>{
+        return super.setData(data.rows.map((r, rIndex)=>{
+            let varExtent = data.variableExtents[rIndex];
             return {
-                key: r.variableName,
+                key: r.variableName+' ['+varExtent[0]+'; '+varExtent[1]+']',
                 values: [
-                    data.defaultPayoff - r.extents[this.config.policyIndex][0],
-                    r.extents[this.config.policyIndex][1] - data.defaultPayoff
+                    Math.max(0, data.defaultPayoff - r.extents[this.config.policyIndex][0]),
+                    Math.max(0, r.extents[this.config.policyIndex][1] - data.defaultPayoff)
                 ],
                 categories: r.extentVariableValues[this.config.policyIndex][0] <= r.extentVariableValues[this.config.policyIndex][1] ? [0, 1] : [1, 0]
             }

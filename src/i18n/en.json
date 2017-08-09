@@ -215,6 +215,9 @@
                     },
                     "step": {
                         "label": "Step"
+                    },
+                    "defaultValue": {
+                        "label": "Default value"
                     }
                 }
             },
@@ -229,7 +232,8 @@
                 "legend":{
                     "low": "Decrease",
                     "high": "Increase"
-                }
+                },
+                "xAxisTitle": "Payoff"
             }
         },
         "probabilistic-sensitivity-analysis":{

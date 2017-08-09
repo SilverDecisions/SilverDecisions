@@ -226,6 +226,20 @@ export class SensitivityAnalysisDialog extends Dialog {
                     },
                     _derivedValues:[
                         {
+                            name: "defaultValue",
+                            value: (variable)=>{
+                                if(!variable.name) {
+                                    return "";
+                                }
+
+                                try{
+                                    return ExpressionEngine.toFloat(this.app.dataModel.expressionScope[variable.name])
+                                }catch(e){
+                                    return "";
+                                }
+                            }
+                        },
+                        {
                             name: "step",
                             value: (variable)=>{
                                 if(variable.max == undefined || variable.max==null) {

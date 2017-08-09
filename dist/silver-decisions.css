@@ -144,8 +144,10 @@
   max-width: 150px; }
   #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group select {
     padding: 4px; }
-  #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group.sd-derived-value input {
-    cursor: not-allowed; }
+  #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group.sd-derived-value {
+    margin-right: 7px; }
+    #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group.sd-derived-value input {
+      cursor: not-allowed; }
 
 #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group:not(.no-floating-label) select ~ label {
   top: -.85em; }

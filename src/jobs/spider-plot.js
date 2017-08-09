@@ -11,7 +11,9 @@ export class SpiderPlotConfig extends LineChartConfig {
     showLegend = true;
     policyIndex = 0;
     guides = true;
-
+    margin={
+        left: 100
+    };
     x={// X axis config
         title: i18n.t('job.spider-plot.plot.xAxisTitle'), // axis label
         key: 0,
