@@ -227,8 +227,8 @@
             },
             "plot":{
                 "legend":{
-                    "low": "Low",
-                    "high": "High"
+                    "low": "Decrease",
+                    "high": "Increase"
                 }
             }
         },
@@ -269,15 +269,19 @@
                     "label": "Extended policy description"
                 },
                 "percentageChangeRange": {
-                    "label": "Range of percentage change"
+                    "label": "+/- percentage change to consider"
                 },
                 "length": {
-                    "label": "Range length"
+                    "label": "Number of values to test",
+                    "help": "Number of values to test (in one side of range)"
                 },
                 "variables": {
                     "label": "Variables",
                     "name": {
                         "label": "Name"
+                    },
+                    "defaultValue": {
+                        "label": "Default value"
                     }
                 }
             },
@@ -289,7 +293,8 @@
             },
             "plot": {
                 "legend": {},
-                "xAxisTitle": "Percentage change"
+                "xAxisTitle": "Percentage change",
+                "yAxisTitle": "Payoff"
             }
         },
         "league-table":{

@@ -18,7 +18,7 @@ export class SpiderPlotConfig extends LineChartConfig {
         domainMargin: 0
     };
     y={// Y axis config
-        title: '', // axis label,
+        title: i18n.t('job.spider-plot.plot.yAxisTitle'), // axis label,
         key: 1,
         domainMargin: 0.1
     };
@@ -50,6 +50,7 @@ export class SpiderPlot extends LineChart {
     }
 
     setData(data){
+        this.config.title = Policy.toPolicyString(data.policies[this.config.policyIndex]);
         return super.setData(data.rows.map(r=>{
             return {
                 key: r.variableName,

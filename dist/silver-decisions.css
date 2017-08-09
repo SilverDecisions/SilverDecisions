@@ -131,7 +131,8 @@
 #silver-decisions .sd-job-parameters-builder .sd-help-icon {
   opacity: 0.6;
   cursor: help;
-  margin-left: 5px; }
+  margin-left: 5px;
+  display: inline-block; }
   #silver-decisions .sd-job-parameters-builder .sd-help-icon:hover {
     opacity: 1; }
 
@@ -769,7 +770,10 @@
     #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-formula .sd-combobox {
       width: 100%; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-percentageChangeRange {
-    max-width: 200px; }
+    max-width: 210px; }
+  #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-length {
+    max-width: 210px;
+    display: inline-block; }
   #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-extendedPolicyDescription {
     max-width: 250px; }
   #silver-decisions .sd-league-table-dialog {

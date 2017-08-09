@@ -314,6 +314,23 @@ export class SensitivityAnalysisDialog extends Dialog {
                     name: {
                         options: this.getGlobalVariableNames()
                     },
+                    _derivedValues:[
+                        {
+                            name: "defaultValue",
+                            value: (variable)=>{
+                                if(!variable.name) {
+                                    return "";
+                                }
+
+                                try{
+                                    return ExpressionEngine.toFloat(this.app.dataModel.expressionScope[variable.name])
+                                }catch(e){
+                                    return "";
+                                }
+                            }
+                        }
+
+                    ],
                     customValidator: customVariablesValidator
                 }
             },
