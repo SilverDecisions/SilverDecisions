@@ -45,14 +45,15 @@ export class JobParametersBuilder{
         this.strictValidation(strictValidation);
         this.pristine = {};
         this.container.selectAll('.sd-pristine').classed('sd-pristine', false);
-        this.checkCustomValidators();
-        return this.jobParameters.validate();
+        return this.checkCustomValidators() && this.jobParameters.validate();
     }
 
     checkCustomValidators(){
+        let valid = true;
         Utils.forOwn(this.customValidators, (val, key)=>{
-            val();
+            valid = valid && val();
         });
+        return valid;
     }
 
     strictValidation(enabled=true){
@@ -164,15 +165,17 @@ export class JobParametersBuilder{
         var customValidator = Utils.get(self.customParamsConfig, path+'.customValidator');
 
         function checkCustomValidator(){
+            let allValid = true;
             if(customValidator){
                 customValidator(values).forEach((isValid, i)=>{
                     var selection = indexToSelection[i];
-                    selection.classed('invalid', !paramDefinition.validateSingleValue(values[i]));
-                    if(!isValid) {
-                        selection.classed('invalid', true);
-                    }
+                    let valid = paramDefinition.validateSingleValue(values[i]) && isValid;
+                    selection.classed('invalid', !valid);
+                    allValid = allValid && valid;
                 })
             }
+
+            return allValid;
         }
 
         self.customValidators[path] = checkCustomValidator;

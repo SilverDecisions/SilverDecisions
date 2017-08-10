@@ -54,8 +54,8 @@ export class TornadoDiagramPlot extends DivergingStackedBarChart {
     setData(data){
         this.config.middleValue = data.defaultPayoff;
         this.config.title = Policy.toPolicyString(data.policies[this.config.policyIndex]);
-        return super.setData(data.rows.map((r, rIndex)=>{
-            let varExtent = data.variableExtents[rIndex];
+        return super.setData(data.rows.map((r)=>{
+            let varExtent = data.variableExtents[data.variableNames.indexOf(r.variableName)];
             return {
                 key: r.variableName+' ['+varExtent[0]+'; '+varExtent[1]+']',
                 values: [

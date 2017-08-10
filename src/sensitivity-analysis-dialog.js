@@ -115,6 +115,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
     initJobConfigurations() {
+        let self = this;
         this.jobConfigurations.length = 0;
         let ExpressionEngine = this.app.expressionEngine.constructor;
         let customVariablesValidator = values => {
@@ -163,21 +164,21 @@ export class SensitivityAnalysisDialog extends Dialog {
                     _derivedValues:[
                         {
                             name: "step",
-                            value: (variable)=>{
-                                if(variable.max == undefined || variable.max==null) {
+                            value: (variable) => {
+                                if (variable.max === undefined || variable.max === null) {
                                     return "";
                                 }
-                                if(variable.min == undefined || variable.min==null) {
+                                if (variable.min === undefined || variable.min === null) {
                                     return "";
                                 }
-                                if(variable.length == undefined || variable.length==null || variable.length < 2) {
+                                if (variable.length === undefined || variable.length === null || variable.length < 2) {
                                     return "";
                                 }
-                                if(variable.min > variable.max){
+                                if (variable.min > variable.max) {
                                     return ""
                                 }
 
-                                try{
+                                try {
                                     return ExpressionEngine.toFloat(ExpressionEngine.divide(ExpressionEngine.subtract(variable.max, variable.min), variable.length-1))
                                 }catch(e){
                                     return "";
@@ -241,17 +242,17 @@ export class SensitivityAnalysisDialog extends Dialog {
                         },
                         {
                             name: "step",
-                            value: (variable)=>{
-                                if(variable.max == undefined || variable.max==null) {
+                            value: (variable) => {
+                                if (variable.max === undefined || variable.max === null) {
                                     return "";
                                 }
-                                if(variable.min == undefined || variable.min==null) {
+                                if (variable.min === undefined || variable.min === null) {
                                     return "";
                                 }
-                                if(variable.length == undefined || variable.length==null || variable.length < 2) {
+                                if (variable.length === undefined || variable.length === null || variable.length < 2) {
                                     return "";
                                 }
-                                if(variable.min > variable.max){
+                                if (variable.min > variable.max) {
                                     return ""
                                 }
 
@@ -264,7 +265,22 @@ export class SensitivityAnalysisDialog extends Dialog {
                         }
 
                     ],
-                    customValidator: customVariablesValidator
+                    customValidator: (values)=>{
+                        let isValidNameArray = customVariablesValidator(values);
+
+                        return values.map((v, i)=>{
+                            if(!isValidNameArray[i]){
+                                return false;
+                            }
+
+                            if (!v.name || v.min === undefined || v.min === null || v.max === undefined || v.max === null) {
+                                return false;
+                            }
+
+                            let defVal = self.app.dataModel.expressionScope[v.name];
+                            return v.min < defVal && v.max >  defVal;
+                        });
+                    }
 
                 }
             },
