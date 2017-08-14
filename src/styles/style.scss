@@ -196,6 +196,21 @@
       #sd-sidebar-definitions {
         @include extendable-card-mixin();
 
+        .sd-variables-scope{
+          margin-top: 0.5em;
+          margin-bottom: .8em;
+          padding: 5px;
+          .sd-variables-scope-label{
+            font-size: .85em;
+            color: #5264AE;
+          }
+
+          .sd-variables-scope-value{
+            margin-top: 3px;
+            cursor: not-allowed;
+          }
+        }
+
         &.sd-read-only{
           .input-group{
             display: none;

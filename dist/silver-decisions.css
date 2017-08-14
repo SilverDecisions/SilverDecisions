@@ -471,6 +471,16 @@
               display: block; }
         #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .content {
           display: none; }
+        #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .sd-variables-scope {
+          margin-top: 0.5em;
+          margin-bottom: .8em;
+          padding: 5px; }
+          #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .sd-variables-scope .sd-variables-scope-label {
+            font-size: .85em;
+            color: #5264AE; }
+          #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions .sd-variables-scope .sd-variables-scope-value {
+            margin-top: 3px;
+            cursor: not-allowed; }
         #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions.sd-read-only .input-group {
           display: none; }
         #silver-decisions #main-region #sd-sidebar #sd-sidebar-definitions.sd-read-only #sd-sidebar-definitions-open-dialog-button {

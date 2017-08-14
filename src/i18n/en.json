@@ -498,6 +498,11 @@
         "evaluatedVariables": "Evaluated variables"
     },
     "sidebarDefinitions":{
+        "scope":{
+            "label": "Variables scope:",
+            "global": "global",
+            "node": "selected node and subtree"
+        },
         "header": "Variables",
         "code": "Code",
         "buttons":{

@@ -127,6 +127,8 @@ export class Sidebar {
             AppUtils.autoResizeTextarea(this.definitionsCode.node())
         });
 
+        this.definitionsScopeLabel = this.definitionsContainer.select('.sd-variables-scope-value');
+
         this.definitionsCode = this.definitionsContainer.select('textarea#sd-sidebar-definitions-code').on('change', function () {
             if (self.onDefinitionsCodeChanged) {
                 self.onDefinitionsCodeChanged(this.value)
@@ -278,6 +280,15 @@ export class Sidebar {
     updateDefinitions(definitionsSourceObject, readOnly, changeCallback) {
         this.definitionsContainer.classed('sd-read-only', readOnly);
         this.onDefinitionsCodeChanged = changeCallback;
+
+
+        let scopeType = 'global';
+        if (definitionsSourceObject instanceof model.Node) {
+            scopeType = 'node'
+        }
+
+        this.definitionsScopeLabel.text(i18n.t("sidebarDefinitions.scope."+scopeType));
+
         this.definitionsCode.node().value = definitionsSourceObject.code;
         this.definitionsCode.classed('invalid', !!definitionsSourceObject.$codeError);
         this.definitionsCode.attr('data-error-msg', definitionsSourceObject.$codeError);
