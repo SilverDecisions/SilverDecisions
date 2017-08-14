@@ -1,7 +1,7 @@
 var lng = getParameterByName('lang') || 'en';
 var app;
 
-var data = SilverDecisions.App.appUtils.getJSON("./data/mcdm4.json", function(data, err){
+var data = SilverDecisions.App.appUtils.getJSON("./data/rockefellerWithParams.json", function(data, err){
     app = new SilverDecisions.App('app-container', {
         lng: lng,
         readOnly: false,
