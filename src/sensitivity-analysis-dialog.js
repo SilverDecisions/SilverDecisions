@@ -123,7 +123,8 @@ export class SensitivityAnalysisDialog extends Dialog {
 
             var names = [];
             values.forEach((v, i)=>{
-                var valid = names.indexOf(v.name)<0;
+                let isVariableInGlobalScope = self.app.dataModel.expressionScope.hasOwnProperty(v.name);
+                var valid = names.indexOf(v.name)<0 && isVariableInGlobalScope;
                 names.push(v.name);
                 isValidArray.push(valid);
             });
