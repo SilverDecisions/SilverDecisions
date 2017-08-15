@@ -37,6 +37,12 @@ export class SensitivityAnalysisDialog extends Dialog {
         this.debouncedCheckWarnings = Utils.debounce(()=>this.checkWarnings(), 200);
 
         this.initButtons();
+        let self = this;
+        document.addEventListener('SilverDecisionsRecomputedEvent', function (data) {
+            if (data.detail === app && self.isVisible()) {
+                self.onOpen();
+            }
+        });
     }
 
     onOpen() {
@@ -544,6 +550,15 @@ export class SensitivityAnalysisDialog extends Dialog {
                 this.setJobParamsValues({});
             } else {
                 this.jobParameters.values.ruleName = this.computationsManager.getCurrentRule().name;
+                let globalVariableNames = this.getGlobalVariableNames();
+
+                if(this.jobParameters.values.variables){
+                    this.jobParameters.values.variables = this.jobParameters.values.variables.filter(v=>globalVariableNames.indexOf(v.name)!==-1);
+
+                    if(!this.jobParameters.values.variables.length){
+                        this.jobParameters.values.variables.push({})
+                    }
+                }
                 this.setJobParamsValues(this.jobParameters.values);
             }
         }

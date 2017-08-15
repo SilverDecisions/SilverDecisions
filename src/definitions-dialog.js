@@ -28,7 +28,7 @@ export class DefinitionsDialog extends Dialog {
         AppUtils.elasticTextarea(this.definitionsCode);
 
         document.addEventListener('SilverDecisionsRecomputedEvent', function (data) {
-            if (data.detail === app) {
+            if (data.detail === app && self.isVisible()) {
                 self.update();
             }
         });

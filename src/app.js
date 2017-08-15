@@ -581,7 +581,11 @@ export class App {
     }
 
     openSensitivityAnalysis() {
-        this.sensitivityAnalysisDialog.open();
+        let self = this;
+        setTimeout(function(){
+            self.sensitivityAnalysisDialog.open();
+        }, 100);
+
     }
 
     showTreePreview(dataDTO, closeCallback, autoLayout = true) {
