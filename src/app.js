@@ -262,7 +262,7 @@ export class App {
     }
 
     isSensitivityAnalysisAvailable() {
-        return !this.isMultipleCriteria() && this.dataModel.getRoots().length === 1 && this.computationsManager.isValid();
+        return !this.isMultipleCriteria() && this.dataModel.getRoots().length === 1 && this.computationsManager.isValid() && this.dataModel.getGlobalVariableNames(true).length;
     }
 
     initToolbar() {
@@ -583,8 +583,11 @@ export class App {
     openSensitivityAnalysis() {
         let self = this;
         setTimeout(function(){
+            if(!self.isSensitivityAnalysisAvailable()){
+                return;
+            }
             self.sensitivityAnalysisDialog.open();
-        }, 100);
+        }, 200);
 
     }
 
