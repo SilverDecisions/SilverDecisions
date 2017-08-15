@@ -492,6 +492,10 @@
     },
     "definitionsDialog":{
         "title": "Variable definitions",
+        "scope": {
+            "global": "global scope",
+            "node": "selected node and subtree scope"
+        },
         "buttons":{
             "recalculate": "Recalculate"
         },
