@@ -503,7 +503,7 @@
     },
     "sidebarDefinitions":{
         "scope":{
-            "label": "Variables scope:",
+            "label": "Variable scope:",
             "global": "global",
             "node": "selected node and subtree"
         },

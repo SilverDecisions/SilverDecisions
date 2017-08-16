@@ -107,7 +107,8 @@
         },
         "plot":{
             "groups":{
-                "highlighted": "Podświetlony",
+                "highlighted": "Rekomendowany (dla pewnej wartości WTP w zakresie)",
+                "highlighted-default": "Rekomendowany (dla domyślnej wartości WTP)",
                 "extended-dominated" : "Zdominowana rozszerzenie",
                 "dominated": "Zdominowana",
                 "default": "Inne"
@@ -191,6 +192,50 @@
                 "largeParametersNumber": "Liczba parametrów większa niż {{number}}. Wyświetlenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
             }
         },
+        "tornado-diagram":{
+            "name": "Diagram tornado",
+            "param":{
+                "ruleName": "Nazwa reguły",
+                "extendedPolicyDescription": {
+                    "label": "Rozszerzony opis polityki"
+                },
+                "variables": {
+                    "label": "Zmienne",
+                    "name": {
+                        "label": "Nazwa"
+                    },
+                    "min": {
+                        "label": "Minimum"
+                    },
+                    "max": {
+                        "label": "Maximum"
+                    },
+                    "length": {
+                        "label": "Długość"
+                    },
+                    "step": {
+                        "label": "Krok"
+                    },
+                    "defaultValue": {
+                        "label": "Wartość domyślna"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Błąd w obliczeniach analizy wrażliwości dla następujących parametrów:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Liczba zdefiniowanych scenariuszy większa niż {{numberFormatted}}. Wyliczenie analizy wrażliwości może się nie powieść lub być bardzo powolne.",
+                "largeParametersNumber": "Liczba parametrów większa niż {{number}}. Wyświetlenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
+            },
+            "plot":{
+                "legend":{
+                    "low": "Zmniejszenie",
+                    "high": "Zwiększenie"
+                },
+                "xAxisTitle": "Wypłata"
+            }
+        },
         "probabilistic-sensitivity-analysis":{
             "name": "Probabilistyczna analiza wrażliwości",
             "param":{
@@ -222,6 +267,42 @@
         },
         "league-table":{
             "name": "Tabela ligowa"
+        },
+        "spider-plot": {
+            "name": "Wykres pajęczynowy",
+            "param": {
+                "ruleName": "Nazwa reguły",
+                "extendedPolicyDescription": {
+                    "label": "Rozszerzony opis polityki"
+                },
+                "percentageChangeRange": {
+                    "label": "+/- zmiana procentowa do analizy"
+                },
+                "length": {
+                    "label": "Liczba wartości do przetestowa",
+                    "help": "Liczba wartości do przetestowa (po jednej stronie zakresu)"
+                },
+                "variables": {
+                    "label": "Zmienne",
+                    "name": {
+                        "label": "Nazwa"
+                    },
+                    "defaultValue": {
+                        "label": "Wartość domyślna"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Błąd w obliczeniu analizy wrażliwości dla następujących parametrów:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Liczba zdefiniowanych scenariuszy większa niż {{numberFormatted}}. Wyliczenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
+            },
+            "plot": {
+                "legend": {},
+                "xAxisTitle": "Zmiana procentowa",
+                "yAxisTitle": "Wypłata"
+            }
         },
         "errors":{
             "generic": "Błąd w obliczeniach analizy wrażliwości: {{message}}",
@@ -366,7 +447,8 @@
             "plot": {
                 "title": "Wykres",
                 "maxWidth": "Maksymalna szerokość",
-                "highlightedColor": "Kolor podświetlonej polityki",
+                "highlightedColor": "Kolor polityki rekomendowanej (dla pewnego WTP w zakresie)",
+                "highlightedDefaultColor": "Kolor polityki rekomendowanej (dla domyślnego WTP)",
                 "extendedDominatedColor": "Kolog polityki zdominowanej rozszerzenie",
                 "dominatedColor": "Kolor polityki zdominowanej",
                 "defaultColor": "Kolor innych polityk"
@@ -410,12 +492,21 @@
     },
     "definitionsDialog":{
         "title": "Definicje zmiennych",
+        "scope": {
+            "global": "zasięg globalny",
+            "node": "zasięg wybranego węzła i poddrzewa"
+        },
         "buttons":{
             "recalculate": "Przelicz"
         },
         "evaluatedVariables": "Wartości zmiennych"
     },
     "sidebarDefinitions":{
+        "scope":{
+            "label": "Zasięg zmiennej:",
+            "global": "globalny",
+            "node": "wybrany węzeł i poddrzewo"
+        },
         "header": "Zmienne",
         "code": "Kod",
         "buttons":{
