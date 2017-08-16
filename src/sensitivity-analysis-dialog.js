@@ -534,7 +534,7 @@ export class SensitivityAnalysisDialog extends Dialog {
     }
 
 
-    clear(clearParams = false) {
+    clear(clearParams = false, clearAllParams = false) {
         this.clearResults();
         this.clearWarnings();
         this.setProgress(0);
@@ -544,21 +544,31 @@ export class SensitivityAnalysisDialog extends Dialog {
             this.onJobSelected(this.jobConfigurations[0]);
         }
 
+        if(clearAllParams){
+            Utils.forOwn(this.jobNameToParamValues, (value, key)=> this.jobNameToParamValues[key] = {})
+        }
+
+        let globalVariableNames = this.getGlobalVariableNames();
+        Utils.forOwn(this.jobNameToParamValues, (value, key)=> {
+            let paramValues = value;
+            if(clearAllParams){
+                paramValues = {}
+            }else if(paramValues.variables){
+                paramValues.variables = paramValues.variables.filter(v=>globalVariableNames.indexOf(v.name)!==-1);
+                if(!paramValues.variables.length){
+                    paramValues.variables.push({})
+                }
+            }
+
+            this.jobNameToParamValues[key] = paramValues;
+        });
+
         if (this.job) {
             if (clearParams) {
                 this.jobNameToParamValues[this.job.name] = {};
                 this.setJobParamsValues({});
             } else {
                 this.jobParameters.values.ruleName = this.computationsManager.getCurrentRule().name;
-                let globalVariableNames = this.getGlobalVariableNames();
-
-                if(this.jobParameters.values.variables){
-                    this.jobParameters.values.variables = this.jobParameters.values.variables.filter(v=>globalVariableNames.indexOf(v.name)!==-1);
-
-                    if(!this.jobParameters.values.variables.length){
-                        this.jobParameters.values.variables.push({})
-                    }
-                }
                 this.setJobParamsValues(this.jobParameters.values);
             }
         }
