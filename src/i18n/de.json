@@ -108,6 +108,7 @@
         "plot":{
             "groups":{
                 "highlighted": "Markiert",
+                "highlighted-default": "Empfohlen (für Standard-WTP)",
                 "extended-dominated" : "Erweitert-dominiert",
                 "dominated": "Dominiert",
                 "default": "Andere"
@@ -191,6 +192,51 @@
                 "largeParametersNumber": "Anzahl der Parameter größer als {{number}}. Die Anzeige der Resultate der Sensitivitätsanalyse könnte fehlschlagen oder sehr langsam sein."
             }
         },
+        "tornado-diagram":{
+            "name": "Tornado-diagramm",
+            "param":{
+                "ruleName": "Regelname",
+                "extendedPolicyDescription": {
+                    "label": "Erweiterte Grundregeln Beschreibung"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "min": {
+                        "label": "Min"
+                    },
+                    "max": {
+                        "label": "Max"
+                    },
+                    "length": {
+                        "label": "Länge"
+                    },
+                    "step": {
+                        "label": "Schritt"
+                    },
+                    "defaultValue": {
+                        "label": "Standardwert"
+                    }
+
+                }
+            },
+            "errors":{
+                "computations": "Fehler bei der Sensitivitätsanalyse für folgende Parameter:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam.",
+                "largeParametersNumber": "Anzahl der Parameter größer als {{number}}. Die Anzeige der Resultate der Sensitivitätsanalyse könnte fehlschlagen oder sehr langsam sein."
+            },
+            "plot":{
+                "legend":{
+                    "low": "Verringerung",
+                    "high": "Erhöhung"
+                },
+                "xAxisTitle": "Auszahlen"
+            }
+        },
         "probabilistic-sensitivity-analysis":{
             "name": "Probabilistische Sensitivitätsanalyse",
             "param":{
@@ -218,6 +264,42 @@
             },
             "warnings": {
                 "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam."
+            }
+        },
+        "spider-plot": {
+            "name": "Netzdiagramm",
+            "param": {
+                "ruleName": "Regelname",
+                "extendedPolicyDescription": {
+                    "label": "Erweiterte Grundregel Beschreibung"
+                },
+                "percentageChangeRange": {
+                    "label": "+/- prozentuale Veränderung zum Berücksichtigen"
+                },
+                "length": {
+                    "label": "Anzahl der zu testenden Werte",
+                    "help": "Anzahl der zu testenden Werte (an einer Seite des Bereichs)"
+                },
+                "variables": {
+                    "label": "Variablen",
+                    "name": {
+                        "label": "Name"
+                    },
+                    "defaultValue": {
+                        "label": "Standardwert"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Berechnungsfehler der Sensitivitätsanalyse für folgende Parameter:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Anzahl der definierten Szenarien größer als {{numberFormatted}}. Sensitivitätsanalyse könnte nicht dürchgefuhrt werden oder wird sehr langsam."
+            },
+            "plot": {
+                "legend": {},
+                "xAxisTitle": "Prozentuale Veränderung",
+                "yAxisTitle": "Auszahlen"
             }
         },
         "league-table":{
@@ -367,6 +449,7 @@
                 "title": "Plot",
                 "maxWidth": "Max Breite",
                 "highlightedColor": "Farbe der markierten Regel",
+                "highlightedDefaultColor": "Empfohlene Regel(für Standard-WTP) Farbe",
                 "extendedDominatedColor": "Farbe der erweitert-dominierten Regel",
                 "dominatedColor": "Farbe der dominierten Regel",
                 "defaultColor": "Farbe der anderen Regeln"
@@ -410,12 +493,21 @@
     },
     "definitionsDialog":{
         "title": "Variablendefinitionen",
+        "scope": {
+            "global": "Globaler Anwendungsbereich",
+            "node": "Gewählten Knoten und Teilbaum Anwendungsbereich"
+        },
         "buttons":{
             "recalculate": "Neu berechnen"
         },
         "evaluatedVariables": "Ausgewertete Variablen"
     },
     "sidebarDefinitions":{
+        "scope":{
+            "label": "Variabel Anwendungsbereich:",
+            "global": "Globaler",
+            "node": "Gewählten Knoten und Teilbaum"
+        },
         "header": "Variablen",
         "code": "Code",
         "buttons":{
