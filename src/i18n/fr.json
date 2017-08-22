@@ -108,6 +108,7 @@
         "plot":{
             "groups":{
                 "highlighted": "Surligné",
+                "highlighted-default": "Recommandée (pour WTP par défaut)",
                 "extended-dominated" : "Étendu-dominé",
                 "dominated": "Dominé",
                 "default": "Autre"
@@ -191,6 +192,50 @@
                 "largeParametersNumber": "Nombre de paramètres est plus grand que {{number}}. Affichage de l'analyse de sensibilité pouvait échouer ou être très lente."
             }
         },
+        "tornado-diagram":{
+            "name": "Graphique en tornade",
+            "param":{
+                "ruleName": "Nom de la règle",
+                "extendedPolicyDescription": {
+                    "label": "Description détaillée de la règle"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Étiquette"
+                    },
+                    "min": {
+                        "label": "Min"
+                    },
+                    "max": {
+                        "label": "Max"
+                    },
+                    "length": {
+                        "label": "Longueur"
+                    },
+                    "step": {
+                        "label": "Étape"
+                    },
+                    "defaultValue": {
+                        "label": "Valeur par défaut"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente.",
+                "largeParametersNumber": "Nombre de paramètres est plus grand que {{number}}. Affichage de l'analyse de sensibilité pouvait échouer ou être très lente."
+            },
+            "plot":{
+                "legend":{
+                    "low": "Diminuer",
+                    "high": "Augmenter"
+                },
+                "xAxisTitle": "Avantage"
+            }
+        },
         "probabilistic-sensitivity-analysis":{
             "name": "Analyse de sensibilité probabiliste",
             "param":{
@@ -218,6 +263,42 @@
             },
             "warnings": {
                 "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente."
+            }
+        },
+        "spider-plot": {
+            "name": "Graphique en radar",
+            "param": {
+                "ruleName": "Nom de la règle",
+                "extendedPolicyDescription": {
+                    "label": "Description détaillée de la règle"
+                },
+                "percentageChangeRange": {
+                    "label": "+/- changement de pourcentage à considérer"
+                },
+                "length": {
+                    "label": "Nombre de valeurs à tester",
+                    "help": "Nombre de valeurs à tester (dans une partie de gamme)"
+                },
+                "variables": {
+                    "label": "Variables",
+                    "name": {
+                        "label": "Nom"
+                    },
+                    "defaultValue": {
+                        "label": "Valeur par défaut"
+                    }
+                }
+            },
+            "errors": {
+                "computations": "Erreur de calcul d'analyse de sensibilité pour les paramètres suivants:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Nombre de scénarios définis est plus grand que {{numberFormatted}}. Analyse de sensibilité pouvait ne pas calculer ou être très lente."
+            },
+            "plot": {
+                "legend": {},
+                "xAxisTitle": "Changement de pourcentage",
+                "yAxisTitle": "Avantage"
             }
         },
         "league-table":{
@@ -367,6 +448,7 @@
                 "title": "Le graphe",
                 "maxWidth": "Largeur maximale",
                 "highlightedColor": "Couleur de la règle soulignée",
+                "highlightedDefaultColor": "Couleur recommandée pour la règle (pour WTP par défaut)",
                 "extendedDominatedColor": "Couleur de la règle étendu-dominée",
                 "dominatedColor": "Couleur de la règle dominée",
                 "defaultColor": "Couleur des autres règles"
@@ -410,12 +492,21 @@
     },
     "definitionsDialog":{
         "title": "Définitions des variables",
+        "scope": {
+            "global": "portée mondiale",
+            "node": "la portée des nœud et sous-arborescence sélectionné"
+        },        
         "buttons":{
             "recalculate": "Recalculer"
         },
         "evaluatedVariables": "Variables évaluées"
     },
     "sidebarDefinitions":{
+        "scope":{
+            "label": "Portée de la variable:",
+            "global": "mondial",
+            "node": "nœud et sous-arborescence sélectionné"
+        },
         "header": "Variables",
         "code": "Code",
         "buttons":{
