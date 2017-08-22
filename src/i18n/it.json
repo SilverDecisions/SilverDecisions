@@ -108,6 +108,7 @@
         "plot":{
             "groups":{
                 "highlighted": "Evidenziato",
+                "highlighted-default": "Raccomandato (per default WTP)",
                 "extended-dominated" : "Estesa-dominata",
                 "dominated": "Dominata",
                 "default": "Altro"
@@ -191,6 +192,50 @@
                 "largeParametersNumber": "Numero di parametri maggiori di {{number}}. La visualizzazione dell'analisi di sensibilità potrebbe non riuscire o essere molto lenta."
             }
         },
+        "tornado-diagram":{
+            "name": "Diagramma a tornado",
+            "param":{
+                "ruleName": "Nome alla regola",
+                "extendedPolicyDescription": {
+                    "label": "Descrizione estesa della politica"
+                },
+                "variables": {
+                    "label": "Variabili",
+                    "name": {
+                        "label": "Nome"
+                    },
+                    "min": {
+                        "label": "Min"
+                    },
+                    "max": {
+                        "label": "Max"
+                    },
+                    "length": {
+                        "label": "Lunghezza"
+                    },
+                    "step": {
+                        "label": "Passo"
+                    },
+                    "defaultValue": {
+                        "label": "Valore predefinito"
+                    }
+                }
+            },
+            "errors":{
+                "computations": "Errore nei calcoli di analisi di sensibilità per i seguenti parametri:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Numero di scenari definiti più grandi di {{numberFormatted}}. Analisi di sensibilità potrebbe non essere calcolata o essere molto lenta.",
+                "largeParametersNumber": "Numero di parametri maggiori di {{number}}. La visualizzazione dell'analisi di sensibilità potrebbe non riuscire o essere molto lenta."
+            },
+            "plot":{
+                "legend":{
+                    "low": "Decresce",
+                    "high": "Cresce"
+                },
+                "xAxisTitle": "Saldo"
+            }
+        },
         "probabilistic-sensitivity-analysis":{
             "name": "Analisi di sensibilità probabilistica",
             "param":{
@@ -220,6 +265,42 @@
                 "largeScenariosNumber": "Numero di scenari definiti più grandi di {{numberFormatted}}. Analisi di sensibilità potrebbe non riuscire o essere molto lenta."
             }
         },
+                "spider-plot": {
+            "name": "Diagramma di Kiviat",
+            "param": {
+                "ruleName": "Nome alla regola",
+                "extendedPolicyDescription": {
+                    "label": "Descrizione estesa della politica"
+                },
+                "percentageChangeRange": {
+                    "label": "+/- variazione percentuale da considerare"
+                },
+                "length": {
+                    "label": "Numero di valpri da testare",
+                    "help": "Numero di valpri da testare (in una parte della gamma)"
+                },
+                "variables": {
+                    "label": "Variabili",
+                    "name": {
+                        "label": "Nome"
+                    },
+                    "defaultValue": {
+                        "label": "Valore predefinito"
+                    }
+                }
+            },
+            "errors": {
+                "computations": "Errore nei calcoli di analisi di sensibilità per i seguenti parametri:"
+            },
+            "warnings": {
+                "largeScenariosNumber": "Numero di scenari definiti più grandi di {{numberFormatted}}. Analisi di sensibilità potrebbe non riuscire o essere molto lenta."
+            },
+            "plot": {
+                "legend": {},
+                "xAxisTitle": "Variazione percentuale",
+                "yAxisTitle": "Saldo"
+            }
+        },
         "league-table":{
             "name": "Classifica"
         },
@@ -228,6 +309,7 @@
             "params": "{{jobName}} parameteri errati"
         }
     },
+
     "settingsDialog":{
         "title": "Settaggi",
         "general":{
@@ -367,6 +449,7 @@
                 "title": "Grafico",
                 "maxWidth": "Larghezza massima",
                 "highlightedColor": "Colore evidenziato della regola",
+                "highlightedDefaultColor": "Colore polizza raccomandata (per default WTP)",
                 "extendedDominatedColor": "Colori della regola dominata estesa",
                 "dominatedColor": "Colore della denominata regola",
                 "defaultColor": "Altri criteri colore"
@@ -410,12 +493,21 @@
     },
     "definitionsDialog":{
         "title": "Definizioni delle variabili",
+        "scope": {
+            "global": "raggio globale",
+            "node": "raggio di nodo e sotto-albero selezionati"
+        },
         "buttons":{
             "recalculate": "Ricalcolare"
         },
         "evaluatedVariables": "Variabili valutate"
     },
     "sidebarDefinitions":{
+        "scope":{
+            "label": "Raggio variabile:",
+            "global": "globale",
+            "node": "nodo e sotto-albero selezionati"
+        },
         "header": "Variabili",
         "code": "Codice",
         "buttons":{
