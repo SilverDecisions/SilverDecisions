@@ -298,8 +298,9 @@ export class Layout{
 
     getNodeMaxX(d){
         var self = this;
+
         if(d && d.childEdges.length){
-            return d3.min(d.childEdges, e=>e.childNode.location.x)-self.getMinMarginBetweenNodes();
+            return d3.min(d.childEdges, e=>!e.childNode.$hidden ? e.childNode.location.x : 9999999)-self.getMinMarginBetweenNodes();
         }
         return 9999999;
     }

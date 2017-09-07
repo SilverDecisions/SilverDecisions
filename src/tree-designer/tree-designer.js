@@ -1234,8 +1234,25 @@ export class TreeDesigner {
         return this.mainGroup.select('#text-'+id);
     }
 
-    getSelectedNodes() {
-        return this.mainGroup.selectAll(".node.selected").data();
+    getSelectedNodes(visibleOnly = false) {
+        let selectedVisible = this.mainGroup.selectAll(".node.selected").data();
+        if(visibleOnly){
+            return selectedVisible;
+        }
+
+        let allSelected  = [];
+        allSelected.push(...selectedVisible);
+
+        selectedVisible.forEach(n=>{
+            if(n.folded){
+                let descendants = this.data.getAllDescendantNodes(n);
+                if(descendants){
+                    allSelected.push(...descendants);
+                }
+            }
+        });
+
+        return allSelected;
     }
 
     getSelectedTexts(){

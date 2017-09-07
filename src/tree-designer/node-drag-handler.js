@@ -59,7 +59,7 @@ export class NodeDragHandler{
 
         self.treeDesigner.selectNode(d);
         node.classed("selected dragging", true);
-        self.selectedNodes = self.treeDesigner.getSelectedNodes();
+        self.selectedNodes = self.treeDesigner.getSelectedNodes(true);
         self.prevDragEvent = d3.event;
         self.dragEventCount = 0;
     }
