@@ -29,7 +29,7 @@ export class NodeContextMenu extends ContextMenu {
                 action: function (elm, d, i) {
                     treeDesigner.pasteToNode(d);
                 },
-                disabled: !treeDesigner.copiedNodes || !treeDesigner.copiedNodes.length
+                disabled: d.folded || !treeDesigner.copiedNodes || !treeDesigner.copiedNodes.length
 
             };
             var deleteMenuItem = {
@@ -41,31 +41,36 @@ export class NodeContextMenu extends ContextMenu {
 
                 }
             };
+
             var menu = [];
             if (d.type == model.TerminalNode.$TYPE) {
                 menu = [copyMenuItem, cutMenuItem, deleteMenuItem];
                 NodeContextMenu.addNodeConversionOptions(d, menu, treeDesigner);
                 return menu;
             }
-            menu.push({
-                title: i18n.t('contextMenu.node.addDecisionNode'),
-                action: function (elm, d, i) {
-                    treeDesigner.addDecisionNode(d)
-                }
-            });
-            menu.push({
-                title: i18n.t('contextMenu.node.addChanceNode'),
-                action: function (elm, d, i) {
-                    treeDesigner.addChanceNode(d)
-                }
-            });
-            menu.push({
-                title: i18n.t('contextMenu.node.addTerminalNode'),
-                action: function (elm, d, i) {
-                    treeDesigner.addTerminalNode(d)
-                }
-            });
-            menu.push({divider: true});
+
+            if(!d.folded){
+                menu.push({
+                    title: i18n.t('contextMenu.node.addDecisionNode'),
+                    action: function (elm, d, i) {
+                        treeDesigner.addDecisionNode(d)
+                    }
+                });
+                menu.push({
+                    title: i18n.t('contextMenu.node.addChanceNode'),
+                    action: function (elm, d, i) {
+                        treeDesigner.addChanceNode(d)
+                    }
+                });
+                menu.push({
+                    title: i18n.t('contextMenu.node.addTerminalNode'),
+                    action: function (elm, d, i) {
+                        treeDesigner.addTerminalNode(d)
+                    }
+                });
+                menu.push({divider: true});
+            }
+
             menu.push(copyMenuItem);
             menu.push(cutMenuItem);
             menu.push(pasteMenuItem);
@@ -79,6 +84,22 @@ export class NodeContextMenu extends ContextMenu {
                     treeDesigner.selectSubTree(d, true);
                 }
             });
+
+            if(!d.folded){
+                menu.push({
+                    title: i18n.t('contextMenu.node.fold'),
+                    action: function (elm, d, i) {
+                        treeDesigner.foldSubtree(d);
+                    }
+                });
+            }else{
+                menu.push({
+                    title: i18n.t('contextMenu.node.unfold'),
+                    action: function (elm, d, i) {
+                        treeDesigner.foldSubtree(d, false);
+                    }
+                });
+            }
 
             if(operationsForObject){
                 var operations = operationsForObject(d);

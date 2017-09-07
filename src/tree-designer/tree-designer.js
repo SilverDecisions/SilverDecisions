@@ -363,7 +363,7 @@ export class TreeDesigner {
 
 
         var nodesContainer = this.mainGroup.selectOrAppend('g.nodes');
-        var nodes = nodesContainer.selectAll('.node').data(this.data.nodes, (d,i)=> d.$id);
+        var nodes = nodesContainer.selectAll('.node').data(this.data.nodes.filter(d=>!d.$hidden), (d,i)=> d.$id);
         nodes.exit().remove();
         var nodesEnter = nodes.enter().append('g')
             .attr('id', d=>'node-'+d.$id)
@@ -512,6 +512,19 @@ export class TreeDesigner {
                     self.nodeDragHandler.cancelDrag();
                 }
             })
+
+
+            if(d.folded){
+                let button = d3.select(nodeElem).selectOrAppend('text.sd-unfold-button')
+                    .text("[+]")
+                    .on('click', ()=>self.foldSubtree(d, false));
+
+                self.layout.nodeUnfoldButtonPosition(button);
+                Tooltip.attach(button, i18n.t('contextMenu.node.unfold'));
+            }else{
+                d3.select(nodeElem).select('.sd-unfold-button').remove();
+            }
+
         })
     }
 
@@ -549,7 +562,7 @@ export class TreeDesigner {
             edgesContainer.selectAll("*").remove();
         }
 
-        var edges = edgesContainer.selectAll('.edge').data(this.data.edges, (d,i)=> d.$id);
+        var edges = edgesContainer.selectAll('.edge').data(this.data.edges.filter(e=>!e.$hidden), (d,i)=> d.$id);
         edges.exit().remove();
         var edgesEnter = edges.enter().append('g')
             .attr('id', d=>'edge-'+d.$id)
@@ -1095,6 +1108,9 @@ export class TreeDesigner {
         self.copyNodes(this.copiedNodes);
         nodesToAttach.forEach(toAttach=>{
             var attached = this.data.attachSubtree(toAttach, node).childNode;
+            if(attached.folded){
+                self.foldSubtree(attached, attached.folded, false);
+            }
             var location = self.layout.getNewChildLocation(node);
             attached.moveTo(location.x, location.y, true);
             self.layout.moveNodeToEmptyPlace(attached, false);
@@ -1102,6 +1118,11 @@ export class TreeDesigner {
 
             self.selectSubTree(attached, false, nodesToAttach.length>1);
         });
+
+        if(node.folded){
+            self.foldSubtree(node, node.folded, false);
+        }
+
         setTimeout(function(){
             self.redraw();
             self.layout.update();
@@ -1117,7 +1138,9 @@ export class TreeDesigner {
         self.copyNodes(this.copiedNodes);
         nodesToAttach.forEach(toAttach=> {
             var attached = this.data.attachSubtree(toAttach);
-
+            if(attached.folded){
+                self.foldSubtree(attached, attached.folded, false);
+            }
             attached.moveTo(point.x, point.y, true);
             self.layout.moveNodeToEmptyPlace(attached, false);
             self.layout.fitNodesInPlottingRegion(this.data.getAllDescendantNodes(attached));
@@ -1151,6 +1174,39 @@ export class TreeDesigner {
         },10)
     }
 
+    foldSubtree(node, fold = true, redraw=true){
+        let self = this;
+        node.folded = fold;
+
+        this.data.getAllDescendantNodes(node).forEach(n=>{
+            n.$hidden = fold;
+            n.folded = false;
+        });
+        this.data.getAllDescendantEdges(node).forEach(e=>e.$hidden = fold);
+
+        if(!redraw){
+            return;
+        }
+        setTimeout(function(){
+            self.redraw();
+            self.layout.update();
+        },10)
+    }
+
+    updateVisibility(node = null){
+        if(!node){
+            this.data.getRoots().forEach(n=>this.updateVisibility(n));
+            return;
+        }
+
+        if(node.folded){
+            this.foldSubtree(node, true, false);
+            return;
+        }
+
+        node.childEdges.forEach(e => this.updateVisibility(e.childNode));
+
+    }
 
     moveNodeTo(x,y){
 

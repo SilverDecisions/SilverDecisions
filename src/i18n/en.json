@@ -78,6 +78,8 @@
                 "terminal": "As Terminal Node"
             },
             "selectSubtree": "Select subtree",
+            "fold": "Fold subtree",
+            "unfold": "Unfold subtree",
             "flipSubtree": "Flip subtree"
         },
         "edge":{

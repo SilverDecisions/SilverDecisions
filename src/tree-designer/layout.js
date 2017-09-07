@@ -212,6 +212,14 @@ export class Layout{
             .attr('text-anchor', 'middle')
     }
 
+    nodeUnfoldButtonPosition(selection) {
+        var fontSize = 12;
+        return selection
+            .attr('x', this.config.nodeSize / 2 + 5)
+            .attr('y', 0)
+            .attr('dominant-baseline', 'central')
+    }
+
     edgeLineD(edge){
         var line = d3.line()
             .x(d=> d[0])
@@ -421,7 +429,7 @@ export class Layout{
         var prevTreeMaxY = self.getNodeMinY();
         this.data.getRoots().forEach(r=>{
             var root = d3.hierarchy(r, d=>{
-                return d.childEdges.map(e=>e.childNode);
+                return d.childEdges.filter(e=>!e.$hidden).map(e=>e.childNode);
             });
 
             // root.sort((a,b)=>self.nodeTypeOrder[a.data.type]-self.nodeTypeOrder[b.data.type]);

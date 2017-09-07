@@ -680,6 +680,10 @@
         animation: pulse 1.3s ease-in;
         -webkit-animation: pulse 1.3s ease-in;
         -webkit-animation-iteration-count: infinite; }
+      #silver-decisions svg.tree-designer .node .sd-unfold-button {
+        cursor: pointer;
+        font-weight: bold;
+        font-family: monospace; }
     #silver-decisions svg.tree-designer .decision-node path {
       fill: #ff7777;
       stroke-width: 1px;

@@ -503,6 +503,12 @@
           -webkit-animation-iteration-count: infinite;
         }
       }
+
+      .sd-unfold-button{
+        cursor: pointer;
+        font-weight: bold;
+        font-family: monospace;
+      }
     }
 
     .decision-node {

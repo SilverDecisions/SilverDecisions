@@ -788,6 +788,7 @@ export class App {
             if (diagramData.treeDesigner) {
                 this.treeDesigner.setConfig(Utils.deepExtend(self.getTreeDesignerInitialConfig(), diagramData.treeDesigner));
             }
+            this.treeDesigner.updateVisibility();
 
             this.setDiagramTitle(diagramData.title || '', true);
             this.setDiagramDescription(diagramData.description || '', true);
