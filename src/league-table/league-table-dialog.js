@@ -1,4 +1,4 @@
-import {Dialog} from "../dialog";
+import {Dialog} from "../dialogs/dialog";
 import {Utils, log} from "sd-utils";
 import {Templates} from "../templates";
 import {i18n} from "../i18n/i18n";

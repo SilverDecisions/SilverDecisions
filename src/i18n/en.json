@@ -56,40 +56,6 @@
     "text":{
         "value": "Text"
     },
-    "contextMenu":{
-        "main":{
-            "addDecisionNode": "Add Decision Node",
-            "addChanceNode": "Add Chance Node",
-            "addText": "Add Text",
-            "paste": "Paste",
-            "selectAllNodes": "Select all nodes"
-        },
-        "node":{
-            "copy": "Copy",
-            "cut": "Cut",
-            "paste": "Paste",
-            "delete": "Delete",
-            "addDecisionNode": "Add Decision Node",
-            "addChanceNode": "Add Chance Node",
-            "addTerminalNode": "Add Terminal Node",
-            "convert":{
-                "decision": "As Decision Node",
-                "chance": "As Chance Node",
-                "terminal": "As Terminal Node"
-            },
-            "selectSubtree": "Select subtree",
-            "fold": "Fold subtree",
-            "unfold": "Unfold subtree",
-            "flipSubtree": "Flip subtree"
-        },
-        "edge":{
-            "injectDecisionNode": "Inject Decision Node",
-            "injectChanceNode": "Inject Chance Node"
-        },
-        "text":{
-            "delete": "Delete"
-        }
-    },
     "leagueTableDialog":{
         "title": "League table",
         "buttons": {
@@ -562,36 +528,6 @@
                     "header": "Edge #{{number}}"
                 }
             }
-        }
-    },
-    "validation":{
-        "incompletePath": "Path not ending with terminal node",
-        "probabilityDoNotSumUpTo1": "Probabilities do not sum up to 1",
-        "invalidProbability": "Invalid probability in edge #{{number}}",
-        "invalidPayoff": "Invalid payoff in edge #{{number}}"
-    },
-    "growl":{
-        "brushDisabled": "Selection brush disabled",
-        "brushEnabled": "Selection brush enabled"
-    },
-    "tooltip":{
-        "node":{
-            "payoff": {
-                "default": "Payoff {{number}}",
-                "named": "{{name}}"
-            },
-            "aggregatedPayoff": {
-                "default": "Aggregated Payoff {{number}}",
-                "named": "Aggregated {{name}}"
-            },
-            "probabilityToEnter": "Probability to enter"
-        },
-        "edge":{
-            "payoff": {
-                "default": "Payoff {{number}}: {{value}}",
-                "named": "{{name}}: {{value}}"
-            },
-            "probability": "Probability: {{value}}"
         }
     },
     "confirm":{

@@ -3,16 +3,16 @@ import {i18n} from "./i18n/i18n";
 import {Utils, log} from "sd-utils";
 import {AppUtils} from "./app-utils";
 import * as model from "sd-model";
-import {TreeDesigner} from "./tree-designer/tree-designer";
+import {TreeDesigner} from "sd-tree-designer";
 import {Templates} from "./templates";
 import {Sidebar} from "./sidebar";
 import {Toolbar} from "./toolbar";
-import {SettingsDialog} from "./settings-dialog";
-import {AboutDialog} from "./about-dialog";
+import {SettingsDialog} from "./dialogs/settings-dialog";
+import {AboutDialog} from "./dialogs/about-dialog";
 import {Exporter} from "./exporter";
-import {DefinitionsDialog} from "./definitions-dialog";
+import {DefinitionsDialog} from "./dialogs/definitions-dialog";
 import {ComputationsManager} from "sd-computations";
-import {SensitivityAnalysisDialog} from "./sensitivity-analysis-dialog";
+import {SensitivityAnalysisDialog} from "./dialogs/sensitivity-analysis-dialog";
 import {LoadingIndicator} from "./loading-indicator";
 import {LeagueTableDialog} from "./league-table/league-table-dialog";
 
@@ -193,11 +193,14 @@ export class App {
             this.container = d3.select(containerIdOrElem);
         }
         var self = this;
-        this.container.html(Templates.get('main', {
+
+        let html = Templates.get('main', {
             version: App.version,
             buildTimestamp: App.buildTimestamp,
             'lng': self.config.lng
-        }));
+        });
+        this.container.html(html);
+
         this.container.select('#silver-decisions').classed('sd-read-only', this.config.readOnly);
     }
 
@@ -286,13 +289,15 @@ export class App {
     initTreeDesigner() {
         var self = this;
         var config = this.getTreeDesignerInitialConfig();
-        this.treeDesigner = new TreeDesigner(this.container.select('#tree-designer-container'), this.dataModel, config);
+        let container2 = this.container.select('#tree-designer-container');
+
+        this.treeDesigner = new TreeDesigner(container2, this.dataModel, config);
     }
 
     getTreeDesignerInitialConfig() {
         var self = this;
         return Utils.deepExtend({
-            $readOnly: self.config.readOnly,
+            readOnly: self.config.readOnly,
             onNodeSelected: function (node) {
                 self.onObjectSelected(node);
             },

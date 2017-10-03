@@ -12,7 +12,7 @@ var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
 
 var p = require('./package.json'),
-stringify = require('stringify');
+    stringify = require('stringify');
 
 var Server = require('karma').Server;
 var runSequence = require('run-sequence');
@@ -22,6 +22,7 @@ var gutil = require('gulp-util');
 var chalk = require('chalk');
 
 var projectName= "silver-decisions";
+let treeDesignerModule = "sd-tree-designer";
 
 var dependencies = [];
 
@@ -45,27 +46,69 @@ var nestedDependencies = [
     'odc-d3/src/scatterplot',
     'odc-d3/src/diverging-stacked-bar-chart',
     'odc-d3/src/line-chart',
-    'sd-computations/src/validation/mcdm-weight-value-validator'
+
 
 ];
-dependencies.push(...nestedDependencies);
 
+var nestedSdDependencies = [
+    'sd-computations/src/validation/mcdm-weight-value-validator',
+    'sd-computations/src/policies/policy',
+    'sd-computations/src/jobs/engine/job-parameter-definition'
+];
+
+dependencies.push(...nestedDependencies);
+dependencies.push(...nestedSdDependencies);
 
 var vendorDependencies = [];
 vendorDependencies.push(...nestedDependencies);
 
 var sdDependencies = [];
+var sdCoreDependencies = [];
 
-for(var k in p.dependencies){
-    if(p.dependencies.hasOwnProperty(k)){
-        dependencies.push(k);
-        if(k.trim().startsWith("sd-")){
-            sdDependencies.push(k)
-        }else{
-            vendorDependencies.push(k)
-        }
+let checkedModules = [];
+let coreVendor = [];
+[p, require('./node_modules/sd-tree-designer/package.json')].forEach(p=>{
+    Object.getOwnPropertyNames(p.dependencies).forEach(n=>checkModule(n))
+});
+
+function checkModule(name, inCore=false){
+
+    name = name.trim();
+    dependencies.push(name);
+
+    if(checkedModules.indexOf(name)>-1){
+        return;
     }
+    console.log('checkModule', name, inCore)
+    checkedModules.push(name);
+
+    if(name.startsWith("sd-")){
+        sdDependencies.push(name);
+        if(name !== treeDesignerModule && sdCoreDependencies.indexOf(name)<0){
+            sdCoreDependencies.push(name);
+            Object.getOwnPropertyNames(require('./node_modules/'+name+'/package.json').dependencies).forEach(n=>checkModule(n, true))
+        }
+
+    }else {
+        let index = vendorDependencies.indexOf(name);
+        if(inCore){
+             //remove vendor dependencies bundled with core
+            if(index > -1){
+                vendorDependencies.splice(index, 1);
+            }
+            coreVendor.push(name)
+        }else{
+            if(index<0){
+                vendorDependencies.push(name)
+            }
+        }
+
+    }
+
 }
+
+
+console.log(dependencies, sdDependencies, sdCoreDependencies, vendorDependencies, 'coreVendor',coreVendor, checkedModules);
 
 gulp.task('clean', function (cb) {
     return del(['tmp', 'dist'], cb);
@@ -86,7 +129,7 @@ gulp.task('build-css', ['build-app-css', 'build-vendor-css'], function () {
 });
 
 gulp.task('build-app-css', function () {
-    return buildCss(projectName, './src/styles/*', './dist');
+    return buildCss(projectName, ['node_modules/sd-tree-designer/src/styles/*', './src/styles/*'], './dist');
 });
 
 gulp.task('build-vendor-css', function () {
@@ -120,7 +163,8 @@ function buildJs(src, standaloneName,  jsFileName, dest, external, failOnError) 
         entries: [src],
         cache: {},
         packageCache: {},
-        standalone: standaloneName
+        standalone: standaloneName,
+        noBundleExternal: true
     }).transform(stringify, {
         appliesTo: { includeExtensions: ['.html'] }
     })
@@ -130,11 +174,17 @@ function buildJs(src, standaloneName,  jsFileName, dest, external, failOnError) 
     return finishBrowserifyBuild(b,jsFileName, dest, failOnError)
 }
 
-function buildJsDependencies(jsFileName, moduleNames, dest, failOnError){
+function buildJsDependencies(jsFileName, moduleNames, dest, failOnError, external){
     var b = browserify({
         debug: true,
-        require: [moduleNames]
+        require: [moduleNames],
+
     })
+
+    if(external){
+        b = b.external(external);
+    }
+
 
     return finishBrowserifyBuild(b, jsFileName, dest, failOnError)
 }
@@ -179,15 +229,17 @@ gulp.task('build-app-watch', ['build-config'], function () {
 
 function buildApp(failOnError){
     var jsFileName =  projectName;
-    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist", dependencies, failOnError)
+
+    return buildJs('src/index.js', 'SilverDecisions.App', jsFileName, "dist", dependencies.filter(n=> n !== treeDesignerModule), failOnError)
 }
 
 gulp.task('build-core', function () {
-    return buildJsDependencies("silver-decisions-core", sdDependencies, "dist")
+    return buildJsDependencies("silver-decisions-core", sdCoreDependencies.concat(nestedSdDependencies), "dist", true)
 });
 
+
 gulp.task('build-vendor', function () {
-    return buildJsDependencies("silver-decisions-vendor", vendorDependencies, "dist")
+    return buildJsDependencies("silver-decisions-vendor", vendorDependencies, "dist", true, coreVendor.concat(nestedSdDependencies))
 });
 
 gulp.task('build-clean', function (cb) {

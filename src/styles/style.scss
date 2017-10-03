@@ -885,19 +885,6 @@
   }
 }
 
-.sd-tooltip {
-  position: absolute;
-  pointer-events: none;
-  font-size: 11px;
-  background: #fdfdfd;
-  padding: 3px 5px;
-  border-radius: 8px;
-  box-shadow: 1px 3px 3px #b7b7b7;
-  text-align: center;
-  z-index: 1000;
-  font-family: sans-serif;
-  //border: 1px solid #ccc;
-}
 
 #sd-settings-dialog {
 
@@ -1006,58 +993,6 @@
 }
 
 
-
-.sd-hidden {
-  display: none !important;
-}
-
-.sd-growl-list {
-  position: fixed;
-  top: 55px;
-
-  &.right {
-    right: 20px;
-  }
-  &.left {
-    left: 215px;
-  }
-
-}
-
-.sd-growl-message {
-  font-family: Roboto, Helvetica, Arial, sans-serif;
-  background: white;
-  border: 1px solid #3a3a3a;
-  border-radius: 7px;
-  box-shadow: 1px 3px 3px #b7b7b7;
-  padding: 5px 10px;
-  margin-bottom: 7px;
-  font-size: 14px;
-
-  &.warning {
-    color: #8a6d3b;
-    background-color: #fcf8e3;
-    border-color: #faebcc;
-  }
-
-  &.info {
-    color: #31708f;
-    background-color: #d9edf7;
-    border-color: #bce8f1;
-  }
-
-  &.success {
-    color: #3c763d;
-    background-color: #dff0d8;
-    border-color: #d6e9c6;
-  }
-
-  &.danger {
-    color: #a94442;
-    background-color: #f2dede;
-    border-color: #ebccd1;
-  }
-}
 
 .sd-loading-indicator {
   z-index: 1000;

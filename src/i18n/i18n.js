@@ -7,12 +7,12 @@ import * as fr from './fr.json'
 
 export class i18n{
 
+    static $instance;
     static language;
 
     static init(lng){
-        var self = this;
         i18n.language = lng;
-        i18next.init({
+        i18n.$instance = i18next.createInstance({
             lng: lng,
             fallbackLng: 'en',
             resources: {
@@ -37,6 +37,6 @@ export class i18n{
     }
 
     static t(key, opt){
-        return i18next.t(key, opt)
+        return i18n.$instance.t(key, opt)
     }
 }

@@ -1,10 +1,10 @@
-import * as d3 from './d3'
+import * as d3 from '../d3'
 import {Dialog} from './dialog'
 import {Utils} from "sd-utils";
-import {AppUtils} from "./app-utils";
-import {Templates} from "./templates";
+import {AppUtils} from "../app-utils";
+import {Templates} from "../templates";
 import {domain as model} from "sd-model";
-import {i18n} from "./i18n/i18n";
+import {i18n} from "../i18n/i18n";
 
 export class DefinitionsDialog extends Dialog {
     changeCallback;

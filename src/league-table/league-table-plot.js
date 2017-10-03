@@ -1,7 +1,7 @@
 import {ScatterPlot, ScatterPlotConfig} from "odc-d3/src/scatterplot";
 import {Utils} from "sd-utils";
 import * as d3 from "../d3";
-import {Tooltip} from "../tooltip";
+import {Tooltip} from "sd-tree-designer";
 import {i18n} from "../i18n/i18n";
 
 export class LeagueTablePlotConfig extends ScatterPlotConfig {

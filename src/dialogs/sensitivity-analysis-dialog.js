@@ -1,17 +1,17 @@
 import {Dialog} from "./dialog";
-import {JobParametersBuilder} from "./jobs/job-parameters-builder";
+import {JobParametersBuilder} from "../jobs/job-parameters-builder";
 import {Utils, log} from "sd-utils";
-import {Templates} from "./templates";
-import {i18n} from "./i18n/i18n";
-import {AppUtils} from "./app-utils";
-import {Tooltip} from "./tooltip";
-import {LoadingIndicator} from "./loading-indicator";
-import {Exporter} from "./exporter";
-import {SensitivityAnalysisJobResultTable} from "./jobs/sensitivity-analysis-result-table";
-import {ProbabilisticSensitivityAnalysisJobResultTable} from "./jobs/probabilistic-sensitivity-analysis-result-table";
+import {Templates} from "../templates";
+import {i18n} from "../i18n/i18n";
+import {AppUtils} from "../app-utils";
+import {Tooltip} from "sd-tree-designer";
+import {LoadingIndicator} from "../loading-indicator";
+import {Exporter} from "../exporter";
+import {SensitivityAnalysisJobResultTable} from "../jobs/sensitivity-analysis-result-table";
+import {ProbabilisticSensitivityAnalysisJobResultTable} from "../jobs/probabilistic-sensitivity-analysis-result-table";
 import {Policy} from "sd-computations/src/policies/policy";
-import {TornadoDiagramPlot} from "./jobs/tornado-diagram-plot";
-import {SpiderPlot} from "./jobs/spider-plot";
+import {TornadoDiagramPlot} from "../jobs/tornado-diagram-plot";
+import {SpiderPlot} from "../jobs/spider-plot";
 
 export class SensitivityAnalysisDialog extends Dialog {
     computationsManager;

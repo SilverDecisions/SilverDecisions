@@ -1,7 +1,7 @@
 import {DivergingStackedBarChartConfig, DivergingStackedBarChart} from "odc-d3/src/diverging-stacked-bar-chart";
 import {Utils} from "sd-utils";
 import * as d3 from "../d3";
-import {Tooltip} from "../tooltip";
+import {Tooltip} from "sd-tree-designer";
 import {i18n} from "../i18n/i18n";
 import {Policy} from "sd-computations/src/policies/policy";
 

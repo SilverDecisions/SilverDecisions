@@ -5,7 +5,7 @@ import * as d3 from "../d3";
 import {Utils} from "sd-utils";
 import {i18n} from "../i18n/i18n";
 import {AppUtils} from "../app-utils";
-import {Tooltip} from "../tooltip";
+import {Tooltip} from "sd-tree-designer";
 import {Autocomplete} from "../autocomplete"
 
 export class JobParametersBuilder{

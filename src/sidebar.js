@@ -6,7 +6,7 @@ import {domain as model} from "sd-model";
 import {PayoffInputValidator} from "./validation/payoff-input-validator";
 import {ProbabilityInputValidator} from "./validation/probability-input-validator";
 import {Templates} from "./templates";
-import {Tooltip} from "./tooltip";
+import {Tooltip} from "sd-tree-designer";
 import {InputField} from "./form/input-field";
 import {PathValueAccessor} from "./form/path-value-accessor";
 import {NumberInputValidator} from "./validation/number-input-validator";
