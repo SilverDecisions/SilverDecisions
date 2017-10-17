@@ -79,7 +79,6 @@ function checkModule(name, inCore=false){
     if(checkedModules.indexOf(name)>-1){
         return;
     }
-    console.log('checkModule', name, inCore)
     checkedModules.push(name);
 
     if(name.startsWith("sd-")){
@@ -107,8 +106,6 @@ function checkModule(name, inCore=false){
 
 }
 
-
-console.log(dependencies, sdDependencies, sdCoreDependencies, vendorDependencies, 'coreVendor',coreVendor, checkedModules);
 
 gulp.task('clean', function (cb) {
     return del(['tmp', 'dist'], cb);
@@ -311,14 +308,23 @@ gulp.task('prepare-test', function(){
         .pipe(gulp.dest('test'))
 })
 
+
 gulp.task('test', ['prepare-test'], function (done) {
-    new Server({
+    return runTest(true, done)
+});
+
+gulp.task('test-watch', ['prepare-test'], function (done) {
+    return runTest(false, done)
+});
+
+function runTest(singleRun, done){
+    return new Server({
         configFile: __dirname + '/karma.conf.js',
-        singleRun: true
+        singleRun: singleRun
     }, function () {
         done();
     }).start();
-});
+}
 
 gulp.task('docs-clean', function (cb) {
     return del(['./docs/app/gen/**/*'], cb);
