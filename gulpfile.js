@@ -321,8 +321,8 @@ function runTest(singleRun, done){
     return new Server({
         configFile: __dirname + '/karma.conf.js',
         singleRun: singleRun
-    }, function () {
-        done();
+    }, function (err) {
+        done(err);
     }).start();
 }
 
