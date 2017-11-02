@@ -31,4 +31,4 @@ Basic technical information about SilverDecisions is provided in [Developer's Gu
 | `hotfix` | we should fix it as soon as possible, possibly in minor release `X.Y.Z` |
 | `unscheduled` | the functionality is planned but beyond last currently planned numbered relase |
 
-[Bogumił Kamiński](https://github.com/bkamins) approves requests for enchancements and assigns them to develpment milestones.
+[Bogumił Kamiński](https://github.com/bkamins) approves requests for enchancements and assigns them to development milestones.
