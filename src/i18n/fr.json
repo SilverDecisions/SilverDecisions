@@ -56,38 +56,6 @@
     "text":{
         "value": "Texte"
     },
-    "contextMenu":{
-        "main":{
-            "addDecisionNode": "Ajouter noud de décision",
-            "addChanceNode": "Ajouter noud aléatoire",
-            "addText": "Ajouter du texte",
-            "paste": "Coller",
-            "selectAllNodes": "Sélectionner tous les nouds"
-        },
-        "node":{
-            "copy": "Copie",
-            "cut": "Couper",
-            "paste": "Coller",
-            "delete": "Effacer",
-            "addDecisionNode": "Ajouter noud de décision",
-            "addChanceNode": "Ajouter noud aléatoire",
-            "addTerminalNode": "Ajouter un noeud terminal",
-            "convert":{
-                "decision": "Comme noud de décision",
-                "chance": "Comme noud aléatoire",
-                "terminal": "Comme un noeud terminal"
-            },
-            "selectSubtree": "Sélectionner une sous-arborescence",
-            "flipSubtree": "Basculer sous-arbre"
-        },
-        "edge":{
-            "injectDecisionNode": "Injecter un noeud de décision",
-            "injectChanceNode": "Injecter un noeud de chance"
-        },
-        "text":{
-            "delete": "Effacer"
-        }
-    },
     "leagueTableDialog":{
         "title": "Classement",
         "buttons": {
@@ -495,7 +463,7 @@
         "scope": {
             "global": "portée mondiale",
             "node": "la portée des nœud et sous-arborescence sélectionné"
-        },        
+        },
         "buttons":{
             "recalculate": "Recalculer"
         },
@@ -560,36 +528,6 @@
                     "header": "Bord #{{number}}"
                 }
             }
-        }
-    },
-    "validation":{
-        "incompletePath": "Parcours non terminé par noeud terminal",
-        "probabilityDoNotSumUpTo1": "La somme des probabilités n'est pas 1 ou plus",
-        "invalidProbability": "Probabilité invalide - le bord #{{number}}",
-        "invalidPayoff": "Avantage invalide - le bord #{{number}}"
-    },
-    "growl":{
-        "brushDisabled": "Brosse de sélection désactivée",
-        "brushEnabled": "Brosse de sélection activée"
-    },
-    "tooltip":{
-        "node":{
-            "payoff": {
-                "default": "Avantage {{number}}",
-                "named": "{{name}}"
-            },
-            "aggregatedPayoff": {
-                "default": "Avantage agrégé {{number}}",
-                "named": "Agrégé  {{name}}"
-            },
-            "probabilityToEnter": "Probabilité d'entrée"
-        },
-        "edge":{
-            "payoff": {
-                "default": "Avantage {{number}}: {{value}}",
-                "named": "{{name}}: {{value}}"
-            },
-            "probability": "Probabilité: {{value}}"
         }
     },
     "confirm":{

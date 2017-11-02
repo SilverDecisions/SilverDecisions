@@ -56,38 +56,6 @@
     "text":{
         "value": "Text"
     },
-    "contextMenu":{
-        "main":{
-            "addDecisionNode": "Entscheidungsknoten hinzufügen",
-            "addChanceNode": "Zufall Knoten hinzufügen",
-            "addText": "Text hinzufügen ",
-            "paste": "Einfügen",
-            "selectAllNodes": "Alle Knoten auswählen"
-        },
-        "node":{
-            "copy": "Kopieren",
-            "cut": "Ausschneiden",
-            "paste": "Einfügen",
-            "delete": "Löschen",
-            "addDecisionNode": "Entscheidungsknoten hinzufügen",
-            "addChanceNode": "Zufall Knoten hinzufügen",
-            "addTerminalNode": "Endknotten hinzufügen",
-            "convert":{
-                "decision": "Als Entscheidungsknoten",
-                "chance": "Als Zufall Knoten",
-                "terminal": "Als Endknoten"
-            },
-            "selectSubtree": "Teilbaum wählen",
-            "flipSubtree": "Teilbaum umdrehen"
-        },
-        "edge":{
-            "injectDecisionNode": "Entscheidungsknoten Injizieren",
-            "injectChanceNode": "Zufall Knoten Injizieren"
-        },
-        "text":{
-            "delete": "Löschen"
-        }
-    },
     "leagueTableDialog":{
         "title": "Rangliste",
         "buttons": {
@@ -561,36 +529,6 @@
                     "header": "Zweig #{{number}}"
                 }
             }
-        }
-    },
-    "validation":{
-        "incompletePath": "Pfad, der nicht mit dem Endknoten endet",
-        "probabilityDoNotSumUpTo1": "Die Summe der Wahrscheinlichkeiten ist nicht gleich 1",
-        "invalidProbability": "Ungültige Wahrscheinlichkeit im Zweig #{{number}}",
-        "invalidPayoff": "Ungültige Auszahlung in Zweig #{{number}}"
-    },
-    "growl":{
-        "brushDisabled": "Auswahlbürste deaktiviert",
-        "brushEnabled": "Auswahlbürste aktiviert"
-    },
-    "tooltip":{
-        "node":{
-            "payoff": {
-                "default": "Auszahlung {{number}}",
-                "named": "{{name}}"
-            },
-            "aggregatedPayoff": {
-                "default": "Aggregierte Auszahlung {{number}}",
-                "named": "Aggregierte {{name}}"
-            },
-            "probabilityToEnter": "Wahrscheinlichkeit"
-        },
-        "edge":{
-            "payoff": {
-                "default": "Auszahlung {{number}}: {{value}}",
-                "named": "{{name}}: {{value}}"
-            },
-            "probability": "Wahrscheinlichkeit: {{value}}"
         }
     },
     "confirm":{

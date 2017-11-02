@@ -56,38 +56,6 @@
     "text":{
         "value": "Testo"
     },
-    "contextMenu":{
-        "main":{
-            "addDecisionNode": "Aggiungi un nodo di decisione",
-            "addChanceNode": "Aggiungi un nodo opportunità",
-            "addText": "Aggiungi testo",
-            "paste": "Incolla",
-            "selectAllNodes": "Seleziona tutti i nodi"
-        },
-        "node":{
-            "copy": "Copia",
-            "cut": "Taglia",
-            "paste": "Incolla",
-            "delete": "Cancella",
-            "addDecisionNode": "Aggiungi un nodo di decisione",
-            "addChanceNode": "Aggiungi un nodo opportunità",
-            "addTerminalNode": "Aggiungi un nodo terminale",
-            "convert":{
-                "decision": "Come Decision Node",
-                "chance": "Come Chance Node",
-                "terminal": "Come Terminal Node"
-            },
-            "selectSubtree": "Seleziona Sotto-albero",
-            "flipSubtree": "Ribalta sotto-albero"
-        },
-        "edge":{
-            "injectDecisionNode": "Inietta nodo di decisione",
-            "injectChanceNode": "Inietta nodo opportunità"
-        },
-        "text":{
-            "delete": "Cancella"
-        }
-    },
     "leagueTableDialog":{
         "title": "Classifica",
         "buttons": {
@@ -561,36 +529,6 @@
                     "header": "Ramo #{{number}}"
                 }
             }
-        }
-    },
-    "validation":{
-        "incompletePath": "Percorso senza nodo terminale",
-        "probabilityDoNotSumUpTo1": "La somma delle probabilità è diversa da 1",
-        "invalidProbability": "Probabilità non valida - bordo #{{number}}",
-        "invalidPayoff": "Saldo non valido - bordo #{{number}}"
-    },
-    "growl":{
-        "brushDisabled": "Selezione pennello disabilitata",
-        "brushEnabled": "Selezione pennello abilitata"
-    },
-    "tooltip":{
-        "node":{
-            "payoff": {
-                "default": "Saldo {{number}}",
-                "named": "{{name}}"
-            },
-            "aggregatedPayoff": {
-                "default": "Saldo aggregato {{number}}",
-                "named": "Aggregato {{name}}"
-            },
-            "probabilityToEnter": "Probabilità da inserire"
-        },
-        "edge":{
-            "payoff": {
-                "default": "Saldo {{number}}: {{value}}",
-                "named": "{{name}}: {{value}}"
-            },
-            "probability": "Probabilità: {{value}}"
         }
     },
     "confirm":{

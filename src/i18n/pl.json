@@ -56,38 +56,6 @@
     "text":{
         "value": "Tekst"
     },
-    "contextMenu":{
-        "main":{
-            "addDecisionNode": "Dodaj Węzeł Decyzyjny",
-            "addChanceNode": "Dodaj Węzeł Losowy",
-            "addText": "Dodaj Tekst",
-            "paste": "Wklej",
-            "selectAllNodes": "Zaznacz wszystkie węzły"
-        },
-        "node":{
-            "copy": "Kopiuj",
-            "cut": "Wytnij",
-            "paste": "Wklej",
-            "delete": "Usuń",
-            "addDecisionNode": "Dodaj Węzeł Decyzyjny",
-            "addChanceNode": "Dodaj Węzeł Losowy",
-            "addTerminalNode": "Dodaj Węzeł Końcowy",
-            "convert":{
-                "decision": "Jako Węzeł Decyzyjny",
-                "chance": "Jako Węzeł Losowy",
-                "terminal": "Jako Węzeł Końcowy"
-            },
-            "selectSubtree": "Zaznacz poddrzewo",
-            "flipSubtree": "Przewróć poddrzewo"
-        },
-        "edge":{
-            "injectDecisionNode": "Wstrzyknij Węzeł Decyzyjny",
-            "injectChanceNode": "Wstrzyknij Węzeł Losowy"
-        },
-        "text":{
-            "delete": "Usuń"
-        }
-    },
     "leagueTableDialog":{
         "title": "Tabela ligowa",
         "buttons": {
@@ -560,36 +528,6 @@
                     "header": "Krawędź #{{number}}"
                 }
             }
-        }
-    },
-    "validation":{
-        "incompletePath": "Ostatnim węzłem w ścieżce powinien być Węzeł Końcowy",
-        "probabilityDoNotSumUpTo1": "Prawdopodobieństwa nie sumują sie do 1",
-        "invalidProbability": "Niepoprawne prawdopodobieństwo na krawędzi #{{number}}",
-        "invalidPayoff": "Niepoprawna wypłata na krawędzi #{{number}}"
-    },
-    "growl":{
-        "brushDisabled": "Zaznaczanie wyłączone",
-        "brushEnabled": "Zaznaczanie włączone"
-    },
-    "tooltip":{
-        "node":{
-            "payoff": {
-                "default": "Wypłata {{number}}",
-                "named": "{{name}}"
-            },
-            "aggregatedPayoff": {
-                "default": "Zagregowana wypłata {{number}}",
-                "named": "Zagregowana {{name}}"
-            },
-            "probabilityToEnter": "Prawdopodobieństwo wejścia"
-        },
-        "edge":{
-            "payoff": {
-                "default": "Wypłata {{number}}: {{value}}",
-                "named": "{{name}}: {{value}}"
-            },
-            "probability": "Prawdopodobieństwo: {{value}}"
         }
     },
     "confirm":{

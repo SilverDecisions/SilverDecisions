@@ -296,7 +296,9 @@ export class App {
 
     getTreeDesignerInitialConfig() {
         var self = this;
+
         return Utils.deepExtend({
+            lng: self.config.lng,
             readOnly: self.config.readOnly,
             onNodeSelected: function (node) {
                 self.onObjectSelected(node);

@@ -6,8 +6,8 @@ var data = SilverDecisions.App.appUtils.getJSON("./data/rockefellerWithParams.js
         lng: lng,
         readOnly: false,
         logLevel: 'debug',
-        // workerUrl: "job-worker.js",
-        jobRepositoryType: 'timeout',
+        workerUrl: "job-worker.js",
+        // jobRepositoryType: 'timeout',
         buttons:{
             new: true,
             save: true,
