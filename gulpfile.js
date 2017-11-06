@@ -248,10 +248,20 @@ gulp.task('build', ['build-css', 'build-app', 'build-core', 'build-vendor'], fun
 });
 
 gulp.task('watch', function() {
-    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json'], ['build-app-watch']);
-    gulp.watch(['./src/styles/*.*css'], ['build-app-css']);
-    gulp.watch(['./node_modules/sd-computations/src/**/*.js', './node_modules/sd-model/src/**/*.js', './node_modules/sd-utils/src/**/*.js'], ['build-core']);
+    watch();
 });
+
+function watch(callback){
+    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json']).on('change', () => {
+        runSequence('build-app-watch', callback)
+    });
+    gulp.watch(['./src/styles/*.*css']).on('change', () => {
+        runSequence('build-app-css', callback)
+    });
+    gulp.watch(['./node_modules/sd-computations/src/**/*.js', './node_modules/sd-model/src/**/*.js', './node_modules/sd-utils/src/**/*.js']).on('change', () => {
+        runSequence('build-core', callback)
+    });
+}
 
 gulp.task('default',  function(cb) {
     return runSequence('build-clean', 'docs-gen', 'test', cb);
@@ -267,8 +277,8 @@ gulp.task('build-templates', function () {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default-watch', ['default'], ()=>{ browserSync.reload();  });
-gulp.task('serve', ['default'], ()=>{
+gulp.task('default-watch', ['build-clean'], ()=>{ browserSync.reload();  });
+gulp.task('serve', ['build-clean'], (cb)=>{
 
     var development = (argv.dev === undefined) ? false : true;
     var baseDir = "demo";
@@ -284,14 +294,16 @@ gulp.task('serve', ['default'], ()=>{
             index: index,
             routes: {
                 "/bower_components": "bower_components",
-                "/dist": "dist"
+                "/dist": "dist",
+                "/docs": "docs"
             }
         },
         port: 8089,
         open: 'local',
         browser: "chrome"
     });
-    gulp.watch(['i18n/**/*.json', './src/**/*.html', './src/styles/*.*css', 'src/**/*.js', 'examples/**/*.*'], ['default-watch']);
+
+    watch(()=>{ browserSync.reload();  })
 });
 
 // error function for plumber

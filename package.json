@@ -103,9 +103,9 @@
     "jquery": "^3.1.1",
     "jquery-ui": "^1.12.1",
     "pivottable": "^2.11.0",
-    "sd-computations": "0.3.4",
-    "sd-model": "0.2.5",
-    "sd-utils": "0.1.9",
-    "sd-tree-designer": "0.1.4"
+    "sd-computations": "0.3.5",
+    "sd-model": "0.2.6",
+    "sd-utils": "0.1.10",
+    "sd-tree-designer": "0.1.5"
   }
 }
