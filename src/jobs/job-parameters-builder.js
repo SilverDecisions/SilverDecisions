@@ -17,11 +17,22 @@ export class JobParametersBuilder{
         this.container=container;
         this.i18nPrefix = i18nPrefix;
         this.paramTypeToInputType ={};
+        this.paramTypeToInputAttrs = {};
+
         this.paramTypeToInputType[PARAMETER_TYPE.BOOLEAN] = 'checkbox';
         this.paramTypeToInputType[PARAMETER_TYPE.DATE] = 'date';
         this.paramTypeToInputType[PARAMETER_TYPE.INTEGER] = 'number';
+        this.paramTypeToInputAttrs[PARAMETER_TYPE.INTEGER] = [{
+            name: "step",
+            value: "1"
+        }];
         this.paramTypeToInputType[PARAMETER_TYPE.NUMBER] = 'number';
+        this.paramTypeToInputAttrs[PARAMETER_TYPE.NUMBER] = [{
+            name: "step",
+            value: "any"
+        }];
         this.paramTypeToInputType[PARAMETER_TYPE.STRING] = 'text';
+
         this.onChange = onChange;
     }
 
@@ -302,6 +313,7 @@ export class JobParametersBuilder{
         var options = Utils.get(self.customParamsConfig, path+'.options', null);
 
         var inputType = this.paramTypeToInputType[paramDefinition.type];
+        var additionalInputAttrs = this.paramTypeToInputAttrs[paramDefinition.type];
         var input;
         if(options && options.length){
             inputType = 'select';
@@ -315,6 +327,11 @@ export class JobParametersBuilder{
             }
         }else{
             input = selection.append('input').attr('type', inputType);
+
+            if(additionalInputAttrs){
+                additionalInputAttrs.forEach(attr=>input.attr(attr.name, attr.value))
+
+            }
         }
 
         input.attr('id', inputId);
