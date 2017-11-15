@@ -46,16 +46,7 @@ export class Toolbar{
         });
         this.openDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.open);
         this.saveDiagramButton = this.container.select('#save-diagram-button').on('click', ()=>{
-            this.app.serialize().then((json)=>{
-                AppUtils.dispatchEvent('SilverDecisionsSaveEvent', json);
-                if(this.app.config.jsonFileDownload){
-                    var blob = new Blob([json], {type: "application/json"});
-                    Exporter.saveAs(blob, Exporter.getExportFileName('json'));
-                }
-            });
-
-
-
+            this.app.saveToFile();
         });
         this.saveDiagramButton.classed(this.hiddenClass, !this.app.config.buttons.save);
     }

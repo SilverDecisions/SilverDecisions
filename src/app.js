@@ -841,7 +841,7 @@ export class App {
         });
     }
 
-    serialize(filterLocation, filterComputed) {
+    serialize(filterLocation = false, filterComputed = false, filterPrivate = true) {
         var self = this;
         return self.checkValidityAndRecomputeObjective(true, false, false, true).then(()=> {
             var obj = {
@@ -859,10 +859,18 @@ export class App {
                 sensitivityAnalysis: this.sensitivityAnalysisDialog.jobNameToParamValues
             };
 
-            return Utils.stringify(obj, self.dataModel.getJsonReplacer(filterLocation, filterComputed, self.computationsManager.expressionEngine.getJsonReplacer()));
+            return Utils.stringify(obj, self.dataModel.getJsonReplacer(filterLocation, filterComputed, self.computationsManager.expressionEngine.getJsonReplacer(), filterPrivate), filterPrivate ? ['$'] : []);
         });
+    }
 
-
+    saveToFile(filterLocation = false, filterComputed = false, filterPrivate = true){
+        this.serialize(filterLocation, filterComputed, filterPrivate).then((json)=>{
+            AppUtils.dispatchEvent('SilverDecisionsSaveEvent', json);
+            if(this.config.jsonFileDownload){
+                var blob = new Blob([json], {type: "application/json"});
+                Exporter.saveAs(blob, Exporter.getExportFileName('json'));
+            }
+        });
     }
 
     updateNumberFormats(updateView = true) {

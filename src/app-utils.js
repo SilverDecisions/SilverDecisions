@@ -63,21 +63,6 @@ export class AppUtils extends TdUtils{
         AppUtils.removeElement(form);
     };
 
-    static getJSON(url, callback) {
-        var xhr = new XMLHttpRequest();
-        xhr.open('get', url, true);
-        xhr.responseType = 'json';
-        xhr.onload = function () {
-            var status = xhr.status;
-            if (status == 200) {
-                callback(xhr.response, null);
-            } else {
-                callback(null, status);
-            }
-        };
-        xhr.send();
-    }
-
     static showFullScreenPopup(title, html, closeCallback){
         var popup = d3.select("body").selectOrAppend("div.sd-full-screen-popup-container").html(Templates.get('fullscreenPopup', {title:title,body:html}));
         popup.select('.sd-close-popup').on('click', ()=>{
