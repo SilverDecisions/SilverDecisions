@@ -526,9 +526,9 @@ svg.sd-tree-designer {
     font-weight: 500;
     text-decoration: none; }
   #silver-decisions.sd-read-only #sd-toolbar {
-    display: none; }
+    display: none !important; }
   #silver-decisions.sd-read-only #sd-sidebar {
-    display: none; }
+    display: none !important; }
   #silver-decisions #sd-toolbar {
     border: 1px solid #bfbfbf;
     border-radius: 2px;

@@ -1,7 +1,8 @@
 import {Utils} from "sd-utils";
 import {AppUtils} from "./app-utils";
 var $ = require('jquery');
-Utils.getGlobalObject().jQuery = $; //FIXME
+var global$ = Utils.getGlobalObject().jQuery;
+Utils.getGlobalObject().jQuery = $;
 require('jquery-ui/ui/data');
 require('jquery-ui/ui/widget');
 require('jquery-ui/ui/widgets/mouse');
@@ -12,6 +13,8 @@ require('jquery-ui/ui/position');
 require('jquery-ui/ui/keycode');
 require('jquery-ui/ui/safe-active-element');
 require('jquery-ui/ui/widgets/autocomplete');
+Utils.getGlobalObject().jQuery = global$;
+
 import * as d3 from './d3'
 
 $( function() {

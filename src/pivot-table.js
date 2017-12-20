@@ -1,7 +1,8 @@
 import {Utils, log} from 'sd-utils';
 import {i18n} from "./i18n/i18n";
 var jQuery = require('jquery');
-Utils.getGlobalObject().jQuery = jQuery; //FIXME
+var global$ = Utils.getGlobalObject().jQuery;
+Utils.getGlobalObject().jQuery = jQuery;
 require('jquery-ui/ui/data');
 require('jquery-ui/ui/scroll-parent');
 require('jquery-ui/ui/widget');
@@ -34,6 +35,8 @@ require('pivottable/dist/pivot.it');
 require('pivottable/dist/pivot.de');
 require('pivottable/dist/pivot.fr');
 require('pivottable/dist/pivot.pl');
+
+Utils.getGlobalObject().jQuery = global$;
 
 // pivot show zero hack continuation
 try{

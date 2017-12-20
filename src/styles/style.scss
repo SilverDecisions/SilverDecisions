@@ -25,10 +25,10 @@
 
   &.sd-read-only {
     #sd-toolbar {
-      display: none;
+      display: none!important;
     }
     #sd-sidebar {
-      display: none;
+      display: none!important;
     }
   }
 
