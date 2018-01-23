@@ -73,6 +73,10 @@ export class Sidebar {
             self.app.treeDesigner.setMargin(m);
         });
 
+        this.scale = this.layoutOptionsContainer.select('input#sd-svg-scale').on('change', function () {
+            self.app.treeDesigner.setScale(parseFloat(this.value));
+        });
+
         self.app.treeDesigner.layout.onAutoLayoutChanged.push((layout)=>self.updateLayoutOptions());
 
         this.layoutOptionsContainer.select('.toggle-button').on('click', () => {
@@ -89,6 +93,7 @@ export class Sidebar {
         this.marginVertical.node().value = this.app.treeDesigner.config.margin.top;
         this.gridWidth.node().value = this.app.treeDesigner.config.layout.gridWidth;
         this.gridHeight.node().value = this.app.treeDesigner.config.layout.gridHeight;
+        this.scale.node().value = this.app.treeDesigner.config.scale;
         this.autoLayoutOptionsGroup.classed('visible', !this.app.treeDesigner.layout.isManualLayout());
     }
 

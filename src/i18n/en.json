@@ -504,7 +504,8 @@
         "nodeSize": "Node size",
         "edgeSlantWidthMax": "Edge slant (max)",
         "gridWidth": "Width",
-        "gridHeight": "Height"
+        "gridHeight": "Height",
+        "scale": "Scale"
     },
     "diagramDetails":{
         "header": "Details",

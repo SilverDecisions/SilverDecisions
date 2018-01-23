@@ -504,7 +504,8 @@
         "nodeSize": "Rozmiar węzła",
         "edgeSlantWidthMax": "Skos krawędzi (maksymalny)",
         "gridWidth": "Szerokość",
-        "gridHeight": "Wysokość"
+        "gridHeight": "Wysokość",
+        "scale": "Skala"
     },
     "diagramDetails":{
         "header": "Szczegóły",
