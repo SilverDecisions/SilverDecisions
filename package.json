@@ -25,7 +25,12 @@
             "es2015"
           ],
           "plugins": [
-            ["transform-class-properties", { "spec": true }],
+            [
+              "transform-class-properties",
+              {
+                "spec": true
+              }
+            ],
             "transform-object-assign",
             "transform-es2015-spread",
             "transform-object-rest-spread",
@@ -106,6 +111,6 @@
     "sd-computations": "0.3.5",
     "sd-model": "0.2.6",
     "sd-utils": "0.1.10",
-    "sd-tree-designer": "0.1.9"
+    "sd-tree-designer": "0.1.11"
   }
 }
