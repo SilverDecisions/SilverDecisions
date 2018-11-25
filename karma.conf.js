@@ -26,6 +26,11 @@ module.exports = function (config) {
         browsers: ['Chrome'],
         reporters: ['progress'],
         logLevel: config.LOG_WARN,
-        singleRun: false
+        singleRun: false,
+        client: {
+            jasmine: {
+                random: false
+            }
+        }
     });
 };

@@ -6,7 +6,6 @@ var browserSync = require('browser-sync').create();
 var argv = require('yargs').argv;
 
 var browserify = require("browserify");
-var resolutions = require('browserify-resolutions');
 var source = require('vinyl-source-stream');
 var sourcemaps = require('gulp-sourcemaps');
 var buffer = require('vinyl-buffer');
@@ -85,7 +84,7 @@ function checkModule(name, inCore=false){
         sdDependencies.push(name);
         if(name !== treeDesignerModule && sdCoreDependencies.indexOf(name)<0){
             sdCoreDependencies.push(name);
-            Object.getOwnPropertyNames(require('./node_modules/'+name+'/package.json').dependencies).forEach(n=>checkModule(n, true))
+            Object.getOwnPropertyNames(require('./node_modules/'+name+'/package.json').dependencies || {}).forEach(n=>checkModule(n, true))
         }
 
     }else {
@@ -107,6 +106,66 @@ function checkModule(name, inCore=false){
 }
 
 
+gulp.task('prepare-test', function(){
+    return gulp
+        .src('test/trees/*.json')
+        .pipe(require('gulp-filelist')('tree-json-filelist.json', { flatten: true }))
+        .pipe(gulp.dest('test'))
+});
+
+
+gulp.task('test', gulp.series('prepare-test', function (done) {
+    return runTest(true, done)
+}));
+
+gulp.task('test-watch', gulp.series('prepare-test', function (done) {
+    return runTest(false, done)
+}));
+
+function runTest(singleRun, done){
+    return new Server({
+        configFile: __dirname + '/karma.conf.js',
+        singleRun: singleRun
+    }, function (err) {
+        done(err);
+    }).start();
+}
+
+gulp.task('docs-clean', function (cb) {
+    return del(['./docs/app/gen/**/*'], cb);
+});
+
+gulp.task('docs-copy-files', gulp.series('docs-clean', function () {
+    var basename = "silver-decisions-"+p.version+'.min';
+    var copyFiles = copyFilesToDocs(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'], basename);
+    var coreBasename = "silver-decisions-core-"+p.version+'.min';
+    var copyCoreFiles = copyFilesToDocs(['./dist/silver-decisions-core.min.js'], coreBasename);
+    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js', './dist/silver-decisions-vendor.min.css'], "silver-decisions-vendor-"+p.version+'.min');
+    var copyAppFiles = copyFilesToDocs(['./docs/app/src/silverdecisions.js', './docs/app/src/silverdecisions.css'], "silverdecisions-"+p.version+'');
+    var copyWorkerFiles = copyFilesToDocs(['./docs/app/src/silverdecisions-job-worker.js'], "silverdecisions-job-worker-"+p.version+'');
+
+    return merge(copyFiles,copyCoreFiles, copyVendorFiles, copyAppFiles, copyWorkerFiles)
+}));
+
+gulp.task('docs-gen', gulp.series('docs-copy-files', function () {
+    var updateReferences = gulp.src('./docs/SilverDecisions.html')
+        .pipe(plugins.replace(/"\.\/app\/gen\/silver-decisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)\.min/g, '"./app/gen/silver-decisions$1'+p.version+'.min'))
+        .pipe(plugins.replace(/"\.\/app\/gen\/silverdecisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)/g, '"./app/gen/silverdecisions$1'+p.version))
+        .pipe(gulp.dest('./docs/'));
+
+    var coreBasename = "silver-decisions-core-"+p.version+'.min';
+    var updateWorkerReferences = gulp.src('./docs/app/gen/silverdecisions-job-worker-'+p.version+'.js')
+        .pipe(plugins.replace(/silver-decisions-core\.min/g, coreBasename))
+        .pipe(gulp.dest('./docs/app/gen/'));
+
+    var updateWorkerReferences2 = gulp.src('./docs/app/gen/silverdecisions-'+p.version+'.js')
+        .pipe(plugins.replace(/\.\/silverdecisions-job-worker.js/g, "./app/gen/silverdecisions-job-worker-"+p.version+'.js'))
+        .pipe(gulp.dest('./docs/app/gen/'));
+
+    return merge(updateReferences, updateWorkerReferences, updateWorkerReferences2)
+}));
+
+
 gulp.task('clean', function (cb) {
     return del(['tmp', 'dist'], cb);
 });
@@ -121,10 +180,6 @@ gulp.task('build-config', function() {
 });
 
 
-gulp.task('build-css', ['build-app-css', 'build-vendor-css'], function () {
-
-});
-
 gulp.task('build-app-css', function () {
     return buildCss(projectName, ['node_modules/sd-tree-designer/src/styles/*', './src/styles/*'], './dist');
 });
@@ -132,6 +187,10 @@ gulp.task('build-app-css', function () {
 gulp.task('build-vendor-css', function () {
     return buildCss(projectName+"-vendor", './vendor/css/*', './dist');
 });
+
+gulp.task('build-css', gulp.parallel('build-app-css', 'build-vendor-css'));
+
+
 
 function buildCss(fileName, src, dest, failOnError) {
     var pipe = gulp.src(src);
@@ -144,7 +203,7 @@ function buildCss(fileName, src, dest, failOnError) {
         .pipe(plugins.sass())
         .pipe(plugins.concat(fileName + '.css'))
         .pipe(gulp.dest(dest))
-        .pipe(plugins.minifyCss())
+        .pipe(plugins.cleanCss())
         .pipe(plugins.rename({extname: '.min.css'}))
         .pipe(gulp.dest(dest));
 }
@@ -188,7 +247,7 @@ function buildJsDependencies(jsFileName, moduleNames, dest, failOnError, externa
 
 function finishBrowserifyBuild(b, jsFileName, dest, failOnError){
     var pipe = b
-        .transform("babelify", {presets: ["es2015"],  plugins: ["transform-class-properties", "transform-object-assign", "transform-object-rest-spread", "transform-es2015-spread", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
+        .transform("babelify", {presets: ["@babel/preset-env"],  plugins: ["transform-class-properties", "transform-object-assign", "transform-es2015-spread", "@babel/plugin-proposal-object-rest-spread", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
         .bundle();
 
     if(!failOnError){
@@ -199,7 +258,7 @@ function finishBrowserifyBuild(b, jsFileName, dest, failOnError){
     pipe = pipe.pipe(source(jsFileName+'.js'))
         .pipe(gulp.dest(dest))
         .pipe(buffer());
-    var development = (argv.dev === undefined) ? false : true;
+    var development = (argv.dev !== undefined);
     if(!development){
         pipe = pipe.pipe(sourcemaps.init({loadMaps: true}))
         // .pipe(plugins.stripDebug())
@@ -216,13 +275,13 @@ function finishBrowserifyBuild(b, jsFileName, dest, failOnError){
     return pipe;
 }
 
-gulp.task('build-app', ['build-config'], function () {
+gulp.task('build-app', gulp.series('build-config', function () {
     return buildApp(true)
-});
+}));
 
-gulp.task('build-app-watch', ['build-config'], function () {
+gulp.task('build-app-watch', gulp.series('build-config', function () {
     return buildApp(false)
-});
+}));
 
 function buildApp(failOnError){
     var jsFileName =  projectName;
@@ -239,20 +298,20 @@ gulp.task('build-vendor', function () {
     return buildJsDependencies("silver-decisions-vendor", vendorDependencies, "dist", true, coreVendor.concat(nestedSdDependencies))
 });
 
-gulp.task('build-clean', function (cb) {
-    return runSequence('clean', 'build', cb);
-});
+gulp.task('build', gulp.parallel('build-css', 'build-app', 'build-core', 'build-vendor'));
 
-gulp.task('build', ['build-css', 'build-app', 'build-core', 'build-vendor'], function () {
+gulp.task('build-clean', gulp.series('clean', 'build'));
 
-});
+gulp.task('default', gulp.series('build-clean', 'docs-gen', 'test'));
+
+
 
 gulp.task('watch', function() {
     watch();
 });
 
 function watch(callback){
-    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json']).on('change', () => {
+    gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json', './node_modules/sd-tree-designer/src/**/*.js']).on('change', () => {
         runSequence('build-app-watch', callback)
     });
     gulp.watch(['./src/styles/*.*css']).on('change', () => {
@@ -263,9 +322,6 @@ function watch(callback){
     });
 }
 
-gulp.task('default',  function(cb) {
-    return runSequence('build-clean', 'docs-gen', 'test', cb);
-});
 
 gulp.task('build-templates', function () {
     return gulp.src('src/templates/*.html')
@@ -277,10 +333,10 @@ gulp.task('build-templates', function () {
         .pipe(gulp.dest('dist'));
 });
 
-gulp.task('default-watch', ['build-clean'], ()=>{ browserSync.reload();  });
-gulp.task('serve', ['build-clean'], (cb)=>{
+gulp.task('default-watch', gulp.series('build-clean', ()=>{ browserSync.reload();  }));
+gulp.task('serve', gulp.series('build-clean', (cb)=>{
 
-    var development = (argv.dev === undefined) ? false : true;
+    var development = (argv.dev !== undefined);
     var baseDir = "demo";
     var index = "index.html";
     if(development){
@@ -304,7 +360,7 @@ gulp.task('serve', ['build-clean'], (cb)=>{
     });
 
     watch(()=>{ browserSync.reload();  })
-});
+}));
 
 // error function for plumber
 var onError = function (err) {
@@ -312,65 +368,6 @@ var onError = function (err) {
     this.emit('end');
 };
 
-
-gulp.task('prepare-test', function(){
-    return gulp
-        .src('test/trees/*.json')
-        .pipe(require('gulp-filelist')('tree-json-filelist.json', { flatten: true }))
-        .pipe(gulp.dest('test'))
-})
-
-
-gulp.task('test', ['prepare-test'], function (done) {
-    return runTest(true, done)
-});
-
-gulp.task('test-watch', ['prepare-test'], function (done) {
-    return runTest(false, done)
-});
-
-function runTest(singleRun, done){
-    return new Server({
-        configFile: __dirname + '/karma.conf.js',
-        singleRun: singleRun
-    }, function (err) {
-        done(err);
-    }).start();
-}
-
-gulp.task('docs-clean', function (cb) {
-    return del(['./docs/app/gen/**/*'], cb);
-});
-
-gulp.task('docs-gen', ['docs-copy-files'], function () {
-    var updateReferences = gulp.src('./docs/SilverDecisions.html')
-        .pipe(plugins.replace(/"\.\/app\/gen\/silver-decisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)\.min/g, '"./app/gen/silver-decisions$1'+p.version+'.min'))
-        .pipe(plugins.replace(/"\.\/app\/gen\/silverdecisions(.*)([0-9]+)\.([0-9]+)\.([0-9]+)/g, '"./app/gen/silverdecisions$1'+p.version))
-        .pipe(gulp.dest('./docs/'));
-
-    var coreBasename = "silver-decisions-core-"+p.version+'.min';
-    var updateWorkerReferences = gulp.src('./docs/app/gen/silverdecisions-job-worker-'+p.version+'.js')
-        .pipe(plugins.replace(/silver-decisions-core\.min/g, coreBasename))
-        .pipe(gulp.dest('./docs/app/gen/'));
-
-    var updateWorkerReferences2 = gulp.src('./docs/app/gen/silverdecisions-'+p.version+'.js')
-        .pipe(plugins.replace(/\.\/silverdecisions-job-worker.js/g, "./app/gen/silverdecisions-job-worker-"+p.version+'.js'))
-        .pipe(gulp.dest('./docs/app/gen/'));
-
-    return merge(updateReferences, updateWorkerReferences, updateWorkerReferences2)
-});
-
-gulp.task('docs-copy-files', ['docs-clean'], function () {
-    var basename = "silver-decisions-"+p.version+'.min';
-    var copyFiles = copyFilesToDocs(['./dist/silver-decisions.min.js', './dist/silver-decisions.min.css'], basename);
-    var coreBasename = "silver-decisions-core-"+p.version+'.min';
-    var copyCoreFiles = copyFilesToDocs(['./dist/silver-decisions-core.min.js'], coreBasename);
-    var copyVendorFiles = copyFilesToDocs(['./dist/silver-decisions-vendor.min.js', './dist/silver-decisions-vendor.min.css'], "silver-decisions-vendor-"+p.version+'.min');
-    var copyAppFiles = copyFilesToDocs(['./docs/app/src/silverdecisions.js', './docs/app/src/silverdecisions.css'], "silverdecisions-"+p.version+'');
-    var copyWorkerFiles = copyFilesToDocs(['./docs/app/src/silverdecisions-job-worker.js'], "silverdecisions-job-worker-"+p.version+'');
-
-    return merge(copyFiles,copyCoreFiles, copyVendorFiles, copyAppFiles, copyWorkerFiles)
-});
 
 function copyFilesToDocs(src, basename){
     return gulp.src(src)
