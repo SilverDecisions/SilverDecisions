@@ -394,8 +394,9 @@ export class App {
     }
 
     undo() {
-        var self = this;
+        let self = this;
         self.dataModel.undo();
+        self.initPayoffNames();
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
@@ -406,8 +407,9 @@ export class App {
     }
 
     redo() {
-        var self = this;
+        let self = this;
         self.dataModel.redo();
+        self.initPayoffNames();
         if (self.selectedObject) {
             self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
         }
@@ -472,12 +474,7 @@ export class App {
 
         if (multiCriteria) {
             this.payoffsMaximization = currentRule.payoffCoeffs.map(c=>c>0);
-
-            if (!this.dataModel.payoffNames.length) {
-                this.dataModel.payoffNames.push(null, null);
-                this.dataModel.payoffNames[0] = i18n.t('multipleCriteria.defaultMinimizedCriterionName');
-                this.dataModel.payoffNames[1] = i18n.t('multipleCriteria.defaultMaximizedCriterionName');
-            }
+            this.initPayoffNames();
             this.treeDesigner.config.payoffNames = this.dataModel.payoffNames;
         } else {
             this.payoffsMaximization[this.currentViewMode.payoffIndex] = currentRule.maximization;
@@ -493,6 +490,14 @@ export class App {
             }
         });
 
+    }
+
+    initPayoffNames() {
+        if (this.currentViewMode.multiCriteria && !this.dataModel.payoffNames.length) {
+            this.dataModel.payoffNames.push(
+                this.dataModel.payoffNames[0] = i18n.t('multipleCriteria.defaultMinimizedCriterionName'),
+                this.dataModel.payoffNames[1] = i18n.t('multipleCriteria.defaultMaximizedCriterionName'));
+        }
     }
 
     isMultipleCriteria() {
