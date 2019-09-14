@@ -312,13 +312,13 @@ gulp.task('watch', function() {
 
 function watch(callback){
     gulp.watch(['./src/**/*.js','./src/**/*.html', './src/i18n/*.*json', './node_modules/sd-tree-designer/src/**/*.js']).on('change', () => {
-        runSequence('build-app-watch', callback)
+        gulp.task('build-app-watch')(callback)
     });
     gulp.watch(['./src/styles/*.*css']).on('change', () => {
-        runSequence('build-app-css', callback)
+        gulp.task('build-app-css')(callback)
     });
     gulp.watch(['./node_modules/sd-computations/src/**/*.js', './node_modules/sd-model/src/**/*.js', './node_modules/sd-utils/src/**/*.js']).on('change', () => {
-        runSequence('build-core', callback)
+        gulp.task('build-core')(callback)
     });
 }
 

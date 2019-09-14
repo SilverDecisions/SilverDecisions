@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-#helper script to update versions of all silver decisions modules, requires all modules to be located in one common parent directory
+#helper script to unlink all sd modules
 
 MODULES=(sd-utils sd-random sd-model sd-expression-engine sd-computations sd-tree-designer)
 mod_string=''
@@ -9,17 +9,21 @@ do
 	mod_string+=' '$m
 done
 
-ncu $mod_string -u
-npm update $mod_string
+cd ..
 
 cd ..
 
 for m in "${MODULES[@]}"
 do
+    pwd
     cd $m
-	ncu $mod_string -u
-    npm update $mod_string
+    echo $m
+    npm unlink $mod_string
+    npm install
     cd ..
 done
 
 
+cd SilverDecisions
+npm unlink $mod_string
+npm install
