@@ -352,7 +352,7 @@ export class Sidebar {
 
         childPropsSelector.select('.children-properties-header').text(i18n.t('objectProperties.childrenProperties.' + objectType + '.header'));
         var childrenContent = childPropsSelector.select('.children-properties-content');
-        var children = childrenContent.selectAll('div.child-object').data(childObjects, (d, i)=> d.$id || i);
+        var children = childrenContent.selectAll('div.child-object').data(childObjects, (d, i)=> d.id || i);
         var childrenEnter = children.enter().appendSelector('div.child-object');
         var childrenMerge = childrenEnter.merge(children);
 
@@ -542,7 +542,7 @@ export class Sidebar {
                 };
                 checkFieldStatus();
 
-                self.dispatch.on("recomputed."+object.$id+"."+d.path, checkFieldStatus);
+                self.dispatch.on("recomputed."+object.id+"."+d.path, checkFieldStatus);
 
                 AppUtils.updateInputClass(d3.select(this));
                 if (d.type == 'textarea') {
@@ -559,7 +559,7 @@ export class Sidebar {
 class ObjectInputField extends InputField{
     //config object with fields: name, path, type, validator, options
     constructor(object, config) {
-        super('object-' + object.$id + '-field-' + config.name, config.name, config.type, config.label ? config.label : i18n.t(Sidebar.getObjectType(object) + '.' + config.name),
+        super('object-' + object.id + '-field-' + config.name, config.name, config.type, config.label ? config.label : i18n.t(Sidebar.getObjectType(object) + '.' + config.name),
             new PathValueAccessor(object, config.path || config.name), config.validator, config.options);
         this.path = config.path || config.name;
         this.onChange = config.onChange;

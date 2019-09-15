@@ -398,7 +398,7 @@ export class App {
         self.dataModel.undo();
         self.initPayoffNames();
         if (self.selectedObject) {
-            self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
+            self.selectedObject = self.dataModel.findById(self.selectedObject.id);
         }
         return this.checkValidityAndRecomputeObjective(false, false, false).then(()=> {
             self.updateView();
@@ -411,7 +411,7 @@ export class App {
         self.dataModel.redo();
         self.initPayoffNames();
         if (self.selectedObject) {
-            self.selectedObject = self.dataModel.findById(self.selectedObject.$id);
+            self.selectedObject = self.dataModel.findById(self.selectedObject.id);
         }
 
         return this.checkValidityAndRecomputeObjective(false, false, false).then(()=> {
