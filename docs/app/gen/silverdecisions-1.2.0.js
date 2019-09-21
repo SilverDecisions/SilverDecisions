@@ -14,7 +14,7 @@ if(!logLevel || ['debug', 'info', 'warn', 'error'].indexOf(logLevel.toLowerCase(
 var config = {
     lng:lng,
     readOnly:!!readOnly,
-    workerUrl: './app/gen/silverdecisions-job-worker-1.1.0.js',
+    workerUrl: './app/gen/silverdecisions-job-worker-1.2.0.js',
     logLevel: logLevel,
     treeDesigner:{
     }

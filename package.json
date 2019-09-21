@@ -1,6 +1,6 @@
 {
   "name": "silver-decisions",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Software for creating and analyzing decision trees.",
   "main": "index.js",
   "scripts": {
@@ -109,9 +109,9 @@
     "jquery": "^3.4.1",
     "jquery-ui": "^1.12.1",
     "pivottable": "^2.23.0",
-    "sd-computations": "0.3.7",
-    "sd-model": "0.2.8",
-    "sd-utils": "0.1.12",
-    "sd-tree-designer": "0.1.13"
+    "sd-computations": "~0.4.0",
+    "sd-model": "~0.2.9",
+    "sd-tree-designer": "~0.2.0",
+    "sd-utils": "~0.1.13"
   }
 }
