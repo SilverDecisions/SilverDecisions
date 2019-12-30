@@ -269,6 +269,23 @@
                 "yAxisTitle": "Payoff"
             }
         },
+        "payoffs-transformation": {
+            "name": "Payoffs Transformation",
+            "param": {
+                "functionName": {
+                    "label": "Function name"
+                },
+                "functionBody": {
+                    "label": "Function body"
+                },
+                "functionArgumentName": {
+                    "label": "Function argument name"
+                },
+                "makeClone": {
+                    "label": "Make clone"
+                }
+            }
+        },
         "league-table":{
             "name": "League table"
         },

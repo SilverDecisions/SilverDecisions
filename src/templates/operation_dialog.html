@@ -1,0 +1,23 @@
+<div class="sd-modal sd-operation-dialog">
+    <div class="sd-modal-content">
+        <div class="sd-modal-header">
+            <span class="sd-modal-button sd-close-modal"><i class="material-icons">close</i></span>
+            <h2 class="sd-modal-header-title"><%= i18n.t("operationDialog.title")%></h2>
+        </div>
+        <div class="sd-modal-body">
+            <div class="sd-operation-job-configuration">
+                <div class="sd-job-select-input-group input-group"></div>
+                <%= include('jobParametersBuilder', variables) %>
+            </div>
+            <div class="sd-operation-warnings">
+
+            </div>
+            <div class="sd-job-progress-bar-container sd-progress-bar-container sd-hidden"><div class="sd-progress-bar"></div></div>
+
+            <div class="sd-operation-action-buttons">
+                <button class="sd-run-job-button"><%= i18n.t('sensitivityAnalysisDialog.buttons.runJob')%></button>
+
+            </div>
+        </div>
+    </div>
+</div>

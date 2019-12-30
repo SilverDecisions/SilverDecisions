@@ -27,6 +27,7 @@ export class Templates extends TdTemplates{
     static aboutDialog = require('./templates/about_dialog.html');
     static definitionsDialog = require('./templates/definitions_dialog.html');
     static sensitivityAnalysisDialog = require('./templates/sensitivity_analysis_dialog.html');
+    static operationDialog = require('./templates/operation_dialog.html');
     static jobParametersBuilder = require('./templates/jobs/job_parameters_builder.html');
     static jobParameter = require('./templates/jobs/job_parameter.html');
     static leagueTableDialog = require('./templates/league_table_dialog.html');

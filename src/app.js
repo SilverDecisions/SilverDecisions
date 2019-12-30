@@ -15,6 +15,7 @@ import {ComputationsManager} from "sd-computations";
 import {SensitivityAnalysisDialog} from "./dialogs/sensitivity-analysis-dialog";
 import {LoadingIndicator} from "./loading-indicator";
 import {LeagueTableDialog} from "./league-table/league-table-dialog";
+import {OperationDialog} from "./dialogs/operation-dialog";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -147,6 +148,7 @@ export class App {
         this.initAboutDialog();
         this.initDefinitionsDialog();
         this.initSensitivityAnalysisDialog();
+        this.initOperationDialog();
         this.initLeagueTableDialog();
         this.initOnBeforeUnload();
         this.initKeyCodes();
@@ -264,6 +266,11 @@ export class App {
 
     }
 
+    initOperationDialog() {
+        this.operationDialog = new OperationDialog(this);
+
+    }
+
     isSensitivityAnalysisAvailable() {
         return !this.isMultipleCriteria() && this.dataModel.getRoots().length === 1 && this.computationsManager.isValid() && this.dataModel.getGlobalVariableNames(true).length;
     }
@@ -295,7 +302,7 @@ export class App {
     }
 
     getTreeDesignerInitialConfig() {
-        var self = this;
+        const self = this;
 
         return Utils.deepExtend({
             lng: self.config.lng,
@@ -321,8 +328,23 @@ export class App {
                 return prefix + self.payoffNumberFormat[i || self.currentViewMode.payoffIndex || 0].format(v)
             },
             probabilityNumberFormatter: (v) => self.probabilityNumberFormat.format(v),
-            operationsForObject: (o) => self.computationsManager.operationsForObject(o)
+            operationsForObject: (o) => self.computationsManager.operationsForObject(o),
+            performOperation: self.performOperation.bind(self)
         }, self.config.treeDesigner);
+    }
+
+    performOperation(object, operation) {
+
+        if(!operation.jobName){
+            return this.computationsManager.performOperation(object, operation);
+        }
+
+
+        return this.operationDialog.openWith(object, operation).catch(e => {
+            log.error(e);
+            return false;
+        });
+
     }
 
     onObjectSelected(object) {

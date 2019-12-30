@@ -233,6 +233,23 @@
                 "largeScenariosNumber": "Liczba zdefiniowanych scenariuszy większa niż {{numberFormatted}}. Wyliczenie analizy wrażliwości może się nie powieść lub być bardzo powolne."
             }
         },
+        "payoffs-transformation": {
+            "name": "Transformacja wypłat",
+            "param": {
+                "functionName": {
+                    "label": "Nazwa funkcji"
+                },
+                "functionBody": {
+                    "label": "Ciało funkcji"
+                },
+                "functionArgumentName": {
+                    "label": "Nazwa argumentu funkcji"
+                },
+                "makeClone": {
+                    "label": "Utwórz klon"
+                }
+            }
+        },
         "league-table":{
             "name": "Tabela ligowa"
         },

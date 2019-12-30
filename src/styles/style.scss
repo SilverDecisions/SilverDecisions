@@ -793,6 +793,42 @@
     }
   }
 
+  .sd-operation-dialog{
+
+    &.sd-job-error{
+      .sd-job-progress-bar-container{
+        background-color: #edc9cb;
+        .sd-progress-bar{
+          background-color: red;
+        }
+      }
+    }
+
+    .sd-job-select-input-group{
+      display: inline-block;
+    }
+
+    .sd-operation-warning:first-of-type{
+      margin-top: 15px;
+    }
+
+    .sd-operation-action-buttons {
+      margin-top: 25px;
+      float: right;
+
+      button{
+        margin-left: 7px;
+      }
+
+      button.sd-run-job-button {
+        $font-size: 16px;
+        font-size: $font-size;
+      }
+
+    }
+
+  }
+
   button{
     background: rgba(158,158,158,.2);
     box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
