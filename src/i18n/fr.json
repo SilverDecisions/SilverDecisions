@@ -269,6 +269,23 @@
                 "yAxisTitle": "Avantage"
             }
         },
+        "payoffs-transformation": {
+            "name": "Transformation des gains",
+            "param": {
+                "functionName": {
+                    "label": "Nom de la fonction"
+                },
+                "functionBody": {
+                    "label": "Corps de fonction"
+                },
+                "functionArgumentName": {
+                    "label": "Nom de l'argument de la fonction"
+                },
+                "makeClone": {
+                    "label": "Cloner"
+                }
+            }
+        },
         "league-table":{
             "name": "Classement"
         },
@@ -504,7 +521,8 @@
         "nodeSize": "Taille du noeud",
         "edgeSlantWidthMax": "Inclinaison du bord (max.)",
         "gridWidth": "Largeur",
-        "gridHeight": "Taille"
+        "gridHeight": "Taille",
+        "scale": "Échelle"
     },
     "diagramDetails":{
         "header": "Détails",

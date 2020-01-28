@@ -269,6 +269,23 @@
                 "yAxisTitle": "Saldo"
             }
         },
+        "payoffs-transformation": {
+            "name": "Trasformazione dei profitti",
+            "param": {
+                "functionName": {
+                    "label": "Nome della funzione"
+                },
+                "functionBody": {
+                    "label": "Corpo funzione"
+                },
+                "functionArgumentName": {
+                    "label": "Nome dell'argomento della funzione"
+                },
+                "makeClone": {
+                    "label": "Clonare"
+                }
+            }
+        },
         "league-table":{
             "name": "Classifica"
         },
@@ -505,7 +522,8 @@
         "nodeSize": "Dimensione nodo",
         "edgeSlantWidthMax": "Inclinazione nodo",
         "gridWidth": "Larghezza",
-        "gridHeight": "Altezza"
+        "gridHeight": "Altezza",
+        "scale": "Scala"
     },
     "diagramDetails":{
         "header": "Dettagli",

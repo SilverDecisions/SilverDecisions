@@ -270,6 +270,23 @@
                 "yAxisTitle": "Auszahlen"
             }
         },
+        "payoffs-transformation": {
+            "name": "Auszahlungstransformation",
+            "param": {
+                "functionName": {
+                    "label": "Funktionsname"
+                },
+                "functionBody": {
+                    "label": "Funktionskörper"
+                },
+                "functionArgumentName": {
+                    "label": "Name des Funktionsarguments"
+                },
+                "makeClone": {
+                    "label": "Kopieren"
+                }
+            }
+        },
         "league-table":{
             "name": "Rangliste"
         },
@@ -505,7 +522,8 @@
         "nodeSize": "Knotengröße",
         "edgeSlantWidthMax": "Kantenschräge (max)",
         "gridWidth": "Breite",
-        "gridHeight": "Höhe"
+        "gridHeight": "Höhe",
+        "scale": "Skala"
     },
     "diagramDetails":{
         "header": "Einzelheiten",
