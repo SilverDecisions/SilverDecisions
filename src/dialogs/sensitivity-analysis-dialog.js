@@ -423,7 +423,7 @@ export class SensitivityAnalysisDialog extends Dialog {
                 label: i18n.t("job." + c.jobName + ".name"),
                 value: c.jobName
             }))
-        })).select("select").on('change input', function (d) {
+        })).select("select").on('change input', function (event, d) {
             self.onJobSelected(Utils.find(self.jobConfigurations, c=>c.jobName === this.value))
         });
     }

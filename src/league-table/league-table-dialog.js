@@ -52,9 +52,9 @@ export class LeagueTableDialog extends Dialog {
 
     initResultTable(result) {
         let config = {
-            onRowSelected: (row, i)=> this.onResultRowSelected(row, i),
-            onRowHover: (row, i)=> this.resultPlot.emphasize(row.row, true),
-            onRowHoverOut: (row, i)=> this.resultPlot.emphasize(row.row, false),
+            onRowSelected: (row)=> this.onResultRowSelected(row),
+            onRowHover: (event, row)=> this.resultPlot.emphasize(row.row, true),
+            onRowHoverOut: (event, row)=> this.resultPlot.emphasize(row.row, false),
         };
 
         if (this.resultTable) {
@@ -322,7 +322,7 @@ export class LeagueTableDialog extends Dialog {
     }
 
 
-    onResultRowSelected(row, index) {
+    onResultRowSelected(row) {
         let title = Policy.toPolicyString(row.policy, false);
         this.app.showPolicyPreview(title, row.policy, ()=> {
             this.resultTable.clearSelection();

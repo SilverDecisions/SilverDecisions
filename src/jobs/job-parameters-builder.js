@@ -261,7 +261,7 @@ export class JobParametersBuilder{
             removeButton
                 .attr('title', i18n.t('jobParametersBuilder.buttons.removeParameterValue'))
                 .classed('sd-hidden', values.length<=paramDefinition.minOccurs)
-                .on('click', (d)=>callbacks.onValueRemoved(d,i))
+                .on('click', (event, d)=> callbacks.onValueRemoved(d,i))
 
         });
 
@@ -337,9 +337,9 @@ export class JobParametersBuilder{
         input.attr('id', inputId);
 
         input.classed('sd-input', true);
-        input.on('input change', function(d, i){
+        input.on('input change', function(event, d) {
             var value = self.parseInput(this.value, paramDefinition.type);
-            if(inputType=='checkbox'){
+            if(inputType === 'checkbox'){
                 value = this.checked
             }
             if(!paramDefinition.validateSingleValue(value)){
@@ -349,13 +349,13 @@ export class JobParametersBuilder{
             }
 
             valueAccessor.set(value);
-            if (d3.event.type == 'change') {
+            if (event.type === 'change') {
                 if (onChange) {
                     onChange();
                 }
             }
 
-            if (d3.event.type == 'input') {
+            if (event.type === 'input') {
                 if (onInput) {
                     onInput();
                 }

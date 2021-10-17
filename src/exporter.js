@@ -2,7 +2,7 @@ import {dataURLtoBlob} from "blueimp-canvas-to-blob";
 import {saveAs} from "file-saver";
 import * as d3 from "./d3";
 import {i18n} from "./i18n/i18n";
-import {Utils, log} from "sd-utils";
+import {log, Utils} from "sd-utils";
 import {LoadingIndicator} from "./loading-indicator";
 
 export class Exporter {
@@ -200,9 +200,7 @@ export class Exporter {
             var pngWidth = 4 * svgWidth;
             var pngHeight = 4 * svgHeight;
             if (clientSide || fallback) {
-                Exporter.svgString2Image(svgString, pngWidth, pngHeight, 'png', save); // passes Blob and filesize String to the callback
-
-                function save(dataBlob, filesize) {
+                Exporter.svgString2Image(svgString, pngWidth, pngHeight, 'png', function (dataBlob, filesize) {
                     try {
                         Exporter.saveAs(dataBlob, Exporter.getExportFileName('png'));
                         LoadingIndicator.hide();
@@ -216,7 +214,7 @@ export class Exporter {
                         }
                     }
 
-                }
+                }); // passes Blob and filesize String to the callback
             } else if (serverSide) {
                 Exporter.exportPngServerSide(svgString, options.serverUrl, pngWidth, pngHeight);
             }

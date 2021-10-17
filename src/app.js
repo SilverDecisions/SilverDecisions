@@ -973,25 +973,25 @@ export class App {
 
     initKeyCodes() {
 
-        this.container.on("keyup", (d)=> {
-            let srcElement = d3.event.target || d3.event.srcElement;
+        this.container.on("keyup", (event, d)=> {
+            let srcElement = event.target || event.srcElement;
 
             if (srcElement && ['INPUT', 'TEXTAREA'].indexOf(srcElement.nodeName.toUpperCase()) > -1) { //ignore events from input and textarea elements
                 return;
             }
 
-            var key = d3.event.keyCode;
+            var key = event.keyCode;
             if (key == 46) {//delete
                 this.treeDesigner.removeSelectedNodes();
                 this.treeDesigner.removeSelectedTexts();
                 return;
             }
-            if (!d3.event.ctrlKey) {
+            if (!event.ctrlKey) {
                 return;
             }
 
 
-            if (d3.event.altKey) {
+            if (event.altKey) {
                 if (this.selectedObject instanceof model.domain.Node) {
                     let selectedNode = this.selectedObject;
                     if (selectedNode instanceof model.domain.TerminalNode) {

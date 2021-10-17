@@ -234,7 +234,10 @@ export class Sidebar {
         var inputGroups = this.multipleCriteriaContainer.select(".sd-multiple-criteria-properties").selectAll('div.input-group').data(this.multipleCriteriaFields);
         inputGroups.exit().remove();
         var inputGroupsEnter = inputGroups.enter().appendSelector('div.input-group').html(d=>d.type=='select'? Templates.get('selectInputGroup', d):Templates.get('inputGroup', d));
-        inputGroupsEnter.merge(inputGroups).select('.sd-input').on('change input', function (d, i) {
+
+        var inputSelection = inputGroupsEnter.merge(inputGroups).select('.sd-input');
+        inputSelection.on('change input', function (event, d) {
+            const i = inputSelection.nodes().indexOf(this);
             var prevValue = d.getValue();
 
             var isValid = !d.validator || d.validator.validate(this.value);
@@ -245,14 +248,14 @@ export class Sidebar {
                 selection.classed(d.styleClass, true);
             }
 
-            if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
+            if (event.type === 'change' && temp[i].pristineVal !== this.value) {
                 self.app.dataModel.saveStateFromSnapshot(temp[i].pristineStateSnapshot);
                 if (d.onChange) {
                     d.onChange(object, this.value, temp[i].pristineVal);
                 }
             }
 
-            if((prevValue+"")==this.value){
+            if((prevValue+"")===this.value){
                 return;
             }
 
@@ -261,7 +264,8 @@ export class Sidebar {
             self.dispatch.call("multi-criteria-updated", self, d.name);
 
         })
-            .on('focus', function(d,i){
+            .on('focus', function(event, d) {
+                const i = inputSelection.nodes().indexOf(this);
                 temp[i].pristineVal = this.value;
 
                 temp[i].pristineStateSnapshot = self.app.dataModel.createStateSnapshot();
@@ -492,25 +496,28 @@ export class Sidebar {
         fieldsMerge.select('label')
             .attr('for', d=>d.id)
             .html(d=>d.label);
+
+        let inputSelection = fieldsMerge.select('.sd-input');
         fieldsMerge.select('.sd-input')
-            .attr('type', d=>d.type == 'textarea' ? undefined : d.type)
+            .attr('type', d=>d.type === 'textarea' ? undefined : d.type)
             .attr('name', d=>d.name)
             .attr('id', d=>d.id)
-            .on('change keyup', function (d, i) {
+            .on('change keyup', function (event, d) {
+                const i = inputSelection.nodes().indexOf(this);
                 var prevValue = d.getValue();
                 var isValid = !d.validator || d.validator.validate(this.value, object, d.path);
                 object.setSyntaxValidity(d.path, isValid);
 
                 d3.select(this).classed('invalid', !object.isFieldValid(d.path));
 
-                if (d3.event.type == 'change' && temp[i].pristineVal != this.value) {
+                if (event.type === 'change' && temp[i].pristineVal !== this.value) {
                     self.app.dataModel.saveStateFromSnapshot(temp[i].pristineStateSnapshot);
                     if (d.onChange) {
                         d.onChange(object, this.value, temp[i].pristineVal);
                     }
                 }
 
-                if((prevValue+"")==this.value){
+                if((prevValue+"")===this.value){
                     return;
                 }
 
@@ -522,7 +529,8 @@ export class Sidebar {
                     self.dispatch.call("object-updated", self, object, d.path);
                 }
             })
-            .on('focus', function(d,i){
+            .on('focus', function(event, d) {
+                const i = inputSelection.nodes().indexOf(this);
                 temp[i].pristineVal = this.value;
                 temp[i].pristineStateSnapshot = self.app.dataModel.createStateSnapshot();
             })

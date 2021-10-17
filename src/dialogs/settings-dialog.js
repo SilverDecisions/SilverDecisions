@@ -194,7 +194,7 @@ export class SettingsDialog extends Dialog{
         var temp = {};
         var formGroups = container.selectAll('div.sd-form-group').filter(function(d) { return this.parentNode==container.node(); }).data(data);
         var formGroupsEnter = formGroups.enter().appendSelector('div.sd-form-group').attr('id', d=>d.id).html(d=>Templates.get('settingsDialogFormGroup', d));
-        formGroupsEnter.select('.toggle-button').on('click', (d) => {
+        formGroupsEnter.select('.toggle-button').on('click', (event, d) => {
             var g = container.select('#'+d.id);
             g.classed('sd-extended', !g.classed('sd-extended'));
         });
@@ -206,14 +206,14 @@ export class SettingsDialog extends Dialog{
         var inputGroupsEnter = inputGroups.enter().appendSelector('div.input-group').html(d=>d.type=='select'? Templates.get('selectInputGroup', d):Templates.get('inputGroup', d));
 
 
-        inputGroupsEnter.merge(inputGroups).select('input, select').on('change input', function(d,i){
+        inputGroupsEnter.merge(inputGroups).select('input, select').on('change input', function(event, d){
             var value = this.value;
             if(d.type=='checkbox'){
                 value = this.checked
             }
             if(d.validator && !d.validator.validate(value)){
                 d3.select(this).classed('invalid', true);
-                if(d3.event.type=='change'){
+                if(event.type=='change'){
                     this.value = d.valueAccessor.get();
                 }
                 return;

@@ -7,8 +7,8 @@ export class LeagueTableConfig {
     onRowSelected = (row) => {
     };
     extendedPolicyDescription = true;
-    onRowHover = (d, i) => {};
-    onRowHoverOut = (d, i) => {};
+    onRowHover = (event, d) => {};
+    onRowHoverOut = (event, d) => {};
 
     constructor(custom) {
         if (custom) {
@@ -110,7 +110,8 @@ export class LeagueTable {
         var rowsEnter = rows.enter().append("tr");
         var rowsMerge = rowsEnter.merge(rows);
         rowsMerge
-            .on('click', function (d, i) {
+            .on('click', function (event, d) {
+                const i = rowsMerge.nodes().indexOf(this);
                 // d3.select(this).classed('sd-selected', true);
                 self.config.onRowSelected(d, i)
             })

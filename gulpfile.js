@@ -2,6 +2,7 @@ var gulp = require('gulp');
 var del = require('del');
 var merge = require('merge-stream');
 var plugins = require('gulp-load-plugins')();
+const sass = require('gulp-sass')(require('sass'));
 var browserSync = require('browser-sync').create();
 var argv = require('yargs').argv;
 
@@ -19,6 +20,7 @@ var runSequence = require('run-sequence');
 /* nicer browserify errors */
 var gutil = require('gulp-util');
 var chalk = require('chalk');
+const _ = require("lodash");
 
 var projectName= "silver-decisions";
 let treeDesignerModule = "sd-tree-designer";
@@ -69,6 +71,8 @@ let coreVendor = [];
 [p, require('./node_modules/sd-tree-designer/package.json')].forEach(p=>{
     Object.getOwnPropertyNames(p.dependencies).forEach(n=>checkModule(n))
 });
+
+const browserifyTransforms = p.browserify.transform.reduce((acc, curr) => (acc[curr[0]] = curr[1], acc), {});
 
 function checkModule(name, inCore=false){
 
@@ -167,7 +171,7 @@ gulp.task('docs-gen', gulp.series('docs-copy-files', function () {
 
 
 gulp.task('clean', function (cb) {
-    return del(['tmp', 'dist'], cb);
+    return del(['tmp', 'dist', 'coverage'], cb);
 });
 
 gulp.task('build-config', function() {
@@ -200,7 +204,7 @@ function buildCss(fileName, src, dest, failOnError) {
     }
 
     return pipe.pipe(plugins.plumber({errorHandler: (err)=>onError(err,failOnError)}))
-        .pipe(plugins.sass())
+        .pipe(sass())
         .pipe(plugins.concat(fileName + '.css'))
         .pipe(gulp.dest(dest))
         .pipe(plugins.cleanCss())
@@ -221,9 +225,7 @@ function buildJs(src, standaloneName,  jsFileName, dest, external, failOnError) 
         packageCache: {},
         standalone: standaloneName,
         noBundleExternal: true
-    }).transform(stringify, {
-        appliesTo: { includeExtensions: ['.html'] }
-    })
+    }).transform(stringify, browserifyTransforms['stringify'])
         // .plugin(resolutions, '*')
         .external(external)
 
@@ -247,7 +249,7 @@ function buildJsDependencies(jsFileName, moduleNames, dest, failOnError, externa
 
 function finishBrowserifyBuild(b, jsFileName, dest, failOnError){
     var pipe = b
-        .transform("babelify", {presets: ["@babel/preset-env"],  plugins: ["transform-class-properties", "transform-object-assign", "transform-es2015-spread", "@babel/plugin-proposal-object-rest-spread", ["babel-plugin-transform-builtin-extend", {globals: ["Error"]}]]})
+        .transform("babelify", browserifyTransforms['babelify'])
         .bundle();
 
     if(!failOnError){
@@ -302,7 +304,14 @@ gulp.task('build', gulp.parallel('build-css', 'build-app', 'build-core', 'build-
 
 gulp.task('build-clean', gulp.series('clean', 'build'));
 
-gulp.task('default', gulp.series('build-clean', 'docs-gen', 'test'));
+gulp.task('default', function() {
+    var development = (argv.dev !== undefined);
+    if(development) {
+        return gulp.series('build-clean', 'test').apply(this, arguments);
+    }
+
+    return gulp.series('build-clean', 'docs-gen', 'test').apply(this, arguments);
+});
 
 
 

@@ -377,8 +377,8 @@ export class LeagueTablePlot extends ScatterPlot {
         super.updateDots();
         var dotsContainer = this.svgG.select("g." + this.dotsContainerClass);
         dotsContainer.selectAll('.' + this.dotClass)
-            .on("mouseover.emphasize", function(d){ self.emphasizeDot(d3.select(this), true) })
-            .on("mouseout.emphasize", function(d){ self.emphasizeDot(d3.select(this), false) })
+            .on("mouseover.emphasize", function(event, d){ self.emphasizeDot(d3.select(this), true) })
+            .on("mouseout.emphasize", function(event, d){ self.emphasizeDot(d3.select(this), false) })
     }
 
     updateLegend() {
