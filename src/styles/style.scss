@@ -707,6 +707,7 @@
 
     .sd-sensitivity-analysis-job-results {
       overflow: auto;
+      @include scrollbar-mixin();
     }
 
     .sd-sensitivity-analysis-action-buttons {
