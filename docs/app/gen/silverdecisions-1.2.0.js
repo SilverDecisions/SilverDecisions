@@ -17,6 +17,9 @@ var config = {
     workerUrl: './app/gen/silverdecisions-job-worker-1.2.0.js',
     logLevel: logLevel,
     treeDesigner:{
+    },
+    exports: {
+      serverUrl: 'https://export.highcharts.com'
     }
 };
 var edgeOrIE = SilverDecisions.App.utils.detectEdge() || SilverDecisions.App.utils.detectIE();
