@@ -87,8 +87,8 @@ export class LeagueTableDialog extends Dialog {
                 value: (d, key) => d.payoffs[1],
                 title: result.payoffNames[1]
             },
-            onDotHover: (d, i) => this.resultTable.emphasize(d, true),
-            onDotHoverOut: (d, i) => this.resultTable.emphasize(d, false),
+            onDotHover: (event, d) => this.resultTable.emphasize(d, true),
+            onDotHoverOut: (event, d) => this.resultTable.emphasize(d, false),
 
 
             color: function (group) {
@@ -125,7 +125,7 @@ export class LeagueTableDialog extends Dialog {
             }
         };
 
-        this.resultPlot = new LeagueTablePlot(this.jobResultsContainer.select(".sd-job-result-plot-container").node(), result.rows, config);
+        this.resultPlot = new LeagueTablePlot(this.jobResultsContainer.select(".sd-job-result-plot-container").node(), result.rows.slice(), config);
         setTimeout(function () {
             self.resultPlot.init()
         }, 100)
