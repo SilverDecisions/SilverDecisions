@@ -4,6 +4,7 @@ import * as pl from './pl.json'
 import * as it from './it.json'
 import * as de from './de.json'
 import * as fr from './fr.json'
+import * as pt_br from './pt-br.json'
 
 export class i18n{
 
@@ -30,6 +31,9 @@ export class i18n{
                 },
                 fr: {
                     translation: fr
+                },
+                'pt-BR': {
+                    translation: pt_br
                 }
             }
         }, (err, t) => {
