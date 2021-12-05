@@ -116,14 +116,15 @@ export class TextsInterpolator {
 
         const globalScope = self.createGlobalScope();
 
-        this.dataModel.nodes.forEach(node => {
-            const textInterpolationScope = self.createNodeTextInterpolationScope(node, globalScope);
-            node.displayValue("name", TextsInterpolator.interpolateText(node.name, textInterpolationScope, self.getImports(textInterpolationScope), node));
-        });
 
-        this.dataModel.edges.forEach(edge => {
-            const textInterpolationScope = TextsInterpolator.copyDisplayValues(edge, {...globalScope});
-            edge.displayValue("name", TextsInterpolator.interpolateText(edge.name, textInterpolationScope, self.getImports(textInterpolationScope), edge));
+        this.dataModel.nodes.forEach(node => {
+            const nodeInterpolationScope = self.createNodeTextInterpolationScope(node, globalScope);
+            node.displayValue("name", TextsInterpolator.interpolateText(node.name, nodeInterpolationScope, self.getImports(nodeInterpolationScope), node));
+
+            node.childEdges.forEach(edge => {
+                const edgeTextInterpolationScope = TextsInterpolator.copyDisplayValues(edge, {...globalScope, ...node.expressionScope});
+                edge.displayValue("name", TextsInterpolator.interpolateText(edge.name, edgeTextInterpolationScope, self.getImports(edgeTextInterpolationScope), edge));
+            });
         });
 
         const textInterpolationScope = {
