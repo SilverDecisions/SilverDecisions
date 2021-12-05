@@ -4,7 +4,7 @@ var readOnly = getParameterByName('readonly');
 var logLevel = getParameterByName('loglevel');
 readOnly = readOnly ? readOnly.toLowerCase() === 'true' : false;
 
-if(!lng || ['en', 'pl', 'it', 'de', 'fr'].indexOf(lng.toLowerCase())<0){
+if(!lng || ['en', 'pl', 'it', 'de', 'fr', 'pt-br'].indexOf(lng.toLowerCase())<0){
     lng = 'en';
 }
 if(!logLevel || ['debug', 'info', 'warn', 'error'].indexOf(logLevel.toLowerCase())<0){
