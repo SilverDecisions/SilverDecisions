@@ -447,7 +447,8 @@
             "hideLabels": "Nascondi le etichette",
             "hidePayoffs": "Nascondi saldo",
             "hideProbabilities": "Nascondi le probabilità",
-            "raw": "Non elaborato"
+            "raw": "Non elaborato",
+            "textInterpolation": "Interpolazione del testo"
         }
     },
     "aboutDialog":{

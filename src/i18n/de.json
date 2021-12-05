@@ -447,7 +447,8 @@
             "hideLabels": "Verstecke Beschreibung",
             "hidePayoffs": "Verstecke Auszahlungen",
             "hideProbabilities": "Verstecke Wahrscheinlichkeiten",
-            "raw": "Rau"
+            "raw": "Rau",
+            "textInterpolation": "Textinterpolation"
         }
     },
     "aboutDialog":{

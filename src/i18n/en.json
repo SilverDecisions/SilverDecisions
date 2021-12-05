@@ -446,7 +446,8 @@
             "hideLabels": "Hide labels",
             "hidePayoffs": "Hide payoffs",
             "hideProbabilities": "Hide probabilities",
-            "raw": "Raw"
+            "raw": "Raw",
+            "textInterpolation": "Text interpolation"
         }
     },
     "aboutDialog":{

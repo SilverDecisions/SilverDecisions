@@ -429,7 +429,8 @@
             "hideLabels": "Esconder rótulos",
             "hidePayoffs": "Esconder pesos",
             "hideProbabilities": "Esconder probabilidades",
-            "raw": "Bruto"
+            "raw": "Bruto",
+            "textInterpolation": "Interpolação de texto"
         }
     },
     "aboutDialog":{

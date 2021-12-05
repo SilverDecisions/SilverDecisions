@@ -446,7 +446,8 @@
             "hideLabels": "Ukryj etykiety",
             "hidePayoffs": "Ukryj wypłaty",
             "hideProbabilities": "Ukryj prawdopodobieństwa",
-            "raw": "Surowy"
+            "raw": "Surowy",
+            "textInterpolation": "Interpolacja tekstu"
         }
     },
     "aboutDialog":{

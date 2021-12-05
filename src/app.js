@@ -1,6 +1,6 @@
 import * as d3 from "./d3";
 import {i18n} from "./i18n/i18n";
-import {Utils, log} from "sd-utils";
+import {log, Utils} from "sd-utils";
 import {AppUtils} from "./app-utils";
 import * as model from "sd-model";
 import {TreeDesigner} from "sd-tree-designer";
@@ -16,6 +16,7 @@ import {SensitivityAnalysisDialog} from "./dialogs/sensitivity-analysis-dialog";
 import {LoadingIndicator} from "./loading-indicator";
 import {LeagueTableDialog} from "./league-table/league-table-dialog";
 import {OperationDialog} from "./dialogs/operation-dialog";
+import {TextsInterpolator} from "./texts-interpolator";
 
 var buildConfig = require('../tmp/build-config.js');
 
@@ -102,6 +103,7 @@ export class AppConfig {
             }
         }
     };
+    textInterpolation = true;
 
     //https://github.com/d3/d3-format/blob/master/README.md#format
 
@@ -129,6 +131,7 @@ export class App {
     sidebar;
     viewModes = [];
     currentViewMode;
+    textsInterpolator;
 
     payoffsMaximization=[true, false];
 
@@ -152,6 +155,7 @@ export class App {
         this.initLeagueTableDialog();
         this.initOnBeforeUnload();
         this.initKeyCodes();
+        this.initTextsInterpolator();
         p.then(()=> {
             this.initToolbar();
             if (diagramData) {
@@ -269,6 +273,10 @@ export class App {
     initOperationDialog() {
         this.operationDialog = new OperationDialog(this);
 
+    }
+
+    initTextsInterpolator() {
+        this.textsInterpolator = new TextsInterpolator(this);
     }
 
     isSensitivityAnalysisAvailable() {
@@ -404,9 +412,9 @@ export class App {
         });
     }
 
-    updateView(withTransitions = true) {
+    updateView(withTransitions = true, disableTextInterpolation = false) {
         // console.log('_updateView');
-        this.treeDesigner.redraw(withTransitions);
+        this.redrawTreeDesigner(withTransitions, disableTextInterpolation);
         this.sidebar.updateObjectPropertiesView(this.selectedObject);
         this.updateVariableDefinitions();
         this.toolbar.update();
@@ -466,7 +474,7 @@ export class App {
         // this.sidebar.updateObjectPropertiesView(this.selectedObject);
         return p.then(()=> {
             setTimeout(function () {
-                self.treeDesigner.redraw(true);
+                self.redrawTreeDesigner(true);
             }, 1);
         });
     }
@@ -481,10 +489,39 @@ export class App {
 
         return p.then(()=> {
             setTimeout(function () {
-                self.treeDesigner.redraw(true);
+                self.redrawTreeDesigner(true);
                 self.sidebar.updateObjectPropertiesView(self.selectedObject);
             }, 1);
         });
+    }
+
+    redrawTreeDesigner(withTransitions, disableTextInterpolation = false) {
+        this.updateInterpolatedDisplayValues(disableTextInterpolation);
+        this.redrawDiagramTitle();
+        this.redrawDiagramDescription();
+        this.treeDesigner.redraw(withTransitions);
+    }
+
+    updateInterpolatedDisplayValues(disableTextInterpolation = false) {
+        this.textsInterpolator.updateInterpolatedDisplayValues(disableTextInterpolation || this.shouldDisableTextInterpolation());
+    }
+
+    updateDiagramTitleAndDescription() {
+        this.updateInterpolatedDisplayValues();
+        this.redrawDiagramTitle();
+        this.redrawDiagramDescription();
+    }
+
+    shouldDisableTextInterpolation() {
+        return !this.isAutoRecalculationEnabled() || !this.config.textInterpolation;
+    }
+
+    redrawDiagramTitle() {
+        this.treeDesigner.updateDiagramTitle(this.textsInterpolator.interpolatedDiagramTitle || this.config.title);
+    }
+
+    redrawDiagramDescription() {
+        this.treeDesigner.updateDiagramDescription(this.textsInterpolator.interpolatedDiagramDescription || this.config.description);
     }
 
     setObjectiveRule(ruleName, evalCode = false, evalNumeric = false, updateView = true, recompute = true) {
@@ -655,11 +692,11 @@ export class App {
         var self = this;
         this.originalDataModelSnapshot = this.dataModel.createStateSnapshot();
         this.computationsManager.displayPolicy(policy);
-        this.updateView(false);
+        this.updateView(false, true);
         AppUtils.showFullScreenPopup(title, '');
         LoadingIndicator.show();
         setTimeout(function () {
-            self.updateView(false);
+            self.updateView(false, true);
             setTimeout(function () {
                 var svgString = Exporter.getSVGString(self.treeDesigner.svg.node(), true);
                 LoadingIndicator.hide();
@@ -698,12 +735,17 @@ export class App {
 
     }
 
-    onRawOptionChanged(){
-        if(this.isAutoRecalculationEnabled()){
-            return this.checkValidityAndRecomputeObjective(false, false).then(()=> {
-                this.updateView();
-            })
+    onRawOptionChanged() {
+        let p = Promise.resolve();
+        if (this.isAutoRecalculationEnabled()) {
+            p = this.checkValidityAndRecomputeObjective(false, false);
         }
+        p.then(() => {
+            this.updateView();
+        })
+    }
+    onTextInterpolationOptionChanged() {
+        this.updateView();
     }
 
     isAutoRecalculationEnabled(){
@@ -964,11 +1006,11 @@ export class App {
 
 
     setDiagramTitle(title, withoutStateSaving) {
-        this.setConfigParam('title', title, withoutStateSaving, (v) => this.treeDesigner.updateDiagramTitle(v));
+        this.setConfigParam('title', title, withoutStateSaving, (v) => this.updateDiagramTitleAndDescription());
     }
 
     setDiagramDescription(description, withoutStateSaving) {
-        this.setConfigParam('description', description, withoutStateSaving, (v) => this.treeDesigner.updateDiagramDescription(v));
+        this.setConfigParam('description', description, withoutStateSaving, (v) => this.updateDiagramTitleAndDescription());
     }
 
     initKeyCodes() {

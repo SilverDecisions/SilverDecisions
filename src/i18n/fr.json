@@ -446,7 +446,8 @@
             "hideLabels": "Masquer les étiquettes",
             "hidePayoffs": "Masquer les paiements",
             "hideProbabilities": "Masquer les probabilités",
-            "raw": "Brut"
+            "raw": "Brut",
+            "textInterpolation": "Interpolation de texte"
         }
     },
     "aboutDialog":{

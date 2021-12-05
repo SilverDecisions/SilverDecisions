@@ -2,7 +2,6 @@ import * as d3 from '../d3'
 import {Dialog} from './dialog'
 import {i18n} from "../i18n/i18n";
 import {Templates} from "../templates";
-import {Utils} from "sd-utils";
 import {AppUtils} from "../app-utils";
 import {InputField} from "../form/input-field";
 import {PathValueAccessor} from "../form/path-value-accessor";
@@ -180,7 +179,13 @@ export class SettingsDialog extends Dialog{
                 type: 'checkbox',
                 config: app.treeDesigner,
                 path: 'config.raw',
-                valueUpdateCallback: ()=>app.onRawOptionChanged()
+                valueUpdateCallback: () => app.onRawOptionChanged()
+            }).addField({
+                name: 'textInterpolation',
+                type: 'checkbox',
+                config: app,
+                path: 'config.textInterpolation',
+                valueUpdateCallback: () => app.onTextInterpolationOptionChanged()
             });
 
         this.formGroups.push(otherGroup);
