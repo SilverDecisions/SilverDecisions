@@ -103,6 +103,9 @@ export class TextsInterpolator {
                 index = index || 0;
                 let optimalList = findOptimalEdges(node);
                 return optimalList.length > index ? optimalList[index] : {name: '-'};
+            },
+            isOptimal: function (nodeOrEdge) {
+                return !!nodeOrEdge.displayValue('optimal');
             }
         };
     }
