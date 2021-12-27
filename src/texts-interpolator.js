@@ -175,8 +175,14 @@ export class TextsInterpolator {
     }
 
     static copyDisplayValues(source, target, nameAliasMap) {
+        const booleanNames = ['optimal'];
         source.$DISPLAY_VALUE_NAMES.forEach(n => {
             let val = source.displayValue(n);
+
+            if (booleanNames.includes(n)) {
+                val = !!val;
+            }
+
             if (val === undefined || val === null) {
                 return;
             }
