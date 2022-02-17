@@ -57,19 +57,13 @@ a:hover {
 }
 
 #wrapper {
-    margin: 0 auto;
+    margin: 14px auto;
+    padding-bottom: 20px;
     width: 800px;
-    height: 1000px;
     background: #FFFFFF;
-    box-shadow: 0px 0px 10px #888888;
+    box-shadow: 0 0 10px #888888;
 }
 
-#wrapper2 {
-    position: absolute;
-    width: 800px;
-    height: 1000px;
-    background: #FFFFFF;
-}
 
 table {
     border-collapse:collapse;
@@ -110,8 +104,7 @@ table.taboldsoft td {
     border-color:white;
     font-weight:bold;
     font-size: 12px;
-	color:#999999
-    width: 530px;
+	color:#999999;
     height: 70px;
     overflow:hidden;
     word-break:normal;
