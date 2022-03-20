@@ -344,7 +344,7 @@ export class App {
     performOperation(object, operation) {
 
         if(!operation.jobName){
-            return this.computationsManager.performOperation(object, operation);
+            return this.computationsManager.performOperation(object, operation.name);
         }
 
 
