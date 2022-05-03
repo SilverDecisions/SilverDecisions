@@ -264,8 +264,8 @@
                     "label": "+/- zmiana procentowa do analizy"
                 },
                 "length": {
-                    "label": "Liczba wartości do przetestowa",
-                    "help": "Liczba wartości do przetestowa (po jednej stronie zakresu)"
+                    "label": "Liczba wartości do przetestowania",
+                    "help": "Liczba wartości do przetestowania (po jednej stronie zakresu)"
                 },
                 "variables": {
                     "label": "Zmienne",
