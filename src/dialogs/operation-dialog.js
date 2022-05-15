@@ -65,7 +65,6 @@ export class OperationDialog extends Dialog {
 
         this.jobParameters = this.job.createJobParameters(jobParamsValues);
 
-
         this.jobParametersBuilder.setJobParameters(this.job.name, this.jobParameters,  {
             'id': {
                 hidden: true
@@ -73,6 +72,20 @@ export class OperationDialog extends Dialog {
             'objectId': {
                 value: this.object.id,
                 hidden: true
+            },
+            'payoffIndex': {
+                value: this.app.currentViewMode.payoffIndex,
+                emptyOptionLabel: i18n.t('job.payoffs-transformation.param.payoffIndex.options.both'),
+                options: [
+                    {
+                        label: i18n.t('toolbar.viewMode.options.criterion1'),
+                        value: 0
+                    }, {
+                        label: i18n.t('toolbar.viewMode.options.criterion2'),
+                        value: 1
+                    }
+                ]
+
             }
         });
     }

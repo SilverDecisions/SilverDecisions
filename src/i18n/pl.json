@@ -247,6 +247,12 @@
                 },
                 "makeClone": {
                     "label": "Utwórz klon"
+                },
+                "payoffIndex": {
+                    "label": "Kryteria do transformacji",
+                    "options": {
+                        "both": "oba"
+                    }
                 }
             }
         },

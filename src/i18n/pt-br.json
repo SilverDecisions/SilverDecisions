@@ -269,6 +269,29 @@
                 "yAxisTitle": "Peso"
             }
         },
+        "payoffs-transformation": {
+            "name": "Transformação de recompensas",
+            "param": {
+                "functionName": {
+                    "label": "Nome da função"
+                },
+                "functionBody": {
+                    "label": "Corpo da função"
+                },
+                "functionArgumentName": {
+                    "label": "Nome do argumento da função"
+                },
+                "makeClone": {
+                    "label": "Fazer clone"
+                },
+                "payoffIndex": {
+                    "label": "Critérios para transformar",
+                    "options": {
+                        "both": "ambos"
+                    }
+                }
+            }
+        },
         "league-table":{
             "name": "Ranking"
         },

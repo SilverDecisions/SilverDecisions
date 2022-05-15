@@ -283,6 +283,12 @@
                 },
                 "makeClone": {
                     "label": "Make clone"
+                },
+                "payoffIndex": {
+                    "label": "Criteria to transform",
+                    "options": {
+                        "both": "both"
+                    }
                 }
             }
         },

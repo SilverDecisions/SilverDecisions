@@ -315,11 +315,16 @@ export class JobParametersBuilder{
         var inputType = this.paramTypeToInputType[paramDefinition.type];
         var additionalInputAttrs = this.paramTypeToInputAttrs[paramDefinition.type];
         var input;
+        const defaultValue = valueAccessor.get();
         if(options && options.length){
             inputType = 'select';
             input = selection.append('select');
             var optionsSel = input.selectAll("option").data([null].concat(options));
-            optionsSel.enter().append("option").attr("value", d=>d).text(d=>d);
+            let emptyOptionLabel = Utils.get(self.customParamsConfig, path+'.emptyOptionLabel', "");
+            optionsSel.enter().append("option")
+                .attr("value", d => d === null ? '' : (Utils.isObject(d) ? d.value : d))
+                .attr("selected", d => (Utils.isObject(d) ? d.value : d) === defaultValue ? "selected" : undefined)
+                .text(d => !d ? emptyOptionLabel : (Utils.isObject(d) ? d.label : d));
 
             if(Utils.get(self.customParamsConfig, path+'.optionsAutocomplete', null)){
                 let autocomplete = new Autocomplete(input);
@@ -363,15 +368,15 @@ export class JobParametersBuilder{
 
             AppUtils.updateInputClass(d3.select(this));
         }).each(function(d, i){
-            var value = valueAccessor.get();
-            if(inputType=='checkbox'){
-                this.checked = value
-            }else{
-                this.value = value;
+            this.value = defaultValue;
+            if (inputType === 'checkbox') {
+                this.checked = defaultValue
+            } else if (inputType === 'select' && defaultValue === null) {
+                this.selectedIndex = 0;
             }
             temp[i]={};
-            temp[i].pristineVal = value;
-            d3.select(this).classed('invalid', !paramDefinition.validateSingleValue(value));
+            temp[i].pristineVal = defaultValue;
+            d3.select(this).classed('invalid', !paramDefinition.validateSingleValue(defaultValue));
             AppUtils.updateInputClass(d3.select(this));
         });
 
@@ -382,7 +387,6 @@ export class JobParametersBuilder{
                 let label = this.getParamNameI18n(path);
                 return label;
             });
-        input.node().value = valueAccessor.get();
     }
 
     value(path, value){
@@ -390,8 +394,12 @@ export class JobParametersBuilder{
     }
 
     parseInput(value, parameterType){
+        if (value === null || value === undefined || (value === '' && parameterType !== PARAMETER_TYPE.STRING)) {
+            return null;
+        }
+
         if(parameterType===PARAMETER_TYPE.DATE){
-            return new Date(value)
+            return new Date(value);
         }
         if(parameterType===PARAMETER_TYPE.NUMBER || parameterType===PARAMETER_TYPE.INTEGER){
             return parseFloat(value);

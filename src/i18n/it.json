@@ -283,6 +283,12 @@
                 },
                 "makeClone": {
                     "label": "Clonare"
+                },
+                "payoffIndex": {
+                    "label": "Criteri da trasformare",
+                    "options": {
+                        "both": "entrambi"
+                    }
                 }
             }
         },

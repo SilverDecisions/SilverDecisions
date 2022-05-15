@@ -284,6 +284,12 @@
                 },
                 "makeClone": {
                     "label": "Kopieren"
+                },
+                "payoffIndex": {
+                    "label": "Kriterien für die Transformation",
+                    "options": {
+                        "both": "beide"
+                    }
                 }
             }
         },
