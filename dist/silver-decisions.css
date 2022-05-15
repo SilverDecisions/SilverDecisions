@@ -458,7 +458,7 @@ svg.sd-tree-designer tspan a {
   align-items: center;
 }
 #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group {
-  max-width: 150px;
+  max-width: 170px;
 }
 #silver-decisions .sd-job-parameters-builder .sd-job-parameter .input-group select {
   padding: 4px;
@@ -1300,10 +1300,11 @@ svg.sd-tree-designer tspan a {
   width: 100%;
 }
 #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-percentageChangeRange {
-  max-width: 210px;
+  max-width: 320px;
 }
 #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-length {
-  max-width: 210px;
+  min-width: 320px;
+  max-width: 320px;
   display: inline-block;
 }
 #silver-decisions .sd-sensitivity-analysis-dialog .sd-job-parameters-builder .sd-job-parameter .sd-parameter-extendedPolicyDescription {
