@@ -453,6 +453,7 @@
             "hideLabels": "Nascondi le etichette",
             "hidePayoffs": "Nascondi saldo",
             "hideProbabilities": "Nascondi le probabilità",
+            "hideTerminalProbabilityToEnter": "Nascondi le probabilità dei nodi terminali",
             "raw": "Non elaborato",
             "textInterpolation": "Interpolazione del testo"
         }

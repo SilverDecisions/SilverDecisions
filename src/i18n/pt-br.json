@@ -452,6 +452,7 @@
             "hideLabels": "Esconder rótulos",
             "hidePayoffs": "Esconder pesos",
             "hideProbabilities": "Esconder probabilidades",
+            "hideTerminalProbabilityToEnter": "Esconder probabilidades dos nós terminais",
             "raw": "Bruto",
             "textInterpolation": "Interpolação de texto"
         }

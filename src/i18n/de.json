@@ -453,6 +453,7 @@
             "hideLabels": "Verstecke Beschreibung",
             "hidePayoffs": "Verstecke Auszahlungen",
             "hideProbabilities": "Verstecke Wahrscheinlichkeiten",
+            "hideTerminalProbabilityToEnter": "Verstecke Wahrscheinlichkeiten an Endknoten",
             "raw": "Rau",
             "textInterpolation": "Textinterpolation"
         }

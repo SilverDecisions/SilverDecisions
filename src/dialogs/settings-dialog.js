@@ -174,6 +174,7 @@ export class SettingsDialog extends Dialog{
             .addField('hideLabels', 'checkbox', app.treeDesigner, 'config.hideLabels')
             .addField('hidePayoffs', 'checkbox', app.treeDesigner, 'config.hidePayoffs')
             .addField('hideProbabilities', 'checkbox', app.treeDesigner, 'config.hideProbabilities')
+            .addField('hideTerminalProbabilityToEnter', 'checkbox', app.treeDesigner, 'config.hideTerminalProbabilityToEnter')
             .addField({
                 name: 'raw',
                 type: 'checkbox',

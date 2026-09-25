@@ -452,6 +452,7 @@
             "hideLabels": "Masquer les étiquettes",
             "hidePayoffs": "Masquer les paiements",
             "hideProbabilities": "Masquer les probabilités",
+            "hideTerminalProbabilityToEnter": "Masquer les probabilités des noeuds terminaux",
             "raw": "Brut",
             "textInterpolation": "Interpolation de texte"
         }

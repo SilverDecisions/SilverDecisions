@@ -452,6 +452,7 @@
             "hideLabels": "Hide labels",
             "hidePayoffs": "Hide payoffs",
             "hideProbabilities": "Hide probabilities",
+            "hideTerminalProbabilityToEnter": "Hide probabilities on terminal nodes",
             "raw": "Raw",
             "textInterpolation": "Text interpolation"
         }
